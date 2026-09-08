@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Replaces the stale legacy sitemap (nine URLs from a previous site —
+  /about-us, /services/*, /blogs, /faqs — none of which exist in App.jsx).
+  Lists only routes that exist in code today. When /about, /contact and
+  /insights ship, add them here and back to robots-friendly status.
+
+  Project URLs are the 28 slugs in src/data/projects.js. Regenerate this file
+  from PROJECT_SLUGS whenever a project ships rather than editing by hand.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url><loc>https://www.rajivwilliams.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://www.rajivwilliams.com/coaching</loc><priority>0.9</priority></url>
+  <url><loc>https://www.rajivwilliams.com/consulting</loc><priority>0.9</priority></url>
+  <url><loc>https://www.rajivwilliams.com/realty</loc><priority>0.8</priority></url>
+  <url><loc>https://www.rajivwilliams.com/realty/portfolio</loc><priority>0.9</priority></url>
+  <url><loc>https://www.rajivwilliams.com/about</loc><priority>0.9</priority></url>
+  <url><loc>https://www.rajivwilliams.com/contact</loc><priority>0.8</priority></url>
+  <url><loc>https://www.rajivwilliams.com/careers</loc><priority>0.5</priority></url>
+
+  <!-- Pre-consultation assessment — picker plus one URL per track -->
+  <url><loc>https://www.rajivwilliams.com/form</loc><priority>0.4</priority></url>
+  <url><loc>https://www.rajivwilliams.com/form/coaching</loc><priority>0.4</priority></url>
+  <url><loc>https://www.rajivwilliams.com/form/consulting</loc><priority>0.4</priority></url>
+  <url><loc>https://www.rajivwilliams.com/form/realty</loc><priority>0.4</priority></url>
+
+  <!-- Project detail pages — real long-tail search demand in Hyderabad -->
+  <url><loc>https://www.rajivwilliams.com/projects/acasasimchah</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/amaris</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/promenadevillas</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/aparna-one</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/niche-by-vamsiram-homes</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/palatium</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/prestige-vaishnaoi-rainbow-waters</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/megaleio</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/villaverde</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/msn-one</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/skymarq</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/cinq</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/sylvanor-by-bluefin</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/iris</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/trilight</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/skyline</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/songs-of-the-sun</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/rise-with-9</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/bayleaf</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/yulaglobus</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/sage</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/bridge-epsilon</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/northstar-allura</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/sreenidhi-luxury-park</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/twins</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/thecascades</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/blissinthewoods</loc><priority>0.7</priority></url>
+  <url><loc>https://www.rajivwilliams.com/projects/mirai-mist</loc><priority>0.7</priority></url>
+
+</urlset>

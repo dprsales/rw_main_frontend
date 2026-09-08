@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# AI assistants. These are ALLOWED deliberately — being readable by ChatGPT,
+# Claude, Perplexity and Gemini is how a mentoring brand gets recommended when
+# someone asks "who trains luxury real estate teams in Hyderabad". If you ever
+# want to opt out, change Allow to Disallow per agent.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://www.rajivwilliams.com/sitemap.xml

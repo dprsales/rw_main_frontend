@@ -1,0 +1,1615 @@
+/* The families are loaded in index.html and set on the app shell in
+   ThemeProvider, with label-role elements opting into the sans inline. This
+   file therefore carries no font-family of its own — only size, weight, style,
+   line-height and letter-spacing. */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+::selection { background: #C39B53; color: #fff; }
+
+/* iOS inflates text in landscape unless this is pinned, which silently breaks
+   every clamp() the page relies on to size itself. */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+/* Replaced media can always overrun its column otherwise — a single oversized
+   logo or plate is enough to give the whole page a horizontal scrollbar. */
+img, svg, video, canvas { max-width: 100%; }
+
+/* The shell fills the viewport. `svh` is the small-viewport height, so a phone
+   with its address bar showing does not get a scrollbar's worth of dead space. */
+.rw-app-shell { min-height: 100vh; min-height: 100svh; }
+
+a { color: var(--copper, #C39B53); text-decoration: none; transition: color .2s; }
+a:hover { color: var(--ink, #12100D); }
+
+/* Metallic gold text, used on the accent line of display headlines only.
+   `color` is set first as the fallback: if background-clip:text is unsupported
+   the text stays gold rather than turning transparent and vanishing. */
+.rw-gold-text {
+  color: var(--copper);
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .rw-gold-text { color: transparent; }
+}
+
+@keyframes rw-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes rw-rise { from { transform: translateY(115%); } to { transform: translateY(0); } }
+
+/* Hover states that inline styles can't express. */
+.rw-nav-link:hover { color: var(--ink); }
+.rw-outline-btn:hover { background: var(--ink); color: var(--bg); }
+
+/* WHAT WE DELIVER — image-led chapter cards. The three services are the page's
+   main forks, so they get photography and a numeral rather than plain columns. */
+.rw-ways { padding-bottom: clamp(56px, 7vw, 92px); }
+/* Drop the middle card to break the grid's symmetry (as .rw-flow-stages does). */
+.rw-ways .rw-way:nth-child(2) { margin-top: clamp(0px, 3.4vw, 46px); }
+
+.rw-way {
+  position: relative; padding-top: 26px;
+  border-top: 1px solid var(--line);
+  transition: transform .6s cubic-bezier(.2,.7,.2,1);
+}
+.rw-way:hover { transform: translateY(-7px); }
+/* The copper rule draws itself in, matching .rw-stage. */
+.rw-way::before {
+  content: ''; position: absolute; top: -1px; left: 0;
+  width: 100%; height: 1px; background: var(--copper);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .55s cubic-bezier(.2,.7,.2,1);
+}
+.rw-way:hover::before { transform: scaleX(1); }
+
+.rw-way-media {
+  position: relative; display: block; overflow: hidden;
+  aspect-ratio: 4 / 5; background: var(--chip);
+}
+.rw-way-media img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+/* A scrim, or the numeral has no contrast of its own against the photo. */
+.rw-way-media::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, rgba(11,10,9,.82), rgba(11,10,9,.16) 42%, rgba(11,10,9,0) 68%);
+}
+
+/* Outlined until hover, when it fills — the same chapter mark as .rw-flow-numeral. */
+.rw-way-numeral {
+  position: absolute; left: 18px; bottom: 6px; z-index: 2;
+  font-style: italic; font-weight: 500;
+  font-size: clamp(56px, 5.4vw, 86px); line-height: .78; letter-spacing: -.03em;
+  color: transparent; -webkit-text-stroke: 1.5px #F2EFE9;
+  transition: color .6s ease, -webkit-text-stroke-color .6s ease;
+}
+.rw-way:hover .rw-way-numeral { color: var(--copper); -webkit-text-stroke-color: var(--copper); }
+
+/* WHAT YOU'LL ACHIEVE — numbered outcome cards. Each lifts on hover with a
+   drawn brand-blue rule and an outlined index that fills, matching the chapter
+   marks used elsewhere (.rw-way / .rw-flow-numeral). */
+.rw-achieve-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* Named so the connector nodes can centre themselves in the same gap. */
+  --achieve-gap: clamp(16px, 2.2vw, 30px);
+  gap: var(--achieve-gap);
+}
+
+/* Sequence connectors — a small copper node hangs in the gap between each card
+   and the next, so the six outcomes read as one ordered chain 1→2→…→6. Each
+   node points RIGHT to the next card in its row and DOWN where the row breaks;
+   the row-break cards depend on the column count, so the direction is switched
+   per breakpoint below. The last card never gets one. */
+.rw-achieve-arrow {
+  position: absolute; z-index: 4; pointer-events: none;
+  width: 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center;
+  /* Centred on the midpoint of the right-hand gap. */
+  left: calc(100% + var(--achieve-gap) / 2);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--chip);
+  border: 1px solid var(--line);
+  color: var(--copper);
+  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-size: 15px; line-height: 1;
+  transition: background .35s ease, border-color .35s ease, color .35s ease;
+}
+.rw-achieve-arrow i { display: block; transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+/* The node fills as its card is hovered, and the glyph nudges toward the next. */
+.rw-achieve:hover + .rw-achieve-arrow { background: var(--copper); border-color: var(--copper); color: #fff; }
+.rw-achieve:hover + .rw-achieve-arrow i { transform: translateX(3px); }
+
+/* Point a node DOWN instead of right (used at row breaks). The hover nudge
+   follows the rotation into a downward push, since the glyph is rotated with it.
+   Which cards are row-breaks depends on the column count, so the assignment
+   lives in the breakpoint rules below — this is just the geometry. */
+.rw-achieve-arrow.is-down {
+  left: 50%;
+  top: calc(100% + var(--achieve-gap) / 2);
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* 3 columns (default, > 1000px): the chain snakes (boustrophedon).
+      [01][02][03]
+               ↓
+      [06][05][04]
+   Row one runs 1→2→3 rightward; card 3 drops DOWN to card 4 (which we place
+   directly beneath it at column 3); the bottom row is reversed so it reads
+   6 ← 5 ← 4 leftward, ending on card 6 at bottom-left. */
+@media (min-width: 1001px) {
+  /* Reverse the visual order of the bottom row so 4 lands under 3. Pin the row
+     explicitly — non-dense auto-flow won't backtrack to fill earlier columns. */
+  .rw-achieve-grid > *:nth-child(4) { grid-column: 3; grid-row: 2; }
+  .rw-achieve-grid > *:nth-child(5) { grid-column: 2; grid-row: 2; }
+  .rw-achieve-grid > *:nth-child(6) { grid-column: 1; grid-row: 2; }
+
+  /* Card 3 drops straight down onto card 4. */
+  .rw-achieve-grid > *:nth-child(3) .rw-achieve-arrow {
+    left: 50%; top: calc(100% + var(--achieve-gap) / 2);
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+  /* Cards 4 and 5 point LEFT into the gap on their left (between 4|5, 5|6). */
+  .rw-achieve-grid > *:nth-child(4) .rw-achieve-arrow,
+  .rw-achieve-grid > *:nth-child(5) .rw-achieve-arrow {
+    left: calc(0% - var(--achieve-gap) / 2);
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(180deg);
+  }
+}
+/* 2 columns (701–1000px): cards 2 and 4 end their rows and point down. */
+@media (min-width: 701px) and (max-width: 1000px) {
+  .rw-achieve-grid > *:nth-child(2) .rw-achieve-arrow,
+  .rw-achieve-grid > *:nth-child(4) .rw-achieve-arrow {
+    left: 50%; top: calc(100% + var(--achieve-gap) / 2);
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+}
+/* 1 column (≤700px): the whole chain runs vertically, so every node points down. */
+@media (max-width: 700px) {
+  .rw-achieve-arrow {
+    left: 50%; top: calc(100% + var(--achieve-gap) / 2);
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+}
+.rw-achieve {
+  position: relative; height: 100%;
+  padding: clamp(28px, 2.6vw, 38px) clamp(22px, 2vw, 30px) clamp(30px, 3vw, 40px);
+  background: var(--card);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  transition: transform .5s cubic-bezier(.2,.7,.2,1),
+              box-shadow .5s cubic-bezier(.2,.7,.2,1),
+              border-color .5s ease;
+}
+.rw-achieve:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: transparent; }
+/* The rule draws itself in from the left, as .rw-way / .rw-stage do. */
+.rw-achieve::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 100%; height: 2px; background: var(--copper);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .55s cubic-bezier(.2,.7,.2,1);
+}
+.rw-achieve:hover::before { transform: scaleX(1); }
+
+.rw-achieve-num {
+  display: block; font-style: italic; font-weight: 500;
+  font-size: clamp(40px, 3.6vw, 56px); line-height: .9; letter-spacing: -.03em;
+  color: transparent; -webkit-text-stroke: 1.3px var(--copper);
+  opacity: .38; transition: opacity .5s ease, color .5s ease;
+}
+.rw-achieve:hover .rw-achieve-num { opacity: 1; color: var(--copper); }
+.rw-achieve-title {
+  margin-top: 18px;
+  font-size: clamp(21px, 1.8vw, 25px); line-height: 1.12; letter-spacing: -.01em;
+  color: var(--ink);
+}
+.rw-achieve-body {
+  margin-top: 12px;
+  font-size: 16px; line-height: 1.55; color: var(--faded);
+}
+
+/* WHAT THE MANDATE COVERS — a coverage matrix. A bordered grid of cells reads
+   as one control panel the mandate owns end to end, distinct from the spaced
+   outcome cards. Each cell floods brand-blue on hover, its index at the top and
+   the scope line anchored to the foot. */
+.rw-matrix {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+.rw-matrix-cell {
+  position: relative;
+  display: flex; flex-direction: column;
+  padding: clamp(24px, 2.4vw, 34px) clamp(20px, 1.9vw, 28px);
+  min-height: clamp(168px, 15vw, 220px);
+  background: var(--card);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  transition: background .45s cubic-bezier(.2,.7,.2,1);
+}
+.rw-matrix-cell:hover { background: var(--copper); }
+
+.rw-matrix-num {
+  font-size: 12px; letter-spacing: .18em; color: var(--copper);
+  transition: color .45s ease;
+}
+.rw-matrix-cell:hover .rw-matrix-num { color: rgba(255,255,255,.82); }
+
+.rw-matrix-title {
+  margin-top: auto; padding-top: 20px;
+  font-size: clamp(18px, 1.55vw, 22px); line-height: 1.24; letter-spacing: -.01em;
+  color: var(--ink);
+  transition: color .45s ease;
+}
+.rw-matrix-cell:hover .rw-matrix-title { color: #fff; }
+
+/* & MORE — additional support services as a chip cloud. Titles read as pills;
+   pointing at (or tapping) one reveals its description in the caption below,
+   the same hover-to-reveal idiom the territory map uses. */
+.rw-chips { display: flex; flex-wrap: wrap; gap: clamp(9px, 1vw, 13px); }
+.rw-chip {
+  cursor: pointer; background: transparent;
+  border: 1px solid var(--line); border-radius: 100px;
+  padding: clamp(11px, 1vw, 14px) clamp(18px, 1.6vw, 24px);
+  font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--faded);
+  transition: background .3s ease, color .3s ease, border-color .3s ease, transform .3s cubic-bezier(.2,.7,.2,1);
+}
+.rw-chip:hover { color: var(--ink); border-color: var(--ink); }
+.rw-chip.is-on {
+  background: var(--copper); border-color: var(--copper); color: #fff;
+  transform: translateY(-1px);
+}
+
+.rw-chip-caption {
+  display: flex; gap: clamp(14px, 1.6vw, 20px); align-items: baseline;
+  margin-top: clamp(28px, 3vw, 42px);
+  padding-top: clamp(24px, 2.6vw, 32px);
+  border-top: 1px solid var(--line);
+  min-height: 108px;
+}
+.rw-chip-caption-num {
+  flex-shrink: 0; font-size: 12px; letter-spacing: .18em; color: var(--copper);
+}
+.rw-chip-caption-text {
+  font-size: clamp(19px, 2vw, 26px); line-height: 1.4; letter-spacing: -.01em;
+  color: var(--ink); max-width: 26em;
+  animation: rw-fade .4s ease both;
+}
+.rw-chip-caption-label {
+  display: block; margin-bottom: 10px;
+  font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--copper);
+}
+
+/* Skeleton placeholder — the fallback shown by <Skeleton> while the blog feed
+   fetches and its (large) images buffer. Gold-tinted so it reads as the brand's
+   loading state rather than a dead grey block. */
+.rw-skel {
+  background: linear-gradient(100deg, var(--chip) 30%, rgba(195,155,83,.10) 50%, var(--chip) 70%);
+  background-size: 200% 100%;
+  animation: rw-skel-shimmer 1.4s ease-in-out infinite;
+  border-radius: 2px;
+}
+@keyframes rw-skel-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rw-skel { animation: none; }
+}
+
+/* Glimpses mosaic — two tall frames flanking a stacked pair, so the strip reads
+   as a contact sheet rather than four identical thumbnails in a row. */
+.rw-glimpses {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: clamp(130px, 13vw, 190px);
+  gap: 16px;
+}
+.rw-glimpse { min-height: 0; }
+.rw-glimpse:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+.rw-glimpse:nth-child(2) { grid-column: span 2; grid-row: span 1; }
+.rw-glimpse:nth-child(3) { grid-column: span 2; grid-row: span 2; }
+.rw-glimpse:nth-child(4) { grid-column: span 2; grid-row: span 1; }
+
+/* Mission / vision. Two labelled columns of small text read as a template, so
+   the statements are the type here — the labels shrink to a serif aside and the
+   index becomes a drawn numeral. */
+.rw-creed {
+  margin-top: clamp(40px, 5vw, 68px);
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 5vw, 84px);
+}
+/* Drop the second statement so the pair reads as a sequence, not a comparison. */
+.rw-creed .rw-creed-item:nth-child(2) { margin-top: clamp(0px, 4.5vw, 62px); }
+
+.rw-creed-item {
+  position: relative; padding-top: 30px;
+  border-top: 1px solid var(--line);
+}
+.rw-creed-item::before {
+  content: ''; position: absolute; top: -1px; left: 0;
+  width: 100%; height: 1px; background: var(--copper);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .6s cubic-bezier(.2,.7,.2,1);
+}
+.rw-creed-item:hover::before { transform: scaleX(1); }
+
+.rw-creed-numeral {
+  position: absolute; top: 22px; right: 0;
+  font-style: italic; font-weight: 500;
+  font-size: clamp(50px, 4.6vw, 78px); line-height: .8;
+  color: transparent; -webkit-text-stroke: 1.5px var(--copper);
+  opacity: .35; transition: opacity .6s ease;
+}
+.rw-creed-item:hover .rw-creed-numeral { opacity: 1; }
+
+.rw-creed-label {
+  display: block; font-style: italic; font-weight: 500;
+  font-size: clamp(22px, 1.9vw, 27px); line-height: 1;
+  color: var(--copper);
+}
+.rw-creed-text {
+  margin-top: 20px; max-width: 17em;
+  font-size: clamp(20px, 1.7vw, 26px); line-height: 1.42;
+  letter-spacing: -.01em; color: var(--ink);
+}
+
+/* The developer challenge, as a ledger. Two boxed lists made the reader pair the
+   problems with the answers themselves; each row now states one shift. */
+.rw-shifts { border-top: 1px solid var(--line); }
+
+.rw-shift {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, .9fr) auto minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(18px, 3vw, 44px);
+  padding: clamp(24px, 3vw, 34px) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.rw-shift-n { font-size: 12px; letter-spacing: .16em; color: var(--copper); }
+
+/* The problem is what gets retired, so it reads muted and is ruled out. The
+   strike is drawn permanently rather than on hover — this section carries no
+   hover state. */
+/* Shrink-to-fit, or the strike rule overruns the text into empty column space. */
+.rw-shift-from {
+  position: relative; align-self: center; justify-self: start;
+  font-size: clamp(17px, 1.5vw, 21px); line-height: 1.3;
+  color: var(--faded);
+}
+.rw-shift-strike {
+  position: absolute; left: 0; top: 52%;
+  width: 100%; height: 1px; background: var(--copper);
+}
+
+.rw-shift-arrow {
+  color: var(--copper); font-size: 18px;
+}
+
+.rw-shift-to { display: flex; flex-direction: column; gap: 6px; }
+.rw-shift-to-title {
+  font-size: clamp(19px, 1.75vw, 25px); line-height: 1.25;
+  letter-spacing: -.01em; color: var(--ink);
+}
+.rw-shift-note { font-size: 15px; line-height: 1.45; color: var(--faded); }
+
+/* The project wall. A card grid left four-fifths of each card empty and a flat
+   index just enumerated; grouping by locality shows where the work is
+   concentrated, and sets the names as the type rather than as table cells. */
+.rw-index-head {
+  display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  padding: 0 0 14px;
+  font-size: 10px; letter-spacing: .16em; color: var(--faded);
+}
+.rw-index-head > span:last-child { color: var(--copper); opacity: .75; }
+
+/* The territory map. Cards, then an index, then a name wall all just enumerated
+   the projects. The map says the thing the roster cannot: the work is not spread
+   thin across Hyderabad, it is massed in a handful of west-corridor micro-markets. */
+.rw-territory {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding-top: clamp(24px, 3vw, 40px);
+}
+
+.rw-map { min-width: 0; }
+.rw-map svg { width: 100%; height: auto; display: block; overflow: visible; }
+
+.rw-node { cursor: pointer; outline: none; }
+.rw-node-hit { fill: transparent; }
+
+.rw-node-halo {
+  fill: none; stroke: var(--copper); stroke-width: .3;
+  opacity: 0; transform-box: fill-box; transform-origin: center;
+  transform: scale(.72);
+  transition: opacity .4s ease, transform .5s cubic-bezier(.2,.7,.2,1);
+}
+.rw-node.is-on .rw-node-halo { opacity: .85; transform: scale(1); }
+
+.rw-node-dot {
+  fill: var(--copper); opacity: .42;
+  transition: opacity .35s ease, fill .35s ease;
+}
+.rw-node:hover .rw-node-dot,
+.rw-node.is-on .rw-node-dot { opacity: 1; }
+.rw-node.is-empty { cursor: default; }
+.rw-node.is-empty .rw-node-dot { fill: var(--faded); opacity: .18; }
+
+/* The name is a hover target too — aiming at a 3px dot is not a design. */
+.rw-node-label {
+  font-size: 1.85px; letter-spacing: .1px;
+  fill: var(--faded); text-transform: uppercase;
+  transition: fill .35s ease;
+}
+.rw-node:hover .rw-node-label,
+.rw-node.is-on .rw-node-label { fill: var(--ink); }
+.rw-node-count { fill: var(--copper); }
+
+/* Single-project localities name themselves only when pointed at, so the dense
+   centre of the map stays readable. An invisible label must not stay hoverable —
+   that would fire the node from a patch of apparently empty map. */
+.rw-node.is-minor .rw-node-label,
+.rw-node.is-empty .rw-node-label {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease, fill .35s ease;
+}
+.rw-node.is-minor:hover .rw-node-label,
+.rw-node.is-minor.is-on .rw-node-label { opacity: 1; }
+
+/* The panel is the map's caption: whatever the reader is pointing at. */
+.rw-territory-panel {
+  border-left: 1px solid var(--line);
+  padding-left: clamp(20px, 2.4vw, 34px);
+  min-height: 260px;
+}
+.rw-panel-count { font-size: 10px; letter-spacing: .18em; color: var(--copper); }
+.rw-panel-name {
+  margin-top: 8px;
+  font-size: clamp(26px, 2.6vw, 36px); line-height: 1.05;
+  letter-spacing: -.01em; font-weight: 500; color: var(--ink);
+}
+.rw-panel-list { list-style: none; margin-top: 22px; }
+.rw-panel-item {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+  font-size: 17px; color: var(--ink);
+}
+.rw-panel-status { font-size: 9px; letter-spacing: .1em; color: var(--copper); }
+.rw-panel-hint {
+  margin-top: 22px;
+  font-size: 9px; letter-spacing: .16em; color: var(--faded); opacity: .7;
+}
+
+/* A project name that links to its detail page. The arrow slides on hover, as
+   the project cards elsewhere do. */
+.rw-panel-link { transition: color .25s ease; }
+.rw-panel-link:hover { color: var(--copper); }
+.rw-panel-go { transform: translateX(-4px); opacity: 0; transition: transform .3s cubic-bezier(.2,.7,.2,1), opacity .3s ease; }
+.rw-panel-link:hover .rw-panel-go { transform: translateX(0); opacity: 1; }
+/* No hover on touch, so the arrow always shows there. */
+@media (hover: none) { .rw-panel-go { opacity: 1; transform: none; } }
+
+.rw-way-body { display: flex; flex-direction: column; gap: 16px; padding: 28px 0 0; }
+.rw-way-cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; color: var(--ink); }
+.rw-way-arrow { font-style: normal; transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+.rw-way:hover .rw-way-arrow { transform: translateX(6px); }
+
+/* Placeholder frames come alive on hover. */
+.rw-slot:hover .rw-slot-mark { transform: rotate(135deg) scale(1.12); }
+
+/* Framed imagery sits above the page rather than flush against it.
+   Images stay still on hover — no lift, zoom or brighten. */
+.rw-figure, .rw-frame { box-shadow: var(--shadow); }
+
+/* Project cards: label slides up, rule sweeps across on hover. */
+.rw-project { transition: background .3s, transform .5s cubic-bezier(.2,.7,.2,1); }
+.rw-project:hover { background: var(--chip); }
+.rw-project:hover .rw-project-go { opacity: 1; transform: translateX(0); }
+.rw-project-go { opacity: 0; transform: translateX(-8px); transition: opacity .3s, transform .3s; }
+
+/* Partner wordmarks, flattened to one ink colour and inverted on dark. */
+.rw-logo img { filter: var(--logo-filter); }
+
+/* Credentials pills: a light lift and copper border on hover/focus. */
+.rw-cred-pill {
+  display: inline-block; cursor: default;
+  transition: transform .35s cubic-bezier(.2,.7,.2,1), border-color .35s ease, background .35s ease;
+}
+.rw-cred-pill:hover {
+  transform: translateY(-3px);
+  border-color: var(--copper);
+  background: rgba(195,155,83,.08);
+}
+
+/* Association cards: lift + copper edge on hover, the mark brightening with it. */
+.rw-assoc-card {
+  transition: transform .45s cubic-bezier(.2,.7,.2,1), border-color .45s ease, box-shadow .45s ease;
+}
+.rw-assoc-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--copper);
+  box-shadow: var(--shadow);
+}
+.rw-assoc-logo { transition: transform .45s cubic-bezier(.2,.7,.2,1); }
+.rw-assoc-card:hover .rw-assoc-logo { transform: scale(1.06); }
+
+/* Mobile drawer: hidden above the breakpoint, where the inline nav shows. */
+.rw-drawer { display: none; }
+/* The wheel menu is offered at every width, so the button is always shown —
+   on desktop it sits beside the inline nav rather than replacing it. */
+.rw-menu-btn { display: flex !important; }
+.rw-menu-btn:hover { border-color: var(--ink); }
+
+/* Fullscreen wheel navigation. */
+.rw-wheel-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  animation: rw-wheel-in .32s cubic-bezier(.2, .75, .25, 1) both;
+}
+@keyframes rw-wheel-in { from { opacity: 0 } to { opacity: 1 } }
+
+.rw-wheel-stage { position: absolute; inset: 0; }
+
+.rw-wheel-hint {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(24px, 5vh, 46px);
+  transform: translateX(-50%);
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--faded);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.rw-wheel-close {
+  position: absolute;
+  top: 18px; right: 34px;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: 1px solid var(--line); border-radius: 100px;
+  color: var(--ink); cursor: pointer; z-index: 2;
+  transition: border-color .25s ease;
+}
+.rw-wheel-close:hover { border-color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .rw-wheel-menu { animation: none; }
+}
+
+/* Sales ecosystem: four phases as compact cards rather than a scroll-tall rail. */
+.rw-phase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(16px, 2.2vw, 28px);
+}
+@media (max-width: 700px) { .rw-phase-grid { grid-template-columns: 1fr; } }
+
+.rw-phase-card {
+  position: relative;
+  padding: clamp(22px, 2.2vw, 30px) clamp(20px, 2vw, 26px) clamp(24px, 2.4vw, 30px);
+  background: var(--card);
+  border: 1px solid var(--line);
+  transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s cubic-bezier(.2,.7,.2,1), border-color .5s ease;
+}
+.rw-phase-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: transparent; }
+.rw-phase-card::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 100%; height: 2px; background: var(--copper);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .55s cubic-bezier(.2,.7,.2,1);
+}
+.rw-phase-card:hover::before { transform: scaleX(1); }
+
+.rw-phase-num {
+  display: block; font-style: italic; font-weight: 500;
+  font-size: clamp(28px, 2.6vw, 38px); line-height: .9; letter-spacing: -.03em;
+  color: transparent; -webkit-text-stroke: 1px var(--copper);
+  opacity: .4; transition: opacity .5s ease, color .5s ease;
+}
+.rw-phase-card:hover .rw-phase-num { opacity: 1; color: var(--copper); }
+
+.rw-phase-points {
+  list-style: none; margin: 14px 0 0; padding: 14px 0 0;
+  border-top: 1px solid var(--line);
+}
+.rw-phase-points li {
+  position: relative; padding-left: 18px;
+  font-size: 13px; line-height: 1.5; color: var(--faded);
+  transition: color .3s ease, padding-left .3s cubic-bezier(.2,.7,.2,1);
+}
+.rw-phase-points li + li { margin-top: 8px; }
+.rw-phase-points li::before {
+  content: ''; position: absolute; left: 0; top: 8px;
+  width: 6px; height: 1px; background: var(--copper);
+  transition: width .3s cubic-bezier(.2,.7,.2,1);
+}
+.rw-phase-points li:hover { color: var(--ink); padding-left: 22px; }
+.rw-phase-points li:hover::before { width: 10px; }
+
+/* Filter pills. */
+.rw-pill { cursor: pointer; transition: background .25s, color .25s, border-color .25s; }
+.rw-pill:hover { color: var(--ink); border-color: var(--ink); }
+
+/* Lightbox. */
+.rw-lightbox { animation: rw-fade .3s ease both; }
+@keyframes rw-fade { from { opacity: 0; } to { opacity: 1; } }
+.rw-lb-btn { cursor: pointer; transition: background .2s, transform .2s; }
+.rw-lb-btn:hover { background: rgba(255,255,255,.16); transform: scale(1.06); }
+
+/* Gallery grid. */
+/* align-items:start, or a short plate stretches to the wide plate's row
+   height and its image floats in a band of empty card. */
+.rw-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+.rw-gallery .rw-figure-wide { grid-column: span 2; }
+@media (max-width: 900px) {
+  .rw-gallery { grid-template-columns: 1fr 1fr; }
+  .rw-gallery .rw-figure-wide { grid-column: span 2; }
+}
+@media (max-width: 560px) {
+  .rw-gallery { grid-template-columns: 1fr; }
+  .rw-gallery .rw-figure-wide { grid-column: span 1; }
+}
+
+/* Custom cursor — only where a fine pointer exists. */
+.rw-cursor-dot, .rw-cursor-ring { position: fixed; top: 0; left: 0; z-index: 999; pointer-events: none; border-radius: 50%; }
+.rw-cursor-dot { width: 6px; height: 6px; background: var(--copper); margin: -3px 0 0 -3px; }
+.rw-cursor-ring { width: 34px; height: 34px; border: 1px solid var(--copper); margin: -17px 0 0 -17px; transition: width .2s, height .2s, margin .2s, background .2s, opacity .2s; }
+.rw-cursor-ring.is-hot { width: 54px; height: 54px; margin: -27px 0 0 -27px; background: color-mix(in srgb, var(--copper) 12%, transparent); }
+@media (hover: none), (pointer: coarse) { .rw-cursor-dot, .rw-cursor-ring { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Team portraits. Five members, so the row divides evenly at five and drops to
+   three then two rather than stranding a single card on its own line. */
+.rw-team-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: clamp(14px, 1.8vw, 24px);
+}
+.rw-team-card { position: relative; }
+.rw-team-photo {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+
+/* Column counts for this grid live in the responsive ladder at the foot of the
+   file, with every other grid on the site. */
+
+/* Testimonials.
+   A plain grid with equal-height cells: the quotes vary in length, so cards
+   stretch to their row and the attribution is pushed to the bottom edge. Every
+   row therefore lines up, rather than staggering as a masonry flow would. */
+.rw-voice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2.2vw, 26px);
+}
+.rw-voice-card {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(22px, 2vw, 30px) clamp(20px, 1.8vw, 26px);
+  background: var(--card);
+  border: 1px solid var(--line);
+  transition: transform .5s cubic-bezier(.2,.7,.2,1),
+              box-shadow .5s cubic-bezier(.2,.7,.2,1),
+              border-color .5s ease;
+}
+.rw-voice-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: transparent; }
+/* The rule draws in from the left on hover, as .rw-way / .rw-achieve do. */
+.rw-voice-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--gold-gradient);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .55s cubic-bezier(.2,.7,.2,1);
+}
+.rw-voice-card:hover::before { transform: scaleX(1); }
+/* Named voices worth flagging keep the gold rule permanently. */
+.rw-voice-card.is-marked::before { transform: scaleX(1); }
+
+/* Attribution sits on the bottom edge whatever the quote's length. */
+.rw-voice-attrib { margin-top: auto; padding-top: 15px; border-top: 1px solid var(--line); }
+
+@media (max-width: 1100px) { .rw-voice-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px)  { .rw-voice-grid { grid-template-columns: 1fr; } }
+
+/* The app shell clips stray horizontal overflow. It must use `clip` rather than
+   `hidden`: `overflow-x: hidden` forces the other axis to `auto`, which turns
+   this wrapper into a scroll container and silently breaks `position: sticky`
+   for every descendant — they pin to this box, which never scrolls, instead of
+   to the viewport. `clip` does the same clipping without that side effect.
+   The `hidden` line is a fallback for browsers predating `clip` (Safari < 16);
+   they keep the clipping and lose only the pinning. */
+.rw-app-shell {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+/* A column that pins while its sibling scrolls past it. `align-self: start` is
+   required: a grid item stretches to the row height by default, which leaves
+   sticky nothing to travel within. The offset clears the sticky header. */
+.rw-sticky-aside {
+  position: sticky;
+  top: 108px;
+  align-self: start;
+}
+
+/* Layout that only holds side by side. The column counts themselves live in the
+   responsive ladder at the foot of this file. */
+@media (max-width: 900px) {
+  .rw-split { grid-template-columns: 1fr !important; }
+  /* Stacked, a pinned column would hover over its own list. */
+  .rw-sticky-aside { position: static; }
+  /* The creed's stagger only works side by side; stacked it is just a gap. */
+  .rw-creed { grid-template-columns: 1fr; gap: 44px; }
+  .rw-creed .rw-creed-item:nth-child(2) { margin-top: 0; }
+
+  /* The map goes full width with the panel beneath it. Node labels would collide
+     at this scale, so only the active one is named — the panel carries the rest. */
+  .rw-territory { grid-template-columns: 1fr; gap: 24px; }
+  .rw-node-label { opacity: 0; }
+  .rw-node.is-on .rw-node-label { opacity: 1; font-size: 3.2px; }
+  .rw-territory-panel {
+    border-left: none; padding-left: 0;
+    border-top: 1px solid var(--line); padding-top: 22px;
+    min-height: 0;
+  }
+  .rw-panel-hint { display: none; }
+  /* The legend is too long to sit beside the count on a phone. */
+  .rw-index-head > span:last-child { display: none; }
+
+  /* A four-column ledger row cannot hold; stack it and turn the arrow down. */
+  .rw-shift {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: 6px 16px;
+    row-gap: 10px;
+  }
+  .rw-shift-n { grid-row: 1; }
+  .rw-shift-from { grid-column: 2; }
+  .rw-shift-arrow { grid-column: 2; transform: rotate(90deg); transform-origin: left center; }
+  .rw-shift-to { grid-column: 2; }
+  /* The mosaic's spans are hand-placed, so the collapse has to clear them all or
+     the frames overlap. An even 2×2 leaves no empty cell. */
+  .rw-glimpses { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 46vw; }
+  .rw-glimpse:nth-child(n) { grid-column: span 1; grid-row: span 1; }
+  /* A headline phrase wraps on a narrow screen, but the reveal mask stays one
+     line tall and guillotines the rest. The animation is decoration; the words
+     are not. Drop the mask and land the text in place. */
+  .rw-rise-mask {
+    overflow: visible !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .rw-rise-line { animation: none !important; transform: none !important; }
+
+  .rw-nav { display: none !important; }
+  /* The drawer takes the links. */
+  .rw-menu-btn { display: flex !important; }
+  .rw-drawer {
+    display: block;
+    border-top: 1px solid var(--line);
+    background: var(--bg);
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
+  }
+}
+
+/* ===========================================================================
+   RESPONSIVE LADDER
+   ---------------------------------------------------------------------------
+   Every column count on the site is declared here, in one descending run, so
+   there is a single place to read what the layout does at any width. The rungs
+   are chosen by where the content actually breaks rather than by device names:
+
+     > 1320   the page is at its maximum measure and only the gutters grow
+     ≤ 1320   large laptop — the container stops being capped
+     ≤ 1200   small laptop / landscape tablet — four-ups drop to three
+     ≤ 1000   portrait tablet — three-ups drop to two
+     ≤ 900    the stacking breakpoint (see the block above): splits collapse,
+              the inline nav goes, staggered grids straighten out
+     ≤ 700    large phone — two-ups drop to one
+     ≤ 560    phone
+     ≤ 400    small phone — the last of the fixed gutters give way
+
+   The gutter is the one value that moves at every rung: `.rw-pad` is applied to
+   each section's inner wrapper, and its !important is what lets it beat the
+   inline `padding: 'clamp(…) 40px'` those wrappers carry.
+   =========================================================================== */
+
+/* --- Gutters ------------------------------------------------------------- */
+@media (max-width: 1200px) { .rw-pad { padding-left: 32px !important; padding-right: 32px !important; } }
+@media (max-width: 900px)  { .rw-pad { padding-left: 24px !important; padding-right: 24px !important; } }
+@media (max-width: 560px)  { .rw-pad { padding-left: 18px !important; padding-right: 18px !important; } }
+@media (max-width: 400px)  { .rw-pad { padding-left: 14px !important; padding-right: 14px !important; } }
+
+/* --- ≤1200: four-ups become three ---------------------------------------- */
+@media (max-width: 1200px) {
+  /* The track-record row is four figures; 2×2 keeps them paired rather than
+     leaving a lone stat on a second line. */
+  .rw-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+  .rw-matrix { grid-template-columns: repeat(3, 1fr); }
+  .rw-team-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 1000px) { .rw-team-grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* --- ≤1000: three-ups become two ----------------------------------------- */
+@media (max-width: 1000px) {
+  .rw-grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
+  .rw-achieve-grid { grid-template-columns: repeat(2, 1fr); }
+  .rw-matrix { grid-template-columns: repeat(2, 1fr); }
+  /* Two-up, the third card would otherwise sit under a raised second one. */
+  .rw-ways .rw-way:nth-child(2) { margin-top: 0; }
+}
+
+/* --- ≤900: see the stacking block above ---------------------------------- */
+@media (max-width: 900px) {
+  /* The dense two-up role lists inside Experience have no room left. */
+  .rw-grid-2 { grid-template-columns: 1fr !important; }
+}
+
+/* --- ≤700: two-ups become one -------------------------------------------- */
+@media (max-width: 700px) {
+  .rw-grid-3, .rw-grid-4 { grid-template-columns: 1fr !important; }
+  .rw-achieve-grid { grid-template-columns: 1fr; }
+  .rw-matrix { grid-template-columns: 1fr; }
+  /* Stacked, a matrix cell no longer needs to hold a row's worth of height. */
+  .rw-matrix-cell { min-height: 0; }
+  .rw-matrix-title { padding-top: 14px; }
+}
+
+/* --- The hero ------------------------------------------------------------ */
+/* Two compositions, one markup.
+
+   OVERLAY (desktop). The photograph is a full-bleed banner behind the copy,
+   which occupies the left third; the subject is framed to the right, where the
+   scrim has lifted, so type and face never share the same ground. The copy
+   panel's height is what makes the banner.
+
+   STACK (phone, below). The overlay cannot survive the copy going full width —
+   the headline lands squarely on the subject's face, and no amount of grading
+   fixes it, because the problem is that they occupy the same pixels. The photo
+   becomes a framed portrait above the copy instead. */
+
+.rw-hero {
+  position: relative;
+  width: 100%;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.rw-hero-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.rw-hero-photo {
+  width: 100%;
+  height: 100%;
+  filter: saturate(.82) contrast(.92) brightness(1.05);
+}
+
+.rw-hero-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The source is 16:9 with the subject right of centre. */
+  object-position: 72% center;
+}
+
+.rw-hero-scrim,
+.rw-hero-fade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.rw-hero-scrim {
+  background: linear-gradient(90deg, rgba(11,10,9,.82) 0%, rgba(11,10,9,.62) 34%, rgba(11,10,9,.28) 55%, rgba(11,10,9,0) 74%);
+}
+
+.rw-hero-fade {
+  background: linear-gradient(180deg, rgba(11,10,9,0) 55%, rgba(11,10,9,.35) 100%);
+}
+
+/* `svh` measures the viewport with the browser chrome shown, so the banner does
+   not sit a toolbar's worth taller than the screen on a phone. */
+.rw-hero-copy {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(48px, 7vw, 90px) clamp(20px, 5vw, 64px);
+  text-align: left;
+}
+
+/* --- The hero, banded ---------------------------------------------------- */
+/* The phone composition. The photograph stays full-bleed and the copy still
+   rides on it, but the two stop fighting for the same pixels.
+
+   Why a band rather than a full-height banner: the source is 16:9 and a phone
+   viewport is about 9:19.5, so `object-fit: cover` always scales the image to
+   the box's HEIGHT and lets the width overflow. At full height that leaves
+   `object-position`'s vertical term with nothing to do — the subject's face
+   lands where it lands, which is the middle of the screen, directly under the
+   headline. Giving the photo a shorter, wider box is the only thing that puts
+   the vertical crop back under our control. */
+@media (max-width: 760px) {
+  .rw-hero { display: flex; flex-direction: column; }
+
+  .rw-hero-media {
+    position: relative;
+    inset: auto;
+    /* `width: auto` is load-bearing: the overlay rule sets `width: 100%`, which
+       here would resolve against the section and then add margins on top. */
+    width: auto;
+    height: 52svh;
+    min-height: 280px;
+    /* Full-bleed — no frame. The photograph runs edge to edge and dissolves
+       into the page, rather than sitting in a box on top of it. */
+    margin: 0;
+    border: none;
+  }
+
+  /* Only the horizontal term does anything at this box ratio; it holds the
+     subject just right of centre, clear of the copy that follows. */
+  .rw-hero-img { object-position: 66% center; }
+
+  /* The scrim turns vertical and lands on the page's own background, so the
+     foot of the photograph dissolves into the copy instead of ending on a
+     visible edge. This is what keeps it an overlay rather than a stack. */
+  .rw-hero-scrim {
+    background: linear-gradient(180deg,
+      rgba(11,10,9,0) 34%,
+      rgba(11,10,9,.42) 64%,
+      rgba(11,10,9,.86) 86%,
+      var(--bg) 100%);
+  }
+
+  /* The horizontal wash and the bottom fade are both desktop-only concerns. */
+  .rw-hero-fade { display: none; }
+
+  .rw-hero-copy {
+    min-height: 0;
+    justify-content: flex-start;
+    /* Lifts the copy onto the photograph's fade, where the scrim has already
+       gone to solid background — the eyebrow sits over picture, not under it. */
+    margin-top: -54px;
+    padding: 0 clamp(18px, 5vw, 24px) clamp(44px, 10vw, 64px);
+  }
+
+  .rw-hero-eyebrow {
+    letter-spacing: .16em !important;
+    margin-bottom: 22px !important;
+  }
+}
+
+/* The credential strip drops its separator rules and stacks, rather than
+   wrapping mid-list and stranding a bare "|" at the head of a line. */
+@media (max-width: 620px) {
+  .rw-hero-meta { flex-direction: column; gap: 8px !important; }
+  .rw-hero-meta-sep { display: none; }
+}
+
+/* A phone held sideways has no vertical room to spare: a viewport-tall hero
+   would push everything below it off a second screen for no gain. And a 5:4
+   frame on a 740px-wide landscape phone is 590px tall — well past the bottom of
+   a 360px screen — so the stacked photo is sized against the viewport here
+   rather than against its own width. */
+@media (max-height: 560px) and (orientation: landscape) {
+  .rw-hero-copy { min-height: 0; padding-top: 48px; padding-bottom: 48px; }
+  /* Sideways there is no height to give away — the band shrinks so the headline
+     still reaches the first screen. */
+  .rw-hero-media { height: 46svh; min-height: 0; }
+  /* This is the one box wide enough for the vertical term to bite: at 740×166
+     the image overflows top and bottom, and centred it cuts the subject across
+     the forehead. Biased upward, the crop falls below the chin instead. */
+  .rw-hero-img { object-position: 66% 26%; }
+}
+
+/* --- The track record ---------------------------------------------------- */
+/* Four figures, dividing where the columns divide. The rules are hung off the
+   left edge of every cell that is not starting a row, so the same declarations
+   hold at four, two and one column — the column count is the only thing the
+   breakpoints below have to change. */
+.rw-stat { padding: 36px 24px 44px; }
+.rw-stat:not(:nth-child(4n + 1)) { border-left: 1px solid var(--line); }
+/* The first cell of each row sits flush with the section's own gutter. */
+.rw-stat:nth-child(4n + 1) { padding-left: 0; }
+
+@media (max-width: 1200px) {
+  .rw-stat:not(:nth-child(4n + 1)) { border-left: none; }
+  .rw-stat:nth-child(4n + 1) { padding-left: 24px; }
+  .rw-stat:not(:nth-child(2n + 1)) { border-left: 1px solid var(--line); }
+  .rw-stat:nth-child(2n + 1) { padding-left: 0; }
+  /* Two rows now, so the pair needs separating as well as the columns. */
+  .rw-stat:nth-child(n + 3) { border-top: 1px solid var(--line); }
+}
+
+@media (max-width: 700px) {
+  .rw-stat, .rw-stat:nth-child(n) { padding: 28px 0; border-left: none; }
+  .rw-stat:not(:first-child) { border-top: 1px solid var(--line); }
+}
+
+/* --- Overlays ------------------------------------------------------------ */
+/* `dvh` tracks the viewport as a phone's address bar slides away, so the card
+   never extends under browser chrome the way a `vh` measurement does. The `vh`
+   line is the fallback for browsers without dynamic viewport units. */
+.rw-modal-card {
+  max-height: 90vh;
+  max-height: 88dvh;
+}
+
+.rw-career-modal-kicker {
+  color: var(--copper);
+  font-family: var(--font-mono, 'Jost', sans-serif);
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.rw-career-modal-title {
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(27px, 4vw, 38px);
+  font-weight: 400;
+  line-height: 1;
+  margin: 0 40px 15px 0;
+}
+
+.rw-career-modal-meta {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  color: var(--faded);
+  display: flex;
+  flex-wrap: wrap;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  gap: 8px;
+  letter-spacing: .04em;
+  padding-bottom: 20px;
+}
+
+.rw-meta-icon {
+  color: var(--copper);
+  height: 16px;
+  width: 16px;
+}
+
+.rw-career-modal-meta .rw-meta-icon:not(:first-child) {
+  margin-left: 10px;
+}
+
+.rw-career-modal-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 6px;
+}
+
+.rw-career-modal-form > label:nth-child(1),
+.rw-career-modal-form > label:nth-child(2),
+.rw-career-modal-form > label:nth-child(3),
+.rw-career-modal-form > label:nth-child(4),
+.rw-career-modal-form > label:nth-child(5),
+.rw-career-modal-form > label:nth-child(6),
+.rw-career-modal-form > label:nth-child(7),
+.rw-career-modal-form > p,
+.rw-career-modal-form > button {
+  min-width: 0;
+}
+
+.rw-career-modal-form > label:nth-child(5),
+.rw-career-modal-form > label:nth-child(6),
+.rw-career-modal-form > label:nth-child(7),
+.rw-career-modal-form > p,
+.rw-career-modal-form > button {
+  grid-column: 1 / -1;
+}
+
+.rw-career-form-section {
+  border-bottom: 1px solid var(--line);
+  color: var(--copper);
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  grid-column: 1 / -1;
+  letter-spacing: .18em;
+  margin-top: 8px;
+  padding-bottom: 7px;
+}
+.rw-career-form-section span { color: var(--faded); letter-spacing: .08em; }
+
+.rw-career-modal-form input,
+.rw-career-modal-form select,
+.rw-career-modal-form textarea {
+  background: rgba(8, 7, 6, .72);
+  border-color: rgba(242, 239, 233, .14);
+  font-size: 14px;
+}
+
+.rw-career-modal-form input:focus,
+.rw-career-modal-form select:focus,
+.rw-career-modal-form textarea:focus {
+  border-color: var(--copper);
+  box-shadow: 0 0 0 2px rgba(195, 155, 83, .12);
+}
+
+.rw-resume-dropzone {
+  align-items: center;
+  border: 1px dashed rgba(242, 239, 233, .28);
+  color: var(--faded);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  gap: 7px;
+  justify-content: center;
+  min-height: 78px;
+  padding: 12px;
+  text-align: center;
+  transition: border-color .2s ease, background .2s ease;
+}
+
+.rw-resume-dropzone:hover,
+.rw-resume-dropzone:focus-within {
+  background: rgba(195, 155, 83, .06);
+  border-color: var(--copper);
+}
+
+.rw-resume-dropzone span { color: var(--ink); }
+.rw-resume-dropzone small { color: var(--faded); font-size: 10px; }
+.rw-resume-dropzone input { display: none; }
+
+.rw-career-submit {
+  background: var(--gold-gradient) !important;
+  color: #100e0b !important;
+  font-weight: 600;
+  letter-spacing: .13em !important;
+  justify-self: center;
+  max-width: 220px;
+  padding: 12px 20px !important;
+  width: 100%;
+}
+
+@media (max-width: 560px) {
+  .rw-career-modal-form { grid-template-columns: 1fr; }
+  .rw-career-modal-form > label:nth-child(n),
+  .rw-career-modal-form > p,
+  .rw-career-modal-form > button { grid-column: 1; }
+  .rw-career-modal-meta { gap: 6px; }
+  .rw-career-modal-meta .rw-meta-icon:not(:first-child) { margin-left: 3px; }
+}
+
+/* The lightbox chrome is inset for a desktop pointer; on a phone that inset is
+   most of the gutter, and the close button lands on the image itself. */
+@media (max-width: 600px) {
+  .rw-lightbox .rw-lb-btn { width: 40px; height: 40px; }
+}
+
+/* --- The wordmark -------------------------------------------------------- */
+/* A stacked monogram-over-signature at the header's 72px eats a third of a
+   phone's sticky bar. These cap it rather than setting it: `max-height` beats
+   the component's inline `height` without needing !important, and — unlike a
+   plain `height` — it leaves the footer's smaller 48px mark alone instead of
+   scaling it up to meet the rule. `width: auto` reflows from the capped height,
+   so the aspect ratio holds. */
+@media (max-width: 700px) { .rw-wordmark { max-height: 56px; } }
+@media (max-width: 420px) { .rw-wordmark { max-height: 46px; } }
+
+/* --- The wheel menu ------------------------------------------------------ */
+/* The close button clears the notch/status bar on a phone and stops colliding
+   with the first option of the wheel. */
+@media (max-width: 700px) {
+  .rw-wheel-close { top: 12px; right: 14px; width: 40px; height: 40px; }
+  .rw-wheel-hint { font-size: 9px; letter-spacing: .12em; padding: 0 16px; white-space: normal; text-align: center; }
+}
+
+/* --- Editorial detail ---------------------------------------------------- */
+@media (max-width: 700px) {
+  /* Ten chips and a caption; the reserved caption height is desktop-sized. */
+  .rw-chip-caption { min-height: 0; flex-direction: column; gap: 10px; }
+  /* The mosaic rows are sized against the viewport, so they stay proportional. */
+  .rw-glimpses { gap: 12px; }
+  /* The strike rule reads as a mistake once "from" and "to" stack — the arrow
+     already carries the replacement. */
+  .rw-shift { gap: 4px 12px; }
+}
+
+@media (max-width: 560px) {
+  /* The auto-fill track's 150px minimum leaves a phone showing two tiles and a
+     wide strip of dead gutter. Pinned at two, the tiles take the full measure.
+     It stays at two all the way down: the marks are legible at ~140px, and
+     nineteen of them stacked one per screen would be an endless section. */
+  .rw-orgs { grid-template-columns: repeat(2, 1fr) !important; }
+  /* The mosaic goes to a single column: at 2×2 on a phone each frame is barely
+     140px across and every subject in them is a person in a room. */
+  .rw-glimpses { grid-template-columns: 1fr; grid-auto-rows: 58vw; }
+  /* An 18px chip with 24px of padding wraps to one per line and reads as a
+     list of buttons rather than a cloud. */
+  .rw-chip { padding: 10px 15px; letter-spacing: .06em; }
+  .rw-team-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 400px) {
+  .rw-glimpses { grid-auto-rows: 62vw; }
+}
+
+/* --- Project detail page — cinematic ------------------------------------- */
+/* A full-bleed element that breaks out of its centred container to span the
+   whole viewport. Safe because .rw-app-shell clips overflow-x, so the 100vw
+   (which includes the scrollbar) can't open a horizontal scrollbar. */
+.rw-bleed { width: 100vw; margin-left: 50%; transform: translateX(-50%); }
+
+/* The hero fills the screen; the photograph drifts in a slow Ken Burns push so
+   the first frame breathes rather than sitting dead still. */
+.rw-projx-hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; background: var(--bg); }
+.rw-projx-kb { position: absolute; inset: 0; }
+.rw-projx-kb img { width: 100%; height: 100%; object-fit: cover; will-change: transform; animation: rw-kenburns 22s ease-in-out infinite alternate; }
+@keyframes rw-kenburns { from { transform: scale(1.04); } to { transform: scale(1.15); } }
+
+/* Hero content fades up on load (not on scroll), so a full-height hero can't
+   strand its own facts/CTA below the reveal-trigger line. */
+.rw-projx-in { animation: rw-projx-in .9s cubic-bezier(.2,.75,.25,1) both; }
+@keyframes rw-projx-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .rw-projx-in { animation: none; } }
+
+/* The scroll cue at the foot of the hero. */
+.rw-projx-cue { animation: rw-cue 1.9s ease-in-out infinite; }
+@keyframes rw-cue { 0%, 100% { transform: translateY(0); opacity: .4; } 50% { transform: translateY(8px); opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .rw-projx-kb img, .rw-projx-cue { animation: none; }
+}
+
+/* The oversized stat band — four big gold figures, divided. */
+.rw-projx-stats { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); background: var(--card); }
+.rw-projx-stat { padding: clamp(30px, 4vw, 60px) clamp(20px, 2.2vw, 34px); border-left: 1px solid var(--line); }
+.rw-projx-stat:first-child { border-left: none; }
+
+/* Amenity tiles flood copper on hover, their icon flipping to white. */
+.rw-projx-amenity { transition: background .4s cubic-bezier(.2,.7,.2,1), border-color .4s ease, transform .4s cubic-bezier(.2,.7,.2,1); }
+.rw-projx-amenity:hover { background: var(--copper); border-color: var(--copper); transform: translateY(-4px); }
+.rw-projx-amenity:hover .rw-projx-amenity-icon { filter: brightness(0) invert(1); }
+.rw-projx-amenity:hover .rw-projx-amenity-label { color: #fff; }
+
+/* --- responsive step-downs ----------------------------------------------- */
+@media (max-width: 1000px) {
+  .rw-proj-floorplans { grid-template-columns: repeat(2, 1fr) !important; }
+  .rw-proj-about-imgs { grid-template-columns: repeat(3, 1fr) !important; }
+}
+@media (max-width: 900px) {
+  .rw-projx-stats { grid-template-columns: repeat(2, 1fr); }
+  .rw-projx-stat:nth-child(2n+1) { border-left: none; }
+  .rw-projx-stat:nth-child(n+3) { border-top: 1px solid var(--line); }
+}
+@media (max-width: 700px) {
+  .rw-proj-floorplans { grid-template-columns: 1fr !important; }
+  .rw-proj-about-imgs { grid-template-columns: repeat(2, 1fr) !important; }
+  .rw-proj-amenities { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important; }
+}
+@media (max-width: 480px) {
+  .rw-projx-stats { grid-template-columns: 1fr; }
+  .rw-projx-stat { border-left: none; border-top: 1px solid var(--line); }
+  .rw-projx-stat:first-child { border-top: none; }
+  .rw-proj-amenities { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* --- Touch ---------------------------------------------------------------- */
+/* Type-only controls — footer links, the "read on" buttons, the inline
+   portfolio link — are sized by their font, which leaves them 18–24px tall.
+   That is a comfortable cursor target and a poor fingertip one, so the hit area
+   is padded out to roughly 40px without moving the text.
+
+   Two gates, because neither alone covers the ground. Width catches every
+   phone and small tablet, including the ones that report a fine pointer
+   because a stylus or mouse is paired. `pointer: coarse` catches a touch
+   device wide enough to miss the width gate. The declarations are identical,
+   so an element matching both is padded once. */
+@media (max-width: 900px), (pointer: coarse) {
+  .rw-footer-links a,
+  .rw-inline-cta,
+  .rw-nav-link {
+    display: inline-block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  /* The added padding already separates the links; the full desktop gap on top
+     of it would spread the footer over half a screen. */
+  .rw-footer-links { gap: 6px 22px !important; }
+}
+
+/* Every hover-to-reveal on the site has a tap fallback (the chips and the map
+   nodes set state on click as well as hover), but the transforms that go with
+   them fire on the first tap and read as a glitch. Landing them flat leaves the
+   reveal itself, which is the part that carries information. */
+@media (hover: none) {
+  .rw-way:hover, .rw-achieve:hover, .rw-voice-card:hover, .rw-figure:hover,
+  .rw-assoc-card:hover, .rw-cred-pill:hover { transform: none; }
+  .rw-way:hover .rw-way-media img { transform: none; }
+  .rw-assoc-card:hover .rw-assoc-logo { transform: none; }
+}
+
+/* --- Careers: role filter tabs -------------------------------------------- */
+/* A single scrollable row rather than a wrapping block, so the filter always
+   reads as one control. The scrollbar is hidden because the row is short and a
+   visible bar under four chips looks like a rendering fault. */
+.rw-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.rw-tabs::-webkit-scrollbar { display: none; }
+
+.rw-tab {
+  flex: 0 0 auto;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 11px 22px;
+  cursor: pointer;
+  color: var(--faded);
+  transition: color .35s, border-color .35s, background .35s;
+}
+.rw-tab:hover { color: var(--ink); border-color: var(--copper); }
+/* The selected chip carries the gold sweep, matching every other filled CTA. */
+.rw-tab.is-on {
+  background: var(--gold-gradient);
+  border-color: transparent;
+  color: #fff;
+}
+
+.rw-level-label {
+  color: var(--copper);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.rw-level-tabs {
+  display: flex;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  scrollbar-width: none;
+}
+.rw-level-tabs::-webkit-scrollbar { display: none; }
+.rw-level-tab {
+  min-width: 104px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  background: transparent;
+  color: var(--faded);
+  cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: .1em;
+  padding: 10px 18px;
+  text-transform: uppercase;
+}
+.rw-level-tab:last-child { border-right: 0; }
+.rw-level-tab:hover { color: var(--ink); }
+.rw-level-tab.is-on { background: var(--gold-gradient); color: #16110a; }
+
+.rw-role-card {
+  min-width: 0;
+}
+.rw-careers-grid {
+  display: grid;
+  gap: 16px;
+}
+.rw-role-row {
+  display: grid;
+  grid-template-columns: minmax(230px, .9fr) minmax(300px, 1.35fr) 200px;
+  align-items: center;
+  gap: clamp(18px, 3vw, 42px);
+  box-sizing: border-box;
+  border: 1px solid var(--line);
+  background: rgba(20, 18, 16, .38);
+  padding: 22px 28px;
+  transition: border-color .3s, background .3s, transform .3s;
+}
+.rw-role-row:hover {
+  border-color: var(--copper);
+  background: var(--card);
+  transform: translateY(-2px);
+}
+.rw-role-card-main {
+  border-right: 1px solid var(--line);
+  min-height: 72px;
+  padding-right: 20px;
+}
+.rw-role-level {
+  display: inline-block;
+  color: var(--copper);
+  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--copper);
+  padding: 0 0 7px;
+}
+.rw-role-title {
+  margin-top: 10px;
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-size: clamp(22px, 2.1vw, 30px);
+  line-height: .98;
+}
+.rw-role-summary { min-width: 0; }
+.rw-role-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  color: var(--faded);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+}
+.rw-role-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.rw-role-meta-icon { width: 16px; height: 16px; color: var(--copper); }
+.rw-role-summary p {
+  color: var(--faded);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 15px;
+  line-height: 1.3;
+  margin: 10px 0 0;
+  max-width: 34em;
+}
+.rw-role-apply {
+  background: #f2eee5 !important;
+  color: #17130e !important;
+  font-size: 10px !important;
+  letter-spacing: .12em !important;
+  min-width: 148px;
+  padding: 10px 13px !important;
+  transition: background .3s, transform .3s;
+}
+.rw-role-row:hover .rw-role-apply { background: var(--gold-gradient) !important; transform: translateY(-1px); }
+
+.rw-load-more-wrap {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 30px auto 0;
+}
+.rw-load-more {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--copper);
+  border-radius: 999px;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  gap: 12px;
+  letter-spacing: .16em;
+  padding: 11px 18px 11px 20px;
+  transition: background .3s, color .3s, transform .3s;
+}
+.rw-load-more svg { height: 15px; width: 15px; transition: transform .3s; }
+.rw-load-more:hover { background: var(--gold-gradient); color: #17130e; transform: translateY(-1px); }
+.rw-load-more:hover svg { transform: translateY(2px); }
+.rw-load-more-count {
+  color: var(--faded);
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: .08em;
+}
+
+@media (max-width: 850px) {
+  .rw-role-row { grid-template-columns: minmax(180px, .8fr) 1.2fr; padding: 24px; }
+  .rw-role-row .rw-role-apply { grid-column: 2; justify-self: start; }
+}
+@media (max-width: 600px) {
+  .rw-role-row { grid-template-columns: 1fr; gap: 18px; padding: 22px; }
+  .rw-role-card-main { border-right: 0; border-bottom: 1px solid var(--line); min-height: 0; padding: 0 0 18px; }
+  .rw-role-row .rw-role-apply { grid-column: 1; min-width: 0; width: 100%; }
+  .rw-role-summary p { font-size: 15px; }
+  .rw-level-tab { min-width: 82px; padding: 9px 12px; }
+}
+
+/* --- Careers: hiring timeline --------------------------------------------- */
+/* Four steps on one rail across desktop. The rail is drawn behind the nodes and
+   inset by half a column at each end so it starts and stops at the first and
+   last circle rather than at the section edge. */
+.rw-track { position: relative; }
+.rw-track::before {
+  content: '';
+  position: absolute;
+  top: 27px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 1px;
+  background: var(--line);
+}
+.rw-track-steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.rw-track-node {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--copper);
+  display: grid;
+  place-items: center;
+  transition: border-color .35s, background .35s, color .35s;
+}
+/* The final step is the offer — filled, so the rail reads as arriving somewhere. */
+.rw-track-step:last-child .rw-track-node {
+  background: var(--gold-gradient);
+  border-color: transparent;
+  color: #fff;
+}
+
+/* Below the two-column break the rail cannot hold four nodes, so the steps
+   stack and the rail redraws vertically down the left of the column. */
+@media (max-width: 900px) {
+  .rw-track::before { top: 27px; bottom: 27px; left: 27px; right: auto; width: 1px; height: auto; }
+  .rw-track-steps { grid-template-columns: 1fr; gap: 30px; }
+  .rw-track-step { display: grid; grid-template-columns: 54px 1fr; gap: 20px; text-align: left !important; align-items: start; }
+  /* The step title carries a desktop-only offset that would break the
+     alignment with its node once the row goes horizontal. */
+  .rw-track-step > div:last-child > div:first-child { margin-top: 0 !important; }
+}
+
+/* --- Careers: reasons grid ------------------------------------------------ */
+/* The same cards as .rw-achieve, but a plain row rather than the six-card
+   serpentine — that layout pins its fourth child to column 3 / row 2, which
+   with only four reasons leaves a hole under the first two. No connector nodes
+   here either: these are four parallel reasons, not an ordered chain. */
+.rw-reason-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(16px, 2.2vw, 30px);
+}
+@media (max-width: 1100px) { .rw-reason-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px)  { .rw-reason-grid { grid-template-columns: 1fr; } }

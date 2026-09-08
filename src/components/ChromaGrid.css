@@ -1,0 +1,183 @@
+/* ChromaGrid (React Bits), restyled for the black-and-gold palette.
+   The spotlight mechanics — .chroma-overlay and .chroma-fade and their radial
+   masks — are unchanged from upstream. Only the card surface, typography and
+   radius are brought in line with the rest of the site. */
+
+.chroma-grid {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 300px));
+  grid-auto-rows: auto;
+  justify-content: center;
+  gap: clamp(12px, 1.4vw, 18px);
+  margin: 0 auto;
+  box-sizing: border-box;
+
+  --x: 50%;
+  --y: 50%;
+  --r: 300px;
+}
+
+.chroma-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--card-gradient, var(--card));
+  transition: border-color .3s ease, transform .5s cubic-bezier(.2, .7, .2, 1);
+
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  --spotlight-color: rgba(195, 155, 83, .22);
+}
+
+.chroma-card:hover {
+  border-color: var(--card-border);
+  transform: translateY(-4px);
+}
+
+.chroma-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .5s ease;
+  z-index: 2;
+}
+
+.chroma-card:hover::before { opacity: 1; }
+
+.chroma-img-wrapper {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 3 / 4;
+  padding: 10px;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.chroma-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 2px;
+  display: block;
+}
+
+/* Shown until a headshot is supplied — initials on the card's own gradient,
+   so a photo-less grid still reads as designed rather than broken. */
+.chroma-monogram {
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(11, 10, 9, .35);
+  border: 1px solid var(--line);
+}
+
+.chroma-monogram span {
+  font-weight: 500;
+  font-size: clamp(34px, 4vw, 46px);
+  letter-spacing: .04em;
+  color: var(--copper);
+  opacity: .85;
+}
+
+.chroma-info {
+  position: relative;
+  z-index: 1;
+  padding: 14px 16px 16px;
+  color: var(--ink);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: 3px;
+  column-gap: 12px;
+  align-items: baseline;
+}
+
+/* Card name is a display role, so it stays on the inherited serif. */
+.chroma-info .name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -.01em;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+/* Label role at 10px — the serif's thin strokes disappear here, so these take Jost
+   explicitly rather than inheriting the display face from the shell. */
+.chroma-info .role,
+.chroma-info .handle,
+.chroma-info .location {
+  margin: 0;
+  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--faded);
+}
+
+.chroma-info .handle,
+.chroma-info .location { justify-self: end; }
+
+/* --- Spotlight layers (upstream mechanics, unchanged) --- */
+
+.chroma-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  backdrop-filter: grayscale(1) brightness(.78);
+  -webkit-backdrop-filter: grayscale(1) brightness(.78);
+  background: rgba(0, 0, 0, .001);
+
+  mask-image: radial-gradient(circle var(--r) at var(--x) var(--y),
+      transparent 0%, transparent 15%, rgba(0, 0, 0, .1) 30%, rgba(0, 0, 0, .22) 45%,
+      rgba(0, 0, 0, .35) 60%, rgba(0, 0, 0, .5) 75%, rgba(0, 0, 0, .68) 88%, white 100%);
+  -webkit-mask-image: radial-gradient(circle var(--r) at var(--x) var(--y),
+      transparent 0%, transparent 15%, rgba(0, 0, 0, .1) 30%, rgba(0, 0, 0, .22) 45%,
+      rgba(0, 0, 0, .35) 60%, rgba(0, 0, 0, .5) 75%, rgba(0, 0, 0, .68) 88%, white 100%);
+}
+
+.chroma-fade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  backdrop-filter: grayscale(1) brightness(.78);
+  -webkit-backdrop-filter: grayscale(1) brightness(.78);
+  background: rgba(0, 0, 0, .001);
+
+  mask-image: radial-gradient(circle var(--r) at var(--x) var(--y),
+      white 0%, white 15%, rgba(255, 255, 255, .9) 30%, rgba(255, 255, 255, .78) 45%,
+      rgba(255, 255, 255, .65) 60%, rgba(255, 255, 255, .5) 75%, rgba(255, 255, 255, .32) 88%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle var(--r) at var(--x) var(--y),
+      white 0%, white 15%, rgba(255, 255, 255, .9) 30%, rgba(255, 255, 255, .78) 45%,
+      rgba(255, 255, 255, .65) 60%, rgba(255, 255, 255, .5) 75%, rgba(255, 255, 255, .32) 88%, transparent 100%);
+
+  opacity: 1;
+  transition: opacity .25s ease;
+}
+
+@media (max-width: 1000px) { .chroma-grid { grid-template-columns: repeat(2, minmax(0, 300px)); } }
+@media (max-width: 620px)  { .chroma-grid { grid-template-columns: minmax(0, 320px); } }
+
+/* Touch devices have no hovering cursor to drive the spotlight; the grey
+   overlay would simply sit there dimming everything permanently. */
+@media (hover: none) {
+  .chroma-overlay, .chroma-fade { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chroma-overlay, .chroma-fade { display: none; }
+  .chroma-card:hover { transform: none; }
+}
