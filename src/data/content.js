@@ -208,7 +208,7 @@ export const CAREER_CULTURE = {
 }
 
 // Role filters; `All` is prepended by the page. Values must match a role's `category` below.
-export const CAREER_CATEGORIES = ['Sales', 'Marketing', 'Client Relations', 'Operations']
+export const CAREER_CATEGORIES = ['Sales', 'Business Development', 'Client Relations', 'Operations']
 
 // Open roles; an empty array renders the "no openings" state.
 export const CAREER_ROLES = [
@@ -225,7 +225,7 @@ export const CAREER_ROLES = [
   {
     title: 'Marketing & Content Associate',
     type: 'FULL-TIME · HYDERABAD',
-    category: 'Marketing',
+    category: 'Business Development',
     level: 'Mid level',
     experience: '2–4 years',
     location: 'Hyderabad',
@@ -245,7 +245,7 @@ export const CAREER_ROLES = [
   {
     title: 'Brand & Account Manager',
     type: 'FULL-TIME · HYDERABAD',
-    category: 'Marketing',
+    category: 'Business Development',
     level: 'Mid level',
     experience: '3–6 years',
     location: 'Hyderabad',
@@ -275,7 +275,7 @@ export const CAREER_ROLES = [
   {
     title: 'Web Developer',
     type: 'FULL-TIME · HYDERABAD',
-    category: 'Marketing',
+    category: 'Business Development',
     level: 'Mid level',
     experience: '2–5 years',
     location: 'Hyderabad',
@@ -285,7 +285,7 @@ export const CAREER_ROLES = [
   {
     title: 'Graphic Designer',
     type: 'FULL-TIME · HYDERABAD',
-    category: 'Marketing',
+    category: 'Business Development',
     level: 'Mid level',
     experience: '2–5 years',
     location: 'Hyderabad',
@@ -295,7 +295,7 @@ export const CAREER_ROLES = [
   {
     title: 'Motion Graphic Designer',
     type: 'FULL-TIME · HYDERABAD',
-    category: 'Marketing',
+    category: 'Business Development',
     level: 'Mid level',
     experience: '2–5 years',
     location: 'Hyderabad',
@@ -305,7 +305,7 @@ export const CAREER_ROLES = [
   {
     title: 'Content Strategist',
     type: 'FULL-TIME · HYDERABAD',
-    category: 'Marketing',
+    category: 'Business Development',
     level: 'Mid level',
     experience: '3–6 years',
     location: 'Hyderabad',

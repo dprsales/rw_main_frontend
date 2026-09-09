@@ -37,7 +37,7 @@ export const ROUTE_SEO = {
   '/careers': {
     title: 'Careers — Luxury Real Estate Sales Roles in Hyderabad | Rajiv Williams',
     description:
-      'Sales, marketing, client relations and operations roles on exclusive luxury mandates. Premium inventory, in-house coaching, uncapped incentives.',
+      'Sales, business development, client relations and operations roles on exclusive luxury mandates. Premium inventory, in-house coaching, uncapped incentives.',
   },
   '/about': {
     title: 'About Rajiv Williams — Luxury Sales Mentor, Hyderabad',

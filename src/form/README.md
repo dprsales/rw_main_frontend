@@ -19,7 +19,7 @@ form/
 ```jsx
 import AssessmentForm from './form/AssessmentForm'
 
-<AssessmentForm onSubmit={(payload) => post('/leads', payload)} />
+<AssessmentForm onSubmit={(payload) => post('/saleleads', payload)} />
 ```
 
 | Prop | Default | What it does |

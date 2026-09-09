@@ -1156,6 +1156,40 @@ a:hover { color: var(--ink, #12100D); }
   padding-bottom: 7px;
 }
 .rw-career-form-section span { color: var(--faded); letter-spacing: .08em; }
+.rw-career-reference-title {
+  color: var(--ink);
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  grid-column: 1 / -1;
+  letter-spacing: .14em;
+  margin-top: 4px;
+}
+.rw-reference-disclaimer {
+  color: #B89555;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  grid-column: 1 / -1;
+  line-height: 1.6;
+  margin: 6px 0 2px;
+  max-width: 58em;
+}
+
+.rw-career-consent {
+  align-items: flex-start;
+  color: var(--faded);
+  display: flex;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  gap: 9px;
+  grid-column: 1 / -1;
+  line-height: 1.45;
+}
+.rw-career-consent input {
+  accent-color: var(--copper);
+  flex: 0 0 auto;
+  margin: 2px 0 0;
+}
 
 .rw-career-modal-form input,
 .rw-career-modal-form select,
@@ -1170,6 +1204,16 @@ a:hover { color: var(--ink, #12100D); }
 .rw-career-modal-form textarea:focus {
   border-color: var(--copper);
   box-shadow: 0 0 0 2px rgba(195, 155, 83, .12);
+}
+
+.rw-career-modal-form input[type='date'] {
+  color-scheme: dark;
+  cursor: pointer;
+}
+.rw-career-modal-form input[type='date']::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(77%) sepia(27%) saturate(650%) hue-rotate(358deg) brightness(88%);
+  opacity: .95;
 }
 
 .rw-resume-dropzone {
@@ -1379,6 +1423,7 @@ a:hover { color: var(--ink, #12100D); }
   scrollbar-width: none;
   padding-bottom: 4px;
 }
+.rw-mobile-career-filters { display: none; }
 .rw-tabs::-webkit-scrollbar { display: none; }
 
 .rw-tab {
@@ -1544,11 +1589,49 @@ a:hover { color: var(--ink, #12100D); }
   .rw-role-row .rw-role-apply { grid-column: 2; justify-self: start; }
 }
 @media (max-width: 600px) {
+  /* The third-party Kenyt launcher floats over the narrow role rows. Keep it
+     available elsewhere, but remove the obstruction on the Careers mobile view. */
+  body.rw-careers-page iframe[src*="kenyt"],
+  body.rw-careers-page [id*="kenyt"],
+  body.rw-careers-page [class*="kenyt"] {
+    display: none !important;
+  }
+  .rw-desktop-career-filters,
+  .rw-desktop-level-filter { display: none !important; }
+  .rw-mobile-career-filters {
+    display: grid;
+    gap: 12px;
+    margin: 28px 0 0;
+  }
+  .rw-mobile-career-filters label { display: grid; gap: 7px; }
+  .rw-mobile-career-filters span {
+    color: var(--copper);
+    font-family: 'Jost', sans-serif;
+    font-size: 10px;
+    letter-spacing: .16em;
+  }
+  .rw-mobile-career-filters select {
+    appearance: none;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    min-height: 44px;
+    padding: 0 14px;
+    width: 100%;
+  }
+  .rw-mobile-career-filters select:focus {
+    border-color: var(--copper);
+    box-shadow: 0 0 0 2px rgba(195, 155, 83, .12);
+    outline: none;
+  }
   .rw-role-row { grid-template-columns: 1fr; gap: 18px; padding: 22px; }
   .rw-role-card-main { border-right: 0; border-bottom: 1px solid var(--line); min-height: 0; padding: 0 0 18px; }
   .rw-role-row .rw-role-apply { grid-column: 1; min-width: 0; width: 100%; }
   .rw-role-summary p { font-size: 15px; }
-  .rw-level-tab { min-width: 82px; padding: 9px 12px; }
+  .rw-level-tab { min-width: 0; padding: 9px 4px; }
 }
 
 /* --- Careers: hiring timeline --------------------------------------------- */

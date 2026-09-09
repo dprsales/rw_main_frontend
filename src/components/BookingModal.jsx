@@ -33,7 +33,9 @@ const INTERESTS = ['Coaching', 'Consulting', 'RW Realty mandate', CAREERS_INTERE
 const EMPTY = {
   name: '', email: '', phone: '', interest: '', role: '', jobId: '', experience: '', experienceCustom: '',
   currentCtc: '', expectedCtc: '', currentLocation: '', noticePeriod: '', relocation: '', workMode: '',
-  ref1Name: '', ref1Number: '', ref2Name: '', ref2Number: '', linkedinUrl: '', portfolioUrl: '', message: '', resume: null,
+  applicationSource: '',
+  ref1Name: '', ref1Number: '', ref1Relationship: '', ref2Name: '', ref2Number: '', ref2Relationship: '',
+  privacyConsent: false, linkedinUrl: '', portfolioUrl: '', message: '', resume: null,
 }
 
 // 10MB cap avoids timing out the upload of a phone-camera PDF on mobile data.
@@ -83,6 +85,7 @@ function BookingModal({ preset, onClose }) {
   }, [onClose])
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }))
+  const setConsent = (e) => setForm((f) => ({ ...f, privacyConsent: e.target.checked }))
 
   const isApplying = form.interest === CAREERS_INTEREST
   const selectedRole = roleOptions.find((role) => role === form.role)
@@ -222,16 +225,6 @@ function BookingModal({ preset, onClose }) {
                 </Field>
               )}
               {isApplying && (
-                <Field label="Resume / CV">
-                  <label className="rw-resume-dropzone">
-                    <MetaIcon type="clip" />
-                    <span>{form.resume ? form.resume.name : 'Drag and drop your resume here'}</span>
-                    <small>or click to browse · PDF, DOC, DOCX (Max 5MB)</small>
-                    <input type="file" accept={RESUME_TYPES} onChange={setResume} />
-                  </label>
-                </Field>
-              )}
-              {isApplying && (
                 <>
                   <Field label="Experience" required>
                     <select required value={form.experience} onChange={set('experience')} style={{ ...inputStyle, appearance: 'none' }}>
@@ -265,10 +258,24 @@ function BookingModal({ preset, onClose }) {
                 <>
                   <div className="rw-career-form-section">CAREER DETAILS</div>
                   <Field label="Current CTC" required>
-                    <input required value={form.currentCtc} onChange={set('currentCtc')} style={inputStyle} placeholder="e.g. 8 LPA" />
+                    <select required value={form.currentCtc} onChange={set('currentCtc')} style={{ ...inputStyle, appearance: 'none' }}>
+                      <option value="">Select current CTC...</option>
+                      <option value="Prefer not to disclose">Prefer not to disclose</option>
+                      <option value="Below 5 LPA">Below 5 LPA</option>
+                      <option value="5–10 LPA">5–10 LPA</option>
+                      <option value="10–20 LPA">10–20 LPA</option>
+                      <option value="20+ LPA">20+ LPA</option>
+                    </select>
                   </Field>
                   <Field label="Expected CTC" required>
-                    <input required value={form.expectedCtc} onChange={set('expectedCtc')} style={inputStyle} placeholder="e.g. 12 LPA" />
+                    <select required value={form.expectedCtc} onChange={set('expectedCtc')} style={{ ...inputStyle, appearance: 'none' }}>
+                      <option value="">Select expected CTC...</option>
+                      <option value="Prefer not to disclose">Prefer not to disclose</option>
+                      <option value="Below 5 LPA">Below 5 LPA</option>
+                      <option value="5–10 LPA">5–10 LPA</option>
+                      <option value="10–20 LPA">10–20 LPA</option>
+                      <option value="20+ LPA">20+ LPA</option>
+                    </select>
                   </Field>
                   <Field label="Current location" required>
                     <input required value={form.currentLocation} onChange={set('currentLocation')} style={inputStyle} placeholder="City, state" />
@@ -299,18 +306,54 @@ function BookingModal({ preset, onClose }) {
                       <option value="Remote">Remote</option>
                     </select>
                   </Field>
+                  <Field label="How did you hear about us?" required>
+                    <select required value={form.applicationSource} onChange={set('applicationSource')} style={{ ...inputStyle, appearance: 'none' }}>
+                      <option value="">Select a source...</option>
+                      <option value="LinkedIn">LinkedIn</option>
+                      <option value="Website">Company website</option>
+                      <option value="Employee referral">Employee referral</option>
+                      <option value="Job portal">Job portal</option>
+                      <option value="Social media">Social media</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </Field>
                   <div className="rw-career-form-section">PROFESSIONAL REFERENCES <span>(OPTIONAL)</span></div>
-                  <Field label="Reference 1 name">
+                  <p className="rw-reference-disclaimer">
+                    Note: Please provide accurate reference details and ensure the individuals listed have consented to being contacted.
+                  </p>
+                  <div className="rw-career-reference-title">REFERENCE 1</div>
+                  <Field label="Name">
                     <input value={form.ref1Name} onChange={set('ref1Name')} style={inputStyle} placeholder="Full name" />
                   </Field>
-                  <Field label="Reference 1 number">
+                  <Field label="Number">
                     <input type="tel" inputMode="numeric" value={form.ref1Number} onChange={set('ref1Number')} style={inputStyle} placeholder="Mobile number" />
                   </Field>
-                  <Field label="Reference 2 name">
+                  <Field label="Relationship">
+                    <input value={form.ref1Relationship} onChange={set('ref1Relationship')} style={inputStyle} placeholder="Former manager, colleague..." />
+                  </Field>
+                  <div className="rw-career-reference-title">REFERENCE 2</div>
+                  <Field label="Name">
                     <input value={form.ref2Name} onChange={set('ref2Name')} style={inputStyle} placeholder="Full name" />
                   </Field>
-                  <Field label="Reference 2 number">
+                  <Field label="Number">
                     <input type="tel" inputMode="numeric" value={form.ref2Number} onChange={set('ref2Number')} style={inputStyle} placeholder="Mobile number" />
+                  </Field>
+                  <Field label="Relationship">
+                    <input value={form.ref2Relationship} onChange={set('ref2Relationship')} style={inputStyle} placeholder="Former manager, colleague..." />
+                  </Field>
+                </>
+              )}
+
+              {isApplying && (
+                <>
+                  <div className="rw-career-form-section">RESUME / CV</div>
+                  <Field label="Resume / CV">
+                    <label className="rw-resume-dropzone">
+                      <MetaIcon type="clip" />
+                      <span>{form.resume ? form.resume.name : 'Drag and drop your resume here'}</span>
+                      <small>or click to browse · PDF, DOC, DOCX (Max 5MB)</small>
+                      <input type="file" accept={RESUME_TYPES} onChange={setResume} />
+                    </label>
                   </Field>
                 </>
               )}
@@ -318,6 +361,13 @@ function BookingModal({ preset, onClose }) {
               <Field label={isApplying ? 'Additional information (optional)' : 'Message'}>
                 <textarea value={form.message} onChange={set('message')} rows={isApplying ? 3 : 3} style={{ ...inputStyle, resize: 'vertical' }} placeholder={isApplying ? 'Tell us about your experience, skills or anything else we should know...' : 'What would you like to discuss? (optional)'} />
               </Field>
+
+              {isApplying && (
+                <label className="rw-career-consent">
+                  <input type="checkbox" checked={form.privacyConsent} onChange={setConsent} required />
+                  <span>I consent to Team Rajiv Williams using my information for recruitment and selection purposes.</span>
+                </label>
+              )}
 
               {status === 'error' && (
                 <p style={{ fontFamily: mono, fontSize: 12, color: '#E5726A', letterSpacing: '.02em' }}>{error}</p>

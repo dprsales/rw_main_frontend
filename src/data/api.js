@@ -201,3 +201,10 @@ export const getJobById = (id, opts) =>
 // Takes a FormData so the résumé file can ride along as multipart.
 export const createApplication = (formData) =>
   request('/applications', { method: 'POST', body: formData })
+
+// Sale Leads — pre-consultation assessment
+export const submitSaleLead = (data) =>
+  request('/saleleads', {
+    method: 'POST',
+    body: data,
+  })

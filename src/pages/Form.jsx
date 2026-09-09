@@ -6,6 +6,7 @@ import Seo from '../components/Seo'
 import AssessmentForm from '../form/AssessmentForm'
 import { ASSESSMENT_TRACKS } from '../form/tracks'
 import { FOOTER_LINKS } from '../theme'
+import { submitSaleLead } from '../data/api'
 
 // /form — pre-consultation assessment (logic in src/form/); tracks are paths (/form/coaching etc),
 // legacy ?track= links redirect to the path form, and unknown/mis-cased segments normalize below.
@@ -46,6 +47,7 @@ export default function Form() {
         key={valid || 'picker'}
         initialTrack={valid}
         stickyOffset={headerH}
+        onSubmit={submitSaleLead}
         // replace:true — track selection shouldn't be a back-button step.
         onTrackChange={(next) => navigate(next ? `/form/${next}` : '/form', { replace: true })}
       />

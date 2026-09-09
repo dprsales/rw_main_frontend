@@ -68,11 +68,20 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
     return { ...prev, [id]: current.includes(option) ? current.filter((v) => v !== option) : [...current, option] }
   })
 
-  function submit() {
+  async function submit() {
     const payload = { track: trackKey, answers, submittedAt: new Date().toISOString() }
-    if (onSubmit) onSubmit(payload)
-    else console.log('RW assessment', payload)
-    setSent(true)
+    try {
+      if (onSubmit) {
+        await onSubmit(payload)
+      } else {
+        console.log('RW assessment', payload)
+      }
+
+      setSent(true)
+    } catch (error) {
+      console.error('Lead submission failed:', error)
+      alert(error?.message || 'Unable to submit your enquiry. Please try again.')
+    }
   }
 
   /* ---------- 1. Track picker ---------- */

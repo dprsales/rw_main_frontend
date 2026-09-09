@@ -56,6 +56,11 @@ export default function Careers() {
   const [openRoles, setOpenRoles] = useState(CAREER_ROLES)
 
   useEffect(() => {
+    document.body.classList.add('rw-careers-page')
+    return () => document.body.classList.remove('rw-careers-page')
+  }, [])
+
+  useEffect(() => {
     let live = true
     fetchRoles().then((rows) => { if (live) setOpenRoles(rows) })
     return () => { live = false }
@@ -63,6 +68,7 @@ export default function Careers() {
 
   // Any API category not in the curated list still needs a tab, or its roles are unreachable.
   const categories = [...new Set([...CAREER_CATEGORIES, ...openRoles.map((r) => r.category)])]
+    .filter((category) => category?.toLowerCase() !== 'marketing')
 
   // Only categories with an open role get a tab.
   const tabs = [ALL, ...categories.filter((c) => openRoles.some((r) => r.category === c))]
@@ -185,7 +191,7 @@ export default function Careers() {
 
           {openRoles.length > 0 && (
             <Reveal delay={80} style={{ marginTop: 38, display: 'flex', justifyContent: 'center' }}>
-              <div className="rw-tabs" role="tablist" aria-label="Filter roles by team">
+              <div className="rw-tabs rw-desktop-career-filters" role="tablist" aria-label="Filter roles by team">
                 {tabs.map((tab) => (
                   <button
                     key={tab}
@@ -204,7 +210,7 @@ export default function Careers() {
           )}
 
           {openRoles.length > 0 && (
-            <Reveal delay={120} style={{ marginTop: 18, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+            <Reveal delay={120} className="rw-desktop-level-filter" style={{ marginTop: 18, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
               <span className="rw-level-label">LEVEL</span>
               <div className="rw-level-tabs" role="tablist" aria-label="Filter roles by level">
                 {LEVELS.map((level) => (
@@ -221,6 +227,23 @@ export default function Careers() {
                 ))}
               </div>
             </Reveal>
+          )}
+
+          {openRoles.length > 0 && (
+            <div className="rw-mobile-career-filters">
+              <label>
+                <span>DEPARTMENT</span>
+                <select value={filter} onChange={(event) => { setFilter(event.target.value); setVisibleCount(ROLES_PER_PAGE) }}>
+                  {tabs.map((tab) => <option key={tab} value={tab}>{tab}</option>)}
+                </select>
+              </label>
+              <label>
+                <span>LEVEL</span>
+                <select value={levelFilter} onChange={(event) => { setLevelFilter(event.target.value); setVisibleCount(ROLES_PER_PAGE) }}>
+                  {LEVELS.map((level) => <option key={level} value={level}>{level}</option>)}
+                </select>
+              </label>
+            </div>
           )}
 
           {openRoles.length === 0 ? (
