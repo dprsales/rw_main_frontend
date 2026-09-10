@@ -1,4 +1,9 @@
-// Headline lines that slide up from behind a clipping mask on load. `block` stacks lines; otherwise they flow inline.
+/**
+ * Headline lines that slide up from behind a clipping mask on load.
+ * The font is inherited from the enclosing heading rather than set here.
+ * `lines` is [{ text, italic?, copper? }]. `block` stacks each line on its own
+ * row; otherwise lines flow inline so a phrase can wrap mid-sentence.
+ */
 export default function RiseText({ lines, block = false, baseDelay = 0.13, step = 0.11 }) {
   let rank = 0 // line breaks don't take a turn in the stagger
 
@@ -14,7 +19,8 @@ export default function RiseText({ lines, block = false, baseDelay = 0.13, step 
           display: block ? 'block' : 'inline-block',
           overflow: 'hidden',
           verticalAlign: 'top',
-          // Extra padding gives italic descenders room below the mask edge; negative margin keeps rhythm unchanged.
+          // Padding gives italic descenders room below the mask edge; margin offsets it back
+          // to the original .12em rhythm (grown for Cormorant's deeper descenders).
           paddingBottom: '.42em',
           marginBottom: '-.30em',
         }}
@@ -23,7 +29,7 @@ export default function RiseText({ lines, block = false, baseDelay = 0.13, step 
           className={line.copper ? 'rw-rise-line rw-gold-text' : 'rw-rise-line'}
           style={{
             display: 'inline-block',
-            // pre-wrap keeps the separating space but still lets long phrases wrap on narrow screens.
+            // pre-wrap keeps the trailing space between phrases but still wraps on narrow screens.
             whiteSpace: 'pre-wrap',
             transform: 'translateY(115%)',
             animation: `rw-rise .9s cubic-bezier(.16,.84,.28,1) ${delay}s both`,

@@ -1,5 +1,4 @@
-/* LogoLoop (React Bits). Marquee mechanics verbatim; the tile treatment for
-   this site's opaque logo artwork is added at the bottom under .rw-logoloop. */
+/* LogoLoop (React Bits), marquee mechanics verbatim; tile treatment added below under .rw-logoloop. */
 
 .logoloop {
   position: relative;
@@ -101,18 +100,12 @@
   .logoloop__item img, .logoloop__node { transition: none !important; }
 }
 
-/* ---------------------------------------------------------------------------
-   Site-specific: most client marks are the vector set — white artwork on
-   transparency, needing a dark tile (`.is-dark`) — while any remaining
-   bitmap mark is opaque with white baked in and needs the light frost
-   instead. Each logo rides in a tile so it, not the image, carries the
-   height.
-   --------------------------------------------------------------------------- */
+/* Site-specific: vector marks (white on transparent) get a dark tile (.is-dark); opaque
+   bitmap marks get the light frost. Each logo rides in a tile that carries the height. */
 .rw-logoloop .logoloop__item { font-size: 0; }
 
 .rw-logoloop .rw-loop-tile {
-  /* Fluid, so a phone shows three or four marks of the loop rather than one
-     and a half. The 3:2 ratio carries the height from here. */
+  /* Fluid so a phone shows 3-4 marks instead of one and a half; 3:2 ratio carries the height. */
   width: clamp(112px, 28vw, 168px);
   aspect-ratio: 3 / 2;
   display: flex;
@@ -131,8 +124,7 @@
   border-color: rgba(242, 239, 233, .18);
 }
 
-/* Overrides the component's `height: var(--logoloop-logoHeight)` so the mark is
-   contained by the tile instead of being forced to a fixed pixel height. */
+/* Overrides height: var(--logoloop-logoHeight) so the mark is contained by the tile. */
 .rw-logoloop .rw-loop-tile img {
   height: auto;
   max-width: 82%;

@@ -1,4 +1,9 @@
-/** Live blog feed: posts link out to LinkedIn Pulse via `posturl`; images load from the DPR CDN via `cdn()`. */
+/**
+ * Live blog feed. Posts are authored on the DPR platform; each card links out
+ * to where the post already lives (`posturl` - LinkedIn Pulse), so there are
+ * no on-site article routes. Images are root-relative Bunny CDN paths, served
+ * from the CDN origin (not the API host) - `cdn()` handles that.
+ */
 import { cdn, getBlogs } from './api'
 
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
@@ -20,7 +25,7 @@ function toCard(blog) {
   }
 }
 
-/** Fetch published blogs, newest first, mapped to card shape. */
+/** Fetch published blogs, newest first, mapped to card shape. Rejects on error so callers can fall back. */
 export async function fetchBlogs() {
   const blogs = await getBlogs()
   return blogs

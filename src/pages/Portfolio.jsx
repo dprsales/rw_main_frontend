@@ -1,26 +1,36 @@
-import { useState } from 'react'
-import coverImage from '../assets/site/cover-rajiv.webp'
+import coverImage from '../assets/site/AI_Image copy.jpg'
+import hydMark from '../assets/site/hyd-01.svg'
 import Seo from '../components/Seo'
 import hraLogo from '../assets/site/logo-hra.png'
 import narLogo from '../assets/site/logo-nar.png'
 import anantha from '../assets/site/LOGOS/anantha.svg'
 import avani from '../assets/site/LOGOS/avani.svg'
 import blueFin from '../assets/site/LOGOS/blue-fin.svg'
+import cascadesNeopolis from '../assets/site/LOGOS/cascades-neopolis.svg'
+import celestial from '../assets/site/LOGOS/celestial.svg'
+import dezignShark from '../assets/site/LOGOS/dezign-shark.svg'
 import eInfra from '../assets/site/LOGOS/e-infra.svg'
 import gangothri from '../assets/site/LOGOS/gangothri.svg'
 import haneesh from '../assets/site/LOGOS/haneesh.svg'
+import happeningHyderabad from '../assets/site/LOGOS/happening-hyderabad.svg'
 import ira from '../assets/site/LOGOS/ira.svg'
 import kolla from '../assets/site/LOGOS/kolla.svg'
 import landmark from '../assets/site/LOGOS/landmark.svg'
+import navanaami from '../assets/site/LOGOS/navanaami.svg'
 import nesta from '../assets/site/LOGOS/nesta.svg'
+import promenadeVillas from '../assets/site/LOGOS/promenade-villas.svg'
+import radhaSpaces from '../assets/site/LOGOS/radha-spaces.svg'
+import rohas from '../assets/site/LOGOS/rohas.svg'
 import sriAditya from '../assets/site/LOGOS/sri-aditya.svg'
 import suchirindia from '../assets/site/LOGOS/suchirindia.svg'
 import tejase from '../assets/site/LOGOS/tejase.svg'
+import tgreraLogo from '../assets/site/LOGOS/tgrera.svg'
 import trilight from '../assets/site/LOGOS/trilight.svg'
 import vamsiram from '../assets/site/LOGOS/vamsiram.svg'
 import vamsiramHomes from '../assets/site/LOGOS/vamsiram-homes.svg'
 import vibrant from '../assets/site/LOGOS/vibrant.svg'
 import zuari from '../assets/site/LOGOS/zuari.svg'
+import CountUp from '../components/CountUp'
 import ExperienceSection from '../components/ExperienceSection'
 import Footer from '../components/Footer'
 import GlimpsesSection from '../components/GlimpsesSection'
@@ -31,16 +41,15 @@ import Reveal from '../components/Reveal'
 import RiseText from '../components/RiseText'
 import ClosingCTA from '../components/ClosingCTA'
 import SectionHead, { SectionCount } from '../components/SectionHead'
-import SignatureOverlay from '../components/SignatureOverlay'
 import TeamSection from '../components/TeamSection'
 import { useTilt } from '../hooks/useTilt'
 import {
-  ASSOCIATIONS, CREDENTIALS,
+  ASSOCIATIONS,
   ORGANISATIONS_WORKED, PORTFOLIO_TESTIMONIALS,
 } from '../data/content'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import {
-  container, ctaInk, eyebrow, eyebrowFaded,
+  container, eyebrow, eyebrowFaded,
   sectionHeadingSm, sectionRule,
 } from '../styles'
 
@@ -50,13 +59,17 @@ const HEADLINE = [
   { text: 'résumé.', italic: true, copper: true },
 ]
 
-// Logos for ASSOCIATIONS by index; undefined slots fall back to ImageSlot's placeholder.
-const ASSOC_LOGOS = [hraLogo, narLogo, undefined, undefined]
+/* Logos for ASSOCIATIONS, matched by index. */
+const ASSOC_LOGOS = [hraLogo, narLogo, tgreraLogo, dezignShark, happeningHyderabad]
 
-// Client logos keyed by name in ORGANISATIONS_WORKED; names without a logo fall back to a wordmark tile.
+const ASSOC_ITEMS = ASSOCIATIONS
+  .map((assoc, i) => ({ ...assoc, logo: ASSOC_LOGOS[i] }))
+
+/* Client logos keyed by name; names absent here fall back to a wordmark tile. */
 const ORG_LOGOS = {
   'Vamsiram': vamsiram,
   'Vamsiram Homes': vamsiramHomes,
+  'The Cascades Neopolis': cascadesNeopolis,
   'The Trilight': trilight,
   'Sri Aditya': sriAditya,
   'Blue Fin Realty': blueFin,
@@ -65,43 +78,53 @@ const ORG_LOGOS = {
   'Landmark Group': landmark,
   'Suchirindia': suchirindia,
   'Kolla': kolla,
-  'Nesta Developers': nesta,
-  'Tejase Developers': tejase,
+  // 'Nesta Developers': nesta,
+  // 'Tejase Developers': tejase,
   'Haneesh Constructions': haneesh,
   'Vibrant Developers': vibrant,
   'Anantha Projects': anantha,
-  'Avani': avani,
+  // 'Avani': avani,
   'Gangothri': gangothri,
+  'Rohas Ventures': rohas,
   'e-Infra': eInfra,
+  'Celestial': celestial,
+  'Navanaami': navanaami,
+  'Promenade Villas': promenadeVillas,
+  'Radha Spaces': radhaSpaces,
 }
 
-// Optical-size correction for logos still on original bitmap canvases; tuned by eye.
+/* Optical-size correction for logos still on original bitmap canvases; tuned by eye. */
 const LOGO_SCALE = {}
 
-// Separate width/height caps keep wide wordmarks and square monograms at comparable area.
+/* Capping width/height separately keeps wordmarks and monograms at comparable area. */
 const LOGO_MAX_W = 82
 const LOGO_MAX_H = 62
 
-// Every logo is white artwork on transparency, so every tile needs a dark background.
+/* Every logo is white artwork on transparency, so every tile runs dark. */
 const LOGO_NEEDS_DARK = new Set([
-  'Vamsiram', 'Vamsiram Homes', 'The Trilight', 'Sri Aditya', 'Blue Fin Realty',
+  'Vamsiram', 'Vamsiram Homes', 'The Cascades Neopolis', 'The Trilight', 'Sri Aditya', 'Blue Fin Realty',
   'IRA', 'Zuari Infraworld', 'Landmark Group', 'Suchirindia', 'Kolla',
   'Nesta Developers', 'Tejase Developers', 'Haneesh Constructions',
-  'Vibrant Developers', 'Anantha Projects', 'Avani', 'Gangothri', 'e-Infra',
+  'Vibrant Developers', 'Anantha Projects', 'Avani', 'Gangothri', 'Rohas Ventures', 'e-Infra',
+  'Celestial', 'Navanaami', 'Promenade Villas', 'Radha Spaces',
 ])
 
-// Only organisations with a supplied logo are shown.
+/* Only organisations with a supplied logo are shown; rest appear once artwork arrives. */
 const ORGS_WITH_LOGO = ORGANISATIONS_WORKED.filter((org) => ORG_LOGOS[org])
 
-const TRACK_RECORD = []
+const TRACK_RECORD = [
+  // { value: <CountUp to={500} suffix="+" />, label: 'PROFESSIONALS MENTORED' },
+  // { value: <CountUp to={30} suffix="+" />, label: 'LUXURY PROJECTS REPRESENTED' },
+  // { value: <CountUp to={15} suffix="+" />, label: 'YEARS IN LUXURY REAL ESTATE' },
+  // { value: '4.9/5', label: 'CLIENT RATING' },
+]
 
-// The first flagged voice leads at scale; the rest fill the wall beneath it.
+/* The first flagged voice leads the section at scale; the rest fill the wall beneath it. */
 const LEAD_VOICE = PORTFOLIO_TESTIMONIALS.find((t) => t.highlight) || PORTFOLIO_TESTIMONIALS[0]
 const REST_VOICES = PORTFOLIO_TESTIMONIALS.filter((t) => t !== LEAD_VOICE)
 
 export default function Portfolio() {
   const tilt = useTilt({ max: 4 })
-  const [showAllVoices, setShowAllVoices] = useState(false)
 
   return (
     <>
@@ -117,7 +140,7 @@ export default function Portfolio() {
               <RiseText lines={HEADLINE} step={0.085} />
             </h1>
             <Reveal as="p" delay={140} style={{ marginTop: 32, maxWidth: '34em', fontFamily: text, fontWeight: 300, fontSize: 'clamp(17px,1.9vw,21px)', lineHeight: 1.55, color: 'var(--faded)' }}>
-              Where Rajiv shows up — mentoring sessions, developer launches, industry gatherings and the conversations that shape Hyderabad&apos;s luxury real estate market.
+              Where RW shows up: mentoring sessions, developer launches, industry gatherings and the conversations that shape Hyderabad&apos;s luxury real estate market.
             </Reveal>
           </div>
 
@@ -131,20 +154,20 @@ export default function Portfolio() {
                 src={coverImage}
                 alt="Rajiv Williams"
                 placeholder="Portrait of Rajiv"
-                caption="pics/ — studio or office"
+                caption="pics/ · studio or office"
                 spec="Portrait 4:5 · ≥1600px tall · shot vertical, not cropped from landscape"
                 position="center 22%"
               />
-              <SignatureOverlay />
             </div>
           </Reveal>
         </div>
       </section>
 
       {/* Track record */}
-      <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={container}>
-          {/* Dividers between stats are drawn in CSS (.rw-stat), based on wrap column count. */}
+      <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)', position: 'relative', overflow: 'hidden' }}>
+        <img src={hydMark} alt="" aria-hidden className="rw-watermark is-left" />
+        <div className="rw-pad" style={{ ...container, position: 'relative', zIndex: 1 }}>
+          {/* Dividers drawn in CSS (.rw-stat) since only the stylesheet knows the wrap column count. */}
           <div className="rw-grid-4 rw-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)' }}>
             {TRACK_RECORD.map((stat, i) => (
               <Reveal key={stat.label} delay={i * 80} className="rw-stat">
@@ -156,14 +179,14 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Same "where the work happens" mosaic as the home page, but tiles don't link here. */}
-      <GlimpsesSection showCta={false} linkTo={null} />
+      {/* Same mosaic as home; no through-link since you're already on the portfolio. */}
+      {/* <GlimpsesSection showCta={false} linkTo={null} /> */}
 
       <ExperienceSection />
 
       <TeamSection />
 
-      {/* Testimonials: one line pulled out large, the rest in a denser grid beneath. */}
+      {/* Testimonials wall: one line pulled out large, rest layer beneath as a denser grid. */}
       <section id="voices" className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
         <SectionHead
           eyebrow="WHAT OUR CLIENTS SAY" faded size="lg" space={34}
@@ -175,7 +198,7 @@ export default function Portfolio() {
           )}
         />
 
-        {/* One voice leads at scale so the eye has an entry point. */}
+        {/* One voice leads at scale; multiple large quotes gave the eye no entry point. */}
         {LEAD_VOICE && (
           <Reveal
             style={{
@@ -184,11 +207,11 @@ export default function Portfolio() {
               marginBottom: 'clamp(30px,3.4vw,44px)',
             }}
           >
-            {/* ~26em keeps a comfortable line length without stranding empty space on desktop. */}
+            {/* ~26em keeps line length comfortable without stranding empty space on desktop. */}
             <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: 'clamp(21px,2.3vw,31px)', lineHeight: 1.36, color: 'var(--ink)', margin: 0, maxWidth: '26em' }}>
               “{LEAD_VOICE.text}”
             </p>
-            {/* Attribution sits under the quote rather than a second column, to avoid a tall void. */}
+            {/* Attribution under the quote: a second column left a tall void beside shorter quotes. */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 'clamp(22px,2.4vw,30px)' }}>
               <span aria-hidden style={{ width: 34, height: 1, background: 'var(--copper)', flexShrink: 0 }} />
               <div>
@@ -201,9 +224,9 @@ export default function Portfolio() {
           </Reveal>
         )}
 
-        {/* Six voices by default; showing all of them ran the section too tall. */}
+        {/* Six voices by default; showing all ran the section to nearly 2,000px. */}
         <div className="rw-voice-grid">
-          {(showAllVoices ? REST_VOICES : REST_VOICES.slice(0, 6)).map((t, i) => (
+          {REST_VOICES.slice(0, 6).map((t, i) => (
             <Reveal key={t.name} delay={(i % 3) * 80} className="rw-voice-card">
               <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: 16, lineHeight: 1.55, color: 'var(--ink)', margin: 0 }}>
                 “{t.text}”
@@ -218,30 +241,32 @@ export default function Portfolio() {
 
         {REST_VOICES.length > 6 && (
           <Reveal style={{ display: 'flex', justifyContent: 'center', marginTop: 'clamp(24px,2.6vw,34px)' }}>
-            <button
-              type="button"
+            <a
+              href="https://www.linkedin.com/in/rajivwilliams/details/recommendations/"
+              target="_blank"
+              rel="noreferrer"
               className="rw-outline-btn"
-              onClick={() => setShowAllVoices((v) => !v)}
               style={{
                 fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--ink)',
                 background: 'none', border: '1px solid var(--line)', padding: '13px 26px',
                 cursor: 'pointer', transition: 'background .3s, color .3s, border-color .3s',
+                display: 'inline-block',
               }}
             >
-              {showAllVoices ? 'SHOW FEWER' : `SHOW ALL ${PORTFOLIO_TESTIMONIALS.length} VOICES`}
-            </button>
+              SHOW ALL MORE VOICES ↗
+            </a>
           </Reveal>
         )}
       </section>
 
-      {/* Organisations we've worked with — a typographic name wall. */}
+      {/* Organisations we've worked with - a typographic name wall. */}
       <section id="organisations" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
           <Reveal style={{ ...eyebrowFaded, marginBottom: 14 }}>ORGANISATIONS WE&apos;VE WORKED WITH</Reveal>
           <Reveal delay={80} as="h2" style={{ ...sectionHeadingSm, maxWidth: '14em' }}>
-            Trusted across Hyderabad&apos;s luxury market.
+            Trusted across Hyderabad&apos;s luxury realestate market.
           </Reveal>
-          {/* Dark frosted-glass tiles, since logos are white artwork on transparency. */}
+          {/* Frosted-glass tiles, dark - white artwork logos only read against a dark tile. */}
           <div className="rw-orgs" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10, marginTop: 'clamp(34px,4vw,52px)' }}>
             {ORGS_WITH_LOGO.map((org, i) => {
               const scale = LOGO_SCALE[org] || 1
@@ -274,16 +299,9 @@ export default function Portfolio() {
       <section id="credentials" style={{ ...sectionRule, background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
           <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>CREDENTIALS &amp; MEMBERSHIPS</Reveal>
-          <Reveal delay={90} style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
-            {CREDENTIALS.map((credential) => (
-              <span key={credential} className="rw-cred-pill" style={{ fontFamily: serif, fontSize: 20, color: 'var(--ink)', border: '1px solid var(--line)', padding: '12px 22px', borderRadius: 100, background: 'var(--bg)' }}>
-                {credential}
-              </span>
-            ))}
-          </Reveal>
 
-          <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginTop: 40 }}>
-            {ASSOCIATIONS.map((assoc, i) => (
+          <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+            {ASSOC_ITEMS.map((assoc, i) => (
               <Reveal
                 key={assoc.name}
                 delay={i * 90}
@@ -294,10 +312,10 @@ export default function Portfolio() {
                 className="rw-assoc-card"
                 style={{ display: 'flex', alignItems: 'center', gap: 'clamp(14px,2vw,20px)', flexWrap: 'wrap', border: '1px solid var(--line)', padding: 'clamp(16px,2vw,22px)', background: 'var(--bg)', textDecoration: 'none' }}
               >
-                {/* Fixed-width, non-shrinking logo slot. */}
+                {/* Fixed-width, non-shrinking, leaving the name ~90px to wrap on a small phone. */}
                 <div className="rw-logo rw-assoc-logo" style={{ width: 'clamp(96px,26vw,132px)', height: 44, flexShrink: 0 }}>
                   <ImageSlot
-                    src={ASSOC_LOGOS[i]}
+                    src={assoc.logo}
                     alt={assoc.name}
                     placeholder="Logo"
                     caption="assoc."
@@ -325,7 +343,7 @@ export default function Portfolio() {
         pad="clamp(90px,12vw,130px)" titleStyle={{ fontStyle: 'italic' }}
         title="Whatever the room, it starts with a conversation."
       >
-        <BookButton style={ctaInk}>BOOK A STRATEGY CALL</BookButton>
+        <BookButton specular>BOOK A STRATEGY CALL</BookButton>
       </ClosingCTA>
 
       <Footer chip links={FOOTER_LINKS} />

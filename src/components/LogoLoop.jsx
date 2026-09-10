@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState, memo } from 'react'
 import './LogoLoop.css'
 
-/** Infinitely scrolling logo marquee (React Bits): duplicated sequence, rAF-driven, eased velocity. */
+/**
+ * LogoLoop (React Bits): a measured logo sequence duplicated to cover the container,
+ * translated by a rAF loop wrapping modulo sequence width. Velocity eases toward
+ * target so hover slow-down feels weighted.
+ */
 const ANIMATION_CONFIG = { SMOOTH_TAU: 0.25, MIN_COPIES: 2, COPY_HEADROOM: 2 }
 
 const toCssLength = (value) => (typeof value === 'number' ? `${value}px` : (value ?? undefined))

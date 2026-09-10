@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import heroImage from '../assets/site/hero-rajiv.webp'
 import backdropImage from '../assets/site/branded-backdrop.webp'
 import deskImage from '../assets/site/desk-work.webp'
-import portraitImage from '../assets/site/portrait-rajiv.webp'
-import whiteboardImage from '../assets/site/whiteboard-session.jpg'
+import portraitImage from '../assets/site/portrait-rajiv.png'
+import whiteboardImage from '../assets/site/whiteboard-session.png'
 import hraLogo from '../assets/site/logo-hra.png'
 import narLogo from '../assets/site/logo-nar.png'
 import Footer from '../components/Footer'
@@ -17,7 +17,8 @@ import { Skeleton } from 'boneyard-js/react'
 import { BookButton } from '../components/BookingModal'
 import Marquee from '../components/Marquee'
 import Reveal from '../components/Reveal'
-import RiseText from '../components/RiseText'
+import FoldText from '../components/FoldText'
+import StrokeText from '../components/StrokeText'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { SectionCount } from '../components/SectionHead'
 import SignatureOverlay from '../components/SignatureOverlay'
@@ -28,23 +29,19 @@ import { BLOGS, HERO_COPY, HOME_TESTIMONIALS, MARQUEE_ITEMS, WAYS } from '../dat
 import { fetchBlogs } from '../data/blogs'
 import { HOME_FOOTER_LINKS, mono, serif, text } from '../theme'
 import {
-  body, container, ctaCopper, ctaInk, ctaInline, eyebrow,
+  body, container, ctaInk, ctaInline, eyebrow,
   sectionHeading, sectionHeadingLg, sectionRule,
 } from '../styles'
 
 
 
-const HERO_LINES = [
-  { text: 'The specialist who' },
-  { text: 'moves markets.', italic: true, copper: true },
-]
-
-// Blog posts as Gallery cards; every fifth card runs wide. Fallback shown until the live feed loads.
+/* Blog posts as Gallery cards, each a link-out; every fifth card runs wide.
+   Static set from content.js is the fallback until the live feed responds. */
 const withRhythm = (posts) => posts.map((post, i) => ({ ...post, wide: i % 5 === 0 }))
 const FALLBACK_BLOG_ITEMS = withRhythm(BLOGS)
 const HOME_BLOG_COUNT = 5
 
-// Loading skeleton mirroring the gallery grid, so real posts cause zero layout shift.
+/* Mirrors the .rw-gallery card grid so there's zero layout shift when real posts arrive. */
 function BlogFeedSkeleton({ count = HOME_BLOG_COUNT }) {
   return (
     <div className="rw-gallery" aria-hidden="true">
@@ -61,7 +58,7 @@ function BlogFeedSkeleton({ count = HOME_BLOG_COUNT }) {
   )
 }
 
-// A tilting, revealing image frame — used for editorial portraits.
+/** A tilting, revealing image frame - used for editorial portraits. */
 function TiltFrame({ ratio = '4/5', children, style }) {
   const tilt = useTilt({ max: 5 })
   return (
@@ -79,7 +76,7 @@ function TiltFrame({ ratio = '4/5', children, style }) {
   )
 }
 
-// Covers for the three service cards, in WAYS order.
+/** Covers for the three service cards, in WAYS order. */
 const WAY_COVERS = [
   { src: whiteboardImage, alt: 'Rajiv coaching at the whiteboard' },
   { src: deskImage, alt: 'Reviewing sales structures at the desk' },
@@ -90,28 +87,70 @@ function HeroCinematic({ onStory }) {
   const { targetRef, targetStyle, container: parallax } = useParallax()
 
   return (
-    // Hero layout lives in global.css — two compositions (desktop overlay / phone stack).
+    /* Layout lives in global.css: overlay on desktop, stack on phone, via `position`
+       swaps that an inline style can't override. */
     <section id="home" className="rw-hero">
 
-      {/* Desktop: full-bleed banner behind copy. Phone: framed portrait above copy (global.css). */}
+      {/* Desktop: full-bleed banner behind the copy. Phone: framed portrait above it. */}
       <div className="rw-hero-media" {...parallax}>
         <div ref={targetRef} className="rw-hero-photo" style={targetStyle}>
           <img className="rw-hero-img" src={heroImage} alt="Rajiv Williams" />
         </div>
-        {/* Protects copy over the photograph; overlay composition only. */}
+        {/* Protects the copy over the photograph; only used in the overlay composition. */}
         <div aria-hidden className="rw-hero-scrim" />
-        {/* Soft bottom fade grounds the frame against the page. */}
+        {/* A soft bottom fade grounds the frame against the page. */}
         <div aria-hidden className="rw-hero-fade" />
       </div>
 
       <div className="rw-hero-copy">
-        {/* Tight tracking here keeps "HYDERABAD" from orphaning below ~500px. */}
-        <Reveal className="rw-hero-eyebrow" style={{ ...eyebrow, letterSpacing: '.3em', marginBottom: 30, color: 'var(--copper)' }}>
-          RAJIV WILLIAMS · HYDERABAD REAL ESTATE
-        </Reveal>
+        {/* .3em tracking orphans "HYDERABAD" below ~500px; .rw-hero-eyebrow tightens it. */}
+        <FoldText
+          text="RAJIV WILLIAMS · HYDERABAD REAL ESTATE"
+          splitBy="word"
+          hinge="top"
+          trigger="mount"
+          duration={0.6}
+          stagger={0.06}
+          fontSize={15}
+          fontWeight={400}
+          color="var(--copper)"
+          className="rw-hero-eyebrow"
+          style={{ fontFamily: mono, letterSpacing: '.3em', marginBottom: 30 }}
+        />
 
-        <h1 style={{ fontFamily: serif, fontWeight: 400, fontSize: 'clamp(44px,4.8vw,92px)', lineHeight: .98, letterSpacing: '-.01em', color: '#F2EFE9' }}>
-          <RiseText lines={HERO_LINES} block />
+        <h1 style={{ fontFamily: serif, lineHeight: .98, letterSpacing: '-.01em' }}>
+          <StrokeText
+            text="The specialist who"
+            strokeColor="#F2EFE9"
+            fillColor="#F2EFE9"
+            strokeWidth={1.1}
+            drawDuration={1.4}
+            fillDelay={0.1}
+            stagger={0.02}
+            trigger="mount"
+            fillMode="wipe"
+            fontSize={90}
+            fontWeight={400}
+            letterSpacing={-1}
+            className="rw-hero-stroke-line"
+          />
+          <StrokeText
+            text="moves markets."
+            strokeColor="#E8C97A"
+            fillColor="#C39B53"
+            strokeWidth={1.1}
+            drawDuration={1.4}
+            fillDelay={0.1}
+            stagger={0.02}
+            trigger="mount"
+            fillMode="wipe"
+            fontSize={90}
+            fontWeight={400}
+            letterSpacing={-1}
+            reverse
+            className="stroke-text--italic rw-hero-stroke-line"
+            style={{ marginTop: '.05em' }}
+          />
         </h1>
 
         <Reveal as="p" delay={140} style={{ ...body, margin: '32px 0 0', maxWidth: '34em', fontSize: 'clamp(16px,1.6vw,19px)', lineHeight: 1.6, color: 'rgba(234,241,249,.82)' }}>
@@ -119,18 +158,19 @@ function HeroCinematic({ onStory }) {
         </Reveal>
 
         <Reveal delay={240} style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 'clamp(14px,2.4vw,24px)', flexWrap: 'wrap' }}>
-          <BookButton style={ctaCopper}>BOOK A STRATEGY CALL</BookButton>
+          <BookButton specular>BOOK A STRATEGY CALL</BookButton>
           <button type="button" onClick={onStory} className="rw-inline-cta" style={{ ...ctaInline, color: '#F2EFE9' }}>
             The story →
           </button>
         </Reveal>
 
-        {/* Separator rules drop below the breakpoint, where the list stacks instead (.rw-hero-meta). */}
+        {/* Separator rules only read correctly while the line holds; below the
+            breakpoint they're dropped and the list stacks (.rw-hero-meta). */}
         <Reveal delay={400} className="rw-hero-meta" style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid rgba(234,241,249,.22)', display: 'flex', gap: 20, fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'rgba(234,241,249,.7)', flexWrap: 'wrap' }}>
-          <span>TGRERA REGISTERED REALTOR</span>
+          <span>TGRERA LICENSED REALTOR</span>
           <span className="rw-hero-meta-sep" style={{ opacity: 0.5 }}>|</span>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14 }}>
-            MEMBER —
+            MEMBER
             <img
               src={hraLogo}
               alt="Hyderabad Realtors' Association"
@@ -143,6 +183,7 @@ function HeroCinematic({ onStory }) {
             />
           </span>
           <span className="rw-hero-meta-sep" style={{ opacity: 0.5 }}>|</span>
+          {/* <span>FOUNDER, RW REALTY</span> */}
         </Reveal>
       </div>
     </section>
@@ -154,7 +195,8 @@ export default function Home() {
   const navigate = useNavigate()
   const goStory = () => scrollToId('about')
 
-  // Live blog feed; falls back to the static set on failure. "Load more" grows visibleCount.
+  // Live blog feed, newest first, falls back to the static set on failure.
+  // `visibleCount` grows a page at a time on "Load more".
   const [allBlogs, setAllBlogs] = useState(FALLBACK_BLOG_ITEMS)
   const [visibleCount, setVisibleCount] = useState(HOME_BLOG_COUNT)
   const [loadingBlogs, setLoadingBlogs] = useState(true)
@@ -196,7 +238,7 @@ He doesn&apos;t wait for the market to move.<br />
       <section id="about" className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,130px) 40px' }}>
         <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.44fr .56fr', gap: 60, alignItems: 'center' }}>
           <TiltFrame ratio="4/5">
-            <ImageSlot src={portraitImage} alt="Rajiv Williams" placeholder="Portrait of Rajiv" caption="pics/ — office or studio" position="64% 28%" />
+            <ImageSlot src={portraitImage} alt="Rajiv Williams" placeholder="Portrait of Rajiv" caption="pics/ · office or studio" position="45% 28%" />
             <SignatureOverlay />
           </TiltFrame>
           <div>
@@ -205,11 +247,14 @@ He doesn&apos;t wait for the market to move.<br />
               Practitioner first.<br />Everything else follows.
             </Reveal>
             <Reveal as="p" delay={120} style={{ ...body, marginTop: 30, maxWidth: '37em' }}>
-              Fifteen years of live deals, and still counting. Everything Rajiv shares was earned in the market first. That single fact decides everything on this page.
+              Over fifteen years of live deals, and still counting. Everything Rajiv shares was earned in the market first. That single fact decides everything on this page.
             </Reveal>
             <Reveal as="p" delay={200} style={{ ...body, marginTop: 20, maxWidth: '37em' }}>
-              In a business built on trust, Rajiv believes reputation is the only asset that compounds forever and every deal is judged against it.
+              In a business built on trust, Rajiv Williams believes reputation is the only asset that compounds forever and every deal is judged against it.
             </Reveal>
+            {/* <Reveal delay={280} style={{ marginTop: 40, display: 'flex', gap: 40, flexWrap: 'wrap', fontFamily: mono, fontSize: 12, letterSpacing: '.06em', color: 'var(--faded)', borderTop: '1px solid var(--line)', paddingTop: 24 }}>
+              <div>TGRERA REGISTERED REALTOR</div><div>FOUNDER, RW REALTY</div><div>HYDERABAD, TELANGANA</div>
+            </Reveal> */}
           </div>
         </div>
       </section>
@@ -218,7 +263,8 @@ He doesn&apos;t wait for the market to move.<br />
       <section style={sectionRule}>
         <div className="rw-pad" style={container}>
           <Reveal style={{ padding: '54px 0 4px', fontFamily: mono, fontSize: 12, letterSpacing: '.26em', color: 'var(--faded)' }}>
-            THREE WAYS IN
+            THREE MOVES. ONE OUTCOME: MORE CLOSED.
+            {/* THREE WAYS IN WHICH DEVELOPERS AND SALES LEADER STANDS TO BENEFIT  */}
           </Reveal>
           <div className="rw-grid-3 rw-ways" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', columnGap: 44 }}>
             {WAYS.map((way, i) => (
@@ -256,10 +302,11 @@ He doesn&apos;t wait for the market to move.<br />
 
       <Marquee items={MARQUEE_ITEMS} />
 
-      {/* Glimpses — a teaser strip that links through to the portfolio */}
-      <GlimpsesSection />
+      {/* Glimpses - a teaser strip that links through to the portfolio */}
+      {/* <GlimpsesSection /> */}
 
-      {/* Blogs: card grid links out to each post; hidden once loaded with nothing to show. */}
+      {/* Cards link out to where each post already lives, so no article routes to maintain.
+          Hidden once loading settles with nothing to show. */}
       {(loadingBlogs || allBlogs.length > 0) && (
       <section id="blogs" className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,120px) 40px' }}>
         <SectionHead
@@ -308,13 +355,13 @@ He doesn&apos;t wait for the market to move.<br />
           <Reveal>
             <PullQuote
               size="clamp(28px,3.8vw,48px)" lineHeight={1.24} space={30}
-              name="— RAJIV" nameStyle={{ letterSpacing: '.24em' }}
+              name="RAJIV" nameStyle={{ letterSpacing: '.24em' }}
             >
-              &ldquo;I never stopped selling. That is the whole method — everything I pass on was closed first, shared second.&rdquo;
+              &ldquo;I never stopped selling. That is the whole method; everything I pass on was closed first, shared second.&rdquo;
             </PullQuote>
           </Reveal>
           <Reveal delay={220} style={{ marginTop: 46 }}>
-            <BookButton style={ctaInk}>BOOK A STRATEGY CALL</BookButton>
+            <BookButton specular>BOOK A STRATEGY CALL</BookButton>
           </Reveal>
         </div>
       </section>

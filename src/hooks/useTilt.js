@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-/** Inert by design: the 3D tilt effect was removed; kept as a no-op so existing call sites still work. */
+/** Inert by design - the cursor-following 3D tilt on images was removed. Kept as a no-op so call sites keep working. */
 export function useTilt() {
   const ref = useRef(null)
   return { ref, onPointerMove: undefined, onPointerLeave: undefined, style: undefined }

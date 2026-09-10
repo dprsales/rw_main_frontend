@@ -13,12 +13,12 @@ import { useTilt } from '../hooks/useTilt'
 import { fetchProject, flattenGallery, projectImage } from '../data/projects'
 import { projectSeo } from '../data/seo-config'
 import { PROJECT_FOOTER_LINKS, mono, serif, text } from '../theme'
-import { body, container, ctaCopper, ctaInk, eyebrow, pageHeading, sectionRule } from '../styles'
+import { body, container, ctaInk, eyebrow, pageHeading, sectionRule } from '../styles'
 
 /* ₹9,500 → "₹9,500". The API gives a plain number. */
 const rupees = (n) => (typeof n === 'number' ? `₹${n.toLocaleString('en-IN')}` : n)
 
-/* Splits a sentence into `n` balanced lines; the last line gets the copper accent. */
+/* Break a sentence into `n` roughly balanced lines; the last line takes the copper accent. */
 function splitLines(str, n = 3) {
   const words = String(str || '').trim().split(/\s+/).filter(Boolean)
   if (!words.length) return []
@@ -32,7 +32,7 @@ function splitLines(str, n = 3) {
   }))
 }
 
-/* Parses an API stat string into an animatable value; only clean integers count up. */
+/* Parse an API stat string into an animatable value; only clean integers count up. */
 function StatValue({ raw }) {
   const m = String(raw ?? '').match(/^(\D*)([\d,]+(?:\.\d+)?)(.*)$/)
   const style = { fontFamily: serif, fontSize: 'clamp(30px,4.2vw,58px)', lineHeight: .95, letterSpacing: '-.02em', color: 'var(--copper)' }
@@ -49,9 +49,9 @@ function StatValue({ raw }) {
   return <div style={style}>{raw}</div>
 }
 
-/** A titled section wrapper — eyebrow, big heading, then children. */
+/** A titled section wrapper - eyebrow, big heading, then children. */
 function Section({ id, eyebrow: kicker, title, intro, chip = false, bleed = false, children }) {
-  // API heading fields vary from short to paragraph-length, so long titles drop to prose scale.
+  // API heading fields vary from a tight headline to a full paragraph; long titles drop to prose scale.
   const isParagraph = typeof title === 'string' && title.trim().length > 72
   const titleStyle = isParagraph
     ? { fontFamily: serif, fontWeight: 400, fontSize: 'clamp(21px,2.3vw,30px)', letterSpacing: '-.01em', lineHeight: 1.32, color: 'var(--ink)', maxWidth: '32em' }
@@ -63,7 +63,7 @@ function Section({ id, eyebrow: kicker, title, intro, chip = false, bleed = fals
           <Reveal style={{ marginBottom: 'clamp(36px,5vw,64px)' }}>
             {kicker && <div style={{ ...eyebrow, marginBottom: 18 }}>{kicker}</div>}
             {title && (
-              // maxWidth in `em` scales with the heading's own font, not the base size.
+              // maxWidth in `em` scales with the heading's own font, not the base 16px.
               <h2 style={titleStyle}>
                 {title}
               </h2>
@@ -104,7 +104,8 @@ function ProjectHero({ hero, details, name }) {
         </div>
       )}
 
-      {/* Hero content isn't scroll-gated — a tall hero could push it past the reveal trigger. */}
+      {/* Not scroll-gated: a 100svh hero can push facts/CTA past the reveal-trigger line,
+          leaving them invisible on load; instead it fades up via .rw-projx-in. */}
       <div className="rw-pad rw-projx-content" style={{ position: 'relative', zIndex: 1, ...container, width: '100%', padding: 'clamp(96px,12vw,132px) 40px clamp(56px,6vw,76px)' }}>
         <Link to="/realty" className="rw-nav-link rw-projx-in" style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.16em', color: 'rgba(234,241,249,.72)' }}>
           ← RW REALTY
@@ -138,7 +139,7 @@ function ProjectHero({ hero, details, name }) {
         )}
 
         <div className="rw-projx-in" style={{ marginTop: 'clamp(26px,3vw,38px)', display: 'flex', gap: 18, alignItems: 'center', flexWrap: 'wrap', animationDelay: '.6s' }}>
-          <BookButton interest="RW Realty mandate" style={ctaCopper}>ENQUIRE ABOUT {(name || 'THIS PROJECT').toUpperCase()}</BookButton>
+          <BookButton interest="RW Realty mandate" specular>ENQUIRE ABOUT {(name || 'THIS PROJECT').toUpperCase()}</BookButton>
           {hero?.rera && <span style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.12em', color: 'rgba(234,241,249,.6)' }}>RERA {hero.rera}</span>}
         </div>
       </div>
@@ -202,7 +203,7 @@ export default function Project() {
           <p style={{ ...body, maxWidth: '32em' }}>The listing may have moved, or the connection dropped. Explore the full portfolio, or reach out and we’ll send the details directly.</p>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8 }}>
             <Link to="/realty/portfolio" style={ctaInk}>View the portfolio</Link>
-            <BookButton interest="RW Realty mandate" style={ctaCopper}>Request details</BookButton>
+            <BookButton interest="RW Realty mandate" specular>Request details</BookButton>
           </div>
         </div>
       )}
@@ -290,7 +291,7 @@ function ProjectBody({ data, name }) {
         </Section>
       )}
 
-      {/* Gallery — full-bleed */}
+      {/* Gallery - full-bleed */}
       {galleryItems.length > 0 && (
         <Section id="gallery" eyebrow="GALLERY" title="Inside &amp; out.">
           <Gallery items={galleryItems} />
@@ -313,7 +314,7 @@ function ProjectBody({ data, name }) {
                   <div style={{ padding: 'clamp(20px,2.2vw,28px)', borderTop: '1px solid var(--line)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 16 }}>
                     <div>
                       <div style={{ fontFamily: serif, fontSize: 'clamp(22px,2.2vw,28px)', color: 'var(--ink)' }}>{u.bhk} BHK</div>
-                      {u.facing && <div style={{ ...eyebrow, fontSize: 10, color: 'var(--faded)', marginTop: 10 }}>{String(u.facing).toUpperCase()} FACING</div>}
+                      {u.facing && <div style={{ ...eyebrow, fontSize: 13, letterSpacing: '.1em', color: 'var(--faded)', marginTop: 10 }}>{String(u.facing).toUpperCase()} FACING</div>}
                     </div>
                     {u.sft && <div style={{ fontFamily: mono, fontSize: 13, letterSpacing: '.06em', color: 'var(--copper)' }}>{u.sft} sq.ft.</div>}
                   </div>
@@ -373,7 +374,7 @@ function ProjectBody({ data, name }) {
         </Section>
       )}
 
-      {/* Closing CTA — full-bleed image with the invitation over it */}
+      {/* Closing CTA - full-bleed image with the invitation over it */}
       <section style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg)' }}>
         {closingImg && (
           <div aria-hidden style={{ position: 'absolute', inset: 0 }}>
@@ -386,7 +387,7 @@ function ProjectBody({ data, name }) {
             Interested in {name}?<br />Let’s talk numbers &amp; availability.
           </Reveal>
           <Reveal delay={140} style={{ marginTop: 44 }}>
-            <BookButton interest="RW Realty mandate" style={ctaCopper}>BOOK A STRATEGY CALL</BookButton>
+            <BookButton interest="RW Realty mandate" specular>BOOK A STRATEGY CALL</BookButton>
           </Reveal>
         </div>
       </section>

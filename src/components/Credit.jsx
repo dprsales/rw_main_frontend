@@ -1,6 +1,6 @@
 import { sysCredit } from '../data/credits'
 
-/** Build credit, kept transparent (not clipped/hidden) so text drag-select still picks it up. */
+/** Build credit, transparent (not display:none) so it stays selectable/copyable in the flow. */
 export default function Credit() {
   return (
     <span

@@ -7,7 +7,8 @@ import { PROJECT_SLUGS, fetchProjectSlugs } from '../data/projects'
 import { mono, serif } from '../theme'
 import { container, sectionRule } from '../styles'
 
-// Territory map of west Hyderabad localities, shared by Portfolio and RW Realty.
+// Territory map: west Hyderabad localities as dots scaled by project count, with a caption panel.
+// Lifted out of Portfolio so RW Realty can reuse it; owns its state, reads content.js directly.
 
 /** Short codes for the status marks that ride beside each name on the wall. */
 const STATUS_MARK = {
@@ -23,7 +24,7 @@ const LABEL_FLIP_X = 68
 export default function ProjectsSection() {
   const [active, setActive] = useState('Kokapet')
 
-  // Seeded with the curated map, then merged with the live index once it loads; a dead endpoint leaves it as-is.
+  // Seeded from the curated map, then merged with the live index; fetchProjectSlugs never rejects.
   const [slugs, setSlugs] = useState(PROJECT_SLUGS)
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function ProjectsSection() {
 
   const shown = PROJECTS
 
-  // Nodes with nothing left after a filter stay on the map, dimmed, rather than disappearing.
+  // Nodes with nothing after a filter stay on the map dimmed — it should re-weight, not reshape.
   const nodes = useMemo(() => {
     const byLocality = new Map(LOCALITIES.map((l) => [l.name, []]))
     for (const p of shown) {
@@ -44,13 +45,13 @@ export default function ProjectsSection() {
     const max = Math.max(1, ...[...byLocality.values()].map((v) => v.length))
     return LOCALITIES.map((l) => {
       const projects = byLocality.get(l.name)
-      // Area, not radius, scales with count, so five projects isn't drawn 25x the size of one.
+      // Area, not radius, scales with count — a radius-linear dot would make 5x look 25x.
       const weight = projects.length ? Math.sqrt(projects.length / max) : 0
       return { ...l, projects, r: projects.length ? 1.1 + weight * 2.3 : 0.8 }
     })
   }, [shown])
 
-  // Keep the panel on a locality that still has something in it.
+  /* Keep the panel on a locality that still has something in it. */
   const activeNode =
     nodes.find((n) => n.name === active && n.projects.length) ||
     [...nodes].sort((a, b) => b.projects.length - a.projects.length)[0]
@@ -59,11 +60,11 @@ export default function ProjectsSection() {
     <section id="projects" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
       <div className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,120px) 40px' }}>
         <SectionHead
-          eyebrow="SELECTED INVENTORY" faded size="lg" titleWidth="13em" space={34}
-          title="Area of influence."
+          eyebrow="INVESTMENT ADVISORY" faded size="lg" titleWidth="13em" space={34}
+          title="Area's of influence."
           aside={(
             <SectionAside width="24em" style={{ marginBottom: -5 }}>
-              A cross-section of the luxury and premium developments across Hyderabad that Rajiv&apos;s team has represented, mentored, or held sales mandates for.
+              A cross-section of the luxury and premium developments across Hyderabad that team RW has represented, mentored, or held sales mandates for.
             </SectionAside>
           )}
         />
@@ -80,7 +81,7 @@ export default function ProjectsSection() {
                 const on = n.name === activeNode?.name
                 const empty = n.projects.length === 0
                 const flip = n.x > LABEL_FLIP_X
-                // Clusters this tight always collide, so single holdings only label themselves on hover/focus.
+                {/* Tight clusters always collide; single holdings only name themselves on hover. */}
                 const minor = n.projects.length < 2
                 return (
                   <g
@@ -92,7 +93,7 @@ export default function ProjectsSection() {
                     role="button"
                     aria-label={`${n.name}, ${n.projects.length} projects`}
                   >
-                    {/* A generous invisible target — the dots are small. */}
+                    {/* Generous invisible hit target — the dots are small. */}
                     <circle className="rw-node-hit" cx={n.x} cy={n.y} r={5.5} />
                     <circle className="rw-node-halo" cx={n.x} cy={n.y} r={n.r + 2.6} />
                     <circle className="rw-node-dot" cx={n.x} cy={n.y} r={n.r} />
@@ -125,7 +126,7 @@ export default function ProjectsSection() {
                     const slug = slugs[p.name]
                     return (
                       <li key={p.name} className="rw-panel-item">
-                        {/* Only projects with a published page become links; arrow marks what's clickable. */}
+                        {/* Only projects with a published page become links; arrow marks clickable. */}
                         {slug ? (
                           <Link to={`/projects/${slug}`} className="rw-panel-link" style={{ fontFamily: serif, color: 'var(--ink)', display: 'inline-flex', alignItems: 'baseline', gap: 8 }}>
                             {p.name}

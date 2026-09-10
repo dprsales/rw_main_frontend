@@ -1,6 +1,6 @@
 import { mono } from '../theme'
 
-// Renders an image, or a designed cross-hatched placeholder frame when no `src` is supplied yet.
+/** Renders an image, or a designed cross-hatched placeholder that looks intentional until `src` lands. */
 export default function ImageSlot({
   src,
   alt = '',
@@ -24,6 +24,7 @@ export default function ImageSlot({
       />
     )
 
+    /* Once a real photo lands, the frame is clean - no corner label. */
     return image
   }
 

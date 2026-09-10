@@ -1,6 +1,9 @@
 import { useCallback, useRef } from 'react'
 
-/** Pulls an element toward the cursor while hovering, springs back on leave. Returns spreadable props. */
+/**
+ * Pulls an element toward the cursor while it hovers, springing back on leave.
+ * Returns props to spread onto the element.
+ */
 export function useMagnetic({ x = 0.28, y = 0.4 } = {}) {
   const ref = useRef(null)
 

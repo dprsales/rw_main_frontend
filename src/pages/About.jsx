@@ -6,9 +6,10 @@ import Seo from '../components/Seo'
 import { BookButton } from '../components/BookingModal'
 import Reveal from '../components/Reveal'
 import ClosingCTA from '../components/ClosingCTA'
+import hydMark from '../assets/site/hyd-01.svg'
 import { ASSOCIATIONS, CREDENTIALS } from '../data/content'
 import { FOOTER_LINKS, mono } from '../theme'
-import { container, ctaCopper, eyebrowFaded, sectionRule } from '../styles'
+import { container, eyebrowFaded, sectionRule } from '../styles'
 
 const HEADLINE = [
   { text: 'Practitioner first. ' },
@@ -27,14 +28,15 @@ export default function About() {
         headline={HEADLINE}
         lede="Fifteen years of live deals, and still counting."
         intro="Everything taught here was earned in the market first, and taught second. The practice and the teaching run in parallel — mornings in the market, afternoons with cohorts and boardrooms."
-        cta={<BookButton interest="About" style={ctaCopper}>APPLY TO WORK WITH RAJIV</BookButton>}
+        cta={<BookButton interest="About" specular>APPLY TO WORK WITH RAJIV</BookButton>}
       />
 
       <ExperienceSection />
 
       {/* Credentials & associations */}
-      <section id="credentials" style={{ ...sectionRule, background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+      <section id="credentials" style={{ ...sectionRule, background: 'var(--chip)', position: 'relative', overflow: 'hidden' }}>
+        <img src={hydMark} alt="" aria-hidden className="rw-watermark is-right" />
+        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>CREDENTIALS &amp; MEMBERSHIPS</Reveal>
 
           <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
@@ -60,7 +62,7 @@ export default function About() {
       </section>
 
       <ClosingCTA title="The story is the credential. The work is the proof." titleStyle={{ maxWidth: '15em' }}>
-        <BookButton interest="About" style={ctaCopper}>APPLY TO WORK WITH RAJIV</BookButton>
+        <BookButton interest="About" specular>APPLY TO WORK WITH RAJIV</BookButton>
       </ClosingCTA>
 
       <Footer links={FOOTER_LINKS} />

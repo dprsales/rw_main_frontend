@@ -1,6 +1,9 @@
 import lockup from '../assets/site/gold1.png'
 
-/** Full RW lockup (monogram over signature) in brand gold. `size` is rendered height in px. */
+/**
+ * Full RW lockup (monogram over signature, brand gold) — the identity itself, never
+ * flattened like partner logos. `size` is height in px; .rw-wordmark steps it down on mobile.
+ */
 export default function Wordmark({ size = 72 }) {
   return (
     <img

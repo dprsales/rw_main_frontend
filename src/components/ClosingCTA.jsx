@@ -1,7 +1,10 @@
 import Reveal from './Reveal'
 import { closingHeading } from '../styles'
 
-/** Closing band: centred heading plus a CTA button passed as children (buttons vary per page). */
+/**
+ * Page-closing band: centred heading + CTA, shared markup across five pages.
+ * The button is passed as `children` since each page varies interest/style.
+ */
 export default function ClosingCTA({
   id = 'apply',
   chip = false,

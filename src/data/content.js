@@ -1,10 +1,16 @@
-// No static fallback posts — an empty grid is more honest than fake placeholders.
+import teamSridevi from '../assets/site/Sridevi.png'
+import teamPriyanka from '../assets/site/panda.png'
+
+/**
+ * Home-page blog cards, shown only until the live feed (`data/blogs.js`)
+ * resolves. Left empty rather than faking placeholder posts that all linked to the same generic feed.
+ */
 export const BLOGS = []
 
 export const HERO_COPY =
-  '₹2,700 Cr generated. 15 years at the top of Hyderabad real estate.'
+  '₹2,700 Cr generated. 15+ years at the top of Hyderabad real estate.'
 
-// The three services; each `title` is the positioning line, `kicker` is the plain name.
+/** The three services. `title` carries the positioning line; the service name reads from `kicker` and the CTA. */
 export const WAYS = [
   { k: 'I', kicker: 'Sales Coaching', title: 'Your ticket size is a ceiling you built. Break it.', line: 'For developers, senior sales leadership, and top sales closers done with volume games.', ctaLabel: 'Coaching', to: '/coaching' },
   { k: 'II', kicker: 'Sales Consulting', title: 'Right product, wrong velocity. That is fixable.', line: 'Advisory on the part of the business the brochure never fixes.', ctaLabel: 'Consulting', to: '/consulting' },
@@ -12,19 +18,19 @@ export const WAYS = [
 ]
 
 export const HOME_TESTIMONIALS = [
-  { text: 'Rajiv negotiates like the asset is his own — his deep understanding of local market dynamics gave us a very good perspective on the opportunities in Hyderabad.', name: 'SANDEEP KYLAS' },
+  { text: 'Rajiv negotiates like the asset is his own; his deep understanding of local market dynamics gave us a very good perspective on the opportunities in Hyderabad.', name: 'SANDEEP KYLAS' },
   { text: 'He always says, "do it with your passion and heart or else don’t do it." Having a mentor like him makes you sharper on tasks, skills, focus and life.', name: 'MALLAREDDY PUTLURI' },
-  { text: 'His expertise and guidance were instrumental in my professional growth — the best mentor I have come across.', name: 'MOHAMMED SHIRAZ' },
+  { text: 'His expertise and guidance were instrumental in my professional growth, the best mentor I have come across.', name: 'MOHAMMED SHIRAZ' },
 ]
 
 export const MARQUEE_ITEMS = [
-  'TGRERA registered realtor',
-  "Member — HRA, NAR",
+  'TGRERA licensed realtor',
+  "Member · HRA, NAR",
   '₹2,700 Cr+ generated',
   '15+ years at the top',
 ]
 
-// List order = display order (numbers and connector arrows run 1→6).
+/* Order is the display order - numbers and connector arrows both run 1→6 down the grid. */
 export const ACHIEVE = [
   { title: 'Increase Sales Revenue', body: 'Move from inconsistent wins to structured, repeatable conversions backed by a clear sales framework.' },
   { title: 'Strengthen Cash Flow & Margins', body: 'Position your product or service with authority so pricing becomes a decision, not a negotiation.' },
@@ -36,19 +42,64 @@ export const ACHIEVE = [
 
 export const COACHING_PROGRAMS = [
   {
-    title: 'The Cohort', subtitle: '(FORMAT 01 · TWELVE WEEKS · SMALL ROOM)',
-    description: 'Twelve weeks, small room, live deals on the table. You bring your pipeline; it becomes the syllabus. Nothing theoretical survives the first session.',
-    features: ['Outcome: your first high-value closing, inside the program.'],
+    title: 'Hight Ticket Sales Mastery', subtitle: '1st Oppurtunity · For Developers · Hyderabad',
+    description: '90-120 mins session',
+    features: [''],
   },
   {
-    title: 'Team Training', subtitle: '(FORMAT 02 · DEVELOPER SALES TEAMS & LEADERSHIP)',
-    description: 'For developer sales teams and their leadership. Rajiv rebuilds the sales conversation your team is actually having — scripts, sequencing, and the discipline between calls.',
-    features: ['Outcome: a team that qualifies harder and closes higher.'],
+    title: 'Luxury Sales Mastery', subtitle: '2nd Oppurtunity · For Developers · Hyderabad',
+    description: '90-120 mins session',
+    features: [''],
   },
   {
-    title: 'One-to-One', subtitle: '(FORMAT 03 · SIX MONTHS · BY APPLICATION)',
-    description: 'Six months, by application only. A working partnership on your actual book of business. Few seats a year, because Rajiv is still in the market himself.',
-    features: ['Outcome: a repositioned practice, not a certificate.'],
+    title: 'One-to-One Mentoring', subtitle: "3rd Oppurtunity · For CXO's, Senior Leadership & Aspiring Individuals · Hyderabad",
+    description: '90-120 mins session',
+    features: [''],
+  },
+]
+
+/** The full syllabus (Coaching's "What's covered"), six numbered categories. Order follows the programme's own sequence. */
+export const CURRICULUM = [
+  {
+    n: '01', title: 'Foundation & Mindset',
+    groups: [
+      { label: 'Buyer Psychology', items: ['Understanding the Mid-to-Luxury Buyer Mindset', 'Buyer Behavior Deep-Dive & Decision Patterns'] },
+      { label: 'Confidence & Personal Readiness', items: ['Confidence Building for High-Ticket Sales', 'Emotional Intelligence in Sales Conversations'] },
+    ],
+  },
+  {
+    n: '02', title: 'Communication & Rapport',
+    groups: [
+      { label: 'First-Level Connection', items: ['First Impressions & Ice Breakers', 'Advanced Rapport & Trust Building'] },
+      { label: 'Messaging & Influence', items: ['Messaging Skills & Information Delivery', 'Persuasive Communication Frameworks', 'NLP Techniques for Sales Influence'] },
+    ],
+  },
+  {
+    n: '03', title: 'Lead Handling & Conversion',
+    groups: [
+      { label: 'Prospecting & Lead Response', items: ['Handling New, Cold & Digital Leads', 'Strategic Follow-Ups for Conversion'] },
+      { label: 'Closing Conversations', items: ['Site Visit Conversions & Closing Techniques', 'Structured Negotiation Techniques'] },
+    ],
+  },
+  {
+    n: '04', title: 'Objection Handling & Client Management',
+    groups: [
+      { label: 'Objection Resolution', items: ['Objection Handling: Price, Location & Delays'] },
+      { label: 'Complex Client Scenarios', items: ['Handling High-Involvement Clients & Families'] },
+    ],
+  },
+  {
+    n: '05', title: 'Presentation & Practical Selling',
+    groups: [
+      { label: 'Property Selling Skills', items: ['High-Impact Property Presentation Skills'] },
+      { label: 'Practice & Real-World Coaching', items: ['Live Deal Coaching & Simulation'] },
+    ],
+  },
+  {
+    n: '06', title: 'Process & Pipeline Management',
+    groups: [
+      { label: 'Sales Operations', items: ['CRM Discipline & Lead Pipeline Management'] },
+    ],
   },
 ]
 
@@ -57,19 +108,19 @@ export const COACHING_TESTIMONIALS = [
   { text: 'I had the pleasure of being mentored by Mr. Rajiv Williams in developing my interpersonal skills. He pushed me to expand my skills and always made time to offer support. By far the best mentor I have come across.', name: 'MOHAMMED SHIRAZ' },
 ]
 
-// Pain point and solution paired per row, instead of two separate lists.
+/** The developer challenge as pairs - each row states the problem and the answer side by side. */
 export const DEVELOPER_SHIFTS = [
   { n: '01', from: 'Random conversions', to: 'Strategic Sales Architecture', note: 'A defined architecture replaces guesswork.' },
   { n: '02', from: 'Discount-driven closures', to: 'Conversion-First Execution', note: 'Value holds the price, not the discount.' },
   { n: '03', from: 'Team dependency', to: 'Channel & Team Alignment', note: 'The system performs, not just the star closer.' },
-  { n: '04', from: 'Poor visibility', to: 'Data-Led Growth & Visibility', note: 'Every stage of the pipeline is measurable.' },
+  { n: '04', from: 'Poor visibility', to: 'Data-Led Growth & Visibility', note: 'Every stage of the pipeline is S.M.A.R.T.', noteExpand: 'Specific · Measurable · Attainable · Relevant · Trackable' },
 ]
 
-// Consulting framework, four phases in the order an engagement runs.
+/** The consulting framework - four phases in the order an engagement runs: audit, build, deploy, tune. */
 export const ECOSYSTEM = [
   {
     phase: '1', title: 'Audit & Discovery',
-    line: 'We map what exists — the process, the tech, the team, the journey — and find where performance leaks.',
+    line: 'We map what exists (the process, the tech, the team, the journey) and find where performance leaks.',
     points: [
       'Sales process audit & operational review',
       'CRM, reporting structure & technology assessment',
@@ -91,7 +142,7 @@ export const ECOSYSTEM = [
   },
   {
     phase: '3', title: 'Implementation & Deployment',
-    line: 'We deploy the systems into daily operation — CRM, automation, team onboarding, and site experience.',
+    line: 'We deploy the systems into daily operation: CRM, automation, team onboarding, and site experience.',
     points: [
       'CRM setup, onboarding & dashboard integration',
       'Workflow automation & operational process deployment',
@@ -112,11 +163,11 @@ export const ECOSYSTEM = [
   },
 ]
 
-// "& More" — extra support services, from the brochure's list.
+/** "& More" - additional strategic support services, from the brochure's support-services list. */
 export const SUPPORT_SERVICES = [
   { title: 'Social Media & Brand Presence', desc: 'Built to improve visibility, positioning, and long-term market recall.' },
   { title: 'Performance Marketing', desc: 'Campaigns engineered for reach, lead generation, and qualified conversions.' },
-  { title: 'Media & PR Collaborations', desc: 'Strategic visibility partnerships and media collaborations — including platforms like Happening Hyderabad — to strengthen brand reach and market presence.' },
+  { title: 'Media & PR Collaborations', desc: 'Strategic visibility partnerships and media collaborations (including platforms like Happening Hyderabad) to strengthen brand reach and market presence.' },
   { title: 'Organic Video Marketing', desc: 'Content designed to improve engagement, trust, and brand perception.' },
   { title: 'Podcasts & Authority Building', desc: 'Positioning founders and leadership voices with stronger market credibility.' },
   { title: 'Channel Partner Networking', desc: 'Broker ecosystem activation, designed to accelerate market movement.' },
@@ -126,11 +177,11 @@ export const SUPPORT_SERVICES = [
   { title: 'Brand Positioning & Market Narratives', desc: 'Crafting perception, differentiation, and premium market identity.' },
 ]
 
-// What an exclusive sales mandate covers, from the brochure's inclusions.
+/** What an exclusive sales mandate covers, from the brochure's inclusions. */
 export const MANDATE_SCOPE = [
   { n: '01', title: 'Full ownership of sales strategy, positioning & execution' },
   { n: '02', title: 'A trained, dedicated sales team deployed onsite' },
-  { n: '03', title: 'End-to-end funnel management — leads to closure' },
+  { n: '03', title: 'End-to-end funnel management: leads to closure' },
   { n: '04', title: 'Pricing strategy & deal structuring' },
   { n: '05', title: 'High-ticket negotiation support & deal intervention' },
   { n: '06', title: 'Site visit design & conversion optimisation' },
@@ -138,68 +189,72 @@ export const MANDATE_SCOPE = [
   { n: '08', title: 'Market narrative & perception building with HNI & NRI segments' },
 ]
 
-// Organisations worked with; names/order follow the client-supplied logo sheet.
+/** Organisations Team Rajiv Williams has worked with. Names/order follow the client-supplied logo sheet. */
 export const ORGANISATIONS_WORKED = [
   'Vamsiram', 'Vamsiram Homes', 'The Cascades Neopolis', 'The Trilight', 'Sri Aditya',
   'Blue Fin Realty', 'Tribhuja', 'Candeur Constructions', 'IRA', 'Manbhum',
  'Zuari Infraworld', 'Landmark Group', 'Suchirindia', 'Kolla',
   'Nesta Developers', 'Tejase Developers', 'Haneesh Constructions', 'Vibrant Developers', 'Anantha Projects',
   'Avani', 'Gangothri', 'Identity', 'Rohas Ventures', 'CSK Builders & Developers',
-  'Mirai Infracon', 'e-Infra',
+  'Mirai Infracon', 'e-Infra', 'Celestial', 'Navanaami', 'Promenade Villas', 'Radha Spaces',
 ]
 
-// Full testimonial wall; `highlight: true` marks lines pulled out large.
+/** The full testimonial wall - every brochure review, condensed. `highlight: true` marks the lines pulled out large. */
 export const PORTFOLIO_TESTIMONIALS = [
-  { text: "His 'Luxury Sales Mastery' framework is a game-changer — it shifts the focus from chasing the lead to commanding the room, with psychological precision and consultative grace. The result? A massive boost in my conversion rates.", name: 'AMARJEET JAT', role: 'AGM Sales & Hospitality, Moonglade', highlight: true },
   { text: 'Rajiv is exceptional in what he does and consistently goes above and beyond to deliver outstanding results and ensure the success of the projects. I wholeheartedly recommend him.', name: 'SUMANTH REDDY', role: 'Chairman, NAR India', highlight: true },
+  { text: "His 'Luxury Sales Mastery' framework is a game-changer; it shifts the focus from chasing the lead to commanding the room, with psychological precision and consultative grace. The result? A massive boost in my conversion rates.", name: 'AMARJEET JAT', role: 'AGM Sales & Hospitality, Moonglade', highlight: true },
   { text: "I couldn't have asked for a better advisor. Rajiv's deep understanding of the local market dynamics gave us a very good perspective on the opportunities in Hyderabad.", name: 'SANDEEP KYLAS', role: 'VP, Fintech & Payments, Zenoti · Ex-Amazon', highlight: true },
-  { text: 'His ability to streamline systems, build effective strategies, and guide teams with clarity makes a significant impact on organizational success — especially in consultative selling and process-driven execution.', name: 'ARUN KUMAR ADGAPURAM', role: 'Head of Direct Sales, Zuari Infra' },
+  { text: 'His ability to streamline systems, build effective strategies, and guide teams with clarity makes a significant impact on organizational success, especially in consultative selling and process-driven execution.', name: 'ARUN KUMAR ADGAPURAM', role: 'Head of Direct Sales, Zuari Infra' },
   { text: "Rajiv's expertise in the luxury real estate market is unparalleled. His ability to connect with clients uniquely, tailoring his approach to their mindset, is truly remarkable.", name: 'CHAKRAVARDHAN REDDY KESARI', role: 'Data Engineering Lead' },
   { text: 'He taught us how to connect with each client uniquely, tailoring our approach based on their background, needs and mindset. His guidance helped us build trust and long-term relationships.', name: 'SHRUTI SHARMA', role: 'Legal Consultant · Real Estate & REIT Compliance' },
   { text: 'He always says, "do it with your passion and heart or else don’t do it." His dedication inspires everyone to give our best. Having a mentor like him makes you perfect in tasks, learning and focus.', name: 'MALLAREDDY PUTLURI', role: 'Sr. Sales Manager, Raghava' },
   { text: "Need market insights? He's got them. Have a real estate query at midnight? Don't be surprised if he replies in seconds. He simplifies things and always delivers with speed and clarity.", name: 'ARUN K GATTU', role: 'VP, Sales & Marketing' },
   { text: 'A professional with a deep understanding of the business and a continuous learner. Very good at relationship management, time and task management, and structured case analysis.', name: 'PRASAD KLNV', role: 'Business Consultant · 25+ Years in Sales & Operations' },
   { text: 'He has an exceptional ability to inspire and motivate. His insights in high-ticket real estate sales are invaluable, and his guidance helped me tackle complex challenges with confidence.', name: 'SUMANA SOUJANYA UNDETI', role: 'Assistant Manager, Sales' },
-  { text: 'His expertise and guidance were instrumental in my professional growth — he pushed me to expand my skills and always made time to offer support. By far the best mentor I have come across.', name: 'MOHAMMED SHIRAZ', role: 'Sales & Strategic Management · 14 Years' },
+  { text: 'His expertise and guidance were instrumental in my professional growth; he pushed me to expand my skills and always made time to offer support. By far the best mentor I have come across.', name: 'MOHAMMED SHIRAZ', role: 'Sales & Strategic Management · 14 Years' },
 ]
 
-// Team Rajiv Williams. No headshots yet — ImageSlot shows a placeholder until `src` is set.
-// Roles left blank on purpose; add a `role` string and the card picks it up automatically.
+/**
+ * Team Rajiv Williams. Not currently rendered - <TeamSection /> is commented
+ * out on Portfolio until headshots are supplied. Roles are intentionally
+ * absent (empty title slots read as unfinished); add a `role` string and the card picks it up automatically.
+ */
 export const TEAM = [
-  { name: 'Priyanka Panda', src: undefined },
-  { name: 'Sridevi Vinjimur', src: undefined },
-  { name: 'Asra Fathima', src: undefined },
-  { name: 'Soma Sekhar', src: undefined },
+  { name: 'Sridevi Vinjimur', photo: teamSridevi, linkedin: 'https://www.linkedin.com/in/sridevi-vinjimur-147125270/', title: 'Head of Operations', for: ['Coaching', 'Consulting', 'Realty'] },
+  { name: 'Priyanka Panda', photo: teamPriyanka, linkedin: 'https://www.linkedin.com/in/priyanka-panda-238451259/', title: 'Head of Sales-Realty', for: ['Realty'] },
 ]
 
-// TEAM mapped to ChromaGrid's shape; every card uses the same gold accent, on-brand.
+/* TEAM mapped to ChromaGrid's item shape. Every card uses the same gold
+ * border/gradient rather than the multicoloured demo set, per the site's single-accent rule. */
 export const TEAM_CHROMA = TEAM.map((member) => ({
-  image: member.src,
+  image: member.photo,
   title: member.name,
-  subtitle: member.role || 'Team Rajiv Williams',
+  subtitle: member.title || 'Team Rajiv Williams',
+  location: member.for?.join(' · '),
+  url: member.linkedin,
   borderColor: '#C39B53',
   gradient: 'linear-gradient(165deg, rgba(195,155,83,.22), #0B0A09 62%)',
 }))
 
-export const CREDENTIALS =['TGRERA Registered', "Member, Hyderabad Realtors' Association", '130+ written recommendations', 'Founder - Design Sharks, Happening hyderabad']
+export const CREDENTIALS = ['TGRERA Licensed Realtor', "Member, Hyderabad Realtors' Association", '130+ written recommendations', 'Founder, Design Sharks, Happening hyderabad']
 
-// Careers — copy for /careers.
+/* Careers - copy for /careers. */
 
-// Deliberately four reasons, so the grid reads as two even rows at every breakpoint.
+/* Why the room is worth joining. Deliberately four, for two even rows at every breakpoint. */
 export const CAREER_REASONS = [
-  { title: 'Premium inventory only', body: 'You sell what the market already respects — luxury and high-ticket projects carried on exclusive mandates, not a scattered listing sheet.' },
+  { title: 'Premium inventory only', body: 'You sell what the market already respects: luxury and high-ticket projects carried on exclusive mandates, not a scattered listing sheet.' },
   { title: 'Trained, not thrown in', body: 'The coaching practice runs in-house first. Every person on the floor is taken through the same frameworks Rajiv runs with developer sales teams.' },
   { title: 'Earnings without a ceiling', body: 'A fixed base plus an incentive structure written against closings. Higher ticket sizes mean the same effort is worth more.' },
-  { title: 'Access to the top of the market', body: 'HNI and NRI buyers, developer leadership, and channel networks — in the room, from your first quarter.' },
+  { title: 'Access to the top of the market', body: 'HNI and NRI buyers, developer leadership, and channel networks: all in the room, from your first quarter.' },
 ]
 
-// Statement band under the intro; kept here so the claim is edited in one place.
+/* The statement band under the intro - two lines, kept here for single-place editing. */
 export const CAREER_HOOK = {
   lead: 'We don’t hire employees.',
   accent: 'We build closers who become the market.',
 }
 
-// Life on the floor — the full-bleed culture band.
+/* Life on the floor - the full-bleed culture band. */
 export const CAREER_CULTURE = {
   eyebrow: 'THE FLOOR',
   title: 'A culture of standards, not slogans.',
@@ -334,7 +389,7 @@ export const CAREER_ROLES = [
   },
 ]
 
-// The hiring process, stated plainly for candidates.
+/* The hiring process, stated plainly. */
 export const CAREER_PROCESS = [
   { n: '01', title: 'Application', body: 'Send your profile with the role named. Every application is read.' },
   { n: '02', title: 'Screening call', body: 'A twenty-minute conversation on your record and what you want next.' },
@@ -342,11 +397,12 @@ export const CAREER_PROCESS = [
   { n: '04', title: 'Offer & onboarding', body: 'Terms, incentive structure, and a two-week induction into the frameworks.' },
 ]
 
-// Résumé data — carried over from the previous site's Resume page.
+/* Résumé data - carried over from the previous site's Resume page. */
 
-// `location` dropped since every role is Hyderabad-based. `phase` groups roles per EXPERIENCE_PHASES.
+/* `location` dropped since every role is Hyderabad-based; stated once instead.
+ * `phase` groups roles into the arc EXPERIENCE_PHASES defines (most recent first). */
 export const EXPERIENCE = [
-  { company: 'Rajiv Williams — Luxury Sales Mastery', role: 'Luxury Sales Mentor · Coach & Consultant', phase: 'practice', current: true },
+  { company: 'Rajiv Williams · Luxury Sales Mastery', role: 'Luxury Sales Mentor · Coach & Consultant', phase: 'practice', current: true },
   { company: 'Dezign Shark', role: 'Business Owner', phase: 'practice' },
   { company: 'Tejase Developers', role: 'Sales Mentor', phase: 'advisory' },
   { company: 'IRA Realty India', role: 'Sales & Marketing Mentor', phase: 'advisory' },
@@ -356,12 +412,13 @@ export const EXPERIENCE = [
   { company: 'Landmark Group India', role: 'Organizational Mentor', phase: 'advisory' },
   { company: 'Avani Projects', role: 'Strategic Partner', phase: 'advisory' },
   { company: 'Magnifiq Properties', role: 'Strategic Partner', phase: 'advisory' },
-  { company: 'PVR Developers India', role: 'Director — Sales, Marketing & Business Development', phase: 'leadership' },
+  { company: 'PVR Developers India', role: 'Director, Sales, Marketing & Business Development', phase: 'leadership' },
   { company: 'Systel', role: 'Operations & Client Relations Manager', phase: 'foundations' },
   { company: 'Dell', role: 'Sr. Process Executive', phase: 'foundations' },
 ]
 
-// Four stages of the track, most recent first. `dense` renders a compact grid.
+/* The four stages of the track, most recent first. `dense` phases render as a
+ * compact two-column grid - the eight advisory mandates would otherwise dominate by sheer count. */
 export const EXPERIENCE_PHASES = [
   { key: 'practice', label: 'The practice today', note: 'Independent mentoring & mandate work' },
   { key: 'advisory', label: 'Mentoring & advisory', note: 'Retained across eight developer and design businesses', dense: true },
@@ -371,14 +428,19 @@ export const EXPERIENCE_PHASES = [
 
 export const ASSOCIATIONS = [
   { name: 'Hyderabad Realtors Association', role: 'Member' },
-  { name: 'National Association of Realtors — India', role: 'Member' },
+  { name: 'National Association of Realtors (India)', role: 'Member' },
+  { name: 'TGRERA', role: 'Licensed Realtor' },
   { name: 'Design Sharks', role: 'Founder' },
-  { name: 'Happening Hyderabad', role: 'Founder', desc: "Curated community of GCC around 86,000+ of active followers", href: 'https://www.linkedin.com/company/hyderabad1st/' },
+  { name: 'Happening Hyderabad', role: 'Owner', desc: "Curated community of GCC around 86,000+ of active followers", href: 'https://www.linkedin.com/company/hyderabad1st/' },
 ]
 
-// Project portfolio — luxury inventory across Hyderabad.
+/* Project portfolio - the luxury inventory Rajiv's team has represented,
+ * mentored on, or held mandates for across Hyderabad. */
 
-// Territory map: x/y are percentages on a 100x100 canvas, schematic only (not real coordinates).
+/**
+ * The territory map. `x`/`y` are percentages on a 100×100 canvas matching the
+ * relative geography of Hyderabad's western corridor. SCHEMATIC only - not survey coordinates.
+ */
 export const LOCALITIES = [
   { name: 'Shankarpally', x: 6, y: 26 },
   { name: 'Mokila', x: 19, y: 36 },
@@ -399,7 +461,7 @@ export const LOCALITIES = [
   { name: 'Mamidipally', x: 76, y: 84 },
 ]
 
-// Collapses sub-localities and alternate spellings down to one map node per real place.
+/** Collapses sub-localities and alternate spellings to one node per real place. */
 export const AREA_TO_LOCALITY = {
   'Kokapet': 'Kokapet',
   'Golden Mile, Kokapet': 'Kokapet',
@@ -407,7 +469,7 @@ export const AREA_TO_LOCALITY = {
   'Neopolis, Kokapet': 'Neopolis',
   'Financial District': 'Financial District',
   'Narsingi, Financial District': 'Narsingi',
-  'Raidurg — Gachibowli': 'Raidurgam',
+  'Raidurg - Gachibowli': 'Raidurgam',
   'Raidurgam': 'Raidurgam',
   'Green Hills Road, HITEC City': 'HITEC City',
   'Shaikpet': 'Shaikpet',
@@ -430,7 +492,7 @@ export const PROJECTS = [
   { name: 'Aparna One', area: 'Shaikpet', status: 'Active' },
   { name: 'Niche', area: 'Shaikpet', status: 'Active' },
   { name: 'Palatium', area: 'APPA Junction', status: 'Ready for Interiors' },
-  { name: 'Rainbow Waters', area: 'Raidurg — Gachibowli', status: 'Under Construction' },
+  { name: 'Rainbow Waters', area: 'Raidurg - Gachibowli', status: 'Under Construction' },
   { name: 'Megaleio', area: 'TGSPA Junction', status: 'Under Construction' },
   { name: 'Villa Verde', area: 'Green Hills Road, HITEC City', status: 'Mandate' },
   { name: 'MSN One', area: 'Neopolis', status: 'Mandate' },

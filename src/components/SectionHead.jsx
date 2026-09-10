@@ -2,11 +2,14 @@ import Reveal from './Reveal'
 import { eyebrow, eyebrowFaded, note, sectionHeading, sectionHeadingLg, sectionHeadingSm } from '../styles'
 import { mono, serif } from '../theme'
 
-// Shared section-opening patterns, factored out of near-identical inline copies on every page.
+// The two section-opening patterns used site-wide; replaces ten near-identical inline copies.
 
 const HEADING = { lg: sectionHeadingLg, md: sectionHeading, sm: sectionHeadingSm }
 
-// Eyebrow and heading on the left, optional aside on the right; `aside` is a node since call sites vary.
+/**
+ * Eyebrow + heading left, optional aside right, wrapping to two rows on a phone.
+ * `aside` takes a node, not a string, since call sites use both text and links.
+ */
 export default function SectionHead({
   eyebrow: kicker,
   faded = false,
@@ -39,7 +42,10 @@ export default function SectionHead({
   )
 }
 
-// Centred variant for full-width list sections (Coaching's programmes, Careers' roles); heading is a div, not h2.
+/**
+ * Centred variant for full-width list sections (Coaching's programmes, Careers' roles).
+ * Heading is a plain <div>: both call sites already have an <h1>/<h2> above this point.
+ */
 export function CenteredHead({ eyebrow: kicker, title, intro }) {
   return (
     <Reveal style={{ textAlign: 'center', marginBottom: 20 }}>
@@ -61,7 +67,7 @@ export function SectionAside({ children, width = '22em', style }) {
   return <p style={{ ...note, maxWidth: width, ...style }}>{children}</p>
 }
 
-/** The small mono line some sections use as an aside — a count, a location. */
+/** The small mono line some sections use as an aside - a count, a location. */
 export function SectionCount({ children }) {
   return <p style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.1em', color: 'var(--faded)' }}>{children}</p>
 }

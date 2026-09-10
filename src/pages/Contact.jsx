@@ -4,8 +4,9 @@ import PageIntro from '../components/PageIntro'
 import Seo from '../components/Seo'
 import { BookButton } from '../components/BookingModal'
 import Reveal from '../components/Reveal'
+import hydMark from '../assets/site/hyd-05.svg'
 import { EMAIL, FOOTER_LINKS, PHONE, WHATSAPP, mono, serif } from '../theme'
-import { container, ctaCopper, eyebrowFaded, sectionRule } from '../styles'
+import { container, eyebrowFaded, sectionRule } from '../styles'
 
 const HEADLINE = [
   { text: 'One form. ' },
@@ -31,11 +32,12 @@ export default function Contact() {
         headline={HEADLINE}
         lede="Coaching applications, developer enquiries, and RW Realty mandates all start here."
         intro="Book a call directly, or reach out on any of the channels below."
-        cta={<BookButton interest="General enquiry" style={ctaCopper}>BOOK A CALL</BookButton>}
+        cta={<BookButton interest="General enquiry" specular>BOOK A CALL</BookButton>}
       />
 
-      <section style={{ ...sectionRule, background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+      <section style={{ ...sectionRule, background: 'var(--chip)', position: 'relative', overflow: 'hidden' }}>
+        <img src={hydMark} alt="" aria-hidden className="rw-watermark is-right" />
+        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>REACH RAJIV DIRECTLY</Reveal>
 
           <div style={{ maxWidth: 560 }}>

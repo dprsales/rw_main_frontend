@@ -4,7 +4,10 @@ import { EXPERIENCE, EXPERIENCE_PHASES } from '../data/content'
 import { mono, serif, text } from '../theme'
 import { container, eyebrowFaded, sectionHeading, sectionRule } from '../styles'
 
-// Tracks which phase block is crossing the viewport's centre band, so the pinned column shows reading position.
+/**
+ * Tracks which phase block crosses viewport centre, so the pinned column shows reading position.
+ * rootMargin narrows the trigger to a thin centre band instead of the bottom edge.
+ */
 function useActivePhase(keys) {
   const [active, setActive] = useState(keys[0])
   const refs = useRef({})
@@ -46,7 +49,7 @@ export default function ExperienceSection() {
             <Reveal as="p" delay={140} style={{ marginTop: 22, fontFamily: text, fontWeight: 300, fontSize: 17, lineHeight: 1.6, color: 'var(--faded)', maxWidth: '26em' }}>
               A path that runs from enterprise operations through developer sales leadership into independent mentoring and mandate work.
             </Reveal>
-            {/* Decorative reading position; phase headings carry the same labels. */}
+            {/* Decorative — phase headings already carry these labels to the reader. */}
             <Reveal aria-hidden delay={200} style={{ marginTop: 30, paddingTop: 22, borderTop: '1px solid var(--line)' }}>
               {EXPERIENCE_PHASES.map((phase) => {
                 const on = phase.key === activePhase
@@ -79,7 +82,7 @@ export default function ExperienceSection() {
             </Reveal>
           </div>
 
-          {/* Spine runs the full height so the eye reads one descent, not equal-weight rows. */}
+          {/* Full-height spine with phase markers, so the eye reads one descent, not equal-weight rows. */}
           <div style={{ position: 'relative', paddingLeft: 28 }}>
             <div aria-hidden style={{ position: 'absolute', left: 3, top: 10, bottom: 10, width: 1, background: 'var(--line)' }} />
 

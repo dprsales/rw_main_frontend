@@ -1,29 +1,22 @@
-/* The families are loaded in index.html and set on the app shell in
-   ThemeProvider, with label-role elements opting into the sans inline. This
-   file therefore carries no font-family of its own — only size, weight, style,
-   line-height and letter-spacing. */
+/* Font families are set in ThemeProvider; this file carries no font-family of
+   its own - only size, weight, style, line-height and letter-spacing. */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 ::selection { background: #C39B53; color: #fff; }
 
-/* iOS inflates text in landscape unless this is pinned, which silently breaks
-   every clamp() the page relies on to size itself. */
+/* iOS inflates text in landscape unless pinned, breaking every clamp() on the page. */
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
-/* Replaced media can always overrun its column otherwise — a single oversized
-   logo or plate is enough to give the whole page a horizontal scrollbar. */
+/* Otherwise a single oversized logo or plate gives the whole page a horizontal scrollbar. */
 img, svg, video, canvas { max-width: 100%; }
 
-/* The shell fills the viewport. `svh` is the small-viewport height, so a phone
-   with its address bar showing does not get a scrollbar's worth of dead space. */
+/* `svh` is the small-viewport height, so a phone's address bar leaves no dead space. */
 .rw-app-shell { min-height: 100vh; min-height: 100svh; }
 
 a { color: var(--copper, #C39B53); text-decoration: none; transition: color .2s; }
 a:hover { color: var(--ink, #12100D); }
 
-/* Metallic gold text, used on the accent line of display headlines only.
-   `color` is set first as the fallback: if background-clip:text is unsupported
-   the text stays gold rather than turning transparent and vanishing. */
+/* Metallic gold text. `color` is the fallback if background-clip:text is unsupported. */
 .rw-gold-text {
   color: var(--copper);
   background: var(--gold-gradient);
@@ -39,10 +32,42 @@ a:hover { color: var(--ink, #12100D); }
 
 /* Hover states that inline styles can't express. */
 .rw-nav-link:hover { color: var(--ink); }
+
+/* Realty's "Why it works" - a barely-there gold-on-dark skyline watermark, rather than a photo competing with the copy. */
+.rw-why-watermark {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  width: 100%; height: auto;
+  opacity: .08;
+  pointer-events: none; user-select: none;
+}
+
+/* Reused on other copy-only sections - a low-opacity landmark mark in a
+   corner, same treatment as .rw-why-watermark. Content siblings need their
+   own `position:relative; z-index:1` or this paints over static text. */
+.rw-watermark {
+  position: absolute; bottom: 0;
+  width: clamp(180px, 24vw, 320px); height: auto;
+  opacity: .07;
+  pointer-events: none; user-select: none;
+}
+.rw-watermark.is-left { left: 0; }
+.rw-watermark.is-right { right: 0; }
+
+/* Footer social row - circular icon buttons so "follow elsewhere" reads as its own action. */
+.rw-social-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; flex: none;
+  border: 1px solid var(--line); border-radius: 100px;
+  color: var(--faded);
+  transition: background .25s ease, color .25s ease, border-color .25s ease, transform .25s cubic-bezier(.2,.7,.2,1);
+}
+.rw-social-icon:hover {
+  background: var(--copper); border-color: var(--copper); color: #fff;
+  transform: translateY(-2px);
+}
 .rw-outline-btn:hover { background: var(--ink); color: var(--bg); }
 
-/* WHAT WE DELIVER — image-led chapter cards. The three services are the page's
-   main forks, so they get photography and a numeral rather than plain columns. */
+/* WHAT WE DELIVER - image-led chapter cards; the page's main forks get photography and a numeral instead of plain columns. */
 .rw-ways { padding-bottom: clamp(56px, 7vw, 92px); }
 /* Drop the middle card to break the grid's symmetry (as .rw-flow-stages does). */
 .rw-ways .rw-way:nth-child(2) { margin-top: clamp(0px, 3.4vw, 46px); }
@@ -75,7 +100,7 @@ a:hover { color: var(--ink, #12100D); }
   background: linear-gradient(to top, rgba(11,10,9,.82), rgba(11,10,9,.16) 42%, rgba(11,10,9,0) 68%);
 }
 
-/* Outlined until hover, when it fills — the same chapter mark as .rw-flow-numeral. */
+/* Outlined until hover, when it fills - the same chapter mark as .rw-flow-numeral. */
 .rw-way-numeral {
   position: absolute; left: 18px; bottom: 6px; z-index: 2;
   font-style: italic; font-weight: 500;
@@ -85,9 +110,7 @@ a:hover { color: var(--ink, #12100D); }
 }
 .rw-way:hover .rw-way-numeral { color: var(--copper); -webkit-text-stroke-color: var(--copper); }
 
-/* WHAT YOU'LL ACHIEVE — numbered outcome cards. Each lifts on hover with a
-   drawn brand-blue rule and an outlined index that fills, matching the chapter
-   marks used elsewhere (.rw-way / .rw-flow-numeral). */
+/* WHAT YOU'LL ACHIEVE - numbered outcome cards, matching the chapter marks used elsewhere (.rw-way / .rw-flow-numeral). */
 .rw-achieve-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -96,11 +119,8 @@ a:hover { color: var(--ink, #12100D); }
   gap: var(--achieve-gap);
 }
 
-/* Sequence connectors — a small copper node hangs in the gap between each card
-   and the next, so the six outcomes read as one ordered chain 1→2→…→6. Each
-   node points RIGHT to the next card in its row and DOWN where the row breaks;
-   the row-break cards depend on the column count, so the direction is switched
-   per breakpoint below. The last card never gets one. */
+/* Sequence connectors - a copper node between each card reads as chain 1→2→…→6.
+   Points RIGHT within a row, DOWN at row breaks (switched per breakpoint below). */
 .rw-achieve-arrow {
   position: absolute; z-index: 4; pointer-events: none;
   width: 30px; height: 30px; border-radius: 50%;
@@ -121,10 +141,8 @@ a:hover { color: var(--ink, #12100D); }
 .rw-achieve:hover + .rw-achieve-arrow { background: var(--copper); border-color: var(--copper); color: #fff; }
 .rw-achieve:hover + .rw-achieve-arrow i { transform: translateX(3px); }
 
-/* Point a node DOWN instead of right (used at row breaks). The hover nudge
-   follows the rotation into a downward push, since the glyph is rotated with it.
-   Which cards are row-breaks depends on the column count, so the assignment
-   lives in the breakpoint rules below — this is just the geometry. */
+/* Point a node DOWN instead of right (row breaks). Just the geometry - which
+   cards are row-breaks is assigned in the breakpoint rules below. */
 .rw-achieve-arrow.is-down {
   left: 50%;
   top: calc(100% + var(--achieve-gap) / 2);
@@ -139,8 +157,7 @@ a:hover { color: var(--ink, #12100D); }
    directly beneath it at column 3); the bottom row is reversed so it reads
    6 ← 5 ← 4 leftward, ending on card 6 at bottom-left. */
 @media (min-width: 1001px) {
-  /* Reverse the visual order of the bottom row so 4 lands under 3. Pin the row
-     explicitly — non-dense auto-flow won't backtrack to fill earlier columns. */
+  /* Pin the row explicitly - non-dense auto-flow won't backtrack to fill earlier columns. */
   .rw-achieve-grid > *:nth-child(4) { grid-column: 3; grid-row: 2; }
   .rw-achieve-grid > *:nth-child(5) { grid-column: 2; grid-row: 2; }
   .rw-achieve-grid > *:nth-child(6) { grid-column: 1; grid-row: 2; }
@@ -210,10 +227,8 @@ a:hover { color: var(--ink, #12100D); }
   font-size: 16px; line-height: 1.55; color: var(--faded);
 }
 
-/* WHAT THE MANDATE COVERS — a coverage matrix. A bordered grid of cells reads
-   as one control panel the mandate owns end to end, distinct from the spaced
-   outcome cards. Each cell floods brand-blue on hover, its index at the top and
-   the scope line anchored to the foot. */
+/* WHAT THE MANDATE COVERS - a bordered coverage matrix, reading as one control
+   panel distinct from the spaced outcome cards. Cell floods brand-blue on hover. */
 .rw-matrix {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -246,9 +261,8 @@ a:hover { color: var(--ink, #12100D); }
 }
 .rw-matrix-cell:hover .rw-matrix-title { color: #fff; }
 
-/* & MORE — additional support services as a chip cloud. Titles read as pills;
-   pointing at (or tapping) one reveals its description in the caption below,
-   the same hover-to-reveal idiom the territory map uses. */
+/* & MORE - support services as a chip cloud; pointing/tapping a pill reveals
+   its description below, the same hover-to-reveal idiom as the territory map. */
 .rw-chips { display: flex; flex-wrap: wrap; gap: clamp(9px, 1vw, 13px); }
 .rw-chip {
   cursor: pointer; background: transparent;
@@ -284,9 +298,7 @@ a:hover { color: var(--ink, #12100D); }
   font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--copper);
 }
 
-/* Skeleton placeholder — the fallback shown by <Skeleton> while the blog feed
-   fetches and its (large) images buffer. Gold-tinted so it reads as the brand's
-   loading state rather than a dead grey block. */
+/* Skeleton placeholder shown by <Skeleton> while blog images buffer. Gold-tinted, not a dead grey block. */
 .rw-skel {
   background: linear-gradient(100deg, var(--chip) 30%, rgba(195,155,83,.10) 50%, var(--chip) 70%);
   background-size: 200% 100%;
@@ -301,8 +313,7 @@ a:hover { color: var(--ink, #12100D); }
   .rw-skel { animation: none; }
 }
 
-/* Glimpses mosaic — two tall frames flanking a stacked pair, so the strip reads
-   as a contact sheet rather than four identical thumbnails in a row. */
+/* Glimpses mosaic - two tall frames flanking a stacked pair, reading as a contact sheet, not four identical thumbnails. */
 .rw-glimpses {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -315,9 +326,7 @@ a:hover { color: var(--ink, #12100D); }
 .rw-glimpse:nth-child(3) { grid-column: span 2; grid-row: span 2; }
 .rw-glimpse:nth-child(4) { grid-column: span 2; grid-row: span 1; }
 
-/* Mission / vision. Two labelled columns of small text read as a template, so
-   the statements are the type here — the labels shrink to a serif aside and the
-   index becomes a drawn numeral. */
+/* Mission / vision - the statements are the type here; labels shrink to a serif aside and the index becomes a drawn numeral. */
 .rw-creed {
   margin-top: clamp(40px, 5vw, 68px);
   display: grid; grid-template-columns: 1fr 1fr;
@@ -358,8 +367,57 @@ a:hover { color: var(--ink, #12100D); }
   letter-spacing: -.01em; color: var(--ink);
 }
 
-/* The developer challenge, as a ledger. Two boxed lists made the reader pair the
-   problems with the answers themselves; each row now states one shift. */
+/* Consulting's mission quote - a copper rule stands in for quotation marks. */
+.rw-mission-quote {
+  position: relative;
+  margin-top: clamp(56px, 6vw, 84px);
+  padding-left: clamp(24px, 2.6vw, 34px);
+  border-left: 2px solid var(--copper);
+}
+.rw-mission-signature {
+  display: block; margin-top: 22px;
+  width: min(38%, 190px); height: auto;
+}
+
+/* The syllabus - six category pills (.rw-chip reused from Consulting's "& More"
+   cloud). Hover/focus reveals sub-groups in the panel below, with a gold monogram watermark, matching the brand's print collateral. */
+.rw-syllabus-panel {
+  position: relative; overflow: hidden;
+  min-height: 200px;
+  margin-top: clamp(28px, 3vw, 42px);
+  padding: clamp(28px, 3vw, 40px) clamp(24px, 2.6vw, 34px);
+  border-top: 1px solid var(--line);
+  display: flex; align-items: center;
+}
+.rw-syllabus-hint { font-size: 12px; letter-spacing: .08em; color: var(--faded); }
+.rw-syllabus-watermark {
+  position: absolute; top: 50%; right: clamp(16px, 3vw, 40px);
+  transform: translateY(-50%);
+  width: clamp(110px, 12vw, 170px); height: auto;
+  opacity: .08; z-index: 0;
+  pointer-events: none; user-select: none;
+}
+.rw-syllabus-panel-body { position: relative; z-index: 1; width: 100%; animation: rw-fade .4s ease both; }
+.rw-syllabus-num {
+  display: block; font-size: 12px; letter-spacing: .1em; color: var(--copper);
+}
+.rw-syllabus-title {
+  margin-top: 10px;
+  font-size: clamp(21px, 2vw, 27px); line-height: 1.18; color: var(--ink);
+}
+.rw-syllabus-panel-groups {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(20px, 2.4vw, 32px);
+  margin-top: 24px;
+  max-width: 70%;
+}
+.rw-syllabus-group-label {
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--faded); margin-bottom: 10px;
+}
+.rw-syllabus-items { display: flex; flex-direction: column; gap: 8px; }
+
+/* The developer challenge, as a ledger - each row states one shift, rather than two boxed lists the reader had to pair up. */
 .rw-shifts { border-top: 1px solid var(--line); }
 
 .rw-shift {
@@ -374,9 +432,7 @@ a:hover { color: var(--ink, #12100D); }
 
 .rw-shift-n { font-size: 12px; letter-spacing: .16em; color: var(--copper); }
 
-/* The problem is what gets retired, so it reads muted and is ruled out. The
-   strike is drawn permanently rather than on hover — this section carries no
-   hover state. */
+/* The problem is what gets retired: muted and ruled out, strike drawn permanently (no hover state here). */
 /* Shrink-to-fit, or the strike rule overruns the text into empty column space. */
 .rw-shift-from {
   position: relative; align-self: center; justify-self: start;
@@ -397,11 +453,23 @@ a:hover { color: var(--ink, #12100D); }
   font-size: clamp(19px, 1.75vw, 25px); line-height: 1.25;
   letter-spacing: -.01em; color: var(--ink);
 }
-.rw-shift-note { font-size: 15px; line-height: 1.45; color: var(--faded); }
+.rw-shift-note { font-size: 15px; line-height: 1.45; color: rgba(242,239,233,.88); }
 
-/* The project wall. A card grid left four-fifths of each card empty and a flat
-   index just enumerated; grouping by locality shows where the work is
-   concentrated, and sets the names as the type rather than as table cells. */
+/* The S.M.A.R.T. acronym - GSAP's ScrambleTextPlugin rewrites .rw-acronym-live's
+   text on hover/focus (see AcronymScramble in Consulting.jsx). .rw-acronym
+   stays locked to the short form's size via the hidden sizer, so the growing overlay never changes the hover hit box. */
+.rw-acronym {
+  position: relative; display: inline-block; cursor: pointer;
+  border-bottom: 1px dotted var(--copper);
+}
+.rw-acronym:focus-visible { outline: none; border-bottom-style: solid; }
+.rw-acronym-sizer { visibility: hidden; white-space: nowrap; }
+.rw-acronym-live {
+  position: absolute; left: 0; top: 0;
+  white-space: nowrap; color: var(--copper);
+}
+
+/* The project wall - grouped by locality to show where the work is concentrated, names set as type rather than table cells. */
 .rw-index-head {
   display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap;
   padding: 0 0 14px;
@@ -409,9 +477,8 @@ a:hover { color: var(--ink, #12100D); }
 }
 .rw-index-head > span:last-child { color: var(--copper); opacity: .75; }
 
-/* The territory map. Cards, then an index, then a name wall all just enumerated
-   the projects. The map says the thing the roster cannot: the work is not spread
-   thin across Hyderabad, it is massed in a handful of west-corridor micro-markets. */
+/* The territory map says what the roster can't: the work isn't spread thin
+   across Hyderabad, it's massed in a handful of west-corridor micro-markets. */
 .rw-territory {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
@@ -444,7 +511,7 @@ a:hover { color: var(--ink, #12100D); }
 .rw-node.is-empty { cursor: default; }
 .rw-node.is-empty .rw-node-dot { fill: var(--faded); opacity: .18; }
 
-/* The name is a hover target too — aiming at a 3px dot is not a design. */
+/* The name is a hover target too - aiming at a 3px dot is not a design. */
 .rw-node-label {
   font-size: 1.85px; letter-spacing: .1px;
   fill: var(--faded); text-transform: uppercase;
@@ -455,7 +522,7 @@ a:hover { color: var(--ink, #12100D); }
 .rw-node-count { fill: var(--copper); }
 
 /* Single-project localities name themselves only when pointed at, so the dense
-   centre of the map stays readable. An invisible label must not stay hoverable —
+   centre of the map stays readable. An invisible label must not stay hoverable -
    that would fire the node from a patch of apparently empty map. */
 .rw-node.is-minor .rw-node-label,
 .rw-node.is-empty .rw-node-label {
@@ -491,8 +558,7 @@ a:hover { color: var(--ink, #12100D); }
   font-size: 9px; letter-spacing: .16em; color: var(--faded); opacity: .7;
 }
 
-/* A project name that links to its detail page. The arrow slides on hover, as
-   the project cards elsewhere do. */
+/* A project name linking to its detail page - the arrow slides on hover, as project cards elsewhere do. */
 .rw-panel-link { transition: color .25s ease; }
 .rw-panel-link:hover { color: var(--copper); }
 .rw-panel-go { transform: translateX(-4px); opacity: 0; transition: transform .3s cubic-bezier(.2,.7,.2,1), opacity .3s ease; }
@@ -508,8 +574,7 @@ a:hover { color: var(--ink, #12100D); }
 /* Placeholder frames come alive on hover. */
 .rw-slot:hover .rw-slot-mark { transform: rotate(135deg) scale(1.12); }
 
-/* Framed imagery sits above the page rather than flush against it.
-   Images stay still on hover — no lift, zoom or brighten. */
+/* Framed imagery sits above the page; images stay still on hover - no lift, zoom or brighten. */
 .rw-figure, .rw-frame { box-shadow: var(--shadow); }
 
 /* Project cards: label slides up, rule sweeps across on hover. */
@@ -546,8 +611,7 @@ a:hover { color: var(--ink, #12100D); }
 
 /* Mobile drawer: hidden above the breakpoint, where the inline nav shows. */
 .rw-drawer { display: none; }
-/* The wheel menu is offered at every width, so the button is always shown —
-   on desktop it sits beside the inline nav rather than replacing it. */
+/* The wheel menu is offered at every width; on desktop it sits beside the inline nav rather than replacing it. */
 .rw-menu-btn { display: flex !important; }
 .rw-menu-btn:hover { border-color: var(--ink); }
 
@@ -625,9 +689,27 @@ a:hover { color: var(--ink, #12100D); }
 }
 .rw-phase-card:hover .rw-phase-num { opacity: 1; color: var(--copper); }
 
-.rw-phase-points {
-  list-style: none; margin: 14px 0 0; padding: 14px 0 0;
+.rw-phase-toggle {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 16px; cursor: pointer; background: none; border: none; padding: 0;
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--copper);
+}
+.rw-phase-toggle:hover { color: var(--ink); }
+.rw-phase-toggle-arrow { font-style: normal; font-size: 13px; }
+
+.rw-phase-points-wrap {
+  position: relative; overflow: hidden;
+  margin-top: 14px; padding: 14px 0 2px;
   border-top: 1px solid var(--line);
+  animation: rw-fade .35s ease both;
+}
+.rw-phase-watermark {
+  position: absolute; right: -18px; bottom: -14px;
+  width: clamp(90px, 9vw, 130px); height: auto;
+  opacity: .1; pointer-events: none; user-select: none;
+}
+.rw-phase-points {
+  position: relative; list-style: none; margin: 0; padding: 0;
 }
 .rw-phase-points li {
   position: relative; padding-left: 18px;
@@ -667,7 +749,7 @@ a:hover { color: var(--ink, #12100D); }
   .rw-gallery .rw-figure-wide { grid-column: span 1; }
 }
 
-/* Custom cursor — only where a fine pointer exists. */
+/* Custom cursor - only where a fine pointer exists. */
 .rw-cursor-dot, .rw-cursor-ring { position: fixed; top: 0; left: 0; z-index: 999; pointer-events: none; border-radius: 50%; }
 .rw-cursor-dot { width: 6px; height: 6px; background: var(--copper); margin: -3px 0 0 -3px; }
 .rw-cursor-ring { width: 34px; height: 34px; border: 1px solid var(--copper); margin: -17px 0 0 -17px; transition: width .2s, height .2s, margin .2s, background .2s, opacity .2s; }
@@ -702,10 +784,7 @@ a:hover { color: var(--ink, #12100D); }
 /* Column counts for this grid live in the responsive ladder at the foot of the
    file, with every other grid on the site. */
 
-/* Testimonials.
-   A plain grid with equal-height cells: the quotes vary in length, so cards
-   stretch to their row and the attribution is pushed to the bottom edge. Every
-   row therefore lines up, rather than staggering as a masonry flow would. */
+/* Testimonials - equal-height cells; cards stretch to their row and attribution pushes to the bottom edge, so rows line up. */
 .rw-voice-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -741,29 +820,23 @@ a:hover { color: var(--ink, #12100D); }
 @media (max-width: 1100px) { .rw-voice-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 700px)  { .rw-voice-grid { grid-template-columns: 1fr; } }
 
-/* The app shell clips stray horizontal overflow. It must use `clip` rather than
-   `hidden`: `overflow-x: hidden` forces the other axis to `auto`, which turns
-   this wrapper into a scroll container and silently breaks `position: sticky`
-   for every descendant — they pin to this box, which never scrolls, instead of
-   to the viewport. `clip` does the same clipping without that side effect.
-   The `hidden` line is a fallback for browsers predating `clip` (Safari < 16);
-   they keep the clipping and lose only the pinning. */
+/* Clips horizontal overflow with `clip`, not `hidden` - `overflow-x: hidden`
+   forces the other axis to `auto`, silently breaking `position: sticky` for
+   descendants. The `hidden` line is a fallback for pre-`clip` browsers (Safari < 16). */
 .rw-app-shell {
   overflow-x: hidden;
   overflow-x: clip;
 }
 
-/* A column that pins while its sibling scrolls past it. `align-self: start` is
-   required: a grid item stretches to the row height by default, which leaves
-   sticky nothing to travel within. The offset clears the sticky header. */
+/* A column that pins while its sibling scrolls past. `align-self: start` is
+   required - a grid item stretches to row height by default, leaving sticky nothing to travel within. */
 .rw-sticky-aside {
   position: sticky;
   top: 108px;
   align-self: start;
 }
 
-/* Layout that only holds side by side. The column counts themselves live in the
-   responsive ladder at the foot of this file. */
+/* Layout that only holds side by side. Column counts live in the responsive ladder at the foot of this file. */
 @media (max-width: 900px) {
   .rw-split { grid-template-columns: 1fr !important; }
   /* Stacked, a pinned column would hover over its own list. */
@@ -772,8 +845,8 @@ a:hover { color: var(--ink, #12100D); }
   .rw-creed { grid-template-columns: 1fr; gap: 44px; }
   .rw-creed .rw-creed-item:nth-child(2) { margin-top: 0; }
 
-  /* The map goes full width with the panel beneath it. Node labels would collide
-     at this scale, so only the active one is named — the panel carries the rest. */
+  /* The map goes full width with the panel beneath it; only the active node is
+     named at this scale, since labels would collide. */
   .rw-territory { grid-template-columns: 1fr; gap: 24px; }
   .rw-node-label { opacity: 0; }
   .rw-node.is-on .rw-node-label { opacity: 1; font-size: 3.2px; }
@@ -797,13 +870,11 @@ a:hover { color: var(--ink, #12100D); }
   .rw-shift-from { grid-column: 2; }
   .rw-shift-arrow { grid-column: 2; transform: rotate(90deg); transform-origin: left center; }
   .rw-shift-to { grid-column: 2; }
-  /* The mosaic's spans are hand-placed, so the collapse has to clear them all or
-     the frames overlap. An even 2×2 leaves no empty cell. */
+  /* Mosaic spans are hand-placed; an even 2×2 collapse clears them all with no empty cell. */
   .rw-glimpses { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 46vw; }
   .rw-glimpse:nth-child(n) { grid-column: span 1; grid-row: span 1; }
-  /* A headline phrase wraps on a narrow screen, but the reveal mask stays one
-     line tall and guillotines the rest. The animation is decoration; the words
-     are not. Drop the mask and land the text in place. */
+  /* The reveal mask stays one line tall and would guillotine a wrapped headline;
+     drop the mask and land the text in place instead. */
   .rw-rise-mask {
     overflow: visible !important;
     padding-bottom: 0 !important;
@@ -824,25 +895,12 @@ a:hover { color: var(--ink, #12100D); }
 }
 
 /* ===========================================================================
-   RESPONSIVE LADDER
-   ---------------------------------------------------------------------------
-   Every column count on the site is declared here, in one descending run, so
-   there is a single place to read what the layout does at any width. The rungs
-   are chosen by where the content actually breaks rather than by device names:
-
-     > 1320   the page is at its maximum measure and only the gutters grow
-     ≤ 1320   large laptop — the container stops being capped
-     ≤ 1200   small laptop / landscape tablet — four-ups drop to three
-     ≤ 1000   portrait tablet — three-ups drop to two
-     ≤ 900    the stacking breakpoint (see the block above): splits collapse,
-              the inline nav goes, staggered grids straighten out
-     ≤ 700    large phone — two-ups drop to one
-     ≤ 560    phone
-     ≤ 400    small phone — the last of the fixed gutters give way
-
-   The gutter is the one value that moves at every rung: `.rw-pad` is applied to
-   each section's inner wrapper, and its !important is what lets it beat the
-   inline `padding: 'clamp(…) 40px'` those wrappers carry.
+   RESPONSIVE LADDER - every column count declared here, one descending run,
+   rungs chosen by where content actually breaks (not device names):
+     > 1320 max measure, only gutters grow | ≤1320 laptop, container uncapped
+     ≤1200 four-ups→three | ≤1000 three-ups→two | ≤900 stacking breakpoint
+     ≤700 two-ups→one | ≤560 phone | ≤400 small phone, fixed gutters give way
+   `.rw-pad`'s !important is what lets the gutter beat the inline padding those wrappers carry.
    =========================================================================== */
 
 /* --- Gutters ------------------------------------------------------------- */
@@ -853,8 +911,7 @@ a:hover { color: var(--ink, #12100D); }
 
 /* --- ≤1200: four-ups become three ---------------------------------------- */
 @media (max-width: 1200px) {
-  /* The track-record row is four figures; 2×2 keeps them paired rather than
-     leaving a lone stat on a second line. */
+  /* The track-record row is four figures; 2×2 keeps them paired, not a lone stat on a second line. */
   .rw-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
   .rw-matrix { grid-template-columns: repeat(3, 1fr); }
   .rw-team-grid { grid-template-columns: repeat(4, 1fr); }
@@ -895,7 +952,7 @@ a:hover { color: var(--ink, #12100D); }
    scrim has lifted, so type and face never share the same ground. The copy
    panel's height is what makes the banner.
 
-   STACK (phone, below). The overlay cannot survive the copy going full width —
+   STACK (phone, below). The overlay cannot survive the copy going full width -
    the headline lands squarely on the subject's face, and no amount of grading
    fixes it, because the problem is that they occupy the same pixels. The photo
    becomes a framed portrait above the copy instead. */
@@ -945,8 +1002,7 @@ a:hover { color: var(--ink, #12100D); }
   background: linear-gradient(180deg, rgba(11,10,9,0) 55%, rgba(11,10,9,.35) 100%);
 }
 
-/* `svh` measures the viewport with the browser chrome shown, so the banner does
-   not sit a toolbar's worth taller than the screen on a phone. */
+/* `svh` measures the viewport with browser chrome shown, so the banner isn't a toolbar's-worth taller than the screen on a phone. */
 .rw-hero-copy {
   position: relative;
   z-index: 1;
@@ -963,40 +1019,29 @@ a:hover { color: var(--ink, #12100D); }
 }
 
 /* --- The hero, banded ---------------------------------------------------- */
-/* The phone composition. The photograph stays full-bleed and the copy still
-   rides on it, but the two stop fighting for the same pixels.
-
-   Why a band rather than a full-height banner: the source is 16:9 and a phone
-   viewport is about 9:19.5, so `object-fit: cover` always scales the image to
-   the box's HEIGHT and lets the width overflow. At full height that leaves
-   `object-position`'s vertical term with nothing to do — the subject's face
-   lands where it lands, which is the middle of the screen, directly under the
-   headline. Giving the photo a shorter, wider box is the only thing that puts
-   the vertical crop back under our control. */
+/* Phone composition: a band, not a full-height banner. The source is 16:9 on a
+   ~9:19.5 viewport, so full-height `object-fit: cover` scales to height and
+   leaves `object-position`'s vertical term nothing to do. A shorter, wider box puts the vertical crop back under control. */
 @media (max-width: 760px) {
   .rw-hero { display: flex; flex-direction: column; }
 
   .rw-hero-media {
     position: relative;
     inset: auto;
-    /* `width: auto` is load-bearing: the overlay rule sets `width: 100%`, which
-       here would resolve against the section and then add margins on top. */
+    /* `width: auto` is load-bearing - the overlay rule's `width: 100%` would resolve against the section and add margins on top. */
     width: auto;
     height: 52svh;
     min-height: 280px;
-    /* Full-bleed — no frame. The photograph runs edge to edge and dissolves
-       into the page, rather than sitting in a box on top of it. */
+    /* Full-bleed - no frame; the photograph runs edge to edge. */
     margin: 0;
     border: none;
   }
 
-  /* Only the horizontal term does anything at this box ratio; it holds the
-     subject just right of centre, clear of the copy that follows. */
+  /* Only the horizontal term does anything at this box ratio; holds the subject right of centre, clear of the copy. */
   .rw-hero-img { object-position: 66% center; }
 
-  /* The scrim turns vertical and lands on the page's own background, so the
-     foot of the photograph dissolves into the copy instead of ending on a
-     visible edge. This is what keeps it an overlay rather than a stack. */
+  /* The scrim turns vertical and lands on the page background, so the photo's
+     foot dissolves into the copy instead of ending on a visible edge. */
   .rw-hero-scrim {
     background: linear-gradient(180deg,
       rgba(11,10,9,0) 34%,
@@ -1011,8 +1056,7 @@ a:hover { color: var(--ink, #12100D); }
   .rw-hero-copy {
     min-height: 0;
     justify-content: flex-start;
-    /* Lifts the copy onto the photograph's fade, where the scrim has already
-       gone to solid background — the eyebrow sits over picture, not under it. */
+    /* Lifts the copy onto the photo's fade, where the scrim is solid - the eyebrow sits over picture, not under it. */
     margin-top: -54px;
     padding: 0 clamp(18px, 5vw, 24px) clamp(44px, 10vw, 64px);
   }
@@ -1023,34 +1067,49 @@ a:hover { color: var(--ink, #12100D); }
   }
 }
 
-/* The credential strip drops its separator rules and stacks, rather than
-   wrapping mid-list and stranding a bare "|" at the head of a line. */
+/* The credential strip drops its separator rules and stacks, rather than wrapping mid-list and stranding a bare "|". */
 @media (max-width: 620px) {
   .rw-hero-meta { flex-direction: column; gap: 8px !important; }
   .rw-hero-meta-sep { display: none; }
 }
 
-/* A phone held sideways has no vertical room to spare: a viewport-tall hero
-   would push everything below it off a second screen for no gain. And a 5:4
-   frame on a 740px-wide landscape phone is 590px tall — well past the bottom of
-   a 360px screen — so the stacked photo is sized against the viewport here
-   rather than against its own width. */
+/* StrokeText's box height is fixed at mount, so it won't shrink with the
+   viewport like the old clamp()-sized headline. Overriding its custom property keeps hero lines fluid instead of towering on a phone. */
+.rw-hero-stroke-line {
+  --stroke-text-height: clamp(58px, 12vw, 120px) !important;
+}
+
+/* SpecularButton has no font-family/letter-spacing props of its own; borrows this to match the site's other mono-set buttons. */
+.rw-specular-cta {
+  font-family: 'Jost', system-ui, -apple-system, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase;
+}
+
+/* The grid row stretches cards to the tallest one's height; BorderGlow's box
+   and its flex inner need to opt into that too, or marginTop:auto on the "apply" button has nothing to push against. */
+.rw-role-card-glow {
+  height: 100%;
+}
+.rw-role-card-glow .border-glow-inner {
+  height: 100%;
+}
+
+/* A phone held sideways has no vertical room to spare - a viewport-tall hero
+   would push content off a second screen. The stacked photo is sized against the viewport, not its own width, to keep it short. */
 @media (max-height: 560px) and (orientation: landscape) {
   .rw-hero-copy { min-height: 0; padding-top: 48px; padding-bottom: 48px; }
-  /* Sideways there is no height to give away — the band shrinks so the headline
-     still reaches the first screen. */
+  /* Sideways there is no height to spare - the band shrinks so the headline still reaches the first screen. */
   .rw-hero-media { height: 46svh; min-height: 0; }
-  /* This is the one box wide enough for the vertical term to bite: at 740×166
-     the image overflows top and bottom, and centred it cuts the subject across
-     the forehead. Biased upward, the crop falls below the chin instead. */
+  /* At 740×166 the image overflows top/bottom; biased upward, the crop falls below the chin instead of across the forehead. */
   .rw-hero-img { object-position: 66% 26%; }
 }
 
 /* --- The track record ---------------------------------------------------- */
-/* Four figures, dividing where the columns divide. The rules are hung off the
-   left edge of every cell that is not starting a row, so the same declarations
-   hold at four, two and one column — the column count is the only thing the
-   breakpoints below have to change. */
+/* Rules hang off the left edge of every cell not starting a row, so the same
+   declarations hold at four, two and one column - only the count changes below. */
 .rw-stat { padding: 36px 24px 44px; }
 .rw-stat:not(:nth-child(4n + 1)) { border-left: 1px solid var(--line); }
 /* The first cell of each row sits flush with the section's own gutter. */
@@ -1071,9 +1130,7 @@ a:hover { color: var(--ink, #12100D); }
 }
 
 /* --- Overlays ------------------------------------------------------------ */
-/* `dvh` tracks the viewport as a phone's address bar slides away, so the card
-   never extends under browser chrome the way a `vh` measurement does. The `vh`
-   line is the fallback for browsers without dynamic viewport units. */
+/* `dvh` tracks the viewport as a phone's address bar slides, unlike `vh` - which stays as the fallback for browsers without dynamic units. */
 .rw-modal-card {
   max-height: 90vh;
   max-height: 88dvh;
@@ -1263,25 +1320,19 @@ a:hover { color: var(--ink, #12100D); }
   .rw-career-modal-meta .rw-meta-icon:not(:first-child) { margin-left: 3px; }
 }
 
-/* The lightbox chrome is inset for a desktop pointer; on a phone that inset is
-   most of the gutter, and the close button lands on the image itself. */
+/* The lightbox chrome is inset for a desktop pointer; on a phone that inset eats most of the gutter and the close button lands on the image. */
 @media (max-width: 600px) {
   .rw-lightbox .rw-lb-btn { width: 40px; height: 40px; }
 }
 
 /* --- The wordmark -------------------------------------------------------- */
-/* A stacked monogram-over-signature at the header's 72px eats a third of a
-   phone's sticky bar. These cap it rather than setting it: `max-height` beats
-   the component's inline `height` without needing !important, and — unlike a
-   plain `height` — it leaves the footer's smaller 48px mark alone instead of
-   scaling it up to meet the rule. `width: auto` reflows from the capped height,
-   so the aspect ratio holds. */
+/* Capped, not set: `max-height` beats the inline `height` without !important,
+   and leaves the footer's smaller mark alone rather than scaling it up. `width: auto` reflows to hold the aspect ratio. */
 @media (max-width: 700px) { .rw-wordmark { max-height: 56px; } }
 @media (max-width: 420px) { .rw-wordmark { max-height: 46px; } }
 
 /* --- The wheel menu ------------------------------------------------------ */
-/* The close button clears the notch/status bar on a phone and stops colliding
-   with the first option of the wheel. */
+/* The close button clears the notch/status bar on a phone and stops colliding with the wheel's first option. */
 @media (max-width: 700px) {
   .rw-wheel-close { top: 12px; right: 14px; width: 40px; height: 40px; }
   .rw-wheel-hint { font-size: 9px; letter-spacing: .12em; padding: 0 16px; white-space: normal; text-align: center; }
@@ -1293,22 +1344,17 @@ a:hover { color: var(--ink, #12100D); }
   .rw-chip-caption { min-height: 0; flex-direction: column; gap: 10px; }
   /* The mosaic rows are sized against the viewport, so they stay proportional. */
   .rw-glimpses { gap: 12px; }
-  /* The strike rule reads as a mistake once "from" and "to" stack — the arrow
-     already carries the replacement. */
+  /* The strike rule reads as a mistake once "from"/"to" stack - the arrow already carries the replacement. */
   .rw-shift { gap: 4px 12px; }
 }
 
 @media (max-width: 560px) {
-  /* The auto-fill track's 150px minimum leaves a phone showing two tiles and a
-     wide strip of dead gutter. Pinned at two, the tiles take the full measure.
-     It stays at two all the way down: the marks are legible at ~140px, and
-     nineteen of them stacked one per screen would be an endless section. */
+  /* The auto-fill track's 150px minimum leaves dead gutter on a phone; pinned
+     at two the tiles take the full measure and marks stay legible at ~140px. */
   .rw-orgs { grid-template-columns: repeat(2, 1fr) !important; }
-  /* The mosaic goes to a single column: at 2×2 on a phone each frame is barely
-     140px across and every subject in them is a person in a room. */
+  /* The mosaic goes to a single column - at 2×2 on a phone each frame is barely 140px across. */
   .rw-glimpses { grid-template-columns: 1fr; grid-auto-rows: 58vw; }
-  /* An 18px chip with 24px of padding wraps to one per line and reads as a
-     list of buttons rather than a cloud. */
+  /* An 18px chip with 24px of padding wraps to one per line, reading as a list of buttons, not a cloud. */
   .rw-chip { padding: 10px 15px; letter-spacing: .06em; }
   .rw-team-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -1317,21 +1363,18 @@ a:hover { color: var(--ink, #12100D); }
   .rw-glimpses { grid-auto-rows: 62vw; }
 }
 
-/* --- Project detail page — cinematic ------------------------------------- */
-/* A full-bleed element that breaks out of its centred container to span the
-   whole viewport. Safe because .rw-app-shell clips overflow-x, so the 100vw
-   (which includes the scrollbar) can't open a horizontal scrollbar. */
+/* --- Project detail page - cinematic ------------------------------------- */
+/* A full-bleed element spanning the whole viewport. Safe because
+   .rw-app-shell clips overflow-x, so the 100vw can't open a horizontal scrollbar. */
 .rw-bleed { width: 100vw; margin-left: 50%; transform: translateX(-50%); }
 
-/* The hero fills the screen; the photograph drifts in a slow Ken Burns push so
-   the first frame breathes rather than sitting dead still. */
+/* The hero fills the screen; the photograph drifts in a slow Ken Burns push so the first frame breathes. */
 .rw-projx-hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; background: var(--bg); }
 .rw-projx-kb { position: absolute; inset: 0; }
 .rw-projx-kb img { width: 100%; height: 100%; object-fit: cover; will-change: transform; animation: rw-kenburns 22s ease-in-out infinite alternate; }
 @keyframes rw-kenburns { from { transform: scale(1.04); } to { transform: scale(1.15); } }
 
-/* Hero content fades up on load (not on scroll), so a full-height hero can't
-   strand its own facts/CTA below the reveal-trigger line. */
+/* Fades up on load, not on scroll - a full-height hero can't strand its own facts/CTA below the reveal-trigger line. */
 .rw-projx-in { animation: rw-projx-in .9s cubic-bezier(.2,.75,.25,1) both; }
 @keyframes rw-projx-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .rw-projx-in { animation: none; } }
@@ -1344,7 +1387,7 @@ a:hover { color: var(--ink, #12100D); }
   .rw-projx-kb img, .rw-projx-cue { animation: none; }
 }
 
-/* The oversized stat band — four big gold figures, divided. */
+/* The oversized stat band - four big gold figures, divided. */
 .rw-projx-stats { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); background: var(--card); }
 .rw-projx-stat { padding: clamp(30px, 4vw, 60px) clamp(20px, 2.2vw, 34px); border-left: 1px solid var(--line); }
 .rw-projx-stat:first-child { border-left: none; }
@@ -1378,16 +1421,9 @@ a:hover { color: var(--ink, #12100D); }
 }
 
 /* --- Touch ---------------------------------------------------------------- */
-/* Type-only controls — footer links, the "read on" buttons, the inline
-   portfolio link — are sized by their font, which leaves them 18–24px tall.
-   That is a comfortable cursor target and a poor fingertip one, so the hit area
-   is padded out to roughly 40px without moving the text.
-
-   Two gates, because neither alone covers the ground. Width catches every
-   phone and small tablet, including the ones that report a fine pointer
-   because a stylus or mouse is paired. `pointer: coarse` catches a touch
-   device wide enough to miss the width gate. The declarations are identical,
-   so an element matching both is padded once. */
+/* Type-only controls are sized by their font (18-24px tall) - a poor fingertip
+   target, so the hit area is padded to ~40px without moving the text. Two
+   gates since neither alone covers it: width for phones/tablets, `pointer: coarse` for wide touch devices with a fine-pointer report. */
 @media (max-width: 900px), (pointer: coarse) {
   .rw-footer-links a,
   .rw-inline-cta,
@@ -1396,15 +1432,12 @@ a:hover { color: var(--ink, #12100D); }
     padding-top: 10px;
     padding-bottom: 10px;
   }
-  /* The added padding already separates the links; the full desktop gap on top
-     of it would spread the footer over half a screen. */
+  /* The added padding already separates the links; the full desktop gap would spread the footer over half a screen. */
   .rw-footer-links { gap: 6px 22px !important; }
 }
 
-/* Every hover-to-reveal on the site has a tap fallback (the chips and the map
-   nodes set state on click as well as hover), but the transforms that go with
-   them fire on the first tap and read as a glitch. Landing them flat leaves the
-   reveal itself, which is the part that carries information. */
+/* Hover-to-reveal has a tap fallback, but the transforms fire on first tap and
+   read as a glitch, so they're landed flat - leaving just the reveal, which carries the information. */
 @media (hover: none) {
   .rw-way:hover, .rw-achieve:hover, .rw-voice-card:hover, .rw-figure:hover,
   .rw-assoc-card:hover, .rw-cred-pill:hover { transform: none; }
@@ -1413,9 +1446,7 @@ a:hover { color: var(--ink, #12100D); }
 }
 
 /* --- Careers: role filter tabs -------------------------------------------- */
-/* A single scrollable row rather than a wrapping block, so the filter always
-   reads as one control. The scrollbar is hidden because the row is short and a
-   visible bar under four chips looks like a rendering fault. */
+/* A single scrollable row so the filter reads as one control; scrollbar hidden since it looks like a rendering fault under four chips. */
 .rw-tabs {
   display: flex;
   gap: 8px;
@@ -1423,7 +1454,6 @@ a:hover { color: var(--ink, #12100D); }
   scrollbar-width: none;
   padding-bottom: 4px;
 }
-.rw-mobile-career-filters { display: none; }
 .rw-tabs::-webkit-scrollbar { display: none; }
 
 .rw-tab {
@@ -1443,6 +1473,8 @@ a:hover { color: var(--ink, #12100D); }
   border-color: transparent;
   color: #fff;
 }
+
+.rw-mobile-career-filters { display: none; }
 
 .rw-level-label {
   color: var(--copper);
@@ -1479,6 +1511,8 @@ a:hover { color: var(--ink, #12100D); }
 .rw-role-card {
   min-width: 0;
 }
+.rw-empty-roles-glow,
+.rw-empty-roles-glow .border-glow-inner { height: 100%; }
 .rw-careers-grid {
   display: grid;
   gap: 16px;
@@ -1489,13 +1523,11 @@ a:hover { color: var(--ink, #12100D); }
   align-items: center;
   gap: clamp(18px, 3vw, 42px);
   box-sizing: border-box;
-  border: 1px solid var(--line);
   background: rgba(20, 18, 16, .38);
   padding: 22px 28px;
-  transition: border-color .3s, background .3s, transform .3s;
+  transition: background .3s, transform .3s;
 }
 .rw-role-row:hover {
-  border-color: var(--copper);
   background: var(--card);
   transform: translateY(-2px);
 }
@@ -1635,9 +1667,7 @@ a:hover { color: var(--ink, #12100D); }
 }
 
 /* --- Careers: hiring timeline --------------------------------------------- */
-/* Four steps on one rail across desktop. The rail is drawn behind the nodes and
-   inset by half a column at each end so it starts and stops at the first and
-   last circle rather than at the section edge. */
+/* The rail is drawn behind the nodes, inset by half a column at each end so it stops at the first/last circle, not the section edge. */
 .rw-track { position: relative; }
 .rw-track::before {
   content: '';
@@ -1666,29 +1696,25 @@ a:hover { color: var(--ink, #12100D); }
   place-items: center;
   transition: border-color .35s, background .35s, color .35s;
 }
-/* The final step is the offer — filled, so the rail reads as arriving somewhere. */
+/* The final step is the offer - filled, so the rail reads as arriving somewhere. */
 .rw-track-step:last-child .rw-track-node {
   background: var(--gold-gradient);
   border-color: transparent;
   color: #fff;
 }
 
-/* Below the two-column break the rail cannot hold four nodes, so the steps
-   stack and the rail redraws vertically down the left of the column. */
+/* Below the two-column break the rail can't hold four nodes; steps stack and the rail redraws vertically. */
 @media (max-width: 900px) {
   .rw-track::before { top: 27px; bottom: 27px; left: 27px; right: auto; width: 1px; height: auto; }
   .rw-track-steps { grid-template-columns: 1fr; gap: 30px; }
   .rw-track-step { display: grid; grid-template-columns: 54px 1fr; gap: 20px; text-align: left !important; align-items: start; }
-  /* The step title carries a desktop-only offset that would break the
-     alignment with its node once the row goes horizontal. */
+  /* The step title carries a desktop-only offset that would break alignment once the row goes horizontal. */
   .rw-track-step > div:last-child > div:first-child { margin-top: 0 !important; }
 }
 
 /* --- Careers: reasons grid ------------------------------------------------ */
-/* The same cards as .rw-achieve, but a plain row rather than the six-card
-   serpentine — that layout pins its fourth child to column 3 / row 2, which
-   with only four reasons leaves a hole under the first two. No connector nodes
-   here either: these are four parallel reasons, not an ordered chain. */
+/* Same cards as .rw-achieve but a plain row, not the six-card serpentine (which
+   would leave a hole with only four reasons). No connector nodes - these are parallel reasons, not an ordered chain. */
 .rw-reason-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

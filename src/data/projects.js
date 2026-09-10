@@ -1,7 +1,12 @@
-/** Project detail feed, served by `GET /projects/:slug`; images load from the DPR CDN like the blog feed's. */
+/**
+ * Project detail feed. Each project's full page is authored on the DPR
+ * platform and served via `GET /projects/:slug` (CORS-open). Images come
+ * back as root-relative CDN paths, same as the blog feed.
+ */
 import { cdn, getProjects, getProjectBySlug } from './api'
 
-// content.js project names mapped to their API slug; names absent here have no detail page yet.
+/* content.js PROJECTS names mapped to their API slug. Names absent here have
+ * no published detail page yet, so the map shows plain text, not a dead link. */
 export const PROJECT_SLUGS = {
   'Acasa': 'acasasimchah',
   'Amaris': 'amaris',
@@ -36,12 +41,17 @@ export const PROJECT_SLUGS = {
 /** Resolve a CDN path (or absolute URL) from the API to a loadable image URL. */
 export const projectImage = cdn
 
-/** Fetch one project's full detail by slug; rejects so the page can show a "not found" state. */
+/** Fetch one project's full detail by slug. Rejects on error/timeout so the page can show "not found". */
 export async function fetchProject(slug) {
   return getProjectBySlug(slug)
 }
 
-/** Merge the live project index into `PROJECT_SLUGS`; never rejects, curated entries keep their slug. */
+/**
+ * Fetch the live project index and merge it into `PROJECT_SLUGS`. `GET
+ * /projects` is untested, so this never rejects - failure returns the map
+ * unchanged; success makes newly published projects linkable automatically.
+ * Matched against the curated list case-insensitively; known entries keep their hand-checked slug.
+ */
 export async function fetchProjectSlugs() {
   let list
   try {
@@ -60,7 +70,7 @@ export async function fetchProjectSlugs() {
     const slug = row?.slug?.trim()
     if (!title || !slug) continue
     const curated = known.get(title.toLowerCase())
-    // Only add genuinely new titles; a backend rename can't orphan a curated name.
+    // Only genuinely new titles are added, so a backend rename can't orphan a curated name.
     if (!curated) merged[title] = slug
   }
   return merged

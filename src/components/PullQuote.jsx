@@ -1,7 +1,10 @@
 import { attribution } from '../styles'
 import { serif } from '../theme'
 
-// Centred testimonial quote; renders a blockquote unless as="p" is passed.
+/**
+ * Centred testimonial: italic display serif quote, copper name below. `size`/`space` are
+ * props since call sites vary; everything else is fixed. Pass `as="p"` inside a semantic wrapper.
+ */
 export default function PullQuote({
   children,
   name,

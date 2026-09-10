@@ -1,21 +1,23 @@
 import { Link } from 'react-router-dom'
 import ImageSlot from './ImageSlot'
 import Reveal from './Reveal'
-import plateWhiteboardImage from '../assets/site/plate-whiteboard.jpg'
-import plateTeamImage from '../assets/site/plate-team.jpg'
-import plateDeskImage from '../assets/site/plate-desk.jpg'
-import plateReadingImage from '../assets/site/plate-reading.jpg'
+import plateWhiteboardImage from '../assets/site/plate-whiteboard.png'
+import plateDeskImage from '../assets/site/plate-desk.png'
+import plateReadingImage from '../assets/site/plate-reading.png'
 import SectionHead from './SectionHead'
 import { container, headLink } from '../styles'
 
-// Glimpses mosaic; on Portfolio pass linkTo={null} and showCta={false} to avoid self-linking.
+/**
+ * Glimpses mosaic, shared by Home (teaser linking to portfolio) and Portfolio itself.
+ * On Portfolio pass `linkTo={null}` and `showCta={false}` to avoid self-links.
+ */
 const GLIMPSES = [
   { tag: 'FIG 01', src: plateWhiteboardImage, alt: 'Rajiv running a session at the whiteboard', placeholder: 'Mentoring', caption: 'Training session', position: 'center 32%' },
   { tag: 'FIG 02', src: plateDeskImage, alt: 'Rajiv working at his desk', placeholder: 'At the desk', caption: 'Between calls', position: 'center 30%' },
-  // Only vertical portrait in the set — needs a tall frame.
+  // Only vertical portrait in the set, so it takes a tall frame instead of a wide crop.
   { tag: 'FIG 03', src: plateReadingImage, alt: 'Rajiv preparing before a session', placeholder: 'Preparation', caption: 'Before the room', position: 'center 30%' },
-  // Wide shot, suits the short panoramic strip.
-  { tag: 'FIG 04', src: plateTeamImage, alt: 'The Rajiv Williams team', placeholder: 'The team', caption: 'Hyderabad office', position: 'center 32%' },
+  /* No plate supplied yet - falls back to ImageSlot's designed placeholder. */
+  { tag: 'FIG 04', alt: 'The Rajiv Williams team', placeholder: 'The team', caption: 'Hyderabad office', position: 'center 32%' },
 ]
 
 export default function GlimpsesSection({ showCta = true, linkTo = '/realty/portfolio' }) {

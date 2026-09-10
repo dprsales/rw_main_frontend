@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import teamImage from '../assets/site/team-group.jpg'
-import cultureImage from '../assets/site/whiteboard-session.jpg'
+import hydMark from '../assets/site/hyd-02.svg'
+import cultureImage from '../assets/site/whiteboard-session.png'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import ImageSlot from '../components/ImageSlot'
 import Seo from '../components/Seo'
 import { BookButton } from '../components/BookingModal'
+import BorderGlow from '../components/BorderGlow'
 import Reveal from '../components/Reveal'
 import AchieveGrid from '../components/AchieveGrid'
 import ClosingCTA from '../components/ClosingCTA'
@@ -16,7 +17,7 @@ import { CAREER_CATEGORIES, CAREER_CULTURE, CAREER_HOOK, CAREER_PROCESS, CAREER_
 import { fetchRoles } from '../data/jobs'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import {
-  container, ctaCard, ctaCopper, ctaInline, eyebrow,
+  container, ctaInline, eyebrow,
   note, sectionHeading, sectionRule,
 } from '../styles'
 
@@ -28,6 +29,15 @@ const HEADLINE = [
 
 // Applications go through the booking form, same as every other CTA, with the role in the message.
 const APPLY_INTEREST = 'Joining the team'
+const CAREER_GLOW = {
+  backgroundColor: 'var(--card)',
+  glowColor: '41 82 71',
+  colors: ['#C39B53', '#E8C97A', '#A67C3D'],
+  borderRadius: 4,
+  glowRadius: 24,
+  fillOpacity: 0.22,
+  animated: false,
+}
 
 const ALL = 'All'
 const LEVELS = ['All', 'Executive', 'Manager', 'Head']
@@ -92,7 +102,7 @@ export default function Careers() {
         lede="A small floor, selling Hyderabad’s luxury inventory."
         intro="We hire for judgement and follow-through, then train the rest. If you have been carrying a target and want the ticket size to match the effort, this is the room."
         cta={<>
-          <BookButton interest={APPLY_INTEREST} roleOptions={roleOptions} style={ctaCopper}>APPLY TO THE TEAM</BookButton>
+          <BookButton interest={APPLY_INTEREST} roleOptions={roleOptions} specular>APPLY TO THE TEAM</BookButton>
           <button type="button" onClick={() => scrollToId('roles')} className="rw-inline-cta" style={ctaInline}>
             See open roles →
           </button>
@@ -100,8 +110,9 @@ export default function Careers() {
       />
 
       {/* Statement band */}
-      <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--card)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(64px,8vw,96px) 40px', textAlign: 'center' }}>
+      <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--card)', position: 'relative', overflow: 'hidden' }}>
+        <img src={hydMark} alt="" aria-hidden className="rw-why-watermark" />
+        <div className="rw-pad" style={{ ...container, padding: 'clamp(64px,8vw,96px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal as="p" style={{ ...sectionHeading, fontSize: 'clamp(26px,3.4vw,44px)', lineHeight: 1.12 }}>
             {CAREER_HOOK.lead}
           </Reveal>
@@ -128,15 +139,14 @@ export default function Careers() {
       <section className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
         <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(28px,4vw,64px)', alignItems: 'center' }}>
           <Reveal className="rw-figure" style={{ border: '1px solid var(--line)', aspectRatio: '4/3' }}>
-            {/* <ImageSlot
-              src={teamImage}
+            <ImageSlot
               alt="Team Rajiv Williams after a sales floor session"
               placeholder="Team Rajiv Williams"
               caption="The floor"
               spec="Landscape 4:3 · ≥1800px wide · the team mid-session, faces engaged"
               tag="HYDERABAD"
               position="center 35%"
-            /> */}
+            />
           </Reveal>
           <Reveal delay={120}>
             <div style={{ ...eyebrow, marginBottom: 16 }}>WHAT THE WORK LOOKS LIKE</div>
@@ -144,7 +154,7 @@ export default function Careers() {
               Fewer leads. Longer conversations. Larger cheques.
             </h2>
             <p style={{ ...note, marginTop: 18, fontSize: 'clamp(16px,1.7vw,18px)', lineHeight: 1.6 }}>
-              Mandates are exclusive, so the inventory you carry is yours to know completely. Mornings are pipeline review, afternoons are site visits, and the deals that matter are worked jointly — nobody is left alone with a negotiation they have not been prepared for.
+              Mandates are exclusive, so the inventory you carry is yours to know completely. Mornings are pipeline review, afternoons are site visits, and the deals that matter are worked jointly; nobody is left alone with a negotiation they have not been prepared for.
             </p>
             <p style={{ ...note, marginTop: 14, fontSize: 'clamp(16px,1.7vw,18px)', lineHeight: 1.6 }}>
               What we ask for is discipline between calls. What we do not ask for is volume dialling.
@@ -247,12 +257,16 @@ export default function Careers() {
           )}
 
           {openRoles.length === 0 ? (
-            <Reveal style={{ marginTop: 48, textAlign: 'center', border: '1px solid var(--line)', padding: 'clamp(36px,6vw,64px)' }}>
-              <div style={{ fontFamily: serif, fontSize: 'clamp(22px,2.6vw,28px)', color: 'var(--ink)' }}>No open positions this month.</div>
-              <p style={{ ...note, marginTop: 12 }}>
-                Strong profiles are kept on file and called first when a seat opens.
-              </p>
-              <BookButton interest={APPLY_INTEREST} roleOptions={roleOptions} style={{ ...ctaCopper, marginTop: 26 }}>SEND YOUR PROFILE</BookButton>
+            <Reveal style={{ marginTop: 48 }}>
+              <BorderGlow {...CAREER_GLOW} className="rw-empty-roles-glow">
+                <div style={{ textAlign: 'center', padding: 'clamp(36px,6vw,64px)' }}>
+                  <div style={{ fontFamily: serif, fontSize: 'clamp(22px,2.6vw,28px)', color: 'var(--ink)' }}>No open positions this month.</div>
+                  <p style={{ ...note, marginTop: 12 }}>
+                    Strong profiles are kept on file and called first when a seat opens.
+                  </p>
+                  <BookButton interest={APPLY_INTEREST} roleOptions={roleOptions} specular style={{ marginTop: 26 }}>SEND YOUR PROFILE</BookButton>
+                </div>
+              </BorderGlow>
             </Reveal>
           ) : (
             <div className="rw-careers-grid" style={{ marginTop: 42 }}>
@@ -260,7 +274,8 @@ export default function Careers() {
                 const roleId = role.id || role.title
                 return (
                   <Reveal key={roleId} delay={(i % 3) * 70} className="rw-role-card">
-                    <article className="rw-role-row">
+                    <BorderGlow {...CAREER_GLOW} className="rw-role-card-glow">
+                      <article className="rw-role-row">
                       <div className="rw-role-card-main">
                         <span className="rw-role-level">{roleLevel(role)}</span>
                         <div className="rw-role-title">{role.title}</div>
@@ -273,10 +288,11 @@ export default function Careers() {
                         </div>
                         <p>{role.description}</p>
                       </div>
-                      <BookButton className="rw-role-apply" interest={APPLY_INTEREST} role={role.title} jobId={role.id} roleOptions={roleOptions} style={{ ...ctaCard, marginTop: 0 }}>
+                      <BookButton className="rw-role-apply" interest={APPLY_INTEREST} role={role.title} jobId={role.id} roleOptions={roleOptions} specular style={{ marginTop: 0 }}>
                         APPLY NOW <span aria-hidden>→</span>
                       </BookButton>
-                    </article>
+                      </article>
+                    </BorderGlow>
                   </Reveal>
                 )
               })}
@@ -327,7 +343,7 @@ export default function Careers() {
       </section>
 
       <ClosingCTA title="Tell us what you have closed, and what you want to be closing a year from now." titleStyle={{ maxWidth: '15em' }}>
-        <BookButton interest={APPLY_INTEREST} roleOptions={roleOptions} style={ctaCopper}>APPLY TO THE TEAM</BookButton>
+        <BookButton interest={APPLY_INTEREST} roleOptions={roleOptions} specular>APPLY TO THE TEAM</BookButton>
       </ClosingCTA>
 
       <Footer links={FOOTER_LINKS} />

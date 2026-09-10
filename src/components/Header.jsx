@@ -8,7 +8,7 @@ import { useBooking } from './BookingModal'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { mono } from '../theme'
 
-// Only route links belong here; per-page scroll anchors would be dead targets on other pages.
+// Same wheel menu on every page: only route links belong here, not per-page scroll anchors.
 const SITE_NAV = [
   { label: 'Home', to: '/' },
   { label: 'Coaching', to: '/coaching' },
@@ -19,7 +19,10 @@ const SITE_NAV = [
   { label: 'Book a call', book: true },
 ]
 
-// Wheel font size/inset must be real px, not clamp(); options position off their own font size.
+/**
+ * Font size and edge inset for the fullscreen wheel, sized against the viewport since the
+ * wheel positions options in real px and can't take a clamp(). Height matters as much as width.
+ */
 function wheelMetrics() {
   if (typeof window === 'undefined') return { fontSize: 3.2, inset: 96 }
   const { innerWidth: w, innerHeight: h } = window
@@ -40,7 +43,7 @@ function MenuIcon({ open }) {
   )
 }
 
-// Bar only carries the wordmark and menu button; nav lives in the fullscreen wheel menu (SITE_NAV above).
+/** Wordmark + menu button; nav lives in the wheel menu (SITE_NAV). Takes no props. */
 export default function Header() {
   const scrollToId = useSmoothScroll()
   const openBooking = useBooking()
@@ -48,10 +51,10 @@ export default function Header() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
-  // Close the menu on route change.
+  /* A route change means the menu's job is done. */
   useEffect(() => { setOpen(false) }, [pathname])
 
-  // Don't let the page scroll behind the open menu.
+  /* Don't let the page scroll behind the open menu. */
   useEffect(() => {
     if (!open) return
     const previous = document.body.style.overflow
@@ -65,7 +68,7 @@ export default function Header() {
     requestAnimationFrame(() => scrollToId(section))
   }
 
-  // Esc closes the wheel menu.
+  /* Esc closes the wheel menu, as it should for any modal. */
   useEffect(() => {
     if (!open) return
     const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
@@ -73,7 +76,7 @@ export default function Header() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
-  // Wheel takes plain label strings; map the activated index back to a SITE_NAV entry.
+  // Opens the wheel on the current page's option; wheel takes labels, index maps back to SITE_NAV.
   const currentIndex = Math.max(0, SITE_NAV.findIndex((item) => item.to === pathname))
 
   const goTo = (item) => {
@@ -85,7 +88,7 @@ export default function Header() {
     else if (item.href) window.location.href = item.href
   }
 
-  // Re-measured on resize/orientation change so rotating the device updates the wheel sizing.
+  // Re-measured on resize/rotate, not just at mount, so type stays sized to the viewport.
   const [wheel, setWheel] = useState(wheelMetrics)
   useEffect(() => {
     const onResize = () => setWheel(wheelMetrics())
@@ -117,10 +120,7 @@ export default function Header() {
           <Wordmark />
         </Link>
 
-        {/* Visually hidden links for crawlers; see CrawlableNav.jsx. */}
-        <CrawlableNav />
-
-        {/* Nav lives in the wheel menu behind this button. */}
+        {/* No inline nav — it lives in the wheel menu behind this button. */}
         <button
           type="button"
           className="rw-menu-btn"
@@ -137,7 +137,8 @@ export default function Header() {
         </button>
       </div>
 
-      {/* Portalled to the theme shell, not body: avoids header's backdrop-filter clipping, keeps palette vars in scope. */}
+      {/* Portalled past the header (backdrop-filter would clip fixed descendants) but into
+          the theme shell, not <body>, so the overlay keeps the shell's palette var(--…) scope. */}
       {open && createPortal(
         <div className="rw-wheel-menu" role="dialog" aria-modal="true" aria-label="Navigation">
           <button
@@ -168,7 +169,7 @@ export default function Header() {
             />
           </div>
 
-          <p className="rw-wheel-hint" style={{ fontFamily: mono }}>Scroll, drag or use ↑ ↓ — click to go</p>
+          <p className="rw-wheel-hint" style={{ fontFamily: mono }}>Scroll, drag or use ↑ ↓ · click to go</p>
         </div>,
         document.getElementById('rw-app-shell') || document.body,
       )}

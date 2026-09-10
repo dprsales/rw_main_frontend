@@ -1,4 +1,7 @@
-/** Per-route SEO metadata, read by `Seo.jsx`. Keep titles under ~60 chars, descriptions under ~155. */
+/**
+ * Per-route SEO metadata. `Seo.jsx` reads this and writes tags into <head> on
+ * navigation. Keep titles under ~60 chars, descriptions under ~155 - Google truncates past that.
+ */
 
 export const SITE = {
   name: 'Rajiv Williams',

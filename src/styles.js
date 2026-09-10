@@ -1,9 +1,10 @@
 import { mono, serif, text } from './theme'
 
-// Page gutter; `.rw-pad` steps it down by breakpoint (see responsive ladder in global.css)
+/* The horizontal padding is the page gutter; `.rw-pad` steps it down by breakpoint - see global.css. */
 export const container = { maxWidth: 1320, margin: '0 auto', padding: '0 40px' }
 
-// Section eyebrows/kickers; override fontSize inline for smaller stat labels
+/* Section eyebrows / kickers, bumped to 15px to read as a label, not fine print.
+ * Stat labels that want to stay small override fontSize inline. */
 export const eyebrow = {
   fontFamily: mono, fontSize: 15, letterSpacing: '.22em', color: 'var(--copper)',
 }
@@ -14,13 +15,14 @@ export const statLabel = {
   fontFamily: mono, fontSize: 10, letterSpacing: '.16em', color: 'var(--faded)', marginTop: 12,
 }
 
-// DISPLAY TYPE — shared serif/weight/tracking in `display`; each role below only varies size/leading
+/* DISPLAY TYPE - every headline shares the same serif/weight/tracking in
+ * `display`; only size and leading change by role. One-offs spread the nearest rung and override fontSize/lineHeight. */
 const display = { fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', color: 'var(--ink)' }
 
 /** Page h1 on the interior pages (Coaching, Careers, Consulting, Realty). */
 export const pageHeading = { ...display, fontSize: 'clamp(42px,5.6vw,84px)', lineHeight: 1.04 }
 
-/** The largest section h2 — used where a section opens a page's second act. */
+/** The largest section h2 - used where a section opens a page's second act. */
 export const sectionHeadingLg = { ...display, fontSize: 'clamp(30px,4vw,52px)', lineHeight: 1 }
 
 /** The standard section h2. */
@@ -34,7 +36,7 @@ export const closingHeading = {
   maxWidth: '16em', margin: '0 auto',
 }
 
-// RUNNING TEXT
+/* RUNNING TEXT */
 
 export const body = {
   fontFamily: text, fontWeight: 300, fontSize: 'clamp(17px,1.8vw,20px)', lineHeight: 1.62, color: 'var(--faded)',
@@ -50,12 +52,13 @@ export const intro = {
   fontFamily: text, fontWeight: 300, fontSize: 'clamp(17px,1.8vw,20px)', lineHeight: 1.55, color: 'var(--faded)',
 }
 
-/** Supporting copy at a fixed size — section asides, card descriptions. */
+/** Supporting copy at a fixed size - section asides, card descriptions. */
 export const note = {
   fontFamily: text, fontWeight: 300, fontSize: 17, lineHeight: 1.55, color: 'var(--faded)',
 }
 
-// CONTROLS — CTA padding shrinks with viewport to avoid mid-label line breaks on small screens
+/* CONTROLS - CTA padding shrinks with the viewport so it stays inside the
+ * gutter on a small phone instead of breaking mid-label. */
 
 /** Gold filled call-to-action, carrying the metallic sweep. */
 export const ctaCopper = {

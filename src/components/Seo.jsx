@@ -1,4 +1,8 @@
-/** Per-route <head> management (no react-helmet). Usage: <Seo route="/coaching" /> or pass title/description. */
+/**
+ * Per-route <head> management (no react-helmet) — gives each route its own title/meta
+ * instead of one hardcoded set Google collapses. `<Seo route="/coaching" />`, or pass
+ * title/description directly for API-driven pages.
+ */
 import { useEffect } from 'react'
 import { DEFAULT_SEO, ROUTE_SEO, SITE } from '../data/seo-config'
 

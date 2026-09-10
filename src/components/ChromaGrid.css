@@ -1,7 +1,4 @@
-/* ChromaGrid (React Bits), restyled for the black-and-gold palette.
-   The spotlight mechanics — .chroma-overlay and .chroma-fade and their radial
-   masks — are unchanged from upstream. Only the card surface, typography and
-   radius are brought in line with the rest of the site. */
+/* ChromaGrid (React Bits), restyled for black-and-gold; spotlight mechanics unchanged from upstream. */
 
 .chroma-grid {
   position: relative;
@@ -28,10 +25,6 @@
   border: 1px solid var(--line);
   background: var(--card-gradient, var(--card));
   transition: border-color .3s ease, transform .5s cubic-bezier(.2, .7, .2, 1);
-
-  --mouse-x: 50%;
-  --mouse-y: 50%;
-  --spotlight-color: rgba(195, 155, 83, .22);
 }
 
 .chroma-card:hover {
@@ -39,25 +32,12 @@
   transform: translateY(-4px);
 }
 
-.chroma-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 70%);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity .5s ease;
-  z-index: 2;
-}
-
-.chroma-card:hover::before { opacity: 1; }
-
 .chroma-img-wrapper {
   position: relative;
   z-index: 1;
   aspect-ratio: 3 / 4;
-  padding: 10px;
-  box-sizing: border-box;
+  min-height: 0;
+  flex-shrink: 0;
   background: transparent;
 }
 
@@ -66,12 +46,10 @@
   height: 100%;
   object-fit: cover;
   object-position: top;
-  border-radius: 2px;
   display: block;
 }
 
-/* Shown until a headshot is supplied — initials on the card's own gradient,
-   so a photo-less grid still reads as designed rather than broken. */
+/* Initials shown until a headshot is supplied, so the grid still reads as designed. */
 .chroma-monogram {
   width: 100%;
   height: 100%;
@@ -96,11 +74,23 @@
   z-index: 1;
   padding: 14px 16px 16px;
   color: var(--ink);
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.chroma-info-top {
+  display: flex;
+  flex-direction: column;
   row-gap: 3px;
-  column-gap: 12px;
+  margin-bottom: 10px;
+}
+
+.chroma-info-head {
+  display: flex;
   align-items: baseline;
+  justify-content: space-between;
+  column-gap: 12px;
 }
 
 /* Card name is a display role, so it stays on the inherited serif. */
@@ -113,8 +103,7 @@
   color: var(--ink);
 }
 
-/* Label role at 10px — the serif's thin strokes disappear here, so these take Jost
-   explicitly rather than inheriting the display face from the shell. */
+/* At 10px the serif's thin strokes disappear, so these take Jost explicitly. */
 .chroma-info .role,
 .chroma-info .handle,
 .chroma-info .location {
@@ -126,8 +115,29 @@
   color: var(--faded);
 }
 
-.chroma-info .handle,
-.chroma-info .location { justify-self: end; }
+/* Department tags run long, so they get their own full-width row instead of wrapping mid-word. */
+.chroma-info .location {
+  margin-top: 2px; color: var(--copper); opacity: .8;
+}
+
+/* margin-top: auto pins this to the footer bottom so every card in a row lines up. */
+.chroma-linkedin {
+  align-self: flex-start;
+  margin-top: auto;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px;
+  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-size: 10px; font-weight: 500; letter-spacing: .12em;
+  color: var(--ink); text-decoration: none;
+  border: 1px solid var(--line); border-radius: 3px;
+  transition: border-color .3s ease, color .3s ease, background .3s ease;
+}
+
+.chroma-linkedin:hover {
+  border-color: var(--copper);
+  color: var(--copper);
+  background: rgba(195, 155, 83, .08);
+}
 
 /* --- Spotlight layers (upstream mechanics, unchanged) --- */
 
@@ -171,8 +181,7 @@
 @media (max-width: 1000px) { .chroma-grid { grid-template-columns: repeat(2, minmax(0, 300px)); } }
 @media (max-width: 620px)  { .chroma-grid { grid-template-columns: minmax(0, 320px); } }
 
-/* Touch devices have no hovering cursor to drive the spotlight; the grey
-   overlay would simply sit there dimming everything permanently. */
+/* Touch devices have no hover cursor to drive the spotlight, so skip it entirely. */
 @media (hover: none) {
   .chroma-overlay, .chroma-fade { display: none; }
 }

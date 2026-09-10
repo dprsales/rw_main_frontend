@@ -1,7 +1,10 @@
 import Reveal from './Reveal'
 import { serif } from '../theme'
 
-/** Numbered outcome cards, shared by Coaching and Careers. `stagger` must match the grid's column count. */
+/**
+ * Numbered outcome cards shared by Coaching and Careers off different arrays.
+ * `stagger` must match the grid's column count or the delay restarts mid-row.
+ */
 export default function AchieveGrid({ items, className, stagger = 3, arrows = false }) {
   return (
     <div className={className}>

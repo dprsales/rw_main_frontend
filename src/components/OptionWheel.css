@@ -18,8 +18,7 @@
 
 .option-wheel--dragging { cursor: grabbing; }
 
-/* Each option is absolutely centred, then offset along the curve by the rAF
-   loop through transform/opacity/filter, so everything stays in step. */
+/* Centred, then offset along the curve by the rAF loop via transform/opacity/filter. */
 .option-wheel__item {
   position: absolute;
   top: 50%;
@@ -44,11 +43,10 @@
 
 .option-wheel__item--selected { font-weight: 400; }
 
-/* Keyboard focus has to be visible — the wheel is a focusable listbox. */
+/* Keyboard focus has to be visible - the wheel is a focusable listbox. */
 .option-wheel:focus-visible { outline: 1px solid var(--copper); outline-offset: -2px; }
 
-/* The blur and the per-frame curve are the whole effect; with reduced motion
-   the wheel still works, it just stops blurring and settles instantly. */
+/* With reduced motion the wheel still works, it just stops blurring and settles instantly. */
 @media (prefers-reduced-motion: reduce) {
   .option-wheel__item { filter: none !important; transition: none !important; }
 }

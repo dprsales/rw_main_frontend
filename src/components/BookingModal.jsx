@@ -1,6 +1,7 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import MagneticLink from './MagneticLink'
+import SpecularButton from './SpecularButton'
 import { mono, serif, text } from '../theme'
 import { CAREERS_INTEREST, isValidPhone, submitBooking } from '../data/booking'
 
@@ -12,14 +13,38 @@ export function useBooking() {
   return useContext(BookingContext)
 }
 
+const DEFAULT_SPECULAR_PROPS = {
+  size: 'lg',
+  radius: 4,
+  tintOpacity: 0,
+  textColor: '#F2EFE9',
+  lineColor: '#E8C97A',
+  baseColor: 'rgba(195,155,83,.55)',
+  intensity: 1.1,
+  shineSize: 12,
+  shineFade: 45,
+  proximity: 320,
+  className: 'rw-specular-cta',
+}
+
 // Magnetic button that opens the booking modal instead of a mailto: link; role/jobId tag careers applications.
-export function BookButton({ interest, role, jobId, roleOptions, style, children, ...rest }) {
+export function BookButton({ interest, role, jobId, roleOptions, style, children, specular = false, specularProps, className = '', ...rest }) {
   const open = useBooking()
+  const handleClick = () => open({ interest, role, jobId, roleOptions })
+
+  if (specular) {
+    return (
+      <SpecularButton onClick={handleClick} {...DEFAULT_SPECULAR_PROPS} className={`${DEFAULT_SPECULAR_PROPS.className} ${className}`.trim()} style={style} {...specularProps} {...rest}>
+        {children}
+      </SpecularButton>
+    )
+  }
+
   return (
     <MagneticLink
       as="button"
       type="button"
-      onClick={() => open({ interest, role, jobId, roleOptions })}
+      onClick={handleClick}
       style={{ border: 'none', cursor: 'pointer', textAlign: 'center', ...style }}
       {...rest}
     >

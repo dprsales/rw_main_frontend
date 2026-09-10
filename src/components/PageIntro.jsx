@@ -1,4 +1,7 @@
-/** Intro section shared by Coaching, Consulting and Careers (Realty/Portfolio use a different layout). */
+/**
+ * Intro section shared by Coaching, Consulting and Careers: eyebrow, RiseText h1, optional
+ * lede/intro/CTA/extra. Realty and Portfolio use a different layout and are left alone.
+ */
 import Reveal from './Reveal'
 import RiseText from './RiseText'
 import { container, eyebrow as eyebrowToken, intro as introToken, lede as ledeToken, pageHeading } from '../styles'

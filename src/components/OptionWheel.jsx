@@ -1,9 +1,12 @@
 import { useRef, useState, useCallback, useEffect, useLayoutEffect } from 'react'
 import './OptionWheel.css'
 
-// Curved scroll/drag/keyboard option picker (from React Bits). Captures wheel events with preventDefault,
-// so keep it out of always-visible chrome — fine inside a modal where body scroll is already locked.
-// Added onActivate: fires on click/Enter/Space of an already-selected option, letting the wheel double as navigation.
+/**
+ * OptionWheel (React Bits): options sit on a circle whose radius keeps arc length
+ * between neighbours equal to one row height; `tilt` controls the curl. Captures
+ * `wheel` events, so keep it out of always-visible chrome — fine inside a locked modal.
+ * Added `onActivate`, firing on click/Enter of an already-selected option (for nav).
+ */
 const OptionWheel = ({
   items = [],
   defaultSelected = 0,
@@ -61,7 +64,7 @@ const OptionWheel = ({
     soundUrl, soundVolume,
   }
 
-  // Split out of the rAF loop so first layout runs synchronously before paint, avoiding a stacked flash.
+  // Positions each option relative to `next`; run synchronously before first paint too.
   const layout = useCallback((next) => {
     const cfg = cfgRef.current
     const els = itemRefs.current
@@ -69,7 +72,7 @@ const OptionWheel = ({
     const mirror = cfg.side === 'right' ? -1 : 1
     const tiltRad = (cfg.tilt * Math.PI) / 180
     const R = tiltRad > 0.0005 ? cfg.rowH / tiltRad : 0
-    // Guard against a non-finite rowH (bad fontSize/spacing) producing NaN transforms.
+    // A non-finite rowH would make transforms NaN and stack the options; fall back to a flat list.
     const rowH = Number.isFinite(cfg.rowH) && cfg.rowH > 0 ? cfg.rowH : 48
     const radius = Number.isFinite(R) ? R : 0
 
@@ -248,7 +251,7 @@ const OptionWheel = ({
     applyTarget(targetRef.current, false)
   }, [items, fontSize, spacing, curve, tilt, blur, fade, minOpacity, side, loop, smoothing, applyTarget])
 
-  // Lay the wheel out before first paint so it never flashes as a stack of options.
+  // Lays the wheel out before first paint, so options never appear stacked while waiting for rAF.
   useLayoutEffect(() => {
     layout(posRef.current)
   }, [layout, items])

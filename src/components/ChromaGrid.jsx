@@ -2,7 +2,12 @@ import { useRef, useEffect } from 'react'
 import { gsap } from 'gsap'
 import './ChromaGrid.css'
 
-/** Spotlight grid (React Bits): overlay desaturates the grid, a cursor-tracked mask reveals colour per card. */
+/**
+ * ChromaGrid (React Bits): a desaturating overlay with a radial mask that follows the
+ * cursor, revealing colour only under the pointer. Changes from upstream: initials
+ * monogram when `image` is missing; motion skipped for reduced-motion; no per-card
+ * hover spotlight (matches the site's "no hover magnet" rule).
+ */
 export default function ChromaGrid({
   items,
   className = '',
@@ -67,14 +72,7 @@ export default function ChromaGrid({
     if (url) window.open(url, '_blank', 'noopener,noreferrer')
   }
 
-  const handleCardMove = (e) => {
-    const card = e.currentTarget
-    const rect = card.getBoundingClientRect()
-    card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`)
-    card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`)
-  }
-
-  // Initials from the first two words of the name, e.g. "PP".
+  // First letters of the first two words, e.g. "Priyanka Panda" -> "PP".
   const initials = (name = '') =>
     name.trim().split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase()
 
@@ -90,7 +88,6 @@ export default function ChromaGrid({
         <article
           key={c.title || i}
           className="chroma-card"
-          onMouseMove={handleCardMove}
           onClick={() => handleCardClick(c.url)}
           style={{
             '--card-border': c.borderColor || 'transparent',
@@ -108,14 +105,34 @@ export default function ChromaGrid({
             )}
           </div>
           <footer className="chroma-info">
-            <h3 className="name">{c.title}</h3>
-            {c.handle && <span className="handle">{c.handle}</span>}
-            {c.subtitle && <p className="role">{c.subtitle}</p>}
-            {c.location && <span className="location">{c.location}</span>}
+            <div className="chroma-info-top">
+              <div className="chroma-info-head">
+                <h3 className="name">{c.title}</h3>
+                {c.handle && <span className="handle">{c.handle}</span>}
+                {c.subtitle && <p className="role">{c.subtitle}</p>}
+              </div>
+              {c.location && <span className="location">{c.location}</span>}
+            </div>
+
+            {c.url && (
+              <a
+                className="chroma-linkedin"
+                href={c.url}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${c.title} on LinkedIn`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+                  <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.48v6.26zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z" />
+                </svg>
+                LINKEDIN
+              </a>
+            )}
           </footer>
         </article>
       ))}
-      {/* Desaturating scrim, cursor punches a colour hole through it; off unless enabled */}
+      {/* Scrim desaturates the whole grid; cursor punches a colour hole through it. Off unless asked for. */}
       {scrim && (
         <>
           <div className="chroma-overlay" />

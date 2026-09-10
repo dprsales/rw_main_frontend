@@ -1,4 +1,8 @@
-/** Always-in-DOM nav links so crawlers see pages before the wheel menu opens (clip-rect hidden, not display:none). */
+/**
+ * Always-in-the-DOM nav mirroring SITE_NAV: Header's <Link>s only exist inside the
+ * wheel menu portal, so crawlers see no links until it's opened. This is additive,
+ * visually hidden via the clip-rect pattern (not display/visibility, which Google discounts).
+ */
 import { Link } from 'react-router-dom'
 
 /** Mirrors SITE_NAV in Header.jsx, minus the booking action (not a URL). */

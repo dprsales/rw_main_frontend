@@ -3,9 +3,12 @@ import ImageSlot from './ImageSlot'
 import Reveal from './Reveal'
 import { mono, serif, text } from '../theme'
 
-// Responsive image gallery with a lightbox (arrow keys move, Esc closes).
+/**
+ * Responsive image gallery with a lightbox (← → to move, Esc to close). `href` items
+ * render as link-out anchors instead, letting the home-page blog grid share the styles.
+ */
 export default function Gallery({ items }) {
-  const [open, setOpen] = useState(null)
+  const [open, setOpen] = useState(null) // index or null
 
   const close = useCallback(() => setOpen(null), [])
   const move = useCallback(
@@ -69,7 +72,7 @@ export default function Gallery({ items }) {
           style={{
             position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(8,6,4,.9)',
             backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
-            // overflowY + margin:auto centering lets tall content scroll instead of clipping
+            /* overflowY + margin:auto centring, so an overflowing item scrolls instead of clipping. */
             display: 'flex', flexDirection: 'column', alignItems: 'center', overflowY: 'auto', padding: 'clamp(12px,4vw,24px)',
           }}
         >

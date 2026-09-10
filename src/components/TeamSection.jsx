@@ -4,7 +4,7 @@ import SectionHead, { SectionCount } from './SectionHead'
 import { TEAM, TEAM_CHROMA } from '../data/content'
 import { container, sectionRule } from '../styles'
 
-// Team wall grid; cards fall back to initials until headshots are added.
+/** Team wall as a cursor-spotlight grid, on Portfolio. No headshots yet, so cards use initials. */
 export default function TeamSection() {
   return (
     <section id="team" style={{ ...sectionRule, background: 'var(--chip)' }}>
@@ -12,13 +12,13 @@ export default function TeamSection() {
         <SectionHead
           eyebrow="TEAM RAJIV WILLIAMS" faded size="lg" titleWidth="14em"
           space="clamp(30px,3.4vw,44px)"
-          title="The people behind the mandate."
+          title="The people that maketh the Team."
           aside={<SectionCount>{String(TEAM.length).padStart(2, '0')} · HYDERABAD</SectionCount>}
         />
 
-        {/* scrim={false}: avoids a hard dark panel over this flat background */}
+        {/* scrim={false}: full-grid desaturation would render as a hard dark panel here. */}
         <Reveal>
-          <ChromaGrid items={TEAM_CHROMA} columns={3} radius={320} scrim={false} />
+          <ChromaGrid items={TEAM_CHROMA} columns={2} radius={320} scrim={false} />
         </Reveal>
       </div>
     </section>

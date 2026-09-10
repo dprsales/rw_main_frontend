@@ -1,6 +1,9 @@
 import { THEME, serif } from '../theme'
 
-// Writes theme tokens as CSS custom properties on a wrapper so global.css and descendants can read them.
+/**
+ * Writes cinematic tokens as CSS custom properties on a wrapper so every descendant
+ * (including global.css rules) can read them. Just a styled wrapper — no state/context needed.
+ */
 export function ThemeProvider({ children }) {
   return (
     <div
@@ -8,9 +11,9 @@ export function ThemeProvider({ children }) {
       className="rw-app-shell"
       style={{
         ...THEME,
-        // Root of the type stack; label-role elements opt into `mono` explicitly.
+        // Root of the type stack; label elements opt into `mono` since serif fails at 9-13px.
         fontFamily: serif,
-        // Greyscale antialiasing keeps light-on-dark serif text from looking bold and muddy.
+        // Greyscale antialiasing keeps light-on-dark serif thin instead of bold and muddy.
         WebkitFontSmoothing: 'antialiased',
         MozOsxFontSmoothing: 'grayscale',
         textRendering: 'optimizeLegibility',

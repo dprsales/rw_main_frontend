@@ -1,6 +1,9 @@
 import signature from '../assets/site/gold22.png'
 
-/** Gold signature over a portrait frame; pointer-transparent so frame's tilt handlers still get the cursor. */
+/**
+ * Gold signature over a portrait frame; own scrim keeps it legible, pointer-transparent so
+ * the frame's tilt handlers still get the cursor. Parent must be `position: relative`.
+ */
 export default function SignatureOverlay() {
   return (
     <div
