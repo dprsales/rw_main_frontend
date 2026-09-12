@@ -2,7 +2,7 @@ import teamSridevi from '../assets/site/Sridevi.png'
 import teamPriyanka from '../assets/site/panda.png'
 
 /** The /assessment page tees off to KRISAH's platform. Production join link — anyone who clicks is auto-added as a Rajiv Williams company participant on the KRISAH side. */
-export const KRISAH_ASSESSMENT_URL = 'https://app.krisah.com/in/join/org/rajiv-williams'
+export const KRISAH_ASSESSMENT_URL = 'https://app.krisah.com/in/join/org/rajiv-williams?utm_source=rajivwilliams.com&utm_medium=assessment&utm_campaign=ai_interview'
 
 /**
  * Home-page blog cards, shown only until the live feed (`data/blogs.js`)

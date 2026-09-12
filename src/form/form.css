@@ -341,15 +341,20 @@
   color: var(--faded);
 }
 .rw-form-submit {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: var(--gold-gradient);
-  border: none;
-  border-radius: 2px;
-  color: #fff;
+  border: 0 solid transparent;
+  border-radius: 10px;
+  color: #16110a;
   font-family: var(--rw-sans);
   font-size: 13px;
   letter-spacing: .1em;
-  padding: clamp(15px, 1.8vw, 18px) clamp(20px, 3vw, 30px);
+  height: 48px;
+  padding: 0 clamp(20px, 3vw, 30px);
+  white-space: nowrap;
+  box-sizing: border-box;
   cursor: pointer;
   transition: opacity .35s;
 }

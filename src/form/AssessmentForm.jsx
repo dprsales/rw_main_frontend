@@ -250,7 +250,7 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
           <span className="rw-form-left">
             {left > 0 ? `${left} required question${left === 1 ? '' : 's'} left` : 'Ready to submit'}
           </span>
-          <button type="button" className="rw-form-submit" onClick={submit} disabled={left > 0}>
+          <button type="button" className="rw-form-submit rw-cta" onClick={submit} disabled={left > 0}>
             SUBMIT &amp; SCHEDULE CONSULTATION
           </button>
         </div>

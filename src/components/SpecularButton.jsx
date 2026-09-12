@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { forwardRef, useRef, useEffect } from 'react'
 import { Renderer, Program, Mesh, Triangle, Color } from 'ogl'
 import './SpecularButton.css'
 
@@ -64,7 +64,7 @@ void main() {
 }
 `
 
-const SpecularButton = ({
+const SpecularButton = forwardRef(({
   children = 'Get Started',
   size = 'lg',
   radius = 18,
@@ -83,11 +83,14 @@ const SpecularButton = ({
   proximity = 250,
   autoAnimate = false,
   disabled = false,
+  href,
+  target,
+  rel,
   onClick,
   className = '',
   type = 'button',
   style,
-}) => {
+}, ref) => {
   const btnRef = useRef(null)
   const fxRef = useRef(null)
   const propsRef = useRef({})
@@ -219,11 +222,19 @@ const SpecularButton = ({
     }
   }, [])
 
+  const Tag = href ? 'a' : 'button'
   return (
-    <button
-      ref={btnRef}
-      type={type}
-      disabled={disabled}
+    <Tag
+      ref={(node) => {
+        btnRef.current = node
+        if (typeof ref === 'function') ref(node)
+        else if (ref) ref.current = node
+      }}
+      type={href ? undefined : type}
+      disabled={href ? undefined : disabled}
+      href={href}
+      target={href ? target : undefined}
+      rel={href ? rel : undefined}
       onClick={onClick}
       className={`specular-button specular-button--${size}${className ? ` ${className}` : ''}`}
       style={{
@@ -237,8 +248,8 @@ const SpecularButton = ({
     >
       <span ref={fxRef} className="specular-button__fx" aria-hidden="true" />
       <span className="specular-button__label">{children}</span>
-    </button>
+    </Tag>
   )
-}
+})
 
 export default SpecularButton

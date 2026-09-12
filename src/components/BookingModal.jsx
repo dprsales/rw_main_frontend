@@ -15,7 +15,7 @@ export function useBooking() {
 
 const DEFAULT_SPECULAR_PROPS = {
   size: 'lg',
-  radius: 4,
+  radius: 10,
   tintOpacity: 0,
   textColor: '#F2EFE9',
   lineColor: '#E8C97A',
@@ -398,7 +398,7 @@ function BookingModal({ preset, onClose }) {
                 <p style={{ fontFamily: mono, fontSize: 12, color: '#E5726A', letterSpacing: '.02em' }}>{error}</p>
               )}
 
-              <button type="submit" disabled={status === 'sending'} className={isApplying ? 'rw-career-submit' : ''} style={{ ...ctaBtn, marginTop: 6, opacity: status === 'sending' ? 0.6 : 1, cursor: status === 'sending' ? 'default' : 'pointer' }}>
+              <button type="submit" disabled={status === 'sending'} className={`rw-cta ${isApplying ? 'rw-career-submit' : ''}`.trim()} style={{ ...ctaBtn, marginTop: 6, opacity: status === 'sending' ? 0.6 : 1, cursor: status === 'sending' ? 'default' : 'pointer' }}>
                 {status === 'sending' ? 'Sending...' : isApplying ? 'Submit Application →' : 'Request my call'}
               </button>
             </form>
@@ -441,7 +441,9 @@ const inputStyle = {
 }
 
 const ctaBtn = {
-  display: 'inline-block', width: '100%', textAlign: 'center', border: 'none',
-  background: 'var(--gold-gradient)', color: '#fff',
-  fontFamily: mono, fontSize: 13, letterSpacing: '.1em', padding: '16px 30px', borderRadius: 2, cursor: 'pointer',
+  display: 'inline-flex', width: '100%', alignItems: 'center', justifyContent: 'center',
+  background: 'var(--gold-gradient)', color: '#16110a',
+  fontFamily: mono, fontSize: 13, letterSpacing: '.1em',
+  height: 48, padding: '0 30px', whiteSpace: 'nowrap', boxSizing: 'border-box',
+  borderRadius: 10, border: '0 solid transparent', cursor: 'pointer',
 }

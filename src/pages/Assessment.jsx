@@ -1,18 +1,22 @@
 import skylineImage from '../assets/site/skyline.png'
+import goldWatermark from '../assets/site/gold1.png'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import ImageSlot from '../components/ImageSlot'
 import PageIntro from '../components/PageIntro'
 import Seo from '../components/Seo'
 import Reveal from '../components/Reveal'
+import CtaButton from '../components/CtaButton'
 import ClosingCTA from '../components/ClosingCTA'
 import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
 import { BookButton } from '../components/BookingModal'
 import { KRISAH_ASSESSMENT_URL } from '../data/content'
+import { track } from '../data/analytics'
+import useCtaEntrance from '../hooks/useCtaEntrance'
+import { useInView } from '../hooks/useInView'
 import { FOOTER_LINKS, mono, serif } from '../theme'
 import {
-  container, ctaCopper, ctaInline,
-  eyebrow, note, sectionHeading, sectionRule, statLabel,
+  container, eyebrow, note, sectionHeading, sectionRule, statLabel,
 } from '../styles'
 
 const HEADLINE = [
@@ -21,14 +25,14 @@ const HEADLINE = [
   { text: 'for the interview?', italic: true, copper: true },
 ]
 
-const TRUST = ['FREE · NO OBLIGATION', 'SCORE REPORT INCLUDED', 'AI-POWERED · INSTANT RESULTS']
+const TRUST = ['COMPLIMENTARY · NO OBLIGATION', 'SCORE REPORT INCLUDED', 'AI-POWERED · INSTANT RESULTS']
 
 /* The before-test page. Running the interview on KRISAH's platform — this page only tees off. */
 const STEPS = [
   { n: '01', title: 'Start here', body: 'Hit Start Assessment. The interview opens on KRISAH’s platform in a new tab. Nothing to install, no forms to fill before you begin.' },
   { n: '02', title: 'Interview with an AI', body: 'Twenty questions in about twenty-five minutes. Answer out loud, the way you would in the room. Delivery is part of what is being read.' },
   { n: '03', title: 'Get your scored report', body: 'The interview closes with a report scored across all six dimensions. An Interview Readiness Score, and where the gaps are.' },
-  { n: '04', title: 'Return for your courses', body: 'Come back after the session. The coaching and consulting catalogue points you at what to work on next.' },
+  { n: '04', title: 'Return for your specialisations', body: 'Come back after the session. The sixteen areas we specialise in point you at what to work on next.' },
 ]
 
 /* The six dimensions the AI interviewer scores — the same set behind every role. */
@@ -54,11 +58,14 @@ const SAMPLE_BARS = [
 const FAQS = [
   { q: 'Who is this for?', a: 'Anyone interviewing with Rajiv Williams, at any role and any level. It is a readiness read, not a pass/fail gate.' },
   { q: 'How long does it take?', a: 'Twenty questions, about twenty-five minutes. Give yourself one uninterrupted sitting.' },
-  { q: 'Do I get a report?', a: 'Yes. After the session you receive a scored report across all six dimensions, free and yours to keep. That is what makes the coaching follow-up specific instead of generic.' },
+  { q: 'Do I get a report?', a: 'Yes. After the session you receive a scored report across all six dimensions, complimentary and yours to keep. That is what makes the coaching follow-up specific instead of generic.' },
   { q: 'Where does the interview run?', a: 'On KRISAH’s platform, in a new tab. Nothing is installed, and no score is shared anywhere on this site.' },
 ]
 
 export default function Assessment() {
+  const heroCtaRef = useCtaEntrance({ delay: 0.4 })
+  const [stepsRef, stepsInView] = useInView({ rootMargin: '0px 0px -18% 0px' })
+
   return (
     <>
       <Seo route="/assessment" />
@@ -71,12 +78,12 @@ export default function Assessment() {
         lede="A 25-minute, 20-question AI interview before you meet us."
         intro="Answer the way you would in a real room. You finish with a clearer read on yourself; we get to see how you think under pressure. Any role, any stage of your career."
         cta={<>
-          <a href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" style={ctaCopper}>
-            START ASSESSMENT →
-          </a>
-          <button type="button" onClick={() => document.getElementById('how')?.scrollIntoView({ behavior: 'smooth' })} className="rw-inline-cta" style={ctaInline}>
+          <CtaButton ref={heroCtaRef} href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'hero' })}>
+            START ASSESSMENT <span className="rw-cta-arrow">→</span>
+          </CtaButton>
+          <CtaButton variant="outline" onClick={() => document.getElementById('how')?.scrollIntoView({ behavior: 'smooth' })}>
             See how it works →
-          </button>
+          </CtaButton>
         </>}
         extra={
           <Reveal delay={120} style={{ marginTop: 48, borderTop: '1px solid var(--line)', paddingTop: 26 }}>
@@ -124,7 +131,7 @@ export default function Assessment() {
             how you perform !
           </Reveal>
           <Reveal as="p" delay={200} style={{ ...note, marginTop: 20, marginLeft: 'auto', marginRight: 'auto', maxWidth: '32em', fontSize: 'clamp(16px,1.7vw,18px)', lineHeight: 1.6, color: 'var(--ink)', textShadow: '0 1px 20px rgba(11,10,9,.6), 0 0 2px rgba(11,10,9,.8)' }}>
-            Over fifteen years of high-value sales, the same lesson keeps repeating: the gap between a good professional and a great one is not knowledge. It is how they perform when it matters. The interview lets us measure that before we begin.
+            Over 16+ years of high-value sales, the same lesson keeps repeating: the gap between a good professional and a great one is not knowledge. It is how they perform when it matters. The interview lets us measure that before we begin.
           </Reveal>
         </div>
       </section>
@@ -163,7 +170,7 @@ export default function Assessment() {
               Four steps. No prep.
             </Reveal>
 
-            <div className="rw-track" style={{ marginTop: 'clamp(44px,6vw,72px)' }}>
+            <div ref={stepsRef} className={`rw-track${stepsInView ? ' is-in' : ''}`} style={{ marginTop: 'clamp(44px,6vw,72px)' }}>
               <div className="rw-track-steps">
                 {STEPS.map((step, i) => (
                   <Reveal key={step.n} delay={i * 90} className="rw-track-step" style={{ textAlign: 'center' }}>
@@ -181,8 +188,9 @@ export default function Assessment() {
       </section>
 
       {/* What the report shows — six dimensions + a sample report card */}
-      <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+      <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)', position: 'relative', overflow: 'hidden' }}>
+        <img src={goldWatermark} alt="" aria-hidden className="rw-watermark is-left" />
+        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px', position: 'relative' }}>
           <SectionHead
             eyebrow="WHAT THE REPORT SHOWS" titleWidth="12em"
             title="Six dimensions, scored against the room."
@@ -245,39 +253,15 @@ export default function Assessment() {
       </section>
 
       {/* What happens after */}
-      <section className="rw-pad" style={{ ...container, ...sectionRule, padding: 'clamp(90px,11vw,130px) 40px' }}>
+      <section className="rw-pad" style={{ ...container, ...sectionRule, padding: 'clamp(80px,10vw,110px) 40px' }}>
         <CenteredHead
           eyebrow="AFTER THE TEST"
-          title={<><span style={{ color: 'var(--copper)' }}>Sixteen</span> courses, ninety minutes each.</>}
-          intro="Return after your interview and find the coaching or consulting programme matched to the gaps the session exposed. Ninety to one hundred and twenty minutes, structured and specific."
+          title={<><span style={{ color: 'var(--copper)' }}>Sixteen</span> areas of specialisation.</>}
+          intro="Finish your interview and your personal write-up waits, with the sixteen areas matched to the gaps your report turned up. Ninety to one hundred and twenty minutes each."
         />
-
-        <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 40, marginTop: 56 }}>
-          <Reveal className="rw-figure" style={{ border: '1px solid var(--line)', padding: 'clamp(28px,4vw,44px)', display: 'flex', flexDirection: 'column', gap: 18 }}>
-            <div style={{ fontFamily: mono, fontSize: 12, letterSpacing: '.14em', color: 'var(--copper)' }}>COACHING</div>
-            <div>
-              <div style={{ fontFamily: serif, fontSize: 'clamp(23px,2.6vw,29px)', color: 'var(--ink)' }}>Eight coaching courses</div>
-              <div style={{ ...note, marginTop: 10, lineHeight: 1.5 }}>
-                Foundations of high-value selling for individuals and teams, through to negotiating the close.
-              </div>
-            </div>
-            <a href="/coaching" className="rw-inline-cta" style={{ ...ctaInline, marginTop: 'auto' }}>Explore coaching →</a>
-          </Reveal>
-
-          <Reveal delay={90} className="rw-figure" style={{ border: '1px solid var(--line)', padding: 'clamp(28px,4vw,44px)', display: 'flex', flexDirection: 'column', gap: 18 }}>
-            <div style={{ fontFamily: mono, fontSize: 12, letterSpacing: '.14em', color: 'var(--copper)' }}>CONSULTING</div>
-            <div>
-              <div style={{ fontFamily: serif, fontSize: 'clamp(23px,2.6vw,29px)', color: 'var(--ink)' }}>Eight consulting courses</div>
-              <div style={{ ...note, marginTop: 10, lineHeight: 1.5 }}>
-                For developers and leadership: process audits, pricing, channel networks and mandate models.
-              </div>
-            </div>
-            <a href="/consulting" className="rw-inline-cta" style={{ ...ctaInline, marginTop: 'auto' }}>Explore consulting →</a>
-          </Reveal>
-        </div>
-
-        <Reveal delay={160} style={{ marginTop: 40, textAlign: 'center' }}>
-          <a href="/assessment/result" className="rw-inline-cta" style={ctaInline}>See all sixteen courses →</a>
+        <Reveal delay={140} style={{ marginTop: 34, display: 'flex', gap: 22, justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
+          <CtaButton variant="outline" href="/assessment/result">What happens after the interview →</CtaButton>
+          <CtaButton variant="outline" href="/coaching">Prefer to look at coaching first →</CtaButton>
         </Reveal>
       </section>
 
@@ -296,16 +280,16 @@ export default function Assessment() {
       </section>
 
       {/* Closing — the offer */}
-      <ClosingCTA title="Your first assessment is free." titleStyle={{ maxWidth: '15em' }}>
+      <ClosingCTA title="Your first assessment is complimentary." titleStyle={{ maxWidth: '15em' }}>
         <div>
           <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-            <a href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" style={ctaCopper}>
-              START ASSESSMENT →
-            </a>
+<CtaButton href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'closing' })}>
+            START ASSESSMENT <span className="rw-cta-arrow">→</span>
+          </CtaButton>
             <BookButton interest="Coaching" specular>OR BOOK A CALL FIRST</BookButton>
           </div>
           <p style={{ ...note, marginTop: 22, fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--faded)' }}>
-            FREE · NO OBLIGATION · SCORE REPORT INCLUDED · INSTANT RESULTS
+            COMPLIMENTARY · NO OBLIGATION · SCORE REPORT INCLUDED · INSTANT RESULTS
           </p>
         </div>
       </ClosingCTA>

@@ -13,6 +13,7 @@ import ClosingCTA from '../components/ClosingCTA'
 import PageIntro from '../components/PageIntro'
 import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
+import { useInView } from '../hooks/useInView'
 import { CAREER_CATEGORIES, CAREER_CULTURE, CAREER_HOOK, CAREER_PROCESS, CAREER_REASONS, CAREER_ROLES } from '../data/content'
 import { fetchRoles } from '../data/jobs'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
@@ -58,6 +59,7 @@ function RoleIcon({ type }) {
 
 export default function Careers() {
   const scrollToId = useSmoothScroll()
+  const [stepsRef, stepsInView] = useInView({ rootMargin: '0px 0px -18% 0px' })
   const [filter, setFilter] = useState(ALL)
   const [levelFilter, setLevelFilter] = useState(ALL)
   const [visibleCount, setVisibleCount] = useState(ROLES_PER_PAGE)
@@ -321,7 +323,7 @@ export default function Careers() {
         </Reveal>
 
         {/* One rail across desktop, stacking to a vertical rail on a phone. */}
-        <div className="rw-track" style={{ marginTop: 'clamp(44px,6vw,72px)' }}>
+        <div ref={stepsRef} className={`rw-track${stepsInView ? ' is-in' : ''}`} style={{ marginTop: 'clamp(44px,6vw,72px)' }}>
           <div className="rw-track-steps">
             {CAREER_PROCESS.map((step, i) => (
               <Reveal key={step.n} delay={i * 90} className="rw-track-step" style={{ textAlign: 'center' }}>

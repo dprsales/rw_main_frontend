@@ -60,11 +60,15 @@ export const note = {
 /* CONTROLS - CTA padding shrinks with the viewport so it stays inside the
  * gutter on a small phone instead of breaking mid-label. */
 
-/** Gold filled call-to-action, carrying the metallic sweep. */
+/** Gold filled call-to-action, carrying the metallic sweep. Dark text keeps it read as clickable.
+ * Height-locked to 48px with a normal 10px radius. The animated metallic rim lives on
+ * `.rw-cta::before` in global.css so it matches the glass specular buttons. */
 export const ctaCopper = {
-  display: 'inline-block', background: 'var(--gold-gradient)', color: '#fff',
+  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+  background: 'var(--gold-gradient)', color: '#16110a',
   fontFamily: mono, fontSize: 13, letterSpacing: '.1em',
-  padding: 'clamp(15px,1.8vw,18px) clamp(20px,3vw,30px)', borderRadius: 2,
+  height: 48, padding: '0 clamp(22px,3vw,32px)', whiteSpace: 'nowrap', boxSizing: 'border-box',
+  borderRadius: 10, border: '0 solid transparent',
 }
 
 /** Ink filled call-to-action, used at the foot of each page. */
