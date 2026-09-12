@@ -1722,3 +1722,12 @@ a:hover { color: var(--ink, #12100D); }
 }
 @media (max-width: 1100px) { .rw-reason-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 700px)  { .rw-reason-grid { grid-template-columns: 1fr; } }
+
+/* Assessment page - "who it is for" audience blocks, 4 across collapsing to 2 then 1. */
+.rw-why-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(18px, 2.4vw, 28px);
+}
+@media (max-width: 1100px) { .rw-why-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px)  { .rw-why-grid { grid-template-columns: 1fr; } }

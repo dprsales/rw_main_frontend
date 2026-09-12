@@ -56,6 +56,16 @@ export const ROUTE_SEO = {
     title: 'Pre-Consultation Assessment | Rajiv Williams',
     description: 'A short assessment before we speak — pick coaching, consulting, or an RW Realty mandate.',
   },
+  '/assessment': {
+    title: 'AI Assessment — 20 Questions, 25 Minutes | Rajiv Williams',
+    description:
+      'A 20-question, 25-minute AI interview powered by KRISAH before you speak to us. Open to any role, any stage of your career.',
+  },
+  '/assessment/result': {
+    title: 'Course Catalogue After Your AI Assessment | Rajiv Williams',
+    description:
+      'Sixteen coaching and consulting courses — 90 to 120 minutes each — matched to the gaps your AI assessment report turns up.',
+  },
   '/form/coaching': {
     title: 'Coaching Assessment | Rajiv Williams',
     description: 'A short pre-consultation assessment for luxury real estate sales coaching in Hyderabad.',

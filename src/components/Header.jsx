@@ -16,6 +16,7 @@ const SITE_NAV = [
   { label: 'RW Realty', to: '/realty' },
   { label: 'Portfolio', to: '/realty/portfolio' },
   { label: 'Careers', to: '/careers' },
+  { label: 'Assessment', to: '/assessment' },
   { label: 'Book a call', book: true },
 ]
 

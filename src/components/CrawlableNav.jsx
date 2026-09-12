@@ -15,6 +15,7 @@ const CRAWLABLE_LINKS = [
   { label: 'About Rajiv Williams', to: '/about' },
   { label: 'Contact', to: '/contact' },
   { label: 'Careers', to: '/careers' },
+  { label: 'AI assessment', to: '/assessment' },
 ]
 
 const visuallyHidden = {

@@ -101,7 +101,7 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
           </Reveal>
 
           <Reveal as="p" delay={180} className="rw-form-intro" style={{ marginTop: 16, maxWidth: '36em' }}>
-            Pick a track below. A short set of questions is what lets us walk into the consultation already knowing your project — so the hour is spent on answers, not introductions.
+            Pick a track below. A short set of questions is what lets us walk into the consultation already knowing your project, so the hour is spent on answers, not introductions.
           </Reveal>
         </section>
 

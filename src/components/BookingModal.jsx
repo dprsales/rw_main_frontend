@@ -19,7 +19,7 @@ const DEFAULT_SPECULAR_PROPS = {
   tintOpacity: 0,
   textColor: '#F2EFE9',
   lineColor: '#E8C97A',
-  baseColor: 'rgba(195,155,83,.55)',
+  baseColor: '#C39B53',
   intensity: 1.1,
   shineSize: 12,
   shineFade: 45,

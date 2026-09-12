@@ -4,6 +4,8 @@ import { BookingProvider } from './components/BookingModal'
 import ScrollProgress from './components/ScrollProgress'
 import { ThemeProvider } from './components/ThemeProvider'
 import About from './pages/About'
+import Assessment from './pages/Assessment'
+import AssessmentResult from './pages/AssessmentResult'
 import Careers from './pages/Careers'
 import Coaching from './pages/Coaching'
 import Consulting from './pages/Consulting'
@@ -33,6 +35,8 @@ export default function App() {
           <Route path="/consulting" element={<Consulting />} />
           <Route path="/realty" element={<Realty />} />
           <Route path="/careers" element={<Careers />} />
+          <Route path="/assessment" element={<Assessment />} />
+          <Route path="/assessment/result" element={<AssessmentResult />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           {/* /form is the track picker; each questionnaire has its own URL (/form/coaching etc) for direct links */}
