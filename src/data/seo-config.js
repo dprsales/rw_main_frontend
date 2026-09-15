@@ -42,6 +42,11 @@ export const ROUTE_SEO = {
     description:
       'Sales, business development, client relations and operations roles on exclusive luxury mandates. Premium inventory, in-house coaching, uncapped incentives.',
   },
+  '/partner': {
+    title: 'Channel Partners — Sell Luxury Inventory | Rajiv Williams',
+    description:
+      'Exclusive RW Realty mandates, golden-rate commissions, in-house sales training and warm leads. Apply to become a channel partner with the Rajiv Williams team.',
+  },
   '/about': {
     title: 'About Rajiv Williams — Luxury Sales Mentor, Hyderabad',
     description:

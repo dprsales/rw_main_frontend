@@ -433,7 +433,7 @@ export const ASSOCIATIONS = [
   { name: 'Hyderabad Realtors Association', role: 'Member' },
   { name: 'National Association of Realtors (India)', role: 'Member' },
   { name: 'TGRERA', role: 'Licensed Realtor' },
-  { name: 'Design Sharks', role: 'Founder' },
+  { name: 'Dezign Shark', role: 'Founder' },
   { name: 'Happening Hyderabad', role: 'Owner', desc: "Curated community of GCC around 86,000+ of active followers", href: 'https://www.linkedin.com/company/hyderabad1st/' },
 ]
 

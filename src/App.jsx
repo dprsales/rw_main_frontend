@@ -15,6 +15,7 @@ import Home from './pages/Home'
 import Portfolio from './pages/Portfolio'
 import Project from './pages/Project'
 import Realty from './pages/Realty'
+import Partner from './pages/Partner'
 
 /** Every route change lands at the top, the way a full page load used to. */
 function ScrollToTop() {
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="/form" element={<Form />} />
           <Route path="/form/:track" element={<Form />} />
           <Route path="/realty/portfolio" element={<Portfolio />} />
+          <Route path="/partner" element={<Partner />} />
           {/* Project detail pages, keyed by API slug; both bare and realty-nested paths resolve here */}
           <Route path="/projects/:slug" element={<Project />} />
           <Route path="/realty/projects/:slug" element={<Project />} />

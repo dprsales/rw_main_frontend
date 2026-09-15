@@ -8,7 +8,7 @@ export default function ImageSlot({
   caption,
   spec,
   tag,
-  fit = '',
+  fit = 'cover',
   position = 'center',
   rounded = false,
 }) {

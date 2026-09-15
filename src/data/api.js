@@ -208,3 +208,10 @@ export const submitSaleLead = (data) =>
     method: 'POST',
     body: data,
   })
+
+// Channel partner enrolment — dedicated collection, multipart-safe; see channelpartnerplan.
+export const submitChannelPartner = (data) =>
+  request('/channel-partners', {
+    method: 'POST',
+    body: data,
+  })

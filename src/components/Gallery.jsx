@@ -51,7 +51,7 @@ export default function Gallery({ items }) {
             }}
           >
             <div style={{ aspectRatio: item.wide ? '16/9' : '4/3', position: 'relative' }}>
-              <ImageSlot src={item.src} alt={item.title} placeholder={item.placeholder || 'Photo'} spec={item.spec} tag={item.tag} />
+              <ImageSlot src={item.src} fit="contain" alt={item.title} placeholder={item.placeholder || 'Photo'} spec={item.spec} tag={item.tag} />
             </div>
             <div style={{ padding: '18px 20px 22px', borderTop: '1px solid var(--line)' }}>
               <div style={{ fontFamily: serif, fontSize: 19, lineHeight: 1.2, color: 'var(--ink)' }}>{item.title}</div>

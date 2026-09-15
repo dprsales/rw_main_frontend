@@ -259,6 +259,47 @@
   border-left: 2px solid var(--copper);
   padding: clamp(22px, 3vw, 30px);
 }
+
+/* --- Connected panel (channel partner form) -------------------------------- */
+/* One bordered panel with the gold spine; field groups are divided by visible
+   hairline rules. Drawn through a 1px grid gap (so the panel background shows
+   through as the divider) with a divider tone stronger than the flat body
+   `--line` — at 10% white on near-black, `--line` alone reads as nothing. */
+.rw-form-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(242, 239, 233, 0.15);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--copper);
+}
+.rw-form-field-wrap {
+  display: block;
+  background: var(--card);
+  padding: clamp(22px, 2.6vw, 30px);
+}
+/* Multi-line groups (developer ties, segment lists, final notes) span the full row. */
+.rw-form-field-wrap--wide { grid-column: 1 / -1; }
+
+/* Inside the panel the question title works better as a quiet label than a
+   17px running-text line — keeps the two-column grid easy to scan. Labels must
+   read clearly against the card: use the ink token (same tone as body
+   headings), NOT `--faded` which matches paragraph colour and disappears. */
+.rw-form-panel .rw-form-q-title {
+  font-family: var(--rw-sans);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.rw-form-panel .rw-form-optional { font-size: 11px; letter-spacing: .08em; }
+.rw-form-panel .rw-form-help { margin-top: 8px; text-transform: none; }
+.rw-form-panel .rw-form-controls { margin-top: 14px; }
+
+@media (max-width: 900px) {
+  .rw-form-panel { grid-template-columns: 1fr; }
+}
 .rw-form-q-title { font-family: var(--rw-sans); font-weight: 400; font-size: 17px; line-height: 1.45; color: var(--ink); }
 .rw-form-req { color: var(--copper); }
 .rw-form-optional,

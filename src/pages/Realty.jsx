@@ -64,8 +64,26 @@ export default function Realty() {
               “You Build, We Sell.” · Team RW
             </Reveal>
 
-            <Reveal as="p" delay={140} style={{ ...intro, marginTop: 20, maxWidth: '38em', fontSize: 'clamp(17px,1.9vw,21px)' }}>
-              For selected projects, Team RW operates through an exclusive mandate model, taking complete ownership of the project's sales strategy and execution. From market positioning and buyer experience to sales management, negotiations, reporting and closures, they work as an embedded sales leadership partner focused on driving stronger project performance in the able leadership of Ms.Priyanka Panda .
+           <Reveal
+              as="p"
+              delay={140}
+              style={{
+                ...intro,
+                marginTop: 20,
+                maxWidth: '38em',
+                fontSize: 'clamp(17px,1.9vw,21px)'
+              }}
+            >
+              For select high-conviction developments, Team RW operates under an{' '}
+              <b>exclusive mandate</b> taking complete ownership of sales strategy and
+              go-to-market execution. Led by{' '}
+              <b>Ms. Priyanka Panda, Head of RW Realty,</b> whose{' '}
+              <b>8+ year track record</b> spans luxury real estate branding, strategic
+              positioning, and high-value closures, the team functions as a fully embedded
+              growth partner. From initial market positioning and immersive buyer
+              experience design to pipeline governance, negotiations, and final closures,
+              RW Realty drives <b>faster absorption rates and maximized price realization</b>{' '}
+              through disciplined, leadership-led execution.
             </Reveal>
 
             <Reveal delay={220} style={{ marginTop: 34 }}>
@@ -81,6 +99,7 @@ export default function Realty() {
                 placeholder="Mandate in motion"
                 caption="pics/ · signing or site walkthrough"
                 tag="FIG 01"
+                fit="cover"
                 position="center 20%"
               />
             </div>
