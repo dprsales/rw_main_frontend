@@ -200,7 +200,7 @@ function BookingModal({ preset, onClose }) {
             {isApplying ? (
               <>
                 <div className="rw-career-modal-kicker">APPLY FOR</div>
-                <h2 className="rw-career-modal-title">{selectedRole || 'Join the team'}</h2>
+                <h2 className="rw-career-modal-title">{selectedRole || 'Join Team RW'}</h2>
                 <div className="rw-career-modal-meta">
                   <MetaIcon type="level" /> {selectedRole ? 'Selected role' : 'Open application'}
                   <MetaIcon type="briefcase" /> Full-time
@@ -251,14 +251,14 @@ function BookingModal({ preset, onClose }) {
               )}
               {isApplying && (
                 <>
-                  <Field label="Experience" required>
+                  <Field label="Experience level" required>
                     <select required value={form.experience} onChange={set('experience')} style={{ ...inputStyle, appearance: 'none' }}>
-                      <option value="">Select experience…</option>
-                      <option value="0–1 years">0–1 years</option>
-                      <option value="1–3 years">1–3 years</option>
-                      <option value="3–6 years">3–6 years</option>
-                      <option value="6–10 years">6–10 years</option>
-                      <option value="10+ years">10+ years</option>
+                      <option value="">Select your level…</option>
+                      <option value="Fresher (0–1 years)">Fr (0–1 years)</option>
+                      <option value="Junior (1–3 years)">Jr (1–3 years)</option>
+                      <option value="Mid-Level (3–6 years)">Mid (3–6 years)</option>
+                      <option value="Senior (6–10 years)">Sr (6–10 years)</option>
+                      <option value="Senior Manager (10+ years)">Sr.Mgr (10+ years)</option>
                       <option value="Other">Other</option>
                     </select>
                   </Field>

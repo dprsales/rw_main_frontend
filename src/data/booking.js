@@ -2,7 +2,7 @@
 import { createApplication, getErrorMessage, sendWhatsAppConfirmation, submitLead } from './api'
 
 /** Interest value the careers page presets — the branch into `/applications`. */
-export const CAREERS_INTEREST = 'Joining the team'
+export const CAREERS_INTEREST = 'Joining Team RW'
 
 // POST /leads only requires name, email, type and phoneNumber; rest folds into the message.
 

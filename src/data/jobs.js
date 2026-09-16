@@ -5,15 +5,15 @@ import { CAREER_ROLES } from './content'
 // API category codes mapped to the display names the careers page filters on.
 const CATEGORY_LABELS = {
   sales: 'Sales',
-  sm: 'Business Development',
-  dm: 'Business Development',
-  marketing: 'Business Development',
-  'business development': 'Business Development',
-  businessdevelopment: 'Business Development',
-  bd: 'Business Development',
+  sm: 'Marketing',
+  dm: 'Marketing',
+  marketing: 'Marketing',
+  'business development': 'Marketing',
+  businessdevelopment: 'Marketing',
+  bd: 'Marketing',
   mgd: 'Operations',
-  hr: 'Client Relations',
-  developer: 'Business Development',
+  hr: 'Operations',
+  developer: 'Marketing',
 }
 
 /** Map one API job record onto the card shape the careers grid renders. */

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import hydMark from '../assets/site/hyd-02.svg'
 import cultureImage from '../assets/site/whiteboard-session.png'
+import teamImage from '../assets/site/team-rw.png'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import ImageSlot from '../components/ImageSlot'
@@ -16,7 +17,7 @@ import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { useInView } from '../hooks/useInView'
 import { CAREER_CATEGORIES, CAREER_CULTURE, CAREER_HOOK, CAREER_PROCESS, CAREER_REASONS, CAREER_ROLES } from '../data/content'
 import { fetchRoles } from '../data/jobs'
-import { FOOTER_LINKS, mono, serif, text } from '../theme'
+import { FOOTER_LINKS, mono, serif } from '../theme'
 import {
   container, ctaInline, eyebrow,
   note, sectionHeading, sectionRule,
@@ -41,14 +42,7 @@ const CAREER_GLOW = {
 }
 
 const ALL = 'All'
-const LEVELS = ['All', 'Executive', 'Manager', 'Head']
 const ROLES_PER_PAGE = 6
-
-function roleLevel(role) {
-  if (role.level?.toLowerCase().includes('senior')) return 'Head'
-  if (role.level?.toLowerCase().includes('mid')) return 'Manager'
-  return 'Executive'
-}
 
 function RoleIcon({ type }) {
   const paths = type === 'location'
@@ -61,7 +55,6 @@ export default function Careers() {
   const scrollToId = useSmoothScroll()
   const [stepsRef, stepsInView] = useInView({ rootMargin: '0px 0px -18% 0px' })
   const [filter, setFilter] = useState(ALL)
-  const [levelFilter, setLevelFilter] = useState(ALL)
   const [visibleCount, setVisibleCount] = useState(ROLES_PER_PAGE)
 
   // Seeded with the curated list, replaced if the jobs endpoint answers; fetchRoles never rejects.
@@ -80,15 +73,10 @@ export default function Careers() {
 
   // Any API category not in the curated list still needs a tab, or its roles are unreachable.
   const categories = [...new Set([...CAREER_CATEGORIES, ...openRoles.map((r) => r.category)])]
-    .filter((category) => category?.toLowerCase() !== 'marketing')
 
   // Only categories with an open role get a tab.
   const tabs = [ALL, ...categories.filter((c) => openRoles.some((r) => r.category === c))]
-  const roles = openRoles.filter((role) => {
-    const matchesCategory = filter === ALL || role.category === filter
-    const matchesLevel = levelFilter === ALL || roleLevel(role) === levelFilter
-    return matchesCategory && matchesLevel
-  })
+  const roles = filter === ALL ? openRoles : openRoles.filter((role) => role.category === filter)
   const visibleRoles = roles.slice(0, visibleCount)
   const roleOptions = openRoles.map((role) => role.title)
 
@@ -137,10 +125,21 @@ export default function Careers() {
         </div>
       </section>
 
-      {/* Life on the floor */}
+    {/* Life on the floor */}
       <section className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
-        <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(28px,4vw,64px)', alignItems: 'center' }}>
-          <Reveal className="rw-figure" style={{ border: '1px solid var(--line)', aspectRatio: '4/3' }}>
+        <div
+          className="rw-grid-2"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 'clamp(28px,4vw,64px)',
+            alignItems: 'center'
+          }}
+        >
+          <Reveal
+            className="rw-figure"
+            style={{ border: '1px solid var(--line)', aspectRatio: '4/3' }}
+          >
             <ImageSlot
               alt="Team Rajiv Williams after a sales floor session"
               placeholder="Team Rajiv Williams"
@@ -148,18 +147,48 @@ export default function Careers() {
               spec="Landscape 4:3 · ≥1800px wide · the team mid-session, faces engaged"
               tag="HYDERABAD"
               position="center 35%"
+              src={teamImage}
             />
           </Reveal>
+
           <Reveal delay={120}>
-            <div style={{ ...eyebrow, marginBottom: 16 }}>WHAT THE WORK LOOKS LIKE</div>
-            <h2 style={{ ...sectionHeading, fontSize: 'clamp(26px,3.2vw,40px)', lineHeight: 1.08 }}>
-              Fewer leads. Longer conversations. Larger cheques.
+            <div style={{ ...eyebrow, marginBottom: 16 }}>
+              WHAT THE WORK LOOKS LIKE
+            </div>
+
+            <h2
+              style={{
+                ...sectionHeading,
+                fontSize: 'clamp(26px,3.2vw,40px)',
+                lineHeight: 1.08
+              }}
+            >
+              Less noise. More leverage. Bigger deals.
             </h2>
-            <p style={{ ...note, marginTop: 18, fontSize: 'clamp(16px,1.7vw,18px)', lineHeight: 1.6 }}>
-              Mandates are exclusive, so the inventory you carry is yours to know completely. Mornings are pipeline review, afternoons are site visits, and the deals that matter are worked jointly; nobody is left alone with a negotiation they have not been prepared for.
+
+            <p
+              style={{
+                ...note,
+                marginTop: 18,
+                fontSize: 'clamp(16px,1.7vw,18px)',
+                lineHeight: 1.6
+              }}
+            >
+              We do not chase every lead. We pursue the right ones with precision,
+              preparation, and intent. Every conversation has a purpose. Every
+              mandate demands complete command.
             </p>
-            <p style={{ ...note, marginTop: 14, fontSize: 'clamp(16px,1.7vw,18px)', lineHeight: 1.6 }}>
-              What we ask for is discipline between calls. What we do not ask for is volume dialling.
+
+            <p
+              style={{
+                ...note,
+                marginTop: 14,
+                fontSize: 'clamp(16px,1.7vw,18px)',
+                lineHeight: 1.6
+              }}
+            >
+              No noise. No desperate selling. Just sharp thinking, decisive action,
+              and a team that knows how to close.
             </p>
           </Reveal>
         </div>
@@ -198,7 +227,7 @@ export default function Careers() {
           <CenteredHead
             eyebrow="OPEN ROLES"
             title="Where we are hiring right now"
-            intro="Every role is Hyderabad-based and on the floor. If none of these fit but you belong here, apply anyway and say why."
+            intro="Every role is Hyderabad-based and on the floor. The band on each card is what we are looking for; if you are close — or simply belong here — apply anyway and say why."
           />
 
           {openRoles.length > 0 && (
@@ -222,37 +251,11 @@ export default function Careers() {
           )}
 
           {openRoles.length > 0 && (
-            <Reveal delay={120} className="rw-desktop-level-filter" style={{ marginTop: 18, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-              <span className="rw-level-label">LEVEL</span>
-              <div className="rw-level-tabs" role="tablist" aria-label="Filter roles by level">
-                {LEVELS.map((level) => (
-                  <button
-                    key={level}
-                    type="button"
-                    role="tab"
-                    aria-selected={levelFilter === level}
-                    onClick={() => { setLevelFilter(level); setVisibleCount(ROLES_PER_PAGE) }}
-                    className={`rw-level-tab${levelFilter === level ? ' is-on' : ''}`}
-                  >
-                    {level}
-                  </button>
-                ))}
-              </div>
-            </Reveal>
-          )}
-
-          {openRoles.length > 0 && (
             <div className="rw-mobile-career-filters">
               <label>
                 <span>DEPARTMENT</span>
                 <select value={filter} onChange={(event) => { setFilter(event.target.value); setVisibleCount(ROLES_PER_PAGE) }}>
                   {tabs.map((tab) => <option key={tab} value={tab}>{tab}</option>)}
-                </select>
-              </label>
-              <label>
-                <span>LEVEL</span>
-                <select value={levelFilter} onChange={(event) => { setLevelFilter(event.target.value); setVisibleCount(ROLES_PER_PAGE) }}>
-                  {LEVELS.map((level) => <option key={level} value={level}>{level}</option>)}
                 </select>
               </label>
             </div>
@@ -279,14 +282,13 @@ export default function Careers() {
                     <BorderGlow {...CAREER_GLOW} className="rw-role-card-glow">
                       <article className="rw-role-row">
                       <div className="rw-role-card-main">
-                        <span className="rw-role-level">{roleLevel(role)}</span>
+                        <span className="rw-role-level">{role.level}</span>
                         <div className="rw-role-title">{role.title}</div>
                       </div>
                       <div className="rw-role-summary">
                         <div className="rw-role-meta">
                           <span><RoleIcon type="briefcase" /> Full-time</span>
                           <span><RoleIcon type="location" /> {role.location || 'Hyderabad'}</span>
-                          <span>{role.experience}</span>
                         </div>
                         <p>{role.description}</p>
                       </div>
