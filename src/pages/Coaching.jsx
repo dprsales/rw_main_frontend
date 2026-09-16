@@ -11,6 +11,7 @@ import ImageSlot from '../components/ImageSlot'
 import PageIntro from '../components/PageIntro'
 import Seo from '../components/Seo'
 import { BookButton } from '../components/BookingModal'
+import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import AchieveGrid from '../components/AchieveGrid'
 import Bullet from '../components/Bullet'
@@ -18,7 +19,8 @@ import ClosingCTA from '../components/ClosingCTA'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
-import { ACHIEVE, COACHING_PROGRAMS, COACHING_TESTIMONIALS, CURRICULUM } from '../data/content'
+import { ACHIEVE, COACHING_PROGRAMS, COACHING_TESTIMONIALS, CURRICULUM, KRISAH_ASSESSMENT_URL } from '../data/content'
+import { track } from '../data/analytics'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import {
   container, ctaInline,
@@ -107,6 +109,9 @@ export default function Coaching() {
         intro="What changes: your ticket size, your client register, and how the market treats your word."
         cta={<>
           <BookButton interest="Coaching" specular>BOOK A STRATEGY CALL</BookButton>
+          <CtaButton href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'coaching-hero' })}>
+            START ASSESSMENT <span className="rw-cta-arrow">→</span>
+          </CtaButton>
           <button type="button" onClick={() => scrollToId('premium-programs')} className="rw-inline-cta" style={ctaInline}>
             Explore coaching programs →
           </button>

@@ -224,7 +224,7 @@ export const PORTFOLIO_TESTIMONIALS = [
  */
 export const TEAM = [
   { name: 'Sridevi Vinjimur', photo: teamSridevi, linkedin: 'https://www.linkedin.com/in/sridevi-vinjimur-147125270/', title: 'Head of Operations', for: ['Coaching', 'Consulting', 'Realty'] },
-  { name: 'Priyanka Panda', photo: teamPriyanka, linkedin: 'https://www.linkedin.com/in/priyanka-panda-238451259/', title: 'Head of Sales-Realty', for: ['Realty'] },
+  { name: 'Priyanka Panda', photo: teamPriyanka, linkedin: 'https://www.linkedin.com/in/priyanka-panda-238451259/', title: 'Head of Sales', for: ['Realty'], bio: '8+ years in luxury real estate sales & marketing sells by positioning, excels at high-value closures. Under her leadership, Team RW runs high-value sales mandates end to end, from go-to-market strategy to a client experience that keeps your cash flows smooth.' },
 ]
 
 /* TEAM mapped to ChromaGrid's item shape. Every card uses the same gold
@@ -235,6 +235,7 @@ export const TEAM_CHROMA = TEAM.map((member) => ({
   subtitle: member.title || 'Team Rajiv Williams',
   location: member.for?.join(' · '),
   url: member.linkedin,
+  bio: member.bio,
   borderColor: '#C39B53',
   gradient: 'linear-gradient(165deg, rgba(195,155,83,.22), #0B0A09 62%)',
 }))

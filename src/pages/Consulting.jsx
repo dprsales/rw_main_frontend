@@ -192,7 +192,7 @@ export default function Consulting() {
         eyebrow="CONSULTING · FOR DEVELOPERS, SALES LEADERSHIP & TOP CLOSERS"
         headline={HEADLINE}
         headlineStyle={{ fontSize: 'clamp(40px,5.2vw,78px)', lineHeight: 1.05 }}
-        lede="Consulting · for developers, sales leadership & top closers."
+        lede="Business Process consulting for Real Estate Developers & Sales Organizations."
         ledeStyle={{ fontSize: 'clamp(18px,2.2vw,22px)' }}
         intro="Team RW advises developers on the part of the business the brochure never fixes: how the inventory actually sells. Engagements are few, structured, and measured in absorption."
         introStyle={{ maxWidth: '38em' }}
