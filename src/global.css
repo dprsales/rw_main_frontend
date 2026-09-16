@@ -1398,12 +1398,24 @@ a:hover { color: var(--ink, #12100D); }
 .rw-projx-amenity:hover .rw-projx-amenity-icon { filter: brightness(0) invert(1); }
 .rw-projx-amenity:hover .rw-projx-amenity-label { color: #fff; }
 
+/* Hero content splits into the pitch (left, ~42%) and the API project
+   photograph (right, ~58%) over the full-bleed background. */
+.rw-projx-grid { display: grid; grid-template-columns: minmax(0, 42fr) minmax(0, 58fr); gap: clamp(24px, 3vw, 48px); align-items: stretch; }
+.rw-projx-main { min-width: 0; align-self: center; }
+/* Most project renders are wide canvases with the building framed off-center /
+   with transparent padding; `cover` + right-center crops only that empty pad
+   so the building becomes the dominant full-column visual. */
+.rw-projx-side { position: relative; align-self: stretch; min-height: 0; overflow: hidden; }
+.rw-projx-side img { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: right center; }
+
 /* --- responsive step-downs ----------------------------------------------- */
 @media (max-width: 1000px) {
   .rw-proj-floorplans { grid-template-columns: repeat(2, 1fr) !important; }
   .rw-proj-about-imgs { grid-template-columns: repeat(3, 1fr) !important; }
 }
 @media (max-width: 900px) {
+  .rw-projx-grid { grid-template-columns: 1fr; }
+  .rw-projx-side { display: none; }
   .rw-projx-stats { grid-template-columns: repeat(2, 1fr); }
   .rw-projx-stat:nth-child(2n+1) { border-left: none; }
   .rw-projx-stat:nth-child(n+3) { border-top: 1px solid var(--line); }

@@ -53,7 +53,7 @@ export function BookButton({ interest, role, jobId, roleOptions, style, children
   )
 }
 
-const INTERESTS = ['Coaching', 'Consulting', 'RW Realty mandate', CAREERS_INTEREST, 'Something else']
+const INTERESTS = [' Sales Coaching', 'Sales Consulting', 'Sales Mandates', CAREERS_INTEREST, 'Something else']
 
 const EMPTY = {
   name: '', email: '', phone: '', interest: '', role: '', jobId: '', experience: '', experienceCustom: '',

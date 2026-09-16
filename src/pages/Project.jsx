@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import projectHeroImage from '../assets/site/projects-hero.jpeg'
 import { Link, useParams } from 'react-router-dom'
 import CountUp from '../components/CountUp'
 import Footer from '../components/Footer'
@@ -79,10 +80,21 @@ function Section({ id, eyebrow: kicker, title, intro, chip = false, bleed = fals
 
 function ProjectHero({ hero, details, name }) {
   const { targetRef, targetStyle, container: parallax } = useParallax({ strength: 22 })
-  const bg = projectImage(hero?.backgroundimage) || projectImage(hero?.projectimage)
+
+  const sideImage =
+    projectImage(hero?.projectimage) ||
+    projectImage(hero?.backgroundimage)
+
   const logo = projectImage(hero?.projectlogo)
-  const bhk = details?.bhk?.length ? `${details.bhk.join(', ')} BHK` : null
-  const sqft = details?.sqft?.length ? `${details.sqft.join(' – ')} sq.ft.` : null
+
+  const bhk = details?.bhk?.length
+    ? `${details.bhk.join(', ')} BHK`
+    : null
+
+  const sqft = details?.sqft?.length
+    ? `${details.sqft.join(' – ')} sq.ft.`
+    : null
+
   const lines = splitLines(hero?.h1, 3)
 
   const facts = [
@@ -91,63 +103,294 @@ function ProjectHero({ hero, details, name }) {
     ['PRICE', details?.sftPrice ? `${rupees(details.sftPrice)}/sq.ft.` : null],
     ['UNITS', details?.units],
     ['TOWERS', details?.towers],
-  ].filter(([, v]) => v)
+  ].filter(([, value]) => value)
 
   return (
     <section className="rw-projx-hero" {...parallax}>
-      {bg && (
-        <div aria-hidden className="rw-projx-kb">
-          <div ref={targetRef} style={{ ...targetStyle, width: '100%', height: '100%' }}>
-            <img src={bg} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          </div>
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(11,10,9,.55) 0%, rgba(11,10,9,.28) 34%, rgba(11,10,9,.72) 78%, rgba(11,10,9,.96) 100%)' }} />
+
+      {/* Background */}
+      <div aria-hidden className="rw-projx-kb">
+        <div
+          ref={targetRef}
+          style={{
+            ...targetStyle,
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          <img
+            src={projectHeroImage}
+            alt=""
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          />
         </div>
-      )}
 
-      {/* Not scroll-gated: a 100svh hero can push facts/CTA past the reveal-trigger line,
-          leaving them invisible on load; instead it fades up via .rw-projx-in. */}
-      <div className="rw-pad rw-projx-content" style={{ position: 'relative', zIndex: 1, ...container, width: '100%', padding: 'clamp(96px,12vw,132px) 40px clamp(56px,6vw,76px)' }}>
-        <Link to="/realty" className="rw-nav-link rw-projx-in" style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.16em', color: 'rgba(234,241,249,.72)' }}>
-          ← RW REALTY
-        </Link>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: `
+              linear-gradient(
+                90deg,
+                rgba(11,10,9,.96) 0%,
+                rgba(11,10,9,.82) 38%,
+                rgba(11,10,9,.42) 72%,
+                rgba(11,10,9,.65) 100%
+              ),
+              linear-gradient(
+                180deg,
+                rgba(11,10,9,.55) 0%,
+                rgba(11,10,9,.2) 45%,
+                rgba(11,10,9,.9) 100%
+              )
+            `,
+          }}
+        />
+      </div>
 
-        {(hero?.loc || details?.location) && (
-          <div className="rw-projx-in" style={{ ...eyebrow, letterSpacing: '.28em', marginTop: 22, color: 'var(--copper)', animationDelay: '.08s' }}>
-            {(hero?.loc || details?.location).trim()}{details?.propertyType ? ` · ${details.propertyType}` : ''}
-          </div>
-        )}
+      {/* Main content */}
+      <div
+        className="rw-pad rw-projx-content"
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          ...container,
+          width: '100%',
+          padding:
+            'clamp(150px, 15vw, 190px) 40px clamp(70px, 8vw, 110px)',
+        }}
+      >
+        <div className="rw-projx-grid">
 
-        {logo
-          ? <div className="rw-projx-in" style={{ marginTop: 20, animationDelay: '.14s' }}><img src={logo} alt={name} style={{ height: 'clamp(52px,7vw,96px)', width: 'auto', maxWidth: 'min(84%, 420px)', objectFit: 'contain' }} /></div>
-          : <h1 style={{ marginTop: 16, fontFamily: serif, fontWeight: 400, fontSize: 'clamp(48px,9vw,120px)', lineHeight: .92, letterSpacing: '-.02em', color: '#F2EFE9' }}>{name}</h1>}
+          {/* LEFT CONTENT */}
+          <div className="rw-projx-main">
 
-        {lines.length > 0 && (
-          <h2 style={{ marginTop: 'clamp(16px,2.2vw,28px)', fontFamily: serif, fontWeight: 400, fontSize: 'clamp(28px,4.4vw,58px)', lineHeight: 1.03, letterSpacing: '-.02em', color: '#F2EFE9', maxWidth: '16em' }}>
-            <RiseText lines={lines} block baseDelay={0.2} step={0.12} />
-          </h2>
-        )}
+            <Link
+              to="/realty"
+              className="rw-nav-link rw-projx-in"
+              style={{
+                fontFamily: mono,
+                fontSize: 11,
+                letterSpacing: '.16em',
+                color: 'rgba(234,241,249,.72)',
+              }}
+            >
+              ← RW REALTY
+            </Link>
 
-        {facts.length > 0 && (
-          <div className="rw-projx-in" style={{ marginTop: 'clamp(30px,3.6vw,44px)', paddingTop: 26, borderTop: '1px solid rgba(234,241,249,.22)', display: 'flex', gap: 'clamp(22px,4vw,52px)', flexWrap: 'wrap', animationDelay: '.5s' }}>
-            {facts.map(([label, value]) => (
-              <div key={label}>
-                <div style={{ fontFamily: serif, fontSize: 'clamp(18px,2.1vw,26px)', color: '#F2EFE9', lineHeight: 1.05 }}>{value}</div>
-                <div style={{ ...eyebrow, fontSize: 10, letterSpacing: '.16em', color: 'rgba(234,241,249,.58)', marginTop: 8 }}>{label}</div>
+            {(hero?.loc || details?.location) && (
+              <div
+                className="rw-projx-in"
+                style={{
+                  ...eyebrow,
+                  letterSpacing: '.28em',
+                  marginTop: 28,
+                  color: 'var(--copper)',
+                  animationDelay: '.08s',
+                }}
+              >
+                {(hero?.loc || details?.location).trim()}
+                {details?.propertyType
+                  ? ` · ${details.propertyType}`
+                  : ''}
               </div>
-            ))}
-          </div>
-        )}
+            )}
 
-        <div className="rw-projx-in" style={{ marginTop: 'clamp(26px,3vw,38px)', display: 'flex', gap: 18, alignItems: 'center', flexWrap: 'wrap', animationDelay: '.6s' }}>
-          <BookButton interest="RW Realty mandate" specular>ENQUIRE ABOUT {(name || 'THIS PROJECT').toUpperCase()}</BookButton>
-          {hero?.rera && <span style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.12em', color: 'rgba(234,241,249,.6)' }}>RERA {hero.rera}</span>}
+            {/* Project Logo */}
+            {logo ? (
+              <div
+                className="rw-projx-in"
+                style={{
+                  marginTop: 24,
+                  animationDelay: '.14s',
+                }}
+              >
+                <img
+                  src={logo}
+                  alt={name}
+                  style={{
+                    height: 'clamp(52px, 7vw, 96px)',
+                    width: 'auto',
+                    maxWidth: 'min(84%, 420px)',
+                    objectFit: 'contain',
+                    objectPosition: 'left center',
+                  }}
+                />
+              </div>
+            ) : (
+              <h1
+                className="rw-projx-in"
+                style={{
+                  marginTop: 20,
+                  fontFamily: serif,
+                  fontWeight: 400,
+                  fontSize: 'clamp(48px, 8vw, 110px)',
+                  lineHeight: .92,
+                  letterSpacing: '-.02em',
+                  color: '#F2EFE9',
+                  maxWidth: '8em',
+                }}
+              >
+                {name}
+              </h1>
+            )}
+
+            {/* Hero Heading */}
+            {lines.length > 0 && (
+              <h2
+                style={{
+                  marginTop: 'clamp(20px, 2.5vw, 34px)',
+                  fontFamily: serif,
+                  fontWeight: 400,
+                  fontSize: 'clamp(30px, 4vw, 58px)',
+                  lineHeight: 1.04,
+                  letterSpacing: '-.02em',
+                  color: '#F2EFE9',
+                  maxWidth: '13em',
+                }}
+              >
+                <RiseText
+                  lines={lines}
+                  block
+                  baseDelay={0.2}
+                  step={0.12}
+                />
+              </h2>
+            )}
+
+            {/* Facts */}
+            {facts.length > 0 && (
+              <div
+                className="rw-projx-in"
+                style={{
+                  marginTop: 'clamp(34px, 4vw, 50px)',
+                  paddingTop: 26,
+                  borderTop: '1px solid rgba(234,241,249,.22)',
+                  display: 'flex',
+                  gap: 'clamp(24px, 3.5vw, 48px)',
+                  flexWrap: 'wrap',
+                  animationDelay: '.5s',
+                }}
+              >
+                {facts.map(([label, value]) => (
+                  <div key={label}>
+                    <div
+                      style={{
+                        fontFamily: serif,
+                        fontSize: 'clamp(18px, 2vw, 26px)',
+                        color: '#F2EFE9',
+                        lineHeight: 1.05,
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {value}
+                    </div>
+
+                    <div
+                      style={{
+                        ...eyebrow,
+                        fontSize: 10,
+                        letterSpacing: '.16em',
+                        color: 'rgba(234,241,249,.58)',
+                        marginTop: 8,
+                      }}
+                    >
+                      {label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* CTA */}
+            <div
+              className="rw-projx-in"
+              style={{
+                marginTop: 'clamp(28px, 3vw, 40px)',
+                display: 'flex',
+                gap: 18,
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                animationDelay: '.6s',
+              }}
+            >
+              <BookButton
+                interest="RW Realty mandate"
+                specular
+              >
+                ENQUIRE ABOUT {(name || 'THIS PROJECT').toUpperCase()}
+              </BookButton>
+
+              {hero?.rera && (
+                <span
+                  style={{
+                    fontFamily: mono,
+                    fontSize: 11,
+                    letterSpacing: '.12em',
+                    color: 'rgba(234,241,249,.6)',
+                  }}
+                >
+                  RERA {hero.rera}
+                </span>
+              )}
+            </div>
+
+          </div>
+
+          {/* RIGHT PROJECT IMAGE */}
+          {sideImage && (
+            <div className="rw-projx-side">
+              <img
+                src={sideImage}
+                alt={name}
+              />
+            </div>
+          )}
+
         </div>
       </div>
 
-      <div aria-hidden className="rw-projx-cue" style={{ position: 'absolute', left: '50%', bottom: 22, transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, color: 'rgba(234,241,249,.7)', zIndex: 1 }}>
-        <span style={{ fontFamily: mono, fontSize: 9, letterSpacing: '.22em' }}>SCROLL</span>
-        <span style={{ width: 1, height: 30, background: 'linear-gradient(rgba(234,241,249,.7), transparent)' }} />
+      {/* Scroll cue */}
+      <div
+        aria-hidden
+        className="rw-projx-cue"
+        style={{
+          position: 'absolute',
+          left: '50%',
+          bottom: 22,
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 8,
+          color: 'rgba(234,241,249,.7)',
+          zIndex: 2,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: mono,
+            fontSize: 9,
+            letterSpacing: '.22em',
+          }}
+        >
+          SCROLL
+        </span>
+
+        <span
+          style={{
+            width: 1,
+            height: 30,
+            background:
+              'linear-gradient(rgba(234,241,249,.7), transparent)',
+          }}
+        />
       </div>
+
     </section>
   )
 }
