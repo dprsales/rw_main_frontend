@@ -1,0 +1,3 @@
+# SPA fallback for Cloudflare Pages — every route resolves to the React app,
+# so direct loads and refreshes of /coaching/result/1..4 render the page.
+/*    /index.html   200

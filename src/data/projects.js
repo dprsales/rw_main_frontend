@@ -3,7 +3,7 @@
  * platform and served via `GET /projects/:slug` (CORS-open). Images come
  * back as root-relative CDN paths, same as the blog feed.
  */
-import { cdn, getProjects, getProjectBySlug } from './api'
+import { cdn, getProjectsPaginated, getProjectBySlug } from './api'
 
 /* content.js PROJECTS names mapped to their API slug. Names absent here have
  * no published detail page yet, so the map shows plain text, not a dead link. */
@@ -52,16 +52,30 @@ export async function fetchProject(slug) {
  * unchanged; success makes newly published projects linkable automatically.
  * Matched against the curated list case-insensitively; known entries keep their hand-checked slug.
  */
-export async function fetchProjectSlugs() {
-  let list
+export async function fetchAllProjects() {
+  const rows = []
   try {
-    list = await getProjects()
+    // `GET /projects` paginates server-side, defaulting to limit 10 — page
+    // through the whole index so every published project is represented.
+    const LIMIT = 100
+    const first = await getProjectsPaginated(1, LIMIT)
+    const read = (res) => (Array.isArray(res) ? res : res?.projects) || []
+    const totalItems = first?.pagination?.totalItems ?? read(first).length
+    rows.push(...read(first))
+    const totalPages = Math.ceil(totalItems / LIMIT)
+    for (let page = 2; page <= totalPages; page++) {
+      const res = await getProjectsPaginated(page, LIMIT)
+      rows.push(...read(res))
+    }
   } catch {
-    return PROJECT_SLUGS
+    return rows
   }
+  return rows
+}
 
-  const rows = Array.isArray(list) ? list : list?.projects
-  if (!Array.isArray(rows)) return PROJECT_SLUGS
+export async function fetchProjectSlugs() {
+  const rows = await fetchAllProjects()
+  if (!rows.length) return PROJECT_SLUGS
 
   const known = new Map(Object.keys(PROJECT_SLUGS).map((name) => [name.toLowerCase(), name]))
   const merged = { ...PROJECT_SLUGS }

@@ -8,6 +8,8 @@ import Assessment from './pages/Assessment'
 import AssessmentResult from './pages/AssessmentResult'
 import Careers from './pages/Careers'
 import Coaching from './pages/Coaching'
+import CoachingResult from './pages/CoachingResult'
+import CoachingPurchase from './pages/CoachingPurchase'
 import Consulting from './pages/Consulting'
 import Contact from './pages/Contact'
 import Form from './pages/Form'
@@ -33,6 +35,11 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/coaching" element={<Coaching />} />
+          {/* KRISAH returns here after the assessment — the route maps to a score scenario. */}
+          <Route path="/coaching/result" element={<CoachingResult />} />
+          <Route path="/coaching/result/:scenario" element={<CoachingResult />} />
+          {/* Checkout: selection → details → review → purchase request (UI only, no gateway wired). */}
+          <Route path="/coaching/purchase" element={<CoachingPurchase />} />
           <Route path="/consulting" element={<Consulting />} />
           <Route path="/realty" element={<Realty />} />
           <Route path="/careers" element={<Careers />} />

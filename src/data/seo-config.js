@@ -71,6 +71,16 @@ export const ROUTE_SEO = {
     description:
       'The sixteen areas of specialisation — 90 to 120 minutes each — matched to the gaps your AI assessment report turns up. No tiers, no split between coaching and consulting.',
   },
+  '/coaching/result': {
+    title: 'Your Coaching Assessment Result — Recommended Coaching Areas | Rajiv Williams',
+    description:
+      'Your assessment score and five recommended coaching starting points, with personalised development areas and all coaching specialisations from Rajiv Williams.',
+  },
+  '/coaching/purchase': {
+    title: 'Buy Coaching Modules — 16 Areas, Live Pricing | Rajiv Williams',
+    description:
+      'Select coaching modules from the sixteen areas of specialisation with live pricing. Choose fixed packages or build your own selection, then place your purchase request.',
+  },
   '/form/coaching': {
     title: 'Coaching Assessment | Rajiv Williams',
     description: 'A short pre-consultation assessment for luxury real estate sales coaching in Hyderabad.',

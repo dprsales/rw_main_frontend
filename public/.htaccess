@@ -1,0 +1,67 @@
+# Rajiv Williams - Vite React SPA rewrite + asset rules.
+# Ships inside dist/ (from react/public/) so every deploy restores it even if
+# the server copy was removed. Do not delete.
+
+# --- SPA routing: every route other than a real file/folder -> index.html ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # A legacy WordPress install used to live in /coaching/ on the main domain
+  # (coaching.rajivwilliams.com). A real folder named "coaching" still exists in
+  # the web root, and Apache's automatic "add trailing slash" redirect handed
+  # the request to it BEFORE this rewrite ran. That shadows the SPA route and
+  # makes refresh/direct hits of /coaching show a WordPress 404 instead of the
+  # React page. Kill the auto-slash redirect, then force the app's live routes
+  # (and the KRISAH result routes) to index.html ahead of any folder check.
+  DirectorySlash Off
+
+  # Live app routes - these always render the SPA, even if a folder with the
+  # same name exists in the web root:
+  RewriteRule ^coaching/?$ /index.html [L]
+  RewriteRule ^coaching/result(?:/[^/]*)?/?$ /index.html [L]
+  RewriteRule ^coaching/purchase/?$ /index.html [L]
+  RewriteRule ^assessment/?$ /index.html [L]
+  RewriteRule ^assessment/result/?$ /index.html [L]
+
+  # Serve real files and directories as-is (assets, fonts, images, robots, etc.)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Everything else (e.g. /consulting, /realty, /coaching/result/3) is handled
+  # by the React router -> fetch index.html.
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# --- Correct MIME types (hosts sometimes mis-serve .js as text/html) ---
+AddType application/javascript .js .mjs
+AddType text/css .css
+AddType application/json .json
+
+# --- Caching: hashed asset files are immutable; index.html stays fresh ---
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType application/json "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType text/html "access plus 3 hours"
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+
+  # Never cache index.html so new builds appear immediately after CDN purge.
+  <FilesMatch "index\.html$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+</IfModule>

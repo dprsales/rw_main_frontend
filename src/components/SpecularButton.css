@@ -12,7 +12,7 @@
   height: 48px;
   padding: 0;
   box-sizing: border-box;
-  border: none;
+  border: 1px solid rgba(195, 155, 83, 0.35);
   margin: 0;
   font-family: inherit;
   font-weight: 500;

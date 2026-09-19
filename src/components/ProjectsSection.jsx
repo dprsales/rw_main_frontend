@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Reveal from './Reveal'
 import SectionHead, { SectionAside } from './SectionHead'
-import { AREA_TO_LOCALITY, LOCALITIES, PROJECTS } from '../data/content'
-import { PROJECT_SLUGS, fetchProjectSlugs } from '../data/projects'
+import { AREA_TO_LOCALITY, LOCALITIES, PROJECTS, resolveLocality } from '../data/content'
+import { PROJECT_SLUGS, fetchAllProjects, fetchProjectSlugs } from '../data/projects'
 import { mono, serif } from '../theme'
 import { container, sectionRule } from '../styles'
 
@@ -24,16 +24,41 @@ const LABEL_FLIP_X = 68
 export default function ProjectsSection() {
   const [active, setActive] = useState('Kokapet')
 
-  // Seeded from the curated map, then merged with the live index; fetchProjectSlugs never rejects.
+  // Seeded from the curated map, then merged with the live index; each fetch never rejects.
   const [slugs, setSlugs] = useState(PROJECT_SLUGS)
+  const [liveProjects, setLiveProjects] = useState([])
 
   useEffect(() => {
     let live = true
-    fetchProjectSlugs().then((next) => { if (live) setSlugs(next) })
+    Promise.all([fetchProjectSlugs(), fetchAllProjects()])
+      .then(([next, rows]) => {
+        if (!live) return
+        setSlugs(next)
+        setLiveProjects(rows)
+      })
     return () => { live = false }
   }, [])
 
-  const shown = PROJECTS
+  /* Live rows override the curated list — the portfolio should track everything the
+     admin panel has published, not the hand-maintained snapshot in content.js. Rows
+     are bridged by slug so curated titles keep their polished casing and status. */
+  const shown = useMemo(() => {
+    if (!liveProjects.length) return PROJECTS
+
+    const curatedBySlug = new Map(
+      PROJECTS.map((p) => [PROJECT_SLUGS[p.name]?.toLowerCase(), p]).filter(([k]) => k),
+    )
+    return liveProjects.map((row) => {
+      const slug = (row.slug || '').trim().toLowerCase()
+      const curated = curatedBySlug.get(slug)
+      if (curated) return curated
+      return {
+        name: (row.title || '').trim(),
+        area: resolveLocality(row.location),
+        status: 'Mandate',
+      }
+    })
+  }, [liveProjects])
 
   // Nodes with nothing after a filter stay on the map dimmed — it should re-weight, not reshape.
   const nodes = useMemo(() => {

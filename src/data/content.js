@@ -223,8 +223,8 @@ export const PORTFOLIO_TESTIMONIALS = [
  * absent (empty title slots read as unfinished); add a `role` string and the card picks it up automatically.
  */
 export const TEAM = [
-  { name: 'Sridevi Vinjimur', photo: teamSridevi, linkedin: 'https://www.linkedin.com/in/sridevi-vinjimur-147125270/', title: 'Head of Operations', for: ['Coaching', 'Consulting', 'Realty'] },
-  { name: 'Priyanka Panda', photo: teamPriyanka, linkedin: 'https://www.linkedin.com/in/priyanka-panda-238451259/', title: 'Head of Sales', for: ['Realty'], bio: '8+ years in luxury real estate sales & marketing sells by positioning, excels at high-value closures. Under her leadership, Team RW runs high-value sales mandates end to end, from go-to-market strategy to a client experience that keeps your cash flows smooth.' },
+  { name: 'Sridevi Vinjimur', photo: teamSridevi, linkedin: 'https://www.linkedin.com/in/sridevi-vinjimur-147125270/', title: 'Director of Operations', for: ['Coaching', 'Consulting', 'Realty'] },
+  { name: 'Priyanka Panda', photo: teamPriyanka, linkedin: 'https://www.linkedin.com/in/priyanka-panda-238451259/', title: 'Director of Sales', for: ['Realty'], bio: '8+ years in luxury real estate sales & marketing sells by positioning, excels at high-value closures. Under her leadership, Team RW runs high-value sales mandates end to end, from go-to-market strategy to a client experience that keeps your cash flows smooth.' },
 ]
 
 /* TEAM mapped to ChromaGrid's item shape. Every card uses the same gold
@@ -503,9 +503,11 @@ export const AREA_TO_LOCALITY = {
   'Neopolis, Kokapet': 'Neopolis',
   'Financial District': 'Financial District',
   'Narsingi, Financial District': 'Narsingi',
+  'Narsingi': 'Narsingi',
   'Raidurg - Gachibowli': 'Raidurgam',
   'Raidurgam': 'Raidurgam',
   'Green Hills Road, HITEC City': 'HITEC City',
+  'HITEC City': 'HITEC City',
   'Shaikpet': 'Shaikpet',
   'Kollur': 'Kollur',
   'Mokila': 'Mokila',
@@ -517,6 +519,47 @@ export const AREA_TO_LOCALITY = {
   'TGSPA Junction': 'TGSPA Junction',
   'Tukkuguda': 'Tukkuguda',
   'Mamidipally': 'Mamidipally',
+}
+
+/** Maps free-text `location` strings from the API onto the curated locality keys. */
+const LOCATION_TO_LOCALITY = {
+  'neopolis': 'Neopolis',
+  'kokapet': 'Kokapet',
+  'financial district': 'Financial District',
+  'nanakramguda': 'Financial District',
+  'narsingi': 'Narsingi',
+  'raidurg': 'Raidurgam',
+  'rai durg': 'Raidurgam',
+  'gachibowli': 'Raidurgam',
+  'green hills': 'HITEC City',
+  'hitec city': 'HITEC City',
+  'shaikpet': 'Shaikpet',
+  'kollur': 'Kollur',
+  'tellapur': 'Kollur',
+  'mokila': 'Mokila',
+  'manchirevula': 'Manchirevula',
+  'gandipet': 'Gandipet',
+  'puppalaguda': 'Puppalaguda',
+  'shankarpally': 'Shankarpally',
+  'appa junction': 'APPA Junction',
+  'tspa': 'TGSPA Junction',
+  'tgpa': 'TGSPA Junction',
+  'appa': 'APPA Junction',
+  'tukkuguda': 'Tukkuguda',
+  'mamidpally': 'Mamidipally',
+  'mamidipally': 'Mamidipally',
+  'gaganpahad': 'Narsingi',
+  'rajendranagar': 'Narsingi',
+}
+
+/** Best-effort: resolve a raw API `location` string to a LOCALITIES node name. */
+export function resolveLocality(location = '') {
+  const text = String(location).toLowerCase()
+  for (const [key, ls] of Object.entries(LOCATION_TO_LOCALITY)) {
+    if (text.includes(key)) return ls
+  }
+  // Unrecognised geographies still get a node so no live project is dropped from the count.
+  return 'Kokapet'
 }
 
 export const PROJECTS = [

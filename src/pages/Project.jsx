@@ -161,7 +161,7 @@ function ProjectHero({ hero, details, name }) {
           ...container,
           width: '100%',
           padding:
-            'clamp(150px, 15vw, 190px) 40px clamp(70px, 8vw, 110px)',
+            'clamp(90px, 10vw, 120px) 40px clamp(70px, 8vw, 110px)',
         }}
       >
         <div className="rw-projx-grid">
@@ -577,9 +577,28 @@ function ProjectBody({ data, name }) {
               return (
                 <Reveal key={i} delay={(i % 6) * 60} className="rw-projx-amenity" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 16, padding: 'clamp(28px,3vw,40px) 16px', border: '1px solid var(--line)', background: 'var(--card)' }}>
                   {logo && (
-                    <div style={{ width: 46, height: 46, display: 'grid', placeItems: 'center' }}>
-                      <img className="rw-projx-amenity-icon" src={logo} alt="" loading="lazy" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', filter: 'var(--logo-filter)', transition: 'filter .4s ease' }} />
-                    </div>
+                   <div
+  style={{
+    width: 46,
+    height: 46,
+    display: 'grid',
+    placeItems: 'center',
+    background: 'transparent',
+  }}
+>
+  <img
+    className="rw-projx-amenity-icon"
+    src={logo}
+    alt=""
+    style={{
+      maxWidth: '100%',
+      maxHeight: '100%',
+      objectFit: 'contain',
+      background: 'transparent',
+      transition: 'transform .4s ease',
+    }}
+  />
+</div>
                   )}
                   <span className="rw-projx-amenity-label" style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.12em', color: 'var(--ink)', lineHeight: 1.4, transition: 'color .4s ease' }}>{(a.h1 || '').trim()}</span>
                 </Reveal>
@@ -630,7 +649,7 @@ function ProjectBody({ data, name }) {
             Interested in {name}?<br />Let’s talk numbers &amp; availability.
           </Reveal>
           <Reveal delay={140} style={{ marginTop: 44 }}>
-            <BookButton interest="RW Realty mandate" specular>BOOK A STRATEGY CALL</BookButton>
+            <BookButton interest="RW Realty mandate" specular>BOOK A PRIVATE TOUR</BookButton>
           </Reveal>
         </div>
       </section>
