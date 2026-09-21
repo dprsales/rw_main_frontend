@@ -12,7 +12,7 @@ export const ASSESSMENT_TRACKS = {
     label: 'Coaching',
     cardTitle: 'Sales Mastery Coaching',
     cardBody: 'Personalised coaching to sharpen closing skills, build a high-performing team, and grow into luxury real estate sales.',
-    cardCta: 'Begin coaching assessment',
+    cardCta: 'Share your coaching details',
     intro: {
       eyebrow: 'RAJIV WILLIAMS COACHING',
       title: 'Welcome to Rajiv Williams Coaching',
@@ -70,7 +70,7 @@ export const ASSESSMENT_TRACKS = {
     label: 'Consulting',
     cardTitle: 'Business & Sales Consulting',
     cardBody: 'Expert guidance on sales setup, branding, hiring, and process — tailored to where your business stands today.',
-    cardCta: 'Begin consulting assessment',
+    cardCta: 'Share your business details',
     intro: {
       eyebrow: 'RAJIV WILLIAMS CONSULTING',
       title: 'Welcome to Rajiv Williams Consulting',
@@ -149,9 +149,9 @@ export const ASSESSMENT_TRACKS = {
     key: 'realty',
     numeral: 'III',
     label: 'Realty',
-    cardTitle: 'RW Realty Services',
+    cardTitle: 'Realty Services',
     cardBody: 'Hand us your project. We recommend and execute the right sales and marketing strategy to move your inventory.',
-    cardCta: 'Begin realty assessment',
+    cardCta: 'Share your project details',
     intro: {
       eyebrow: 'RAJIV WILLIAMS REALTY SERVICES',
       title: 'Welcome to Rajiv Williams Realty Services',

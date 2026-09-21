@@ -136,21 +136,28 @@ function ProjectHero({ hero, details, name }) {
             background: `
               linear-gradient(
                 90deg,
-                rgba(11,10,9,.96) 0%,
-                rgba(11,10,9,.82) 38%,
-                rgba(11,10,9,.42) 72%,
-                rgba(11,10,9,.65) 100%
+                rgba(11,10,9,.94) 0%,
+                rgba(11,10,9,.78) 34%,
+                rgba(11,10,9,.3) 58%,
+                rgba(11,10,9,.12) 100%
               ),
               linear-gradient(
                 180deg,
-                rgba(11,10,9,.55) 0%,
-                rgba(11,10,9,.2) 45%,
-                rgba(11,10,9,.9) 100%
+                rgba(11,10,9,.5) 0%,
+                rgba(11,10,9,.1) 40%,
+                rgba(11,10,9,.85) 100%
               )
             `,
           }}
         />
       </div>
+
+      {/* Project render: an alpha cutout composited onto the sky, grounded bottom-right, never cropped. */}
+      {sideImage && (
+        <div aria-hidden className="rw-projx-render">
+          <img src={sideImage} alt="" />
+        </div>
+      )}
 
       {/* Main content */}
       <div
@@ -161,7 +168,7 @@ function ProjectHero({ hero, details, name }) {
           ...container,
           width: '100%',
           padding:
-            'clamp(90px, 10vw, 120px) 40px clamp(70px, 8vw, 110px)',
+            'clamp(48px, 6vw, 88px) 40px clamp(64px, 7vw, 96px)',
         }}
       >
         <div className="rw-projx-grid">
@@ -209,13 +216,17 @@ function ProjectHero({ hero, details, name }) {
                   animationDelay: '.14s',
                 }}
               >
+                {/* Bounding box, not a fixed height: wide wordmarks are width-capped so the
+                    headline stays dominant, square badges are height-capped so they stay legible. */}
                 <img
                   src={logo}
                   alt={name}
                   style={{
-                    height: 'clamp(52px, 7vw, 96px)',
+                    display: 'block',
                     width: 'auto',
-                    maxWidth: 'min(84%, 420px)',
+                    height: 'auto',
+                    maxHeight: 'clamp(56px, 7vw, 92px)',
+                    maxWidth: 'min(68%, 300px)',
                     objectFit: 'contain',
                     objectPosition: 'left center',
                   }}
@@ -278,12 +289,17 @@ function ProjectHero({ hero, details, name }) {
               >
                 {facts.map(([label, value]) => (
                   <div key={label}>
+                    {/* Jost, not Cormorant: the values are mostly digits, and Cormorant's
+                        old-style figures sit at uneven heights (2, 2.5, 3, 3.5 / 1085 – 2615). */}
                     <div
                       style={{
-                        fontFamily: serif,
-                        fontSize: 'clamp(18px, 2vw, 26px)',
+                        fontFamily: text,
+                        fontWeight: 400,
+                        fontSize: 'clamp(17px, 1.7vw, 23px)',
+                        letterSpacing: '.02em',
+                        fontVariantNumeric: 'lining-nums',
                         color: '#F2EFE9',
-                        lineHeight: 1.05,
+                        lineHeight: 1.1,
                         whiteSpace: 'nowrap',
                       }}
                     >
@@ -340,16 +356,6 @@ function ProjectHero({ hero, details, name }) {
             </div>
 
           </div>
-
-          {/* RIGHT PROJECT IMAGE */}
-          {sideImage && (
-            <div className="rw-projx-side">
-              <img
-                src={sideImage}
-                alt={name}
-              />
-            </div>
-          )}
 
         </div>
       </div>
@@ -646,10 +652,16 @@ function ProjectBody({ data, name }) {
         )}
         <div className="rw-pad" style={{ position: 'relative', zIndex: 1, maxWidth: 900, margin: '0 auto', padding: 'clamp(100px,14vw,180px) 40px', textAlign: 'center' }}>
           <Reveal as="h2" style={{ fontFamily: serif, fontWeight: 400, fontSize: 'clamp(34px,5vw,68px)', lineHeight: 1.04, letterSpacing: '-.02em', color: '#F2EFE9', maxWidth: '15em', margin: '0 auto' }}>
-            Interested in {name}?<br />Let’s talk numbers &amp; availability.
+            Interested in {name}?<br />Let’s find out how it fits your family.
           </Reveal>
           <Reveal delay={140} style={{ marginTop: 44 }}>
-            <BookButton interest="RW Realty mandate" specular>BOOK A PRIVATE TOUR</BookButton>
+            <BookButton
+              interest="RW Realty mandate"
+              eyebrow="BOOK A PRIVATE TOUR"
+              title="Let’s schedule your visit."
+              subtitle="Fill the form and speak to an expert on how and when to schedule a site visit."
+              specular
+            >BOOK A PRIVATE TOUR</BookButton>
           </Reveal>
         </div>
       </section>

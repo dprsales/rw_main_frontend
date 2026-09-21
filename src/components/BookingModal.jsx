@@ -28,9 +28,9 @@ const DEFAULT_SPECULAR_PROPS = {
 }
 
 // Magnetic button that opens the booking modal instead of a mailto: link; role/jobId tag careers applications.
-export function BookButton({ interest, role, jobId, roleOptions, style, children, specular = false, specularProps, className = '', ...rest }) {
+export function BookButton({ interest, role, jobId, roleOptions, eyebrow: eyebrowText, title, subtitle, style, children, specular = false, specularProps, className = '', ...rest }) {
   const open = useBooking()
-  const handleClick = () => open({ interest, role, jobId, roleOptions })
+  const handleClick = () => open({ interest, role, jobId, roleOptions, eyebrow: eyebrowText, title, subtitle })
 
   if (specular) {
     return (
@@ -209,12 +209,12 @@ function BookingModal({ preset, onClose }) {
               </>
             ) : (
               <>
-                <div style={{ ...eyebrow, marginBottom: 12, paddingRight: 44 }}>BOOK A STRATEGY CALL</div>
+                <div style={{ ...eyebrow, marginBottom: 12, paddingRight: 44 }}>{preset.eyebrow || 'BOOK A STRATEGY CALL'}</div>
                 <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: 'clamp(24px,3.2vw,32px)', color: 'var(--ink)', lineHeight: 1.15, marginBottom: 8 }}>
-                  Let’s start the conversation.
+                  {preset.title || 'Let’s start the conversation.'}
                 </h2>
                 <p style={{ fontFamily: text, fontWeight: 300, fontSize: 14, lineHeight: 1.6, color: 'var(--faded)', marginBottom: 24 }}>
-                  Share a few details and the team will reach out to schedule a call.
+                  {preset.subtitle || 'Share a few details and the team will reach out to schedule a call.'}
                 </p>
               </>
             )}

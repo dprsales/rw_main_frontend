@@ -10,6 +10,7 @@ import Header from '../components/Header'
 import ImageSlot from '../components/ImageSlot'
 import Seo from '../components/Seo'
 import { BookButton } from '../components/BookingModal'
+import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import ClosingCTA from '../components/ClosingCTA'
 import PageIntro from '../components/PageIntro'
@@ -327,7 +328,7 @@ export default function Consulting() {
       </section>
 
       <ClosingCTA id="talk" chip title="If the inventory is right and the velocity is wrong, talk.">
-        <BookButton interest="Consulting" specular>REQUEST A SALES CONSULTATION</BookButton>
+        <CtaButton variant="outline" href="/form/consulting">TELL US ABOUT YOUR BUSINESS</CtaButton>
       </ClosingCTA>
 
       <Footer links={FOOTER_LINKS} />

@@ -216,7 +216,7 @@ export default function Coaching() {
       </section>
 
       <ClosingCTA title="The application is the filter. Serious applications get serious answers." titleStyle={{ maxWidth: '15em' }}>
-        <BookButton interest="Coaching" specular>BOOK A STRATEGY CALL</BookButton>
+        <CtaButton variant="outline" href="/form/coaching">TELL US ABOUT YOUR COACHING NEEDS</CtaButton>
       </ClosingCTA>
 
       <Footer links={FOOTER_LINKS} />

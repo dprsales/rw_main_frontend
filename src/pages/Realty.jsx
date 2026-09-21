@@ -15,6 +15,7 @@ import Seo from '../components/Seo'
 import ProjectsSection from '../components/ProjectsSection'
 import ImageSlot from '../components/ImageSlot'
 import { BookButton } from '../components/BookingModal'
+import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import RiseText from '../components/RiseText'
 import ClosingCTA from '../components/ClosingCTA'
@@ -191,7 +192,7 @@ export default function Realty() {
       </section>
 
       <ClosingCTA title="Mandates are limited to a handful of projects at a time.">
-        <BookButton interest="RW Realty mandate" specular>DISCUSS A MANDATE</BookButton>
+        <CtaButton variant="outline" href="/form/realty">TELL US ABOUT YOUR PROJECT</CtaButton>
       </ClosingCTA>
 
       <Footer chip links={FOOTER_LINKS} />
