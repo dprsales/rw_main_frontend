@@ -16,6 +16,7 @@ import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHe
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { useInView } from '../hooks/useInView'
 import { CAREER_CATEGORIES, CAREER_CULTURE, CAREER_HOOK, CAREER_PROCESS, CAREER_REASONS, CAREER_ROLES } from '../data/content'
+import { CAREERS_INTEREST } from '../data/booking'
 import { fetchRoles } from '../data/jobs'
 import { FOOTER_LINKS, mono, serif } from '../theme'
 import {
@@ -29,8 +30,8 @@ const HEADLINE = [
   { text: 'We are hiring people who can hold a room.', italic: true, copper: true },
 ]
 
-// Applications go through the booking form, same as every other CTA, with the role in the message.
-const APPLY_INTEREST = 'Joining the team'
+// Applications go through the booking form, same as every other CTA; CAREERS_INTEREST switches it into application mode.
+const APPLY_INTEREST = CAREERS_INTEREST
 const CAREER_GLOW = {
   backgroundColor: 'var(--card)',
   glowColor: '41 82 71',
