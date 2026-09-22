@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import heroImage from '../assets/site/hero-rajiv.webp'
-import backdropImage from '../assets/site/branded-backdrop.webp'
-import deskImage from '../assets/site/desk-work.webp'
+import backdropImage from '../assets/site/sales-mandate.png'
+import consultingImage from '../assets/site/consulting.jpeg'
 import portraitImage from '../assets/site/portrait-rajiv.png'
-import whiteboardImage from '../assets/site/whiteboard-session.png'
+import whiteboardImage from '../assets/site/coaching.png'
 import hraLogo from '../assets/site/logo-hra.png'
 import narLogo from '../assets/site/logo-nar.png'
 import Footer from '../components/Footer'
 import Gallery from '../components/Gallery'
+import GuidedFinder from '../components/GuidedFinder'
 import GlimpsesSection from '../components/GlimpsesSection'
 import Seo from '../components/Seo'
 import Header from '../components/Header'
@@ -79,7 +80,7 @@ function TiltFrame({ ratio = '4/5', children, style }) {
 /** Covers for the three service cards, in WAYS order. */
 const WAY_COVERS = [
   { src: whiteboardImage, alt: 'Rajiv coaching at the whiteboard' },
-  { src: deskImage, alt: 'Reviewing sales structures at the desk' },
+  { src: consultingImage, alt: 'Reviewing sales structures at the desk' },
   { src: backdropImage, alt: 'Rajiv beside the RW backdrop' },
 ]
 
@@ -193,7 +194,16 @@ function HeroCinematic({ onStory }) {
 export default function Home() {
   const scrollToId = useSmoothScroll()
   const navigate = useNavigate()
+  const location = useLocation()
   const goStory = () => scrollToId('about')
+
+  // /start sends "browse the three services" back here with a target section.
+  useEffect(() => {
+    const target = location.state?.scrollTo
+    if (!target) return
+    const id = requestAnimationFrame(() => scrollToId(target))
+    return () => cancelAnimationFrame(id)
+  }, [location.state, scrollToId])
 
   // Live blog feed, newest first, falls back to the static set on failure.
   // `visibleCount` grows a page at a time on "Load more".
@@ -219,6 +229,7 @@ export default function Home() {
       <Header />
 
       <HeroCinematic onStory={goStory} />
+
 
       {/* Philosophy */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
@@ -259,8 +270,12 @@ He doesn&apos;t wait for the market to move.<br />
         </div>
       </section>
 
+      {/* Guided finder sits at the decision point: right before the three service cards it chooses between.
+          The same questions also open first inside the booking modal, so every lead is qualified either way. */}
+      <GuidedFinder variant="inline" location="home" />
+
       {/* Three ways in */}
-      <section style={sectionRule}>
+      <section id="services" style={sectionRule}>
         <div className="rw-pad" style={container}>
           <Reveal style={{ padding: '54px 0 4px', fontFamily: mono, fontSize: 12, letterSpacing: '.26em', color: 'var(--faded)' }}>
             THREE MOVES. ONE OUTCOME: MORE CLOSED.

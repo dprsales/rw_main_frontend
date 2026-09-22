@@ -1,9 +1,14 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import MagneticLink from './MagneticLink'
 import SpecularButton from './SpecularButton'
 import { mono, serif, text } from '../theme'
-import { CAREERS_INTEREST, isValidPhone, submitBooking } from '../data/booking'
+import { CAREERS_INTEREST, INTERESTS, isValidPhone, submitBooking } from '../data/booking'
+import { labelFor } from '../data/guidance'
+import { track } from '../data/analytics'
+import { useFinder } from '../hooks/useFinder'
+import FinderSteps from './FinderSteps'
+import CtaButton from './CtaButton'
 
 // Global booking modal, mounted once; CTAs call useBooking().open() instead of mailto:.
 const BookingContext = createContext(() => {})
@@ -28,9 +33,9 @@ const DEFAULT_SPECULAR_PROPS = {
 }
 
 // Magnetic button that opens the booking modal instead of a mailto: link; role/jobId tag careers applications.
-export function BookButton({ interest, role, jobId, roleOptions, eyebrow: eyebrowText, title, subtitle, style, children, specular = false, specularProps, className = '', ...rest }) {
+export function BookButton({ interest, role, jobId, roleOptions, guidance, source, skipQuestions, eyebrow: eyebrowText, title, subtitle, style, children, specular = false, specularProps, className = '', ...rest }) {
   const open = useBooking()
-  const handleClick = () => open({ interest, role, jobId, roleOptions, eyebrow: eyebrowText, title, subtitle })
+  const handleClick = () => open({ interest, role, jobId, roleOptions, guidance, source, skipQuestions, eyebrow: eyebrowText, title, subtitle })
 
   if (specular) {
     return (
@@ -45,6 +50,7 @@ export function BookButton({ interest, role, jobId, roleOptions, eyebrow: eyebro
       as="button"
       type="button"
       onClick={handleClick}
+      className={className || undefined}
       style={{ border: 'none', cursor: 'pointer', textAlign: 'center', ...style }}
       {...rest}
     >
@@ -53,10 +59,16 @@ export function BookButton({ interest, role, jobId, roleOptions, eyebrow: eyebro
   )
 }
 
-const INTERESTS = [' Sales Coaching', 'Sales Consulting', 'Sales Mandates', CAREERS_INTEREST, 'Something else']
+// Page presets predate the select's option list; fold them onto it so the select shows a selection.
+const INTEREST_ALIASES = {
+  'Coaching': 'Sales Coaching',
+  'Consulting': 'Sales Consulting',
+  'RW Realty mandate': 'Sales Mandates',
+}
+const normaliseInterest = (value) => INTEREST_ALIASES[value] || value || ''
 
 const EMPTY = {
-  name: '', email: '', phone: '', interest: '', role: '', jobId: '', experience: '', experienceCustom: '',
+  name: '', email: '', phone: '', company: '', website: '', interest: '', role: '', jobId: '', experience: '', experienceCustom: '',
   currentCtc: '', expectedCtc: '', currentLocation: '', noticePeriod: '', relocation: '', workMode: '',
   applicationSource: '',
   ref1Name: '', ref1Number: '', ref1Relationship: '', ref2Name: '', ref2Number: '', ref2Relationship: '',
@@ -86,34 +98,97 @@ export function BookingProvider({ children }) {
   )
 }
 
+// Interests the modal already understands — opening with one of these skips the questions.
+const KNOWN_INTERESTS = ['Sales Coaching', 'Sales Consulting', 'Sales Mandates', CAREERS_INTEREST]
+
 function BookingModal({ preset, onClose }) {
+  const presetInterest = normaliseInterest(preset.interest)
+  // The questions run first unless the opener already knows who the visitor is
+  // (finder card, a service page, careers) or asked to skip them.
+  const askQuestions = !preset.guidance && !preset.skipQuestions && !KNOWN_INTERESTS.includes(presetInterest)
+  const [phase, setPhase] = useState(askQuestions ? 'questions' : 'details')
+  const finder = useFinder({ location: 'modal' })
+
+  // `guidance` comes from the finder card (preset) or from the questions answered in here.
+  const guidance = preset.guidance || (phase === 'details' && finder.done ? { ...finder.guidance, onEdit: 'modal' } : null)
   const [form, setForm] = useState({
     ...EMPTY,
-    interest: preset.interest || '',
+    interest: presetInterest,
     role: preset.role || '',
     jobId: preset.jobId || '',
+    source: preset.source || '',
   })
+
+  // Questions finished inside the modal → carry the recommendation into the form and move on.
+  useEffect(() => {
+    if (phase !== 'questions' || !finder.done) return
+    const outcome = finder.result.outcome
+    setForm((f) => ({ ...f, interest: outcome.interest || f.interest, source: 'guided_finder' }))
+    setPhase('details')
+  }, [phase, finder.done, finder.result])
+
+  const skipQuestions = () => {
+    track('finder_abandoned', { lastStep: Object.keys(finder.answers).length, location: 'modal', skipped: true })
+    finder.restart()
+    setForm((f) => ({ ...f, source: f.source || 'finder_skip' }))
+    setPhase('details')
+  }
   const roleOptions = preset.roleOptions || []
   const [status, setStatus] = useState('idle') // idle | sending | sent | error
   const [error, setError] = useState('')
+  const [repeat, setRepeat] = useState(false)
+  const cardRef = useRef(null)
 
-  // Esc closes; lock the page scroll while the modal is up.
+  // Esc closes; lock the page scroll while the modal is up. Tab stays inside the card,
+  // and focus goes back to whatever opened the modal when it closes.
   useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    const opener = document.activeElement
+    const onKey = (e) => {
+      if (e.key === 'Escape') { onClose(); return }
+      if (e.key !== 'Tab' || !cardRef.current) return
+      const focusable = cardRef.current.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+      if (!focusable.length) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+    }
     const previous = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', onKey)
     return () => {
       document.body.style.overflow = previous
       window.removeEventListener('keydown', onKey)
+      if (opener && typeof opener.focus === 'function') opener.focus()
     }
   }, [onClose])
+
+  const startedRef = useRef(false)
+  useEffect(() => {
+    if (startedRef.current) return   // StrictMode double-invokes effects in dev
+    startedRef.current = true
+    track('booking_started', {
+      source: preset.source || (guidance ? 'guided_finder' : 'site_cta'),
+      interest: normaliseInterest(preset.interest) || undefined,
+      recommendedService: guidance?.recommendedKey,
+      visitorType: guidance?.who,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }))
   const setConsent = (e) => setForm((f) => ({ ...f, privacyConsent: e.target.checked }))
 
   const isApplying = form.interest === CAREERS_INTEREST
   const selectedRole = roleOptions.find((role) => role === form.role)
+  // A preset the select doesn't list (e.g. "General enquiry") still needs to be visible and submittable.
+  const interestOptions = form.interest && !INTERESTS.includes(form.interest) ? [form.interest, ...INTERESTS] : INTERESTS
+
+  const editAnswers = () => {
+    if (guidance?.onEdit === 'modal') { finder.restart(); setPhase('questions'); return }
+    onClose()
+    guidance?.onEdit?.()
+  }
 
   const setResume = (e) => {
     const file = e.target.files?.[0] || null
@@ -141,8 +216,17 @@ function BookingModal({ preset, onClose }) {
     setStatus('sending')
     setError('')
     try {
-      await submitBooking(form)
+      const result = await submitBooking({ ...form, guidance })
+      setRepeat(Boolean(result?.repeat))
       setStatus('sent')
+      track('booking_completed', {
+        source: form.source || (guidance ? 'guided_finder' : 'site_cta'),
+        interest: form.interest || undefined,
+        recommendedService: guidance?.recommendedKey,
+        visitorType: guidance?.who,
+        repeat: Boolean(result?.repeat),
+        deep: false,
+      })
     } catch (err) {
       setError(err?.message || 'Something went wrong. Please try again.')
       setStatus('error')
@@ -165,6 +249,7 @@ function BookingModal({ preset, onClose }) {
     >
       {/* max-height lives in global.css so it can use dvh with a vh fallback for mobile chrome */}
       <div
+        ref={cardRef}
         className="rw-modal-card"
         onClick={(e) => e.stopPropagation()}
         style={{
@@ -182,7 +267,23 @@ function BookingModal({ preset, onClose }) {
           }}
         >×</button>
 
-        {status === 'sent' ? (
+        {phase === 'questions' ? (
+          <>
+            <div style={{ ...eyebrow, marginBottom: 12, paddingRight: 44 }}>{preset.eyebrow || 'BOOK A STRATEGY CALL'}</div>
+            <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: 'clamp(24px,3.2vw,32px)', color: 'var(--ink)', lineHeight: 1.15, marginBottom: 8 }}>
+              First, a little about you.
+            </h2>
+            <p style={{ fontFamily: text, fontWeight: 300, fontSize: 14, lineHeight: 1.6, color: 'var(--faded)', marginBottom: 22 }}>
+              One to three taps, so the call starts on the right subject. Then your details.
+            </p>
+            <FinderSteps finder={finder} compact>
+              <div className="rw-finder-links" style={{ marginTop: 18 }}>
+                {finder.stepIndex > 0 && <CtaButton variant="secondary" arrow="←" onClick={finder.back}>Back</CtaButton>}
+                <CtaButton variant="secondary" onClick={skipQuestions}>Skip — just give me the form</CtaButton>
+              </div>
+            </FinderSteps>
+          </>
+        ) : status === 'sent' ? (
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
             <div style={{ ...eyebrow, marginBottom: 14 }}>{isApplying ? 'APPLICATION RECEIVED' : 'REQUEST RECEIVED'}</div>
             <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: 'clamp(24px,3.2vw,32px)', color: 'var(--ink)', lineHeight: 1.15, marginBottom: 14 }}>
@@ -191,7 +292,9 @@ function BookingModal({ preset, onClose }) {
             <p style={{ fontFamily: text, fontWeight: 300, fontSize: 15, lineHeight: 1.6, color: 'var(--faded)', maxWidth: '28em', margin: '0 auto 24px' }}>
               {isApplying
                 ? 'Your application has reached the team. If there’s a fit, you’ll hear from us within one business day.'
-                : 'Your request has reached the team. Expect a reply within one business day to arrange your strategy call.'}
+                : repeat
+                  ? 'You’re already with us — we’ve added this request to your existing enquiry and the team has been notified.'
+                  : 'Your request has reached the team. Expect a reply within one business day to arrange your strategy call.'}
             </p>
             <button type="button" onClick={onClose} style={{ ...ctaBtn }}>Close</button>
           </div>
@@ -213,9 +316,20 @@ function BookingModal({ preset, onClose }) {
                 <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: 'clamp(24px,3.2vw,32px)', color: 'var(--ink)', lineHeight: 1.15, marginBottom: 8 }}>
                   {preset.title || 'Let’s start the conversation.'}
                 </h2>
-                <p style={{ fontFamily: text, fontWeight: 300, fontSize: 14, lineHeight: 1.6, color: 'var(--faded)', marginBottom: 24 }}>
+                <p style={{ fontFamily: text, fontWeight: 300, fontSize: 14, lineHeight: 1.6, color: 'var(--faded)', marginBottom: guidance ? 14 : 24 }}>
                   {preset.subtitle || 'Share a few details and the team will reach out to schedule a call.'}
                 </p>
+                {guidance && (
+                  <div className="rw-guidance-chips" aria-label="Your answers" style={{ marginBottom: 22 }}>
+                    {guidance.who && <span className="rw-guidance-chip">{labelFor('who', guidance.who)}</span>}
+                    {guidance.challenge && <span className="rw-guidance-chip">{labelFor('challenge', guidance.challenge)}</span>}
+                    {guidance.goal && <span className="rw-guidance-chip">{labelFor('goal', guidance.goal)}</span>}
+                    {guidance.recommended && <span className="rw-guidance-chip is-result">→ {guidance.recommended}</span>}
+                    {guidance.onEdit && (
+                      <button type="button" className="rw-guidance-chip is-edit" onClick={editAnswers}>edit</button>
+                    )}
+                  </div>
+                )}
               </>
             )}
 
@@ -234,12 +348,22 @@ function BookingModal({ preset, onClose }) {
                   placeholder="10-digit mobile number"
                 />
               </Field>
+              {!isApplying && (
+                <Field label="Company / organisation">
+                  <input value={form.company} onChange={set('company')} style={inputStyle} placeholder="Optional" autoComplete="organization" />
+                </Field>
+              )}
               {!isApplying && <Field label="I’m interested in">
                 <select value={form.interest} onChange={set('interest')} style={{ ...inputStyle, appearance: 'none' }}>
                   <option value="">Select one…</option>
-                  {INTERESTS.map((i) => <option key={i} value={i}>{i}</option>)}
+                  {interestOptions.map((i) => <option key={i} value={i}>{i}</option>)}
                 </select>
               </Field>}
+              {/* Honeypot: off-screen, never focusable; a filled value means a bot and the server drops it. */}
+              <label aria-hidden="true" style={{ position: 'absolute', left: -9999, width: 1, height: 1, overflow: 'hidden' }}>
+                Website
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" value={form.website} onChange={set('website')} />
+              </label>
               {/* Only shown for careers: attaching a file routes to the applications endpoint */}
               {isApplying && (
                 <Field label="Job role" required>

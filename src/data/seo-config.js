@@ -57,6 +57,10 @@ export const ROUTE_SEO = {
     description:
       'Speak to Rajiv Williams about coaching, developer consulting, or an exclusive sales mandate. Based in Shaikpet, Hyderabad.',
   },
+  '/start': {
+    title: 'Find the Right Service | Rajiv Williams',
+    description: 'Answer one to three quick questions and we point you to the right Rajiv Williams service — coaching, consulting or an RW Realty mandate.',
+  },
   '/form': {
     title: 'Pre-Consultation Assessment | Rajiv Williams',
     description: 'A short assessment before we speak — coaching, developer consulting, or an RW Realty mandate.',

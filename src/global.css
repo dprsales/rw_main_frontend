@@ -1900,3 +1900,28 @@ a:hover { color: var(--ink, #12100D); }
   .rw-cta::before { animation: none; }
   .rw-cta-arrow { animation: none; }
 }
+
+/* --- Secondary CTA ---------------------------------------------------------- */
+/* One step below the gold specular button: same 48px height, 10px radius and Jost
+   caps so a pair sits flush, but a hairline rim and no fill, so it never competes.
+   Used for "not sure?", back, skip and browse actions. The arrow slides on hover
+   the way .rw-way-arrow does. */
+.rw-cta-secondary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  height: 48px; padding: 0 24px; box-sizing: border-box;
+  border: 1px solid color-mix(in srgb, var(--copper) 55%, transparent);
+  border-radius: 10px; background: color-mix(in srgb, var(--copper) 6%, transparent);
+  color: var(--ink); text-decoration: none; cursor: pointer; white-space: nowrap;
+  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+  transition: border-color .25s ease, background .25s ease, transform .18s cubic-bezier(.34, 1.56, .64, 1);
+}
+.rw-cta-secondary:hover { border-color: var(--copper); background: color-mix(in srgb, var(--copper) 14%, transparent); transform: translateY(-1px); }
+.rw-cta-secondary:active { transform: translateY(0); }
+.rw-cta-secondary:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
+.rw-cta-secondary .rw-cta-secondary-arrow { display: inline-block; transition: transform .3s cubic-bezier(.2,.7,.2,1); }
+.rw-cta-secondary:hover .rw-cta-secondary-arrow { transform: translateX(4px); }
+.rw-cta-secondary--back .rw-cta-secondary-arrow { order: -1; }
+.rw-cta-secondary--back:hover .rw-cta-secondary-arrow { transform: translateX(-4px); }
+@media (max-width: 560px) { .rw-cta-secondary { white-space: normal; text-align: center; height: auto; min-height: 48px; padding: 12px 18px; line-height: 1.3; } }
+@media (prefers-reduced-motion: reduce) { .rw-cta-secondary, .rw-cta-secondary .rw-cta-secondary-arrow { transition: none; } }

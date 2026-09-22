@@ -22,7 +22,7 @@ import ClosingCTA from '../components/ClosingCTA'
 import SectionHead, { SectionAside } from '../components/SectionHead'
 import { MANDATE_SCOPE } from '../data/content'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
-import {
+import { ctaInline,
   body, container, eyebrow, headLink,
   intro, lede, pageHeading, sectionHeading, sectionRule,
 } from '../styles'
@@ -87,8 +87,9 @@ export default function Realty() {
               through disciplined, leadership-led execution.
             </Reveal>
 
-            <Reveal delay={220} style={{ marginTop: 34 }}>
+            <Reveal delay={220} style={{ marginTop: 34, display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
               <BookButton interest="RW Realty mandate" specular>DISCUSS A MANDATE</BookButton>
+              <CtaButton variant="secondary" to="/start?who=developer" arrow="→">Not sure? Find your fit</CtaButton>
             </Reveal>
           </div>
 

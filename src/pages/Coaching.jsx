@@ -115,6 +115,7 @@ export default function Coaching() {
           <button type="button" onClick={() => scrollToId('premium-programs')} className="rw-inline-cta" style={ctaInline}>
             Explore coaching programs →
           </button>
+          <CtaButton variant="secondary" to="/start?who=sales_pro" arrow="→">Not sure? Find your fit</CtaButton>
         </>}
         extra={
           <Reveal delay={120} style={{ marginTop: 48, display: 'flex', gap: 56, flexWrap: 'wrap', borderTop: '1px solid var(--line)', paddingTop: 26 }}>

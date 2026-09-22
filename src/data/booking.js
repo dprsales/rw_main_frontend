@@ -1,16 +1,25 @@
 /** Booking / lead submission: every CTA posts to `/leads`, except careers apps (multipart to `/applications`). */
-import { createApplication, getErrorMessage, sendWhatsAppConfirmation, submitLead } from './api'
+import { createApplication, submitLead } from './api'
+import { labelFor } from './guidance'
 
 /** Interest value the careers page presets — the branch into `/applications`. */
 export const CAREERS_INTEREST = 'Joining Team RW'
 
-// POST /leads only requires name, email, type and phoneNumber; rest folds into the message.
+/** The booking modal's "I'm interested in" options. Keys here must match LEAD_TYPE below. */
+export const INTERESTS = ['Sales Coaching', 'Sales Consulting', 'Sales Mandates', CAREERS_INTEREST, 'Something else']
 
-/** Form interest values mapped to the API's narrower `type` set; unmapped values fall back to `contact`. */
+// POST /leads only requires name, email, type and phoneNumber; the rest is optional.
+
+/** Form interest values mapped to the API's narrower `type` set; unmapped values fall back to `contact`.
+    Page presets (`interest="Coaching"` etc.) are listed too so older call sites keep their type. */
 const LEAD_TYPE = {
+  'Sales Coaching': 'coaching',
   'Coaching': 'coaching',
+  'Sales Consulting': 'contact',
   'Consulting': 'contact',
-  'RW Realty mandate': 'project',
+  // A mandate enquiry is a developer lead, not a buyer's interest in a listing — `project` is for the latter.
+  'Sales Mandates': 'contact',
+  'RW Realty mandate': 'contact',
   [CAREERS_INTEREST]: 'contact',
   'Something else': 'contact',
 }
@@ -25,46 +34,52 @@ export function toPhoneDigits(raw) {
 /** The API's rule, stated once so the form and the submit path agree. */
 export const isValidPhone = (raw) => toPhoneDigits(raw).length === 10
 
+/** One line the CRM notes can carry even where structured fields aren't read. */
+export function guidanceSummary(g) {
+  if (!g) return ''
+  const parts = [
+    g.who && `Visitor: ${labelFor('who', g.who)}`,
+    g.challenge && `Challenge: ${labelFor('challenge', g.challenge)}`,
+    g.goal && `Wants: ${labelFor('goal', g.goal)}`,
+    g.recommended && `Recommended: ${g.recommended}`,
+  ].filter(Boolean)
+  return parts.join(' · ')
+}
+
 function toLead(form) {
   const notes = []
   if (form.interest) notes.push(`Interested in: ${form.interest}`)
+  if (form.company?.trim()) notes.push(`Company: ${form.company.trim()}`)
   if (form.role) notes.push(`Role: ${form.role}`)
+  const summary = guidanceSummary(form.guidance)
+  if (summary) notes.push(summary)
   if (form.message?.trim()) notes.push(form.message.trim())
 
+  const g = form.guidance || {}
   return {
     type: LEAD_TYPE[form.interest] || DEFAULT_LEAD_TYPE,
     name: form.name?.trim(),
     email: form.email?.trim(),
     phoneNumber: toPhoneDigits(form.phone),
     message: notes.join('\n'),
+    // Structured copies of the same facts, for filtering in admin/CRM. All optional server-side.
+    source: form.source || (g.who ? 'guided_finder' : 'site_cta'),
+    ...(form.company?.trim() && { company: form.company.trim() }),
+    ...(g.who && { visitorType: g.who }),
+    ...(g.challenge && { challenge: g.challenge }),
+    ...(g.goal && { goal: g.goal }),
+    ...(g.recommendedKey && { recommendedService: g.recommendedKey }),
+    // Honeypot: real visitors never see this field; bots fill it and the server drops the request.
+    ...(form.website && { website: form.website }),
   }
 }
 
-/** Submit the booking modal; WhatsApp confirmation failures are logged, not surfaced. */
+/** Submit the booking modal. Resolves with the API body (`{ message, repeat? }`). */
 export async function submitBooking(form) {
   if (form.interest === CAREERS_INTEREST) {
     return submitApplication(form)
   }
-
-  const lead = toLead(form)
-  const result = await submitLead(lead)
-
-  if (lead.phoneNumber) {
-    try {
-      await sendWhatsAppConfirmation({
-        firstName: lead.name?.split(' ')[0] || 'there',
-        sessionTitle: form.interest || 'Strategy call',
-        sessionDate: 'To be confirmed',
-        sessionTime: 'To be confirmed',
-        venueOrPlace: 'Hyderabad',
-        phoneNumber: lead.phoneNumber,
-      })
-    } catch (err) {
-      // Non-blocking by design.
-      console.error('[booking] WhatsApp confirmation failed:', getErrorMessage(err))
-    }
-  }
-
+  const result = await submitLead(toLead(form))
   return result ?? { ok: true }
 }
 

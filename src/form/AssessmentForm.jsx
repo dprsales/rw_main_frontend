@@ -33,11 +33,12 @@ const Arrow = () => (
 )
 
 /** Pre-consultation assessment: track picker, questionnaire, confirmation. Self-contained inside `src/form/`. */
-export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, stickyOffset = 0 }) {
+export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, stickyOffset = 0, prefill = {}, extraAnswers = {} }) {
   const [trackKey, setTrackKey] = useState(ASSESSMENT_TRACKS[initialTrack] ? initialTrack : null)
   const track = trackKey ? ASSESSMENT_TRACKS[trackKey] : null
 
-  const [answers, setAnswers] = useState(() => (track ? blankAnswers(track) : {}))
+  // `prefill` seeds answers by question id (from the guided finder); `extraAnswers` ride along in the payload untouched.
+  const [answers, setAnswers] = useState(() => (track ? { ...blankAnswers(track), ...prefill } : {}))
   const [sent, setSent] = useState(false)
 
   /* Scroll to top on each view change so a new track/confirmation starts visible. */
@@ -69,7 +70,7 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
   })
 
   async function submit() {
-    const payload = { track: trackKey, answers, submittedAt: new Date().toISOString() }
+    const payload = { track: trackKey, answers: { ...answers, ...extraAnswers }, submittedAt: new Date().toISOString() }
     try {
       if (onSubmit) {
         await onSubmit(payload)

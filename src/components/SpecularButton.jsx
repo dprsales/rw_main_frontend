@@ -159,16 +159,22 @@ const SpecularButton = forwardRef(({
       fx.appendChild(gl.canvas)
 
       const sizeRef = { w: 1, h: 1 }
-      const resize = () => {
-        // Fractional size keeps the SDF pinned to the CSS border vs offsetWidth rounding drift.
-        const rect = btn.getBoundingClientRect()
-        const w = rect.width
-        const h = rect.height
+      const apply = (w, h) => {
         sizeRef.w = w
         sizeRef.h = h
         renderer.setSize(w + PAD * 2, h + PAD * 2)
         program.uniforms.uCenter.value = [(PAD + w / 2) * dpr, (PAD + h / 2) * dpr]
         program.uniforms.uHalfSize.value = [(w / 2) * dpr, (h / 2) * dpr]
+      }
+      // Measure the *layout* box, never getBoundingClientRect(): an ancestor mid-entrance
+      // (Reveal scales to .986) would shrink that rect and the rim would land inside the
+      // CSS border. ResizeObserver reports the untransformed, fractional border box and
+      // fires once on observe(), so the initial offsetWidth pass is only a fallback.
+      const resize = (entries) => {
+        const box = entries?.[0]?.borderBoxSize
+        const size = Array.isArray(box) ? box[0] : box
+        if (size) apply(size.inlineSize, size.blockSize)
+        else apply(btn.offsetWidth, btn.offsetHeight)
       }
       ro = new ResizeObserver(resize)
       ro.observe(btn)

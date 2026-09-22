@@ -18,7 +18,7 @@ import PullQuote from '../components/PullQuote'
 import SectionHead, { SectionAside } from '../components/SectionHead'
 import { DEVELOPER_SHIFTS, ECOSYSTEM, SUPPORT_SERVICES } from '../data/content'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
-import {
+import { ctaInline,
   container, eyebrow,
   note, sectionHeading, sectionRule,
 } from '../styles'
@@ -198,7 +198,10 @@ export default function Consulting() {
         intro="Team RW advises developers on the part of the business the brochure never fixes: how the inventory actually sells. Engagements are few, structured, and measured in absorption."
         introStyle={{ maxWidth: '38em' }}
         padding="80px 40px 40px"
-        cta={<BookButton interest="Consulting" specular>REQUEST A SALES CONSULTATION</BookButton>}
+        cta={<>
+          <BookButton interest="Consulting" specular>REQUEST A SALES CONSULTATION</BookButton>
+          <CtaButton variant="secondary" to="/start?who=developer" arrow="→">Not sure? Find your fit</CtaButton>
+        </>}
       />
 
       {/* Wide feature image */}

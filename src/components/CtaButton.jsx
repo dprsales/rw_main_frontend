@@ -1,19 +1,22 @@
 import { forwardRef } from 'react'
+import { Link } from 'react-router-dom'
 import SpecularButton from './SpecularButton'
 import { ctaCopper } from '../styles'
 
 /**
  * One button token for every CTA on the site. Renders a real <button>, or an
- * <a> styled exactly like a button when given an href. All primary CTAs share
- * the 48px height / 10px radius uniform across the site.
- *   variant="gold"    filled metallic sweep + dark text (primary action),
- *                     with the animated gold rim + breathing glow when live
- *   variant="outline" the BookButton glass: transparent, specular shader gold
- *                     rim, white text (secondary actions)
- * When an href is passed it renders an anchor carrying the same styling.
+ * <a> styled exactly like a button when given an href (or a router <Link> when
+ * given `to`). All primary CTAs share the 48px height / 10px radius uniform.
+ *   variant="gold"      filled metallic sweep + dark text (primary action),
+ *                       with the animated gold rim + breathing glow when live
+ *   variant="outline"   the BookButton glass: transparent, specular shader gold
+ *                       rim, white text (secondary actions of equal weight)
+ *   variant="secondary" one step down: 42px, hairline gold rim, mono caps — for
+ *                       "not sure?", back, skip and browse actions. `arrow`
+ *                       ("→" or "←") renders a sliding arrow; "←" puts it first.
  */
 const CtaButton = forwardRef(function CtaButton(
-  { href, target, rel, variant = 'gold', live = false, className = '', style, children, ...rest },
+  { href, to, target, rel, variant = 'gold', live = false, arrow, className = '', style, children, ...rest },
   ref,
 ) {
   if (variant === 'outline') {
@@ -38,6 +41,19 @@ const CtaButton = forwardRef(function CtaButton(
         {children}
       </SpecularButton>
     )
+  }
+
+  if (variant === 'secondary') {
+    const classes = ['rw-cta-secondary', arrow === '←' ? 'rw-cta-secondary--back' : '', className].filter(Boolean).join(' ')
+    const inner = (
+      <>
+        {children}
+        {arrow && <span className="rw-cta-secondary-arrow" aria-hidden="true">{arrow}</span>}
+      </>
+    )
+    if (to) return <Link ref={ref} to={to} className={classes} style={style} {...rest}>{inner}</Link>
+    if (href) return <a ref={ref} href={href} target={target} rel={rel} className={classes} style={style} {...rest}>{inner}</a>
+    return <button ref={ref} type={rest.type || 'button'} className={classes} style={style} {...rest}>{inner}</button>
   }
 
   const Tag = href ? 'a' : 'button'

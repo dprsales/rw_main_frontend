@@ -17,6 +17,7 @@ import Home from './pages/Home'
 import Portfolio from './pages/Portfolio'
 import Project from './pages/Project'
 import Realty from './pages/Realty'
+import Start from './pages/Start'
 import Partner from './pages/Partner'
 
 /** Every route change lands at the top, the way a full page load used to. */
@@ -47,6 +48,8 @@ export default function App() {
           <Route path="/assessment/result" element={<AssessmentResult />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          {/* /start is the guided finder on its own page; service pages link here with ?who= */}
+          <Route path="/start" element={<Start />} />
           {/* /form is the track picker; each questionnaire has its own URL (/form/coaching etc) for direct links */}
           <Route path="/form" element={<Form />} />
           <Route path="/form/:track" element={<Form />} />
