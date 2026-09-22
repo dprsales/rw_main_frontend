@@ -19,11 +19,11 @@ import ClosingCTA from '../components/ClosingCTA'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
-import { ACHIEVE, COACHING_PROGRAMS, COACHING_TESTIMONIALS, CURRICULUM, KRISAH_ASSESSMENT_URL } from '../data/content'
+import { ACHIEVE, ASSESSMENT_AREAS, COACHING_PROGRAMS, COACHING_TESTIMONIALS, CURRICULUM, KRISAH_ASSESSMENT_URL } from '../data/content'
 import { track } from '../data/analytics'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import {
-  container, ctaInline,
+  container, ctaInline, eyebrow,
   note, sectionRule, statLabel,
 } from '../styles'
 
@@ -109,9 +109,6 @@ export default function Coaching() {
         intro="What changes: your ticket size, your client register, and how the market treats your word."
         cta={<>
           <BookButton interest="Coaching" specular>BOOK A STRATEGY CALL</BookButton>
-          <CtaButton href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'coaching-hero' })}>
-            START ASSESSMENT <span className="rw-cta-arrow">→</span>
-          </CtaButton>
           <button type="button" onClick={() => scrollToId('premium-programs')} className="rw-inline-cta" style={ctaInline}>
             Explore coaching programs →
           </button>
@@ -130,6 +127,47 @@ export default function Coaching() {
           </Reveal>
         }
       />
+
+      {/* Assessment — the KRISAH-powered scored interview, explained before the ask.
+          Was a bare "START ASSESSMENT" button in the hero with no context; moved here
+          with the content from the standalone assessment landing page so the CTA has
+          a reason behind it. */}
+      <section id="assessment" className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,130px) 40px' }}>
+        <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 56, alignItems: 'start' }}>
+          <Reveal>
+            <div style={{ ...eyebrow, marginBottom: 18 }}>THE ASSESSMENT</div>
+            <h2 style={{ fontFamily: serif, fontWeight: 400, fontSize: 'clamp(28px,3.6vw,42px)', lineHeight: 1.1, color: 'var(--ink)', maxWidth: '14em' }}>
+              A live AI interview that measures what actually matters.
+            </h2>
+            <p style={{ ...note, marginTop: 22, fontSize: 16, lineHeight: 1.6 }}>
+              I have partnered with KRISAH — an AI-powered assessment platform — to bring a rigorous, scored sales assessment to real estate professionals across India.
+            </p>
+            <p style={{ ...note, marginTop: 16, fontSize: 16, lineHeight: 1.6 }}>
+              This is not a quiz. It is a live interview simulation conducted by an AI interviewer, asking the kinds of questions a serious employer or a demanding buyer would ask. It listens to your answers, adapts based on what you say, and scores your performance across six areas.
+            </p>
+            <p style={{ ...note, marginTop: 16, fontSize: 16, lineHeight: 1.6 }}>
+              After your session, you receive a full scored report. I review that report before our first coaching session together — we begin by addressing what the data shows, not what I assume.
+            </p>
+            <div style={{ marginTop: 32 }}>
+              <CtaButton href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'coaching-assessment-section' })}>
+                TAKE YOUR FREE ASSESSMENT <span className="rw-cta-arrow">→</span>
+              </CtaButton>
+            </div>
+          </Reveal>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 26 }}>
+            {ASSESSMENT_AREAS.map((area, i) => (
+              <Reveal key={area.n} delay={i * 70} style={{ display: 'flex', gap: 18, borderTop: '1px solid var(--line)', paddingTop: 20 }}>
+                <span style={{ fontFamily: serif, fontSize: 22, color: 'var(--copper)', lineHeight: 1, flexShrink: 0, width: 28 }}>{area.n}</span>
+                <div>
+                  <div style={{ fontFamily: serif, fontSize: 18, color: 'var(--ink)', lineHeight: 1.3 }}>{area.title}</div>
+                  <p style={{ ...note, marginTop: 8, fontSize: 14, lineHeight: 1.55 }}>{area.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* What you'll achieve - numbered outcome cards */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>

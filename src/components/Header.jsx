@@ -17,7 +17,7 @@ const SITE_NAV = [
   { label: 'Portfolio', to: '/portfolio' },
   { label: 'Careers', to: '/careers' },
   { label: 'Channel Partners', to: '/partner' },
-  { label: 'Assessment', to: '/assessment' },
+  { label: 'KRISAH Assessment', to: '/assessment' },
   { label: 'Find your fit', to: '/start' },
   { label: 'Book a call', book: true },
 ]

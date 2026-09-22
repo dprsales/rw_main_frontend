@@ -5,9 +5,9 @@
  *
  * Route contract (to be confirmed with KRISAH before production):
  *   /coaching/result            → default scenario (40%, prototype)
- *   /coaching/result/1          → below 40%
- *   /coaching/result/2          → below 50%
- *   /coaching/result/3          → below 60%
+ *   /coaching/result/1          → 0%–40%
+ *   /coaching/result/2          → 40%–50%
+ *   /coaching/result/3          → 50%–60%
  *   /coaching/result/4          → 60% or above
  *   /coaching/result/low        → alias for 1
  *   /coaching/result/developing → alias for 2
@@ -169,7 +169,7 @@ export const coachingResultScenarios = {
     route: '/coaching/result/1',
     displayScore: 39,
     scoreBand: 'below-40',
-    scoreLabel: 'Below 40%',
+    scoreLabel: '0%–40%',
     bandTitle: 'Foundations first.',
     showAllModules: true,
     showPresetModules: true,
@@ -185,7 +185,7 @@ export const coachingResultScenarios = {
     route: '/coaching/result/2',
     displayScore: 49,
     scoreBand: 'below-50',
-    scoreLabel: 'Below 50%',
+    scoreLabel: '40%–50%',
     bandTitle: 'Priority improvement areas.',
     showAllModules: true,
     showPresetModules: true,
@@ -201,7 +201,7 @@ export const coachingResultScenarios = {
     route: '/coaching/result/3',
     displayScore: 59,
     scoreBand: 'below-60',
-    scoreLabel: 'Below 60%',
+    scoreLabel: '50%–60%',
     bandTitle: 'Gap-based progression.',
     showAllModules: true,
     showPresetModules: true,
@@ -217,7 +217,7 @@ export const coachingResultScenarios = {
     route: '/coaching/result/4',
     displayScore: 60,
     scoreBand: '60-plus',
-    scoreLabel: '60% or above',
+    scoreLabel: 'Above 60%',
     bandTitle: 'Advanced refinement.',
     showAllModules: true,
     showPresetModules: true,

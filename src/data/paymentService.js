@@ -1,126 +1,132 @@
 /**
- * Payment integration seam for the coaching purchase flow.
+ * Payment orchestration for the coaching purchase flow — Razorpay Checkout.
  *
- * There is deliberately NO payment gateway wired in yet — no Razorpay, Stripe,
- * PayPal, no amount data sent to any provider, and no secret keys anywhere in
- * this frontend (keys never live in a browser bundle). The checkout ends in an
- * honest "purchase request recorded" state, and a future backend can replace
- * the three placeholder methods below without touching the page logic.
+ * The backend (`src/payments/`) creates the order and holds the real secret
+ * keys; this file only ever sees the publishable key_id Razorpay's own
+ * Checkout script needs to open the modal. No amount is trusted from the
+ * browser on the way back — /payments/verify and the webhook both re-check
+ * the signature server-side before anything is marked paid.
  *
- * Future contract (backend /api/payments/* once it exists):
- *   POST /api/payments/create-order  { modules, count, baseAmount,
- *                                      discountPercent, discountAmount,
- *                                      payableAmount, customer }
- *        -> { orderId, amount, currency, status: 'pending' }
- *   POST /api/payments/verify        { orderId, paymentId }
- *        -> { status: 'completed' | 'pending' | 'failed' }
- *   GET  /api/payments/status/:orderId
- *        -> { status, orderId }
- *
- * The page only ever sends customer details together with the amount summary;
- * all signature handling stays on the server.
+ * Every function here resolves to a result object, never throws to the call
+ * site: { status: 'completed' | 'failed' | 'cancelled' | 'error', orderId, message? }.
+ * 'cancelled' means the customer closed the Checkout modal without paying —
+ * not an error, just an incomplete attempt they can retry.
  */
-import { getErrorMessage } from './api'
+import { createPaymentOrder, verifyPayment, getPaymentStatus, getErrorMessage } from './api'
 
-/** Flip `enabled: true` (and set a provider) only when a real gateway goes live. */
 export const PAYMENT_CONFIG = {
-  enabled: false,
-  provider: null,
+  enabled: true,
+  provider: 'razorpay',
 }
 
-const NOT_CONFIGURED_MESSAGE =
-  'Payment setup is currently being finalised. Your request has been recorded and our team will contact you regarding the next step.'
+const CHECKOUT_SRC = 'https://checkout.razorpay.com/v1/checkout.js'
+let checkoutPromise = null
 
-function notConfigured(extra = {}) {
-  return {
-    configured: false,
-    status: 'not-configured',
-    message: NOT_CONFIGURED_MESSAGE,
-    ...extra,
+/** Loads Razorpay's Checkout script once; every call after the first reuses the same promise. */
+function loadCheckout() {
+  if (typeof window === 'undefined') {
+    return Promise.reject(new Error('Checkout requires a browser.'))
   }
-}
+  if (window.Razorpay) return Promise.resolve(window.Razorpay)
+  if (checkoutPromise) return checkoutPromise
 
-/** Create a payment order. Until a gateway is configured this resolves to "not configured". */
-export async function createOrder(order) {
-  if (!PAYMENT_CONFIG.enabled) return notConfigured({ orderId: null })
-  // TODO(backend): POST /api/payments/create-order with `order`, then return the order.
-  return notConfigured({ orderId: null })
-}
-
-/** Verify a completed payment. Placeholder — never fakes a success response. */
-export async function verifyPayment(details) {
-  if (!PAYMENT_CONFIG.enabled) return notConfigured()
-  // TODO(backend): POST /api/payments/verify with `details`.
-  return notConfigured()
-}
-
-/** Poll a payment's status. Placeholder — stays "not configured" until a gateway exists. */
-export async function getPaymentStatus(orderId) {
-  if (!PAYMENT_CONFIG.enabled) return notConfigured({ orderId })
-  // TODO(backend): GET /api/payments/status/:orderId.
-  return notConfigured({ orderId })
-}
-
-function storageKey(orderId) {
-  return `rw.coaching.purchase.${orderId}`
+  checkoutPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.src = CHECKOUT_SRC
+    script.onload = () => (window.Razorpay ? resolve(window.Razorpay) : reject(new Error('Payment gateway failed to load.')))
+    script.onerror = () => {
+      checkoutPromise = null // let a retry try loading the script again instead of replaying a dead promise
+      reject(new Error('Could not reach the payment gateway. Check your connection and try again.'))
+    }
+    document.body.appendChild(script)
+  })
+  return checkoutPromise
 }
 
 /**
- * Records the purchase request.
- *
- * With no gateway the record is kept locally in the browser (so the "recorded"
- * wording on the status screen is truthful) and flagged `recordedLocally: true`.
- * Once a backend exists, POST the same payload to /api/payments/... (or the
- * existing /leads route) and flip `recordedLocally` to false.
- *
- * Returns the honest result object the status screen renders from. Never
- * returns a "payment succeeded" shape — a gateway does not exist yet.
+ * Opens Razorpay Checkout for an already-created order and resolves once the
+ * flow ends, one way or another — paid, declined, or the customer backed out.
  */
-export async function submitPurchaseRequest({ orderId, modules, count, pricing, customer }) {
-  try {
-    if (PAYMENT_CONFIG.enabled) {
-      const order = await createOrder({
-        modules,
-        count,
-        baseAmount: pricing.baseAmount,
-        discountPercent: pricing.discountPercent,
-        discountAmount: pricing.discountAmount,
-        payableAmount: pricing.payableAmount,
-        customer,
-      })
-      return { ...order, recorded: true, recordedLocally: false }
-    }
+function payWithRazorpay({ orderId, razorpayOrderId, amount, currency, keyId, customer }) {
+  return loadCheckout().then(
+    (Razorpay) =>
+      new Promise((resolve) => {
+        const rzp = new Razorpay({
+          key: keyId,
+          order_id: razorpayOrderId,
+          amount,
+          currency,
+          name: 'Rajiv Williams',
+          description: 'Coaching module purchase',
+          prefill: { name: customer.name, email: customer.email, contact: customer.phone },
+          theme: { color: '#C39B53' },
+          handler: (response) => {
+            verifyPayment({
+              orderId,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            })
+              .then((result) => resolve({ status: result.status, orderId: result.orderId }))
+              .catch((err) => {
+                // Money may already have moved on Razorpay's side even if this call fails —
+                // the webhook (server-to-server, not dependent on this browser) is what
+                // ultimately reconciles it, so this is reported as unresolved, not failed.
+                console.error('[payment] verify call failed after a Razorpay success callback:', err)
+                resolve({
+                  status: 'error',
+                  orderId,
+                  message: 'Payment may have gone through, but we could not confirm it here. Contact us with your order id and we will check.',
+                })
+              })
+          },
+          modal: {
+            ondismiss: () => resolve({ status: 'cancelled', orderId }),
+          },
+        })
 
-    const payload = {
-      orderId,
+        rzp.on('payment.failed', () => resolve({ status: 'failed', orderId }))
+        rzp.open()
+      }),
+  )
+}
+
+/**
+ * The one call the purchase page makes: create the order, then open Checkout.
+ * Always resolves — see the module comment for the result shape.
+ */
+export async function payForModules({ modules, count, pricing, customer }) {
+  let order
+  try {
+    order = await createPaymentOrder({
       modules,
       count,
-      pricing,
+      baseAmount: pricing.baseAmount,
+      discountPercent: pricing.discountPercent,
+      discountAmount: pricing.discountAmount,
+      payableAmount: pricing.payableAmount,
       customer,
-      createdAt: new Date().toISOString(),
-    }
-
-    try {
-      window.localStorage.setItem(storageKey(orderId), JSON.stringify(payload))
-    } catch (err) {
-      console.warn('[payment] could not keep a local record:', getErrorMessage(err))
-    }
-
-    return {
-      configured: false,
-      status: 'recorded',
-      recorded: true,
-      recordedLocally: true,
-      orderId,
-      message: NOT_CONFIGURED_MESSAGE,
-    }
+    })
   } catch (err) {
+    // Never surface the backend's own error text here — it can legitimately say
+    // things like "set RAZORPAY_KEY_ID", which is a note for us, not a customer.
+    console.error('[payment] create-order failed:', getErrorMessage(err))
     return {
-      configured: false,
       status: 'error',
-      recorded: false,
       orderId: null,
-      message: getErrorMessage(err),
+      message: 'We could not start the payment right now. Please try again, or contact us and we will process it directly.',
     }
   }
+
+  return payWithRazorpay({
+    orderId: order.orderId,
+    razorpayOrderId: order.razorpayOrderId,
+    amount: order.amount,
+    currency: order.currency,
+    keyId: order.keyId,
+    customer,
+  })
 }
+
+/** For a status page that wants to re-check after the fact (e.g. a page refresh). */
+export const getOrderStatus = (orderId) => getPaymentStatus(orderId)

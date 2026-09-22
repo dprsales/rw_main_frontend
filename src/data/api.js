@@ -215,3 +215,15 @@ export const submitChannelPartner = (data) =>
     method: 'POST',
     body: data,
   })
+
+// 8. PAYMENTS — coaching module checkout (Razorpay). See data/paymentService.js
+// for the Checkout orchestration; these three are the raw backend calls.
+
+export const createPaymentOrder = (data) =>
+  request('/payments/create-order', { method: 'POST', body: data })
+
+export const verifyPayment = (data) =>
+  request('/payments/verify', { method: 'POST', body: data })
+
+export const getPaymentStatus = (orderId, opts) =>
+  request(`/payments/status/${encodeURIComponent(orderId)}`, { timeoutMs: READ_TIMEOUT_MS, ...opts })

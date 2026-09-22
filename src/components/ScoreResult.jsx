@@ -5,10 +5,10 @@ import { eyebrow, note } from '../styles'
 /* Score → tone lines, honest to the band the route maps to. Never a made-up number. */
 function bandLineFor(overall) {
   if (overall == null) return null
-  if (overall >= 60) return 'Advanced refinement — you are building on a strong base.'
-  if (overall >= 50) return 'Gap-based progression — targeted work will move you quickly.'
-  if (overall >= 40) return 'Priority improvement areas — a focused plan lifts you fastest.'
-  return 'Foundations first — the basics give you the fastest gains.'
+  if (overall >= 60) return 'Advanced refinement. You are building on a strong base.'
+  if (overall >= 50) return 'Gap-based progression. Targeted work will move you quickly.'
+  if (overall >= 40) return 'Priority improvement areas. A focused plan lifts you fastest.'
+  return 'Foundations first. The basics give you the fastest gains.'
 }
 
 const BAR_STYLE = {
@@ -46,7 +46,10 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
   const hasData = overall != null || dims.length > 0
   const isNumber = hasData && overall != null
   const headline = isNumber ? `${Math.round(overall)}` : scenario.bandTitle
-  const statusLine = bandLineFor(overall) ?? scenario.bandTitle
+  // No fallback to scenario.bandTitle here: without a real score, bandLineFor
+  // returns null and headline already shows scenario.bandTitle — repeating it
+  // as the line underneath was pure duplication.
+  const statusLine = bandLineFor(overall)
 
   return (
     <Reveal delay={delay}>
@@ -63,9 +66,9 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
                 Interview Readiness Score
               </div>
             </div>
-            <span style={bandChip}>
+            {/* <span style={bandChip}>
               {hasData ? 'LIVE RESULT' : 'RESULT BAND'}
-            </span>
+            </span> */}
           </div>
 
           {/* Overall score / band */}
@@ -84,7 +87,9 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
               </span>
             )}
           </div>
-          <p style={{ ...note, fontSize: 16, color: 'var(--ink)', lineHeight: 1.5 }}>{statusLine}</p>
+          {statusLine && (
+            <p style={{ ...note, fontSize: 16, color: 'var(--ink)', lineHeight: 1.5 }}>{statusLine}</p>
+          )}
 
           {/* Per-dimension bars when real scores exist */}
           {dims.length > 0 ? (

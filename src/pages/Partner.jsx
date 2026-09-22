@@ -26,7 +26,7 @@ const VALUE = [
   {
     n: '01',
     tag: 'ACCESS',
-    title: 'Exclusive mandates, not open-market scraps.',
+    title: 'Exclusive mandates, not open-market.',
     body: 'A small roster of projects owned end to end. Mandate inventory is not pitched by every broker in the city, so your buyers are chasing a property only you can sell.',
   },
   {
@@ -220,7 +220,10 @@ export default function Partner() {
           {STEPS.map((step, i) => (
             <Reveal key={step.n} delay={i * 90}>
               <div style={{ fontFamily: mono, fontSize: 13, letterSpacing: '.08em', color: 'var(--copper)', borderBottom: '1px solid var(--line)', paddingBottom: 14 }}>STEP {step.n}</div>
-              <div style={{ marginTop: 20, fontFamily: serif, fontSize: 'clamp(21px,2.4vw,27px)', color: 'var(--ink)' }}>{step.title}</div>
+              {/* Sans, not the display serif: Cormorant Garamond's capital Q carries a long
+                  decorative swash that reads as italic/cursive next to "Apply"/"Mandate in" —
+                  the webfont has no alternate glyph (tested via font-feature-settings, no effect). */}
+              <div style={{ marginTop: 20, fontFamily: text, fontWeight: 500, fontSize: 'clamp(19px,2.1vw,23px)', color: 'var(--ink)' }}>{step.title}</div>
               <p style={{ ...note, marginTop: 8, fontSize: 16, lineHeight: 1.55 }}>{step.body}</p>
             </Reveal>
           ))}

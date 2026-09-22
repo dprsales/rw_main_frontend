@@ -66,7 +66,7 @@ export const ROUTE_SEO = {
     description: 'A short assessment before we speak — coaching, developer consulting, or an RW Realty mandate.',
   },
   '/assessment': {
-    title: 'AI Assessment — 20 Questions, 25 Minutes | Rajiv Williams',
+    title: 'Discover where you stand before your training begins | Rajiv Williams',
     description:
       'A 20-question, 25-minute AI interview powered by KRISAH before you speak to us. Open to any role, any stage of your career.',
   },

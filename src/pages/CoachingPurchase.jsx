@@ -26,7 +26,7 @@ import {
   getPackageById,
   labelForCount,
 } from '../data/pricing'
-import { submitPurchaseRequest } from '../data/paymentService'
+import { payForModules } from '../data/paymentService'
 import useScoreData from '../hooks/useScoreData'
 import { FOOTER_LINKS, mono, serif } from '../theme'
 import { container, ctaCopper, eyebrow, note, sectionHeading, sectionRule } from '../styles'
@@ -253,9 +253,7 @@ export default function CoachingPurchase() {
     setSubmitting(true)
     track('purchase_review', { count: pricing.count, payable: pricing.payableAmount, mode })
 
-    const orderId = `RW-${Date.now()}`
-    const result = await submitPurchaseRequest({
-      orderId,
+    const result = await payForModules({
       modules: selectedModules.map((m) => ({ id: m.id, title: m.title, category: m.group })),
       count: pricing.count,
       pricing,
@@ -268,8 +266,15 @@ export default function CoachingPurchase() {
 
     setStatus(result)
     setSubmitting(false)
+    track('purchase_status', { status: result.status })
+
+    // A cancelled Checkout modal (customer backed out, didn't decline) returns them to
+    // review with everything still filled in, rather than a dead-end status screen.
+    if (result.status === 'cancelled') {
+      goto('review')
+      return
+    }
     goto('status')
-    track('purchase_status', { configured: result.configured, status: result.status, recorded: result.recorded })
   }
 
   const tabs = [
@@ -347,6 +352,10 @@ export default function CoachingPurchase() {
           {COACHING_MODULES.map((mod) => {
             const sel = selected.includes(mod.id)
             const isRec = rec.ids.includes(mod.id)
+            // In Custom Selection, the score-based recommendation isn't shown anywhere else on
+            // the page (unlike Recommended mode, which has its own banner), so it needs its own
+            // chip here rather than relying on the subtitle text, which the ellipsis can hide.
+            const showPriorityChip = isRec && !isRecommendedMode
             const open = expandedIds.has(mod.id)
             return (
               <div key={mod.id} className={`rw-pur-pick${sel ? ' is-on' : ''}`}>
@@ -354,8 +363,13 @@ export default function CoachingPurchase() {
                   <button type="button" className="rw-pur-pick-toggle" aria-pressed={sel} onClick={() => toggleModule(mod.id)}>
                     <span className="rw-pur-pick-num">{mod.n}</span>
                     <span className="rw-pur-pick-meta">
-                      <span className="rw-pur-pick-title">{mod.title}</span>
-                      <span className="rw-pur-pick-sub">{mod.group.toUpperCase()}{isRec ? ' · RECOMMENDED' : ''} · 90&#8211;120 MIN · {formatINR(MODULE_BASE_PRICE)}</span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                        <span className="rw-pur-pick-title">{mod.title}</span>
+                        {showPriorityChip && (
+                          <span className="rw-pur-chip" style={{ fontSize: 8, padding: '3px 8px' }}>PRIORITY FOCUS</span>
+                        )}
+                      </span>
+                      <span className="rw-pur-pick-sub">{mod.group.toUpperCase()} · 90&#8211;120 MIN · {formatINR(MODULE_BASE_PRICE)}</span>
                     </span>
                     <span className={`rw-pur-pick-check${sel ? ' is-on' : ''}`}>&#10003;</span>
                   </button>
@@ -391,7 +405,7 @@ export default function CoachingPurchase() {
               Choose how you want to grow.
             </div>
             <p style={{ ...note, marginTop: 14, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em', fontSize: 17, lineHeight: 1.6 }}>
-              Every module is one focused 90&#8211;120 minute coaching area. Build your selection, watch the price update live, and place your purchase request.
+              Every module is one focused 90&#8211;120 minute coaching area. Build your selection, watch the price update live, and pay securely to confirm.
             </p>
             {step !== 'status' && <Stepper current={step} />}
           </div>
@@ -425,7 +439,7 @@ export default function CoachingPurchase() {
                 <div className="rw-pur-toolbar" style={{ borderTop: '1px solid var(--line)', paddingTop: 22, marginTop: 30 }}>
                   <span className="rw-pur-reason">
                     {selected.length === 0
-                      ? 'Nothing selected yet — add one or more modules to continue.'
+                      ? 'Nothing selected yet. Add one or more modules to continue.'
                       : `${labelForCount(selected.length)} selected · ${formatINR(pricing.payableAmount)} payable${pricing.discountPercent ? ` · ${pricing.discountPercent}% off applied` : ''}`}
                   </span>
                   <div className="rw-pur-toolbar-actions">
@@ -446,7 +460,7 @@ export default function CoachingPurchase() {
 
             {step === 'details' && (
               <>
-                <CenteredHead eyebrow="YOUR DETAILS" title="Where should we keep your record?" intro="The purchase request is saved under these details. No payment is taken on this page." />
+                <CenteredHead eyebrow="YOUR DETAILS" title="Where should we keep your record?" intro="Payment confirmation and your receipt go to these details. Nothing is charged on this page." />
                 <div className="rw-pur-form-wrap" style={{ margin: '0 auto' }}>
                   <div className="rw-form-panel" style={{ marginTop: 34 }}>
                     <label className="rw-form-field-wrap">
@@ -492,7 +506,7 @@ export default function CoachingPurchase() {
 
             {step === 'review' && (
               <>
-                <CenteredHead eyebrow="REVIEW PURCHASE" title="Review Purchase" intro="Take a last look. Confirming records your purchase request — no payment is taken on this page." />
+                <CenteredHead eyebrow="REVIEW PURCHASE" title="Review Purchase" intro="Take a last look. Confirming opens secure payment via Razorpay. Nothing is charged until you complete it there." />
                 <div className="rw-pur-recap">
                   <div className="rw-pur-block">
                     <div className="rw-pur-block-title">YOUR SELECTION · {labelForCount(selected.length)}</div>
@@ -536,11 +550,11 @@ export default function CoachingPurchase() {
                 </div>
 
                 <div className="rw-pur-toolbar" style={{ borderTop: '1px solid var(--line)', paddingTop: 22, marginTop: 30 }}>
-                  <span className="rw-pur-reason">{submitting ? 'Recording your request…' : 'No payment is taken during this preview.'}</span>
+                  <span className="rw-pur-reason">{submitting ? 'Opening secure payment…' : 'Pay by card, UPI, netbanking or wallet. Handled by Razorpay, not stored on this site.'}</span>
                   <div className="rw-pur-toolbar-actions">
                     <button type="button" className="rw-form-back" disabled={submitting} onClick={() => goto('details')}>&#8592; DETAILS</button>
                     <button type="button" className="rw-cta rw-cta--live" style={ctaCopper} disabled={submitting} onClick={confirmPurchase}>
-                      {submitting ? 'RECORDING…' : 'CONFIRM PURCHASE REQUEST &#8594;'}
+                      {submitting ? 'OPENING PAYMENT…' : `PAY ${formatINR(pricing.payableAmount)} →`}
                     </button>
                   </div>
                 </div>
@@ -551,31 +565,32 @@ export default function CoachingPurchase() {
               <div className="rw-pur-status">
                 <div className="rw-pur-ring">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
-                    <path d="M4 12.5 9.5 18 20 6.5" />
+                    {status.status === 'completed'
+                      ? <path d="M4 12.5 9.5 18 20 6.5" />
+                      : <path d="M6 6 18 18M18 6 6 18" />}
                   </svg>
                 </div>
-                <div style={{ ...eyebrow, marginTop: 28 }}>PURCHASE REQUEST</div>
-                <h2 style={{ ...sectionHeading, marginTop: 10 }}>Purchase Request</h2>
+                <div style={{ ...eyebrow, marginTop: 28 }}>{status.status === 'completed' ? 'PAYMENT RECEIVED' : 'PAYMENT NOT COMPLETED'}</div>
+                <h2 style={{ ...sectionHeading, marginTop: 10 }}>{status.status === 'completed' ? 'You’re in.' : 'That payment did not go through.'}</h2>
                 <p style={{ ...note, marginTop: 16, marginLeft: 'auto', marginRight: 'auto', maxWidth: '34em', fontSize: 17, lineHeight: 1.6 }}>
-                  {status.status === 'error'
-                    ? "We couldn't record your request just now. No payment was taken — please try again, or contact us and we'll do it for you."
-                    : status.message}
+                  {status.status === 'completed'
+                    ? 'Payment received and your modules are confirmed. Our team will reach out to schedule your first session.'
+                    : (status.message || 'No charge was made. You can try again, or reach out and we will take the payment directly.')}
                 </p>
-                <div className="rw-pur-status-chip">
-                  <span>ORDER {status.orderId ?? '\u2014'}</span>
-                  <span>{labelForCount(selected.length)}</span>
-                  <span>{formatINR(pricing.payableAmount)} PAYABLE</span>
-                </div>
+                {status.status === 'completed' && (
+                  <div className="rw-pur-status-chip">
+                    <span>ORDER {status.orderId ?? '\u2014'}</span>
+                    <span>{labelForCount(selected.length)}</span>
+                    <span>{formatINR(pricing.payableAmount)} PAID</span>
+                  </div>
+                )}
                 <div style={{ marginTop: 34, display: 'flex', gap: 18, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
                   <CtaButton variant="outline" href="/assessment">VIEW ASSESSMENT</CtaButton>
                   <CtaButton variant="outline" href="/coaching/result">RETURN TO RESULTS</CtaButton>
-                  {status.status === 'error' && (
+                  {status.status !== 'completed' && (
                     <button type="button" className="rw-cta" style={ctaCopper} onClick={() => goto('review')}>TRY AGAIN &#8594;</button>
                   )}
                 </div>
-                <p style={{ ...note, marginTop: 26, fontSize: 13, color: 'var(--faded)' }}>
-                  Payment completion is being set up and will be enabled shortly. You will never be asked to pay until the secure checkout is live.
-                </p>
               </div>
             )}
           </div>

@@ -6,6 +6,7 @@ import ImageSlot from '../components/ImageSlot'
 import PageIntro from '../components/PageIntro'
 import Seo from '../components/Seo'
 import Reveal from '../components/Reveal'
+import PullQuote from '../components/PullQuote'
 import CtaButton from '../components/CtaButton'
 import ClosingCTA from '../components/ClosingCTA'
 import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
@@ -29,10 +30,10 @@ const TRUST = ['COMPLIMENTARY · NO OBLIGATION', 'SCORE REPORT INCLUDED', 'AI-PO
 
 /* The before-test page. Running the interview on KRISAH's platform — this page only tees off. */
 const STEPS = [
-  { n: '01', title: 'Start here', body: 'Hit Start Assessment. The interview opens on KRISAH’s platform in a new tab. Nothing to install, no forms to fill before you begin.' },
-  { n: '02', title: 'Interview with an AI', body: 'Twenty questions in about twenty-five minutes. Answer out loud, the way you would in the room. Delivery is part of what is being read.' },
-  { n: '03', title: 'Get your scored report', body: 'The interview closes with a report scored across all six dimensions. An Interview Readiness Score, and where the gaps are.' },
-  { n: '04', title: 'Return for your specialisations', body: 'Come back after the session. The sixteen areas we specialise in point you at what to work on next.' },
+  { n: '01', title: 'Start here', body: 'Hit Start Assessment. The interview opens on KRISAH’s platform in a new tab. Nothing to install, just create profile and begin.' },
+  { n: '02', title: 'Interview with an AI', body: 'Twenty questions in about twenty-five minutes. Answer out loud, the way you would in the room.' },
+  { n: '03', title: 'Get your scored report', body: 'The interview closes with a report scored across all six dimensions. An Interview Readiness Score, and detailed feedback.' },
+  { n: '04', title: 'Return for your specialisations', body: 'Come back here after the session. The sixteen areas we specialise in point you at what to work on next.' },
 ]
 
 /* The six dimensions the AI interviewer scores — the same set behind every role. */
@@ -56,10 +57,10 @@ const SAMPLE_BARS = [
 ]
 
 const FAQS = [
-  { q: 'Who is this for?', a: 'Anyone interviewing with Rajiv Williams, at any role and any level. It is a readiness read, not a pass/fail gate.' },
-  { q: 'How long does it take?', a: 'Twenty questions, about twenty-five minutes. Give yourself one uninterrupted sitting.' },
+  { q: 'Who is this for?', a: 'Anyone interviewing, at any role and any level. It is a readiness read, not a pass/fail gate.' },
+  { q: 'How long does it take?', a: 'Twenty questions. Give yourself one uninterrupted sitting.' },
   { q: 'Do I get a report?', a: 'Yes. After the session you receive a scored report across all six dimensions, complimentary and yours to keep. That is what makes the coaching follow-up specific instead of generic.' },
-  { q: 'Where does the interview run?', a: 'On KRISAH’s platform, in a new tab. Nothing is installed, and no score is shared anywhere on this site.' },
+  { q: 'Where does the interview run?', a: 'On KRISAH’s platform, in a new tab. Nothing is installed and yours to access.' },
 ]
 
 export default function Assessment() {
@@ -75,7 +76,7 @@ export default function Assessment() {
       <PageIntro
         eyebrow="RAJIV WILLIAMS AI ASSESSMENT · POWERED BY KRISAH"
         headline={HEADLINE}
-        lede="A 25-minute, 20-question AI interview before you meet us."
+        lede="AI-led assessment to understand your starting point before the programme begins"
         intro="Answer the way you would in a real room. You finish with a clearer read on yourself; we get to see how you think under pressure. Any role, any stage of your career."
         cta={<>
           <CtaButton ref={heroCtaRef} href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'hero' })}>
@@ -89,16 +90,20 @@ export default function Assessment() {
           <Reveal delay={120} style={{ marginTop: 48, borderTop: '1px solid var(--line)', paddingTop: 26 }}>
             <div style={{ display: 'flex', gap: 56, flexWrap: 'wrap' }}>
               <div>
-                <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>20</div>
+                <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>STRUCTURED</div>
+                <div style={{ ...statLabel, marginTop: 8 }}>ASSESSMENT</div>
+              </div>
+              <div>
+                <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>ONE</div>
+                <div style={{ ...statLabel, marginTop: 8 }}>SITTING</div>
+              </div>
+              <div>
+                <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>AI-LED</div>
+                <div style={{ ...statLabel, marginTop: 8 }}>INTERVIEW</div>
+              </div>
+              <div>
+                <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>PERSONALISED</div>
                 <div style={{ ...statLabel, marginTop: 8 }}>QUESTIONS</div>
-              </div>
-              <div>
-                <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>≈ 25 min</div>
-                <div style={{ ...statLabel, marginTop: 8 }}>ONE SITTING</div>
-              </div>
-              <div>
-                <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>AI</div>
-                <div style={{ ...statLabel, marginTop: 8 }}>INTERVIEWER</div>
               </div>
             </div>
             <div style={{ marginTop: 22, display: 'flex', gap: 28, flexWrap: 'wrap', fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--faded)' }}>
@@ -257,7 +262,7 @@ export default function Assessment() {
         <CenteredHead
           eyebrow="AFTER THE TEST"
           title={<><span style={{ color: 'var(--copper)' }}>Sixteen</span> areas of specialisation.</>}
-          intro="Finish your interview and your personal write-up waits, with the sixteen areas matched to the gaps your report turned up. Ninety to one hundred and twenty minutes each."
+          intro="Finish your interview and your personal write-up waits, with the sixteen areas matched to the gaps your report turned up. We work in sixteen areas of specialisation, ninety to one hundred and twenty minutes each, and we will point you at the ones your report turns up."
         />
         <Reveal delay={140} style={{ marginTop: 34, display: 'flex', gap: 22, justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
           <CtaButton variant="outline" href="/assessment/result">What happens after the interview →</CtaButton>
@@ -276,6 +281,20 @@ export default function Assessment() {
               <p style={{ ...note, marginTop: 8, lineHeight: 1.5 }}>{faq.a}</p>
             </Reveal>
           ))}
+        </div>
+      </section>
+
+      {/* A note from the team — reassurance, placed right before the ask so the last
+          thing a candidate reads before clicking through is a human voice, not FAQ copy.
+          Team voice, not Rajiv alone, matching how the rest of the site frames this. */}
+      <section style={sectionRule}>
+        <div className="rw-pad" style={{ maxWidth: 720, margin: '0 auto', padding: 'clamp(70px,9vw,100px) 40px', textAlign: 'center' }}>
+          <Reveal style={{ ...eyebrow, marginBottom: 24 }}>A NOTE FROM THE RW TEAM</Reveal>
+          <Reveal delay={100}>
+            <PullQuote size="clamp(21px,2.6vw,28px)" lineHeight={1.5}>
+              “Before we begin working together, we want to understand where you are today: what you already do well and where we can focus your development. This assessment gives us that starting point. Don't try to impress it. Just answer naturally.”
+            </PullQuote>
+          </Reveal>
         </div>
       </section>
 

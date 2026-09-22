@@ -112,7 +112,7 @@ export default function CoachingResult() {
           </Reveal>
           {isDefault && (
             <Reveal as="p" delay={220} style={{ ...note, marginTop: 10, marginLeft: 'auto', marginRight: 'auto', maxWidth: '32em', fontSize: 14, lineHeight: 1.6, color: 'var(--faded)' }}>
-              Your assessment is still being finalised — these starting points are ready while your detailed report comes through.
+              Your assessment is still being finalised. These starting points are ready while your detailed report comes through.
             </Reveal>
           )}
 
@@ -138,7 +138,7 @@ export default function CoachingResult() {
           <SectionHead
             eyebrow="SCORE AT A GLANCE" titleWidth="16em"
             title="What your score means."
-            aside={<SectionAside>The read on your result, and the plan that follows from it — in plain language.</SectionAside>}
+            aside={<SectionAside>The read on your result, and the plan that follows from it, in plain language.</SectionAside>}
           />
           <div style={{ marginTop: 44 }}>
             <ScoreResult scenario={scenario} scoreData={scoreData} delay={120} />
@@ -205,7 +205,7 @@ export default function CoachingResult() {
           <SectionHead
             eyebrow="BUY YOUR COACHING" titleWidth="15em"
             title={<>Turn your result into <span style={{ color: 'var(--copper)' }}>a plan.</span></>}
-            aside={<SectionAside>Every module is {formatINR(calculatePricing(1).payableAmount)}. Larger selections carry a built-in discount — the price updates live as you choose.</SectionAside>}
+            aside={<SectionAside>Every module is {formatINR(calculatePricing(1).payableAmount)}. Larger selections carry a built-in discount, and the price updates live as you choose.</SectionAside>}
           />
 
           <div style={{ marginTop: 44, border: '1px solid rgba(195,155,83,.28)', background: 'var(--card)', maxWidth: 680, position: 'relative' }}>
