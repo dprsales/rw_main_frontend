@@ -2,18 +2,17 @@ import teamSridevi from '../assets/site/Sridevi.png'
 import teamPriyanka from '../assets/site/panda.png'
 
 /** The /assessment page tees off to KRISAH's platform. Production join link — anyone who clicks is auto-added as a Rajiv Williams company participant on the KRISAH side. */
-export const KRISAH_ASSESSMENT_URL = 'https://app.krisah.com/in/join/org/rajiv-williams?utm_source=rajivwilliams.com&utm_medium=assessment&utm_campaign=ai_interview'
+export const KRISAH_ASSESSMENT_URL = 'https://app.krisah.com/in/join/org/rajiv-williams'
 
-/** The six areas KRISAH's AI interview scores. Same copy as the standalone assessment
- *  landing page — reused on /coaching so the "start assessment" ask is explained inline
- *  instead of being a bare button with no context. */
+/** The 5 most essential areas of KRISAH's AI interview, shown as a quick preview on
+ *  /coaching so the "start assessment" ask is explained inline instead of being a bare
+ *  button with no context. The full report still scores six areas (see Assessment.jsx). */
 export const ASSESSMENT_AREAS = [
-  { n: '1', title: 'What you know', desc: 'Your command of the market — pricing, regulations, project specifics, and what a serious buyer expects you to know before they trust you.' },
-  { n: '2', title: 'How you structure your answers', desc: 'Whether your responses are clear, complete, and easy to follow — or rambling, incomplete, and difficult to act on.' },
-  { n: '3', title: 'How you communicate', desc: 'Your tone, vocabulary, and professional presence. In luxury real estate, buyers decide whether to trust you before you finish your first sentence.' },
-  { n: '4', title: 'How you carry yourself', desc: 'The confidence and presence you project under pressure. Does your delivery match the price point of what you are selling?' },
-  { n: '5', title: 'How relevant you stay', desc: 'Whether you address what is actually being asked — or drift. A buyer who has to repeat themselves has already begun to disengage.' },
-  { n: '6', title: 'How you handle objections', desc: 'Your response when a buyer pushes back, challenges your position, or redirects the conversation. This is the moment that separates closers from order-takers.' },
+  { n: '1', title: 'What you know', desc: 'Pricing, regulations, project details. What a buyer expects you to know before they trust you.' },
+  { n: '2', title: 'How you structure your answers', desc: 'Clear and easy to follow, or rambling and hard to act on.' },
+  { n: '3', title: 'How you communicate', desc: 'Tone, vocabulary, and presence. Buyers form trust early in the conversation.' },
+  { n: '4', title: 'How you carry yourself', desc: 'Confidence under pressure. Whether your delivery matches the price point you sell.' },
+  { n: '5', title: 'How you handle objections', desc: 'How you respond when a buyer pushes back. This separates closers from order-takers.' },
 ]
 
 /**
@@ -235,7 +234,7 @@ export const PORTFOLIO_TESTIMONIALS = [
  * absent (empty title slots read as unfinished); add a `role` string and the card picks it up automatically.
  */
 export const TEAM = [
-  { name: 'Sridevi Vinjimur', photo: teamSridevi, linkedin: 'https://www.linkedin.com/in/sridevi-vinjimur-147125270/', title: 'Director of Operations', for: ['Coaching', 'Consulting', 'Realty'] },
+  { name: 'Sridevi Vinjimur', photo: teamSridevi, linkedin: 'https://www.linkedin.com/in/sridevi-vinjimur-147125270/', title: 'Director of Operations', for: ['Coaching', 'Consulting', 'Realty'], bio:'With over 10 years of experience in a diverse range of industries, and maximum out of it being in real estate, Ms. Sridevi specializes in the back-end operations of hiring, finance, administration, client management. A key member of Rajiv Williams team, she is one of the most important members in the organization and has immense knowledge about branding, marketing, sales, technology, AI, and digital platforms. She continues to lead the team in times of challenges and is highly valued and regarded.'},
   { name: 'Priyanka Panda', photo: teamPriyanka, linkedin: 'https://www.linkedin.com/in/priyanka-panda-238451259/', title: 'Director of Sales', for: ['Realty'], bio: '8+ years in luxury real estate sales & marketing sells by positioning, excels at high-value closures. Under her leadership, Team RW runs high-value sales mandates end to end, from go-to-market strategy to a client experience that keeps your cash flows smooth.' },
 ]
 

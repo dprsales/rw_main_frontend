@@ -652,8 +652,8 @@ function ProjectBody({ data, name }) {
         )}
         <div className="rw-pad" style={{ position: 'relative', zIndex: 1, maxWidth: 900, margin: '0 auto', padding: 'clamp(100px,14vw,180px) 40px', textAlign: 'center' }}>
           <Reveal as="h2" style={{ fontFamily: serif, fontWeight: 400, fontSize: 'clamp(34px,5vw,68px)', lineHeight: 1.04, letterSpacing: '-.02em', color: '#F2EFE9', maxWidth: '15em', margin: '0 auto' }}>
-            Interested in {name}?<br />Let’s find out how it fits your family.
-          </Reveal>
+Let’s connect and discover if {name} feels like home.
+</Reveal>
           <Reveal delay={140} style={{ marginTop: 44 }}>
             <BookButton
               interest="RW Realty mandate"

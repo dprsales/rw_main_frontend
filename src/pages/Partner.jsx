@@ -38,41 +38,150 @@ const VALUE = [
   {
     n: '03',
     tag: 'GROWTH',
-    title: 'Training, warm leads and volume.',
+    title: 'Training, warm leads and Volume.',
     body: 'In-house sales training before the first site visit, leads kept warm by our funnel, and more inventory offered as your numbers come in.',
   },
 ]
 
 const STEPS = [
-  { n: '1', title: 'Apply', body: 'The form below takes about ten minutes. References matter more than a big deck.' },
+  { n: '1', title: 'Apply', body: 'The form below takes about two minutes. References matter more than a big deck.' },
   { n: '2', title: 'Qualify', body: 'A call with the team and a short reference check, usually within the week.' },
   { n: '3', title: 'Mandate in', body: 'Access to live inventory, sales training, and the deal room.' },
 ]
 
+// Trimmed to what's needed to identify and route an applicant before the Step 2 call —
+// designation, operating cities, expected business, preferred inventory, social links,
+// team size and buyer segments all move to that live conversation instead, where they
+// get a real answer rather than a guessed one. "How did you hear about us" is cut
+// outright: queryAttribution() below already captures UTM source/medium from the URL,
+// so asking the applicant to retype it was pure duplication. RERA is asked here (not
+// deferred) because it gates eligibility under Telangana law.
 const PILL_FIELDS = [
   { title: 'Years in real estate', id: 'yearsExperience', required: true, options: ['0-2', '2-5', '5-10', '10+'] },
-  { title: 'Team size', id: 'teamSize', options: ['Just me', '2-5', '6-15', '15+'] },
-  { title: 'Current developer ties', id: 'currentDeveloperPartnerships', options: ['None', 'One developer', 'Two or three', 'More than three'], help: 'So we can flag conflicts before money gets messy.' },
 ]
 
 const CHECK_GROUPS = [
-  { title: 'Which categories do you sell?', id: 'projectCategories', options: ['Luxury apartments', 'Villas', 'Commercial', 'Plots and land', 'Township', 'Mixed use'] },
-  { title: 'Who do you sell to?', id: 'buyerSegments', options: ['HNI / UHNI buyers', 'NRIs', 'Investors', 'End users'] },
+  { title: 'Which categories do you sell?', id: 'projectCategories', required: true, options: ['Luxury apartments', 'Villas', 'Plots and lands', 'Mixed use'] },
 ]
+
+const FILE_MAX_BYTES = 5 * 1024 * 1024
+const FILE_TYPES = '.pdf,.jpg,.jpeg,.png'
+
+// Compliance documents required for RERA/payout verification — the same reason
+// RERA registration itself is asked upfront rather than deferred to the call.
+const FILE_FIELDS = [
+  { title: 'Upload your PAN card', id: 'panCard', required: true, hint: 'Drag and drop your PAN card here' },
+  { title: 'Upload cancelled cheque', id: 'cancelledCheque', required: true, hint: 'Drag and drop your cancelled cheque here' },
+]
+
+/* Resume-style dropzone: a real drop target (not a single-line file input) with a
+   drag/drop state, an image/document preview after selection, a remove button, and
+   the accepted formats spelled out so applicants aren't guessing about file types. */
+function FileDropzone({ title, hint, required, accept, maxBytes, file, onSelect }) {
+  const [dragOver, setDragOver] = useState(false)
+  const [previewUrl, setPreviewUrl] = useState('')
+  const [localError, setLocalError] = useState('')
+
+  // Image types get a live thumbnail; PDFs fall back to the document icon. The object
+  // URL is revoked on replace/unmount so memory doesn't leak while re-selecting files.
+  useEffect(() => {
+    if (!file || !file.type.startsWith('image/')) { setPreviewUrl(''); return }
+    const url = URL.createObjectURL(file)
+    setPreviewUrl(url)
+    return () => URL.revokeObjectURL(url)
+  }, [file])
+
+  const acceptFile = (candidate) => {
+    if (!candidate) return
+    if (candidate.size > maxBytes) {
+      setLocalError('That file is over 5MB. Please attach a smaller one.')
+      return
+    }
+    setLocalError('')
+    onSelect(candidate)
+  }
+
+  const handleChange = (e) => {
+    acceptFile(e.target.files?.[0])
+    e.target.value = ''
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    setDragOver(false)
+    acceptFile(e.dataTransfer.files?.[0])
+  }
+
+  const clear = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    onSelect(null)
+  }
+
+  return (
+    // --wide: full-width row, so PAN card and cancelled cheque stack one above the
+    // other rather than sharing the panel's two-column grid side by side.
+    <div className="rw-form-field-wrap rw-form-field-wrap--wide">
+      <span className="rw-form-q-title">
+        {title}
+        {required
+          ? <span className="rw-form-req"> *</span>
+          : <span className="rw-form-optional"> (optional)</span>}
+      </span>
+
+      {file ? (
+        <div className="rw-file-preview" style={{ marginTop: 10 }}>
+          {previewUrl
+            ? <img className="rw-file-preview-image" src={previewUrl} alt={file.name} />
+            : (
+              <span className="rw-file-preview-icon" aria-hidden>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z" />
+                  <path d="M14 2v6h6" />
+                </svg>
+              </span>
+            )}
+          <span className="rw-file-preview-meta">
+            <strong>{file.name}</strong>
+            <small>{file.type || 'Document'} · {(file.size / 1024).toFixed(1)} KB</small>
+          </span>
+          <button type="button" className="rw-file-remove" onClick={clear} aria-label={`Remove ${file.name}`}>×</button>
+        </div>
+      ) : (
+        <label
+          className={`rw-resume-dropzone${dragOver ? ' rw-resume-dropzone--over' : ''}`}
+          style={{ marginTop: 10 }}
+          onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={handleDrop}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+            <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" />
+            <path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" />
+          </svg>
+          <span>{hint}</span>
+          <small>or click to browse · {accept === '.pdf,.jpg,.jpeg,.png' ? 'PDF, JPG or PNG' : accept.split(',').join(', ').replace(/\./g, '').toUpperCase()} (Max {Math.round(maxBytes / 1024 / 1024)}MB)</small>
+          {/* No `required` here: this input is CSS-hidden (.rw-resume-dropzone input
+              { display:none }), and a hidden control failing native constraint
+              validation blocks submission with no visible browser tooltip to explain
+              why. handleSubmit already checks both files are present before sending. */}
+          <input type="file" accept={accept} onChange={handleChange} />
+        </label>
+      )}
+
+      {localError && (
+        <span className="rw-form-help" style={{ marginTop: 8, color: 'var(--copper)' }}>{localError}</span>
+      )}
+    </div>
+  )
+}
 
 const INPUT_FIELDS = [
   { title: 'Full name', id: 'name', required: true, placeholder: 'Your name' },
   { title: 'Phone', id: 'phone', required: true, type: 'tel', placeholder: '+91 ·····' },
   { title: 'Email', id: 'email', required: true, type: 'email', placeholder: 'you@agency.com' },
-  { title: 'Agency / company', id: 'agencyName', required: true, placeholder: 'The firm you work under' },
-  { title: 'Designation', id: 'designation', placeholder: 'Partner, director, BD head' },
+  { title: 'Agency / Company Name', id: 'agencyName', required: true, placeholder: 'The firm you work under' },
   { title: 'Base city', id: 'city', required: true, placeholder: 'Hyderabad' },
-  { title: 'Operating cities', id: 'operatingCities', placeholder: 'Where you actually sell' },
-  { title: 'RERA / licence no', id: 'reraNo', optional: true, placeholder: 'Not required to apply' },
-  { title: 'Expected monthly business', id: 'expectedMonthlyBusiness', placeholder: 'e.g. ₹5 Cr' },
-  { title: 'Preferred inventory', id: 'preferredInventory', placeholder: 'What you want to carry next' },
-  { title: 'Website or social links', id: 'socialLinks', optional: true, placeholder: 'Separate with commas' },
-  { title: 'How did you hear about us?', id: 'referralSource', optional: true, placeholder: 'Referral, LinkedIn, an ad' },
 ]
 
 function queryAttribution(search) {
@@ -94,14 +203,17 @@ export default function Partner() {
 
   const [attribution] = useState(() => queryAttribution(search))
   const [values, setValues] = useState({})
-  const [checks, setChecks] = useState({ projectCategories: [], buyerSegments: [] })
+  const [checks, setChecks] = useState({ projectCategories: [] })
   const [pills, setPills] = useState({})
+  const [files, setFiles] = useState({})
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
   const [referenceNo, setReferenceNo] = useState('')
   const honeypot = useRef('')
 
   const set = (id) => (e) => setValues((prev) => ({ ...prev, [id]: e.target.value }))
+
+  const setFile = (id, file) => setFiles((prev) => ({ ...prev, [id]: file || undefined }))
 
   const toggleCheck = (id, option) => setChecks((prev) => ({
     ...prev,
@@ -120,24 +232,49 @@ export default function Partner() {
       setError('Please choose your years of experience.')
       return
     }
+    if (!pills.hasRera) {
+      setError('Please tell us whether you are RERA registered.')
+      return
+    }
+    if (pills.hasRera === 'Yes' && !values.reraNo?.trim()) {
+      setError('Please enter your RERA registration number.')
+      return
+    }
+    if (!files.panCard) {
+      setError('Please upload your PAN card.')
+      return
+    }
+    if (!files.cancelledCheque) {
+      setError('Please upload a cancelled cheque.')
+      return
+    }
     setError('')
     setStatus('sending')
 
     const payload = {
       ...values,
       ...pills,
-      currentDeveloperPartnerships: pills.currentDeveloperPartnerships
-        ? [pills.currentDeveloperPartnerships]
-        : undefined,
+      // A "No" answer means there is no number to store; never carry a stale one.
+      reraNo: pills.hasRera === 'Yes' ? values.reraNo?.trim() : '',
       projectCategories: checks.projectCategories,
-      buyerSegments: checks.buyerSegments,
       ...attribution,
       referrer: document.referrer || '',
       submittedAt: new Date().toISOString(),
     }
 
+    // Multipart from here down — the two documents ride alongside the same fields
+    // that used to go as plain JSON. Arrays have no native multipart representation,
+    // so projectCategories goes as a JSON string; the backend parses it back out.
+    const fd = new FormData()
+    Object.entries(payload).forEach(([key, val]) => {
+      if (val === undefined || val === null) return
+      fd.append(key, Array.isArray(val) ? JSON.stringify(val) : val)
+    })
+    fd.append('panCard', files.panCard)
+    fd.append('cancelledCheque', files.cancelledCheque)
+
     try {
-      const res = await submitChannelPartner(payload)
+      const res = await submitChannelPartner(fd)
       setReferenceNo(res?.referenceNo || res?.reference || '')
       setStatus('done')
       track('partner_application_submitted', payload)
@@ -277,8 +414,10 @@ export default function Partner() {
                   style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px' }}
                 />
 
-                {/* One connected panel: fields are separated by hairlines, not boxes. */}
-                <div className="rw-form-panel">
+                {/* One connected panel: fields are separated by hairlines, not boxes.
+                    --compact: tighter padding, since 8 fields left generous room to breathe
+                    as visibly empty space rather than intentional layout. */}
+                <div className="rw-form-panel rw-form-panel--compact">
                   {INPUT_FIELDS.map((field) => (
                     <label key={field.id} className="rw-form-field-wrap" style={{ display: 'block' }}>
                       <span className="rw-form-q-title">
@@ -300,7 +439,7 @@ export default function Partner() {
                   ))}
 
                   {PILL_FIELDS.map((field) => (
-                    <div key={field.id} className={`rw-form-field-wrap${field.id === 'currentDeveloperPartnerships' ? ' rw-form-field-wrap--wide' : ''}`}>
+                    <div key={field.id} className="rw-form-field-wrap">
                       <span className="rw-form-q-title">
                         {field.title}
                         {field.required
@@ -327,6 +466,47 @@ export default function Partner() {
                     </div>
                   ))}
 
+                  {/* RERA registration — a No does not block the application, but the
+                      applicant is told upfront that Telangana law requires registration
+                      before they can operate. A Yes reveals the number field. */}
+                  <div className="rw-form-field-wrap rw-form-field-wrap--wide">
+                    <span className="rw-form-q-title">
+                      Are you RERA registered?
+                      <span className="rw-form-req"> *</span>
+                    </span>
+                    <div className="rw-form-controls rw-form-pills">
+                      {['Yes', 'No'].map((option) => {
+                        const on = pills.hasRera === option
+                        return (
+                          <button
+                            key={option}
+                            type="button"
+                            aria-pressed={on}
+                            className={`rw-form-pill${on ? ' is-on' : ''}`}
+                            onClick={() => setPill('hasRera', option)}
+                          >
+                            {option}
+                          </button>
+                        )
+                      })}
+                    </div>
+                    {pills.hasRera === 'Yes' && (
+                      <input
+                        className="rw-form-field"
+                        type="text"
+                        style={{ marginTop: 12 }}
+                        placeholder="Your RERA registration number"
+                        value={values.reraNo || ''}
+                        onChange={set('reraNo')}
+                      />
+                    )}
+                    {pills.hasRera === 'No' && (
+                      <span className="rw-form-help" style={{ marginTop: 12, color: 'var(--ink)', fontSize: 13, lineHeight: 1.55, letterSpacing: '.02em' }}>
+                        As per TG RERA, it is mandatory for every agent, channel partner, broker to have a RERA number, we recommend you encourage you to file for a RERA number ASAP to avoid future inconvenience.
+                      </span>
+                    )}
+                  </div>
+
                   {CHECK_GROUPS.map((group) => (
                     <div key={group.id} className="rw-form-field-wrap rw-form-field-wrap--wide">
                       <span className="rw-form-q-title">{group.title} <span className="rw-form-optional"> (optional)</span></span>
@@ -344,17 +524,18 @@ export default function Partner() {
                     </div>
                   ))}
 
-                  <label className="rw-form-field-wrap rw-form-field-wrap--wide" style={{ display: 'block' }}>
-                    <span className="rw-form-q-title">Anything else we should know? <span className="rw-form-optional"> (optional)</span></span>
-                    <textarea
-                      className="rw-form-field"
-                      rows={4}
-                      style={{ marginTop: 10 }}
-                      placeholder="A line about the network you bring"
-                      value={values.notes || ''}
-                      onChange={set('notes')}
+                  {FILE_FIELDS.map((field) => (
+                    <FileDropzone
+                      key={field.id}
+                      title={field.title}
+                      hint={field.hint}
+                      required={field.required}
+                      accept={FILE_TYPES}
+                      maxBytes={FILE_MAX_BYTES}
+                      file={files[field.id]}
+                      onSelect={(file) => setFile(field.id, file)}
                     />
-                  </label>
+                  ))}
                 </div>
 
                 {error && (

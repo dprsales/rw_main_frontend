@@ -9,6 +9,15 @@
  * palette. Colours are the black-and-gold set from theme.js — #C39B53 is the
  * sole accent, as it is everywhere else on the site.
  * ========================================================================== */
+/* Font tokens live at :root, not on .rw-form — the channel-partner and
+   coaching-purchase forms use the .rw-form-* classes without that wrapper, and
+   a var() that resolves nowhere silently falls back to the inherited serif. */
+:root {
+  --rw-serif: 'Cormorant Garamond', 'Times New Roman', serif;
+  --rw-sans: 'Jost', system-ui, -apple-system, sans-serif;
+  --rw-ease: cubic-bezier(.2, .75, .25, 1);
+}
+
 .rw-form {
   --bg: #0B0A09;
   --ink: #F2EFE9;
@@ -18,10 +27,6 @@
   --gold-gradient: linear-gradient(100deg, #A67C3D 0%, #E8C97A 48%, #C39B53 100%);
   --chip: #1A1714;
   --card: #141210;
-
-  --rw-serif: 'Cormorant Garamond', 'Times New Roman', serif;
-  --rw-sans: 'Jost', system-ui, -apple-system, sans-serif;
-  --rw-ease: cubic-bezier(.2, .75, .25, 1);
 
   background: var(--bg);
   color: var(--ink);
@@ -365,6 +370,22 @@
 }
 .rw-form-field::placeholder { color: var(--faded); opacity: .6; }
 .rw-form-field:focus { outline: none; border-color: var(--copper); }
+
+/* Compact variant — same panel, tighter padding, for a form short enough that the
+   default spacing reads as empty gaps (channel partner, 8 fields). Opt-in via an
+   extra class so the assessment form and purchase-details step, which use the same
+   .rw-form-* classes, are untouched. Input font-size stays 16px on purpose — iOS
+   Safari zooms in on focus for anything smaller. */
+.rw-form-panel--compact .rw-form-field-wrap { padding: clamp(14px, 1.8vw, 18px); }
+.rw-form-panel--compact .rw-form-controls { margin-top: 10px; }
+/* Matches the careers application form's inputs (BookingModal's inputStyle):
+   same padding and the darker --bg fill, so the two forms read as one system. */
+.rw-form-panel--compact .rw-form-field { padding: 12px 14px; background: var(--bg); }
+.rw-form-panel--compact .rw-form-pill { padding: 8px 16px; }
+.rw-form-panel--compact .rw-form-check { padding: 9px 14px; }
+/* Two columns for "Which categories do you sell?" — 4 short options read as a
+   single tall list otherwise, on a field-wrap already given the --wide span. */
+.rw-form-panel--compact .rw-form-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
 /* --- Submit ---------------------------------------------------------------- */
 .rw-form-submit-bar {

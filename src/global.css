@@ -33,6 +33,106 @@ a:hover { color: var(--ink, #12100D); }
 /* Hover states that inline styles can't express. */
 .rw-nav-link:hover { color: var(--ink); }
 
+/* Realty hero: editorial copy beside a full-height portrait. */
+.rw-realty-hero {
+  max-width: 1520px; margin: 0 auto;
+  padding: clamp(40px, 4.5vw, 68px) 40px clamp(48px, 5vw, 76px);
+  overflow: hidden;
+  overflow: clip;
+}
+.rw-realty-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, .58fr) minmax(0, .42fr);
+  gap: clamp(28px, 3.4vw, 52px);
+  align-items: center;
+}
+.rw-realty-hero-copy { min-width: 0; }
+.rw-realty-hero-title { font-size: clamp(46px, 5.6vw, 86px); }
+.rw-realty-hero-description { font-size: clamp(17px, 1.45vw, 21px); }
+.rw-realty-hero-actions {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 18px 24px; margin-top: 34px;
+}
+.rw-realty-portrait {
+  position: relative; min-width: 0;
+  width: min(100%, 510px); justify-self: end;
+}
+.rw-realty-portrait-frame {
+  /* A static, opaque border keeps all four edges consistent after load and hover. */
+  position: relative; isolation: isolate; overflow: hidden; aspect-ratio: 4 / 5;
+  border: 1px solid color-mix(in srgb, var(--copper) 48%, var(--bg));
+  background: var(--bg);
+  box-shadow: 0 28px 70px rgba(0,0,0,.4);
+}
+.rw-realty-portrait-media {
+  position: absolute; inset: 0; isolation: isolate; overflow: hidden;
+  background: var(--chip);
+}
+.rw-realty-portrait-image {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 24%;
+}
+.rw-realty-portrait-media::after {
+  content: ''; position: absolute; z-index: 1; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(11,10,9,.22), transparent 17%, transparent 86%, rgba(11,10,9,.16)),
+    linear-gradient(180deg, rgba(11,10,9,.08), transparent 32%, rgba(11,10,9,.14) 62%, rgba(11,10,9,.92) 100%);
+}
+.rw-realty-portrait-caption {
+  position: absolute; z-index: 2; left: 0; right: 0; bottom: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 34px 24px 24px;
+  background: linear-gradient(180deg, transparent, rgba(11,10,9,.74) 26%, rgba(11,10,9,.94));
+}
+.rw-realty-signature-reveal {
+  position: relative; display: block; width: min(72%, 250px); overflow: hidden;
+  clip-path: inset(0 100% 0 0); opacity: .3;
+  transition: clip-path 1.9s cubic-bezier(.22,.7,.18,1) .2s, opacity .3s ease .2s;
+}
+.rw-realty-signature-reveal::after {
+  content: ''; position: absolute; top: 8%; bottom: 8%; left: -18px; width: 34px;
+  background: linear-gradient(90deg, transparent, rgba(232,201,122,.28), transparent);
+  opacity: 0; pointer-events: none;
+}
+.rw-realty-signature-reveal.is-drawn { clip-path: inset(0); opacity: 1; }
+.rw-realty-signature-reveal.is-drawn::after { animation: rw-signature-sweep 1.9s cubic-bezier(.22,.7,.18,1) .2s both; }
+.rw-realty-signature {
+  display: block; width: 100%; height: auto;
+  transition: filter .35s ease;
+}
+@keyframes rw-signature-sweep {
+  0% { opacity: 0; transform: translateX(0); }
+  8% { opacity: 1; }
+  88% { opacity: .8; }
+  100% { opacity: 0; transform: translateX(268px); }
+}
+.rw-realty-portrait-role {
+  font-size: 11px; line-height: 1.5; letter-spacing: .24em;
+  color: var(--copper); text-align: center;
+}
+@media (hover: hover) and (pointer: fine) {
+  .rw-realty-portrait:hover .rw-realty-signature { filter: brightness(1.1); }
+}
+@media (min-width: 701px) and (max-width: 1100px) {
+  .rw-realty-hero-grid { grid-template-columns: minmax(0, .6fr) minmax(0, .4fr); gap: 26px; }
+  .rw-realty-hero-title { font-size: clamp(38px, 5.1vw, 56px); }
+  .rw-realty-hero-description { font-size: 17px; }
+  .rw-realty-portrait-caption { padding: 28px 12px 18px; }
+  .rw-realty-signature-reveal { width: min(70%, 210px); }
+  .rw-realty-portrait-role { font-size: 10px; letter-spacing: .18em; }
+}
+@media (max-width: 700px) {
+  .rw-realty-hero-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .rw-realty-hero-title { font-size: clamp(36px, 8.6vw, 58px); }
+  .rw-realty-portrait { width: min(100%, 430px); justify-self: center; }
+  .rw-realty-portrait-caption { padding: 30px 18px 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rw-realty-signature { transition: none; }
+  .rw-realty-signature-reveal { clip-path: inset(0); opacity: 1; transition: none; }
+  .rw-realty-signature-reveal::after { display: none; }
+}
+
 /* Realty's "Why it works" - a barely-there gold-on-dark skyline watermark, rather than a photo competing with the copy. */
 .rw-why-watermark {
   position: absolute; left: 0; right: 0; bottom: 0;
@@ -469,6 +569,142 @@ a:hover { color: var(--ink, #12100D); }
   white-space: nowrap; color: var(--copper);
 }
 
+/* Type-ahead by name — the fast path for a visitor who already knows what they're
+   looking for and shouldn't have to find the right locality dot on the map first. */
+.rw-project-search {
+  position: relative;
+  margin-top: 34px;
+}
+.rw-project-search-icon {
+  position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  width: 15px; height: 15px; color: var(--faded); pointer-events: none;
+}
+.rw-project-search-input {
+  width: 100%; box-sizing: border-box;
+  background: var(--chip); border: 1px solid var(--line); border-radius: 2px;
+  padding: 14px 44px;
+  /* 16px is a floor, not a preference: iOS Safari zooms in on focus below it and
+     never zooms back out (same rule form.css's inputs follow). */
+  font-size: 16px; font-weight: 300; color: var(--ink);
+  transition: border-color .25s ease;
+}
+.rw-project-search-input::placeholder { color: var(--faded); }
+.rw-project-search-input:focus { outline: none; border-color: var(--copper); }
+
+.rw-project-search-clear {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; border: none; border-radius: 50%;
+  font-size: 18px; line-height: 1; color: var(--faded); cursor: pointer;
+  transition: color .2s ease;
+}
+.rw-project-search-clear:hover { color: var(--copper); }
+
+.rw-project-search-results {
+  position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 8px);
+  list-style: none; margin: 0; padding: 6px;
+  background: var(--card); border: 1px solid var(--line);
+  max-height: 340px; overflow-y: auto;
+  box-shadow: 0 18px 44px rgba(0,0,0,.4);
+}
+.rw-project-search-item {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+  padding: 11px 12px; border-radius: 2px; cursor: pointer;
+  font-size: 16px; color: var(--ink);
+  transition: background .15s ease;
+}
+.rw-project-search-item.is-active,
+.rw-project-search-item:hover { background: var(--chip); }
+.rw-project-search-item.is-disabled { cursor: default; opacity: .55; }
+.rw-project-search-item.is-disabled.is-active,
+.rw-project-search-item.is-disabled:hover { background: transparent; }
+
+.rw-project-search-name mark { background: none; color: var(--copper); font-weight: 600; }
+.rw-project-search-meta {
+  flex-shrink: 0; font-size: 10px; letter-spacing: .1em; color: var(--faded); text-transform: uppercase;
+}
+.rw-project-search-meta em { font-style: normal; opacity: .75; }
+
+.rw-project-search-empty { padding: 16px 12px; font-size: 13px; color: var(--faded); }
+
+/* Section header: standing copy left, live controls right. Stacked full-width the
+   search field stretches past 1200px on a desktop and reads thin, not premium.
+   NB: prefix is `rw-influence-`, not `rw-projx-` — that family is already taken by
+   the project detail hero (see .rw-projx-stats further down) and collides. */
+.rw-influence-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr);
+  grid-template-areas: "heading label" "summary controls";
+  /* Gap and padding match so the hairline sits centred in the channel. */
+  column-gap: clamp(18px, 2.4vw, 38px);
+  row-gap: 18px;
+  align-items: start;
+}
+.rw-influence-heading { grid-area: heading; }
+.rw-influence-summary { grid-area: summary; }
+.rw-influence-explore-label {
+  grid-area: label; justify-self: end;
+  min-width: 144px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  font-size: 11px; line-height: 1.6; letter-spacing: .16em; color: var(--copper);
+}
+/* Hairline between copy and controls, as the reference has. */
+.rw-influence-controls {
+  grid-area: controls;
+  display: flex; flex-direction: column;
+  border-left: 1px solid var(--line);
+  padding-left: clamp(18px, 2.4vw, 38px);
+}
+/* The shared second row aligns the search with the description below the title. */
+.rw-influence-controls .rw-project-search { margin-top: 0; }
+
+.rw-influence-stats {
+  display: flex; align-items: baseline; flex-wrap: wrap;
+  gap: clamp(18px, 2.6vw, 38px);
+  margin-top: clamp(24px, 3vw, 38px);
+}
+.rw-influence-stat { display: flex; align-items: baseline; gap: 10px; }
+.rw-influence-stat + .rw-influence-stat {
+  border-left: 1px solid var(--line);
+  padding-left: clamp(18px, 2.6vw, 38px);
+}
+.rw-influence-stat-num {
+  font-size: clamp(28px, 2.8vw, 40px); line-height: 1;
+  color: var(--copper); letter-spacing: -.02em;
+}
+.rw-influence-stat-label { font-size: 10px; letter-spacing: .18em; color: var(--faded); }
+
+.rw-influence-caption {
+  margin-top: auto; padding-top: 22px; text-align: right;
+  font-size: 10px; letter-spacing: .16em; color: var(--copper); opacity: .75;
+}
+
+@media (max-width: 900px) {
+  .rw-influence-head {
+    grid-template-columns: 1fr;
+    grid-template-areas: "heading" "summary" "label" "controls";
+    gap: 26px;
+  }
+  .rw-influence-explore-label { justify-self: start; }
+  .rw-influence-controls { border-left: none; padding-left: 0; }
+  .rw-influence-caption { margin-top: 18px; padding-top: 0; text-align: left; }
+}
+
+/* Quadrant filter — describes position on this schematic diagram, not true compass
+   geography (see the comment above LOCALITY_QUADRANT in ProjectsSection.jsx). */
+.rw-quadrant-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.rw-quadrant-pill {
+  padding: 9px 18px; border-radius: 999px;
+  background: transparent; border: 1px solid var(--line);
+  font-size: 13px; color: var(--faded); cursor: pointer;
+  transition: border-color .2s ease, color .2s ease, background .2s ease;
+}
+.rw-quadrant-pill:hover { border-color: var(--copper); color: var(--ink); }
+.rw-quadrant-pill.is-on {
+  background: var(--gold-gradient); border-color: transparent;
+  color: #16110a; font-weight: 500;
+}
+
 /* The project wall - grouped by locality to show where the work is concentrated, names set as type rather than table cells. */
 .rw-index-head {
   display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap;
@@ -481,15 +717,36 @@ a:hover { color: var(--ink, #12100D); }
    across Hyderabad, it's massed in a handful of west-corridor micro-markets. */
 .rw-territory {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+  /* Panel widened from 300px: the height-capped map only renders ~610px of content,
+     so the slack is better spent on the project cards than on empty map gutter. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
   gap: clamp(28px, 4vw, 64px);
   align-items: center;
   border-top: 1px solid var(--line);
-  padding-top: clamp(24px, 3vw, 40px);
+  padding-top: clamp(16px, 1.8vw, 24px);
+  margin-top: clamp(20px, 2.2vw, 30px);
 }
 
-.rw-map { min-width: 0; }
-.rw-map svg { width: 100%; height: auto; display: block; overflow: visible; }
+.rw-map { position: relative; isolation: isolate; min-width: 0; }
+/* Decorative map texture sits behind the interactive locality schematic. */
+.rw-map::before {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  background:
+    linear-gradient(rgba(11,10,9,.68), rgba(11,10,9,.68)),
+    url('./assets/site/project-location-bg.png') center / cover no-repeat;
+  opacity: .58; pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 40%, transparent 76%);
+  mask-image: radial-gradient(ellipse at center, #000 40%, transparent 76%);
+}
+/* The locality coordinates span a near-square range, so at full column width the SVG
+   renders ~880x810 and the dots scatter across a lot of empty black. Capping the
+   height keeps the schematic compact; `meet` scales it down uniformly rather than
+   stretching, which would turn the dots into ellipses. */
+.rw-map svg {
+  position: relative; z-index: 1;
+  width: 100%; height: auto; display: block; overflow: visible;
+  max-height: clamp(380px, 42vw, 560px);
+}
 
 .rw-node { cursor: pointer; outline: none; }
 .rw-node-hit { fill: transparent; }
@@ -545,26 +802,54 @@ a:hover { color: var(--ink, #12100D); }
   font-size: clamp(26px, 2.6vw, 36px); line-height: 1.05;
   letter-spacing: -.01em; font-weight: 500; color: var(--ink);
 }
-.rw-panel-list { list-style: none; margin-top: 22px; }
-.rw-panel-item {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
-  padding: 9px 0;
-  border-top: 1px solid var(--line);
-  font-size: 17px; color: var(--ink);
+.rw-panel-list { list-style: none; margin-top: 18px; }
+.rw-panel-item { border-top: 1px solid var(--line); }
+
+/* Each row is a small card: thumbnail, name + locality/status, chevron. The whole
+   row is the tap target, not just the name — a thumbnail with no link underneath
+   would otherwise be dead space. */
+.rw-panel-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 4px;
+  border-radius: 3px;
+  transition: background .2s ease;
 }
-.rw-panel-status { font-size: 9px; letter-spacing: .1em; color: var(--copper); }
-.rw-panel-hint {
-  margin-top: 22px;
-  font-size: 9px; letter-spacing: .16em; color: var(--faded); opacity: .7;
+a.rw-panel-link { cursor: pointer; }
+a.rw-panel-link:hover { background: var(--chip); }
+.rw-panel-link.is-disabled { cursor: default; opacity: .55; }
+
+.rw-panel-thumb {
+  flex-shrink: 0; width: 46px; height: 46px;
+  border-radius: 3px; overflow: hidden;
+  background: var(--chip); border: 1px solid var(--line);
+}
+.rw-panel-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rw-panel-thumb-fallback {
+  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+  font-size: 17px; color: var(--copper); opacity: .6;
 }
 
-/* A project name linking to its detail page - the arrow slides on hover, as project cards elsewhere do. */
-.rw-panel-link { transition: color .25s ease; }
-.rw-panel-link:hover { color: var(--copper); }
-.rw-panel-go { transform: translateX(-4px); opacity: 0; transition: transform .3s cubic-bezier(.2,.7,.2,1), opacity .3s ease; }
-.rw-panel-link:hover .rw-panel-go { transform: translateX(0); opacity: 1; }
-/* No hover on touch, so the arrow always shows there. */
-@media (hover: none) { .rw-panel-go { opacity: 1; transform: none; } }
+.rw-panel-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.rw-panel-item-name {
+  font-size: 16px; line-height: 1.2; color: var(--ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.rw-panel-item-meta {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 9px; letter-spacing: .1em; color: var(--faded); text-transform: uppercase;
+}
+.rw-panel-status { color: var(--copper); }
+
+.rw-panel-chevron {
+  flex-shrink: 0; width: 15px; height: 15px; color: var(--faded);
+  transition: color .2s ease, transform .2s ease;
+}
+a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: translateX(2px); }
+
+.rw-panel-hint {
+  margin-top: 18px;
+  font-size: 9px; letter-spacing: .16em; color: var(--faded); opacity: .7;
+}
 
 .rw-way-body { display: flex; flex-direction: column; gap: 16px; padding: 28px 0 0; }
 .rw-way-cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; color: var(--ink); }
@@ -1296,9 +1581,92 @@ a:hover { color: var(--ink, #12100D); }
   border-color: var(--copper);
 }
 
+.rw-resume-dropzone--over {
+  background: rgba(195, 155, 83, .1);
+  border-color: var(--copper);
+  border-style: solid;
+}
+
 .rw-resume-dropzone span { color: var(--ink); }
 .rw-resume-dropzone small { color: var(--faded); font-size: 10px; }
 .rw-resume-dropzone input { display: none; }
+
+/* Selected-file preview shown under the dropzone label after an upload/drop. */
+.rw-file-preview {
+  align-items: center;
+  border: 1px solid rgba(242, 239, 233, .18);
+  border-radius: 2px;
+  display: flex;
+  gap: 12px;
+  padding: 10px 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.rw-file-preview-image {
+  border: 1px solid rgba(242, 239, 233, .18);
+  border-radius: 2px;
+  height: 44px;
+  object-fit: cover;
+  width: 44px;
+  flex: 0 0 auto;
+}
+
+.rw-file-preview-icon {
+  align-items: center;
+  color: var(--copper);
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 44px;
+  justify-content: center;
+  width: 44px;
+  background: rgba(195, 155, 83, .08);
+  border-radius: 2px;
+}
+
+.rw-file-preview-meta {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.rw-file-preview-meta strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rw-file-preview-meta small {
+  color: var(--faded);
+  font-size: 10px;
+}
+
+.rw-file-remove {
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgba(242, 239, 233, .18);
+  border-radius: 50%;
+  color: var(--faded);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 15px;
+  height: 24px;
+  justify-content: center;
+  line-height: 1;
+  margin-left: auto;
+  padding: 0;
+  width: 24px;
+  flex: 0 0 auto;
+  transition: border-color .2s ease, color .2s ease;
+}
+
+.rw-file-remove:hover {
+  border-color: var(--copper);
+  color: var(--copper);
+}
 
 .rw-career-submit {
   background: var(--gold-gradient) !important;

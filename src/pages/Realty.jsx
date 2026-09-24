@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import skylineImage from '../assets/site/skyline.png'
 import priyankaImage from '../assets/site/panda.png'
+import priyankaSignature from '../assets/site/panda-sign.png'
 import iraLogo from '../assets/site/LOGOS/ira.svg'
 import landmarkLogo from '../assets/site/LOGOS/landmark.svg'
 import sriAdityaLogo from '../assets/site/LOGOS/sri-aditya.svg'
@@ -13,13 +14,13 @@ import Header from '../components/Header'
 import LogoLoop from '../components/LogoLoop'
 import Seo from '../components/Seo'
 import ProjectsSection from '../components/ProjectsSection'
-import ImageSlot from '../components/ImageSlot'
 import { BookButton } from '../components/BookingModal'
 import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import RiseText from '../components/RiseText'
 import ClosingCTA from '../components/ClosingCTA'
 import SectionHead, { SectionAside } from '../components/SectionHead'
+import { useInView } from '../hooks/useInView'
 import { MANDATE_SCOPE } from '../data/content'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import { ctaInline,
@@ -45,6 +46,22 @@ const HEADLINE = [
   { text: 'of the sale.', italic: true, copper: true },
 ]
 
+function SignatureReveal() {
+  const [ref, inView] = useInView({ rootMargin: '0px 0px -10% 0px' })
+
+  return (
+    <span ref={ref} className={`rw-realty-signature-reveal${inView ? ' is-drawn' : ''}`}>
+      <img
+        className="rw-realty-signature"
+        src={priyankaSignature}
+        alt="Priyanka Panda"
+        width="2071"
+        height="759"
+      />
+    </span>
+  )
+}
+
 export default function Realty() {
   return (
     <>
@@ -52,12 +69,12 @@ export default function Realty() {
       <Header />
 
       {/* Intro */}
-      <section id="top" className="rw-pad" style={{ ...container, padding: '80px 40px 40px' }}>
-        <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.58fr .42fr', gap: 60, alignItems: 'center' }}>
-          <div>
+      <section id="top" className="rw-pad rw-realty-hero">
+        <div className="rw-realty-hero-grid">
+          <div className="rw-realty-hero-copy">
             <Reveal style={{ ...eyebrow, marginBottom: 30 }}>RW REALTY · MANDATE MODEL</Reveal>
 
-            <h1 style={{ ...pageHeading, fontSize: 'clamp(46px,6vw,92px)', lineHeight: 1, maxWidth: '14em' }}>
+            <h1 className="rw-realty-hero-title" style={{ ...pageHeading, fontSize: undefined, lineHeight: 1, maxWidth: '14em' }}>
               <RiseText lines={HEADLINE} step={0.12} />
             </h1>
 
@@ -65,20 +82,21 @@ export default function Realty() {
               “You Build, We Sell.” · Team RW
             </Reveal>
 
-           <Reveal
+            <Reveal
               as="p"
               delay={140}
+              className="rw-realty-hero-description"
               style={{
                 ...intro,
                 marginTop: 20,
                 maxWidth: '38em',
-                fontSize: 'clamp(17px,1.9vw,21px)'
+                fontSize: undefined,
               }}
             >
               For select high-conviction developments, Team RW operates under an{' '}
               <b>exclusive mandate</b> taking complete ownership of sales strategy and
               go-to-market execution. Led by{' '}
-              <b>Ms. Priyanka Panda, Head of RW Realty,</b> whose{' '}
+              <b>Ms. Priyanka Panda, Director of Sales,</b> whose{' '}
               <b>8+ year track record</b> spans luxury real estate branding, strategic
               positioning, and high-value closures, the team functions as a fully embedded
               growth partner. From initial market positioning and immersive buyer
@@ -87,25 +105,28 @@ export default function Realty() {
               through disciplined, leadership-led execution.
             </Reveal>
 
-            <Reveal delay={220} style={{ marginTop: 34, display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
+            <Reveal delay={220} className="rw-realty-hero-actions">
               <BookButton interest="RW Realty mandate" specular>DISCUSS A MANDATE</BookButton>
               <CtaButton variant="secondary" to="/start?who=developer" arrow="→">Not sure? Find your fit</CtaButton>
             </Reveal>
           </div>
 
-          <Reveal delay={160} style={{ position: 'relative' }}>
-            <div className="rw-frame" style={{ aspectRatio: '4/5', border: '1px solid var(--line)', overflow: 'hidden', background: 'var(--chip)' }}>
-              <ImageSlot
+          <figure className="rw-realty-portrait rw-realty-portrait-frame">
+            <div className="rw-realty-portrait-media">
+              <img
+                className="rw-realty-portrait-image"
                 src={priyankaImage}
                 alt="Priyanka Panda"
-                placeholder="Mandate in motion"
-                caption="pics/ · signing or site walkthrough"
-                tag="FIG 01"
-                fit="cover"
-                position="center 20%"
+                width="1016"
+                height="1548"
+                fetchPriority="high"
               />
             </div>
-          </Reveal>
+            <figcaption className="rw-realty-portrait-caption">
+              <SignatureReveal />
+              <span className="rw-realty-portrait-role" style={{ fontFamily: mono }}>DIRECTOR OF SALES</span>
+            </figcaption>
+          </figure>
         </div>
       </section>
 

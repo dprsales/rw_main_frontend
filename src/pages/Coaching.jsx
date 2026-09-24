@@ -140,13 +140,13 @@ export default function Coaching() {
               A live AI interview that measures what actually matters.
             </h2>
             <p style={{ ...note, marginTop: 22, fontSize: 16, lineHeight: 1.6 }}>
-              I have partnered with KRISAH — an AI-powered assessment platform — to bring a rigorous, scored sales assessment to real estate professionals across India.
+              I have partnered with KRISAH, an AI-powered assessment platform, to bring a scored sales assessment to real estate professionals across India.
             </p>
             <p style={{ ...note, marginTop: 16, fontSize: 16, lineHeight: 1.6 }}>
-              This is not a quiz. It is a live interview simulation conducted by an AI interviewer, asking the kinds of questions a serious employer or a demanding buyer would ask. It listens to your answers, adapts based on what you say, and scores your performance across six areas.
+              It is a live AI interview, asking the kinds of questions a serious employer or buyer would ask, and scoring your performance across six areas.
             </p>
             <p style={{ ...note, marginTop: 16, fontSize: 16, lineHeight: 1.6 }}>
-              After your session, you receive a full scored report. I review that report before our first coaching session together — we begin by addressing what the data shows, not what I assume.
+              You get a full scored report after your session. I review it before our first coaching call, so we start from what the data shows, not what I assume.
             </p>
             <div style={{ marginTop: 32 }}>
               <CtaButton href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'coaching-assessment-section' })}>
@@ -155,13 +155,13 @@ export default function Coaching() {
             </div>
           </Reveal>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 26 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {ASSESSMENT_AREAS.map((area, i) => (
-              <Reveal key={area.n} delay={i * 70} style={{ display: 'flex', gap: 18, borderTop: '1px solid var(--line)', paddingTop: 20 }}>
+              <Reveal key={area.n} delay={i * 70} style={{ display: 'flex', gap: 18, borderTop: '1px solid var(--line)', paddingTop: 12 }}>
                 <span style={{ fontFamily: serif, fontSize: 22, color: 'var(--copper)', lineHeight: 1, flexShrink: 0, width: 28 }}>{area.n}</span>
                 <div>
                   <div style={{ fontFamily: serif, fontSize: 18, color: 'var(--ink)', lineHeight: 1.3 }}>{area.title}</div>
-                  <p style={{ ...note, marginTop: 8, fontSize: 14, lineHeight: 1.55 }}>{area.desc}</p>
+                  <p style={{ ...note, marginTop: 4, fontSize: 14, lineHeight: 1.5 }}>{area.desc}</p>
                 </div>
               </Reveal>
             ))}
