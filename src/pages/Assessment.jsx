@@ -19,6 +19,7 @@ import { FOOTER_LINKS, mono, serif } from '../theme'
 import {
   container, eyebrow, note, sectionHeading, sectionRule, statLabel,
 } from '../styles'
+import krisahInterviewVisual from '../assets/site/krisah-interview-left-visual.png'
 
 const HEADLINE = [
   { text: 'How ready are you ' },
@@ -144,27 +145,25 @@ export default function Assessment() {
       {/* The session + how it runs — one section keeps the page tight */}
       <section id="how" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
-          <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(28px,4vw,64px)', alignItems: 'center' }}>
-            <Reveal className="rw-figure" style={{ border: '1px solid var(--line)', aspectRatio: '4/3' }}>
-              <ImageSlot
-                alt="A candidate answering the Rajiv Williams AI assessment on camera"
-                placeholder="AI interview session"
-                caption="The assessment"
-                spec="Landscape 4:3 · ≥1600px wide · a candidate answering the AI interviewer on camera, calm and composed"
-                tag="KRISAH AI"
-              />
-            </Reveal>
-            <Reveal delay={120}>
-              <div style={{ ...eyebrow, marginBottom: 16 }}>WHAT THE SESSION LOOKS LIKE</div>
-              <h2 style={{ ...sectionHeading, fontSize: 'clamp(26px,3.2vw,40px)', lineHeight: 1.08 }}>
+          <div className="rw-grid-2 rw-assessment-session-grid">
+            <Reveal delay={120} className="rw-assessment-session-content">
+              <div style={{ ...eyebrow, fontSize: 'clamp(14px,1vw,18px)', marginBottom: 20 }}>WHAT THE SESSION LOOKS LIKE</div>
+              <h2 style={{ ...sectionHeading, fontSize: 'clamp(30px,3.4vw,52px)', lineHeight: 1.08 }}>
                 A real interview. With a highly intelligent, purpose-trained AI.
               </h2>
-              <p style={{ ...note, marginTop: 18, fontSize: 'clamp(16px,1.7vw,18px)', lineHeight: 1.6 }}>
-                Twenty questions from an AI interviewer engineered for this read. It waits, listens, and captures not just what you say, but how you structure, pace, and hold the answer.
+              <p style={{ ...note, marginTop: 24, fontSize: 'clamp(17px,1.35vw,22px)', lineHeight: 1.62 }}>
+                Twenty questions from an AI interviewer engineered for this role. It waits, listens, and captures not just what you say, but how you structure, pace, and hold the answer.
               </p>
-              <p style={{ ...note, marginTop: 14, fontSize: 'clamp(16px,1.7vw,18px)', lineHeight: 1.6 }}>
+              <p style={{ ...note, marginTop: 20, fontSize: 'clamp(17px,1.35vw,22px)', lineHeight: 1.62 }}>
                 Answer out loud. Hesitate the way you would in the room. It is rehearsal under real pressure, and the only audience is you.
               </p>
+            </Reveal>
+            <Reveal className="rw-figure rw-assessment-session-visual">
+              <ImageSlot
+                src={krisahInterviewVisual}
+                fit="contain"
+                alt="KRISAH AI interview session interface"
+              />
             </Reveal>
           </div>
 

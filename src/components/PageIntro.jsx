@@ -1,6 +1,5 @@
 /**
- * Intro section shared by Coaching, Consulting and Careers: eyebrow, RiseText h1, optional
- * lede/intro/CTA/extra. Realty and Portfolio use a different layout and are left alone.
+ * Shared page intro with optional copy, actions and a right-hand illustration.
  */
 import Reveal from './Reveal'
 import RiseText from './RiseText'
@@ -18,34 +17,48 @@ export default function PageIntro({
   cta,
   extra,
   padding = '80px 40px 30px',
+  image,
+  imageAlt = '',
 }) {
   return (
-    <section id="top" className="rw-pad" style={{ ...container, padding }}>
-      <Reveal style={{ ...eyebrowToken, marginBottom: 30 }}>{eyebrow}</Reveal>
+    <section
+      id="top"
+      className={`rw-pad${image ? ' rw-intro-with-image' : ''}`}
+      style={{ ...container, padding }}
+    >
+      <div className={image ? 'rw-intro-copy' : undefined}>
+        <Reveal style={{ ...eyebrowToken, marginBottom: 30 }}>{eyebrow}</Reveal>
 
-      <h1 style={{ ...pageHeading, maxWidth: '17em', ...headlineStyle }}>
-        <RiseText lines={headline} step={headlineStep} />
-      </h1>
+        <h1 style={{ ...pageHeading, maxWidth: '17em', ...headlineStyle }}>
+          <RiseText lines={headline} step={headlineStep} />
+        </h1>
 
-      {lede && (
-        <Reveal as="p" delay={140} style={{ ...ledeToken, marginTop: 28, ...ledeStyle }}>
-          {lede}
-        </Reveal>
+        {lede && (
+          <Reveal as="p" delay={140} style={{ ...ledeToken, marginTop: 28, ...ledeStyle }}>
+            {lede}
+          </Reveal>
+        )}
+
+        {intro && (
+          <Reveal as="p" delay={180} style={{ ...introToken, marginTop: 16, maxWidth: '36em', ...introStyle }}>
+            {intro}
+          </Reveal>
+        )}
+
+        {cta && (
+          <Reveal delay={240} style={{ marginTop: 32, display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
+            {cta}
+          </Reveal>
+        )}
+
+        {extra}
+      </div>
+
+      {image && (
+        <div className="rw-intro-visual">
+          <img src={image} alt={imageAlt} className="rw-intro-image" />
+        </div>
       )}
-
-      {intro && (
-        <Reveal as="p" delay={180} style={{ ...introToken, marginTop: 16, maxWidth: '36em', ...introStyle }}>
-          {intro}
-        </Reveal>
-      )}
-
-      {cta && (
-        <Reveal delay={240} style={{ marginTop: 32, display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
-          {cta}
-        </Reveal>
-      )}
-
-      {extra}
     </section>
   )
 }

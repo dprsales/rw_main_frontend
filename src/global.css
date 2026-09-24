@@ -361,6 +361,48 @@ a:hover { color: var(--ink, #12100D); }
 }
 .rw-matrix-cell:hover .rw-matrix-title { color: #fff; }
 
+/* Same hover language as .rw-matrix above (copper fill, white text) — the mandate
+   article's "three ways" cards, sized for a title plus a body paragraph instead of
+   a title alone. */
+.rw-econ-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin-top: 28px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+.rw-econ-cell {
+  display: flex; flex-direction: column;
+  padding: clamp(22px, 2.2vw, 30px) clamp(18px, 1.8vw, 24px);
+  background: var(--card);
+  transition: background .45s cubic-bezier(.2,.7,.2,1);
+}
+.rw-econ-cell:hover { background: var(--copper); }
+
+.rw-econ-num { font-size: 12px; letter-spacing: .18em; color: var(--copper); transition: color .45s ease; }
+.rw-econ-cell:hover .rw-econ-num { color: rgba(255,255,255,.82); }
+
+.rw-econ-title {
+  margin-top: 14px;
+  font-size: clamp(17px, 1.5vw, 20px); line-height: 1.24; letter-spacing: -.01em;
+  color: var(--ink);
+  transition: color .45s ease;
+}
+.rw-econ-cell:hover .rw-econ-title { color: #fff; }
+
+.rw-econ-body {
+  margin-top: 10px;
+  font-weight: 300; font-size: 14px; line-height: 1.55;
+  color: var(--faded);
+  transition: color .45s ease;
+}
+.rw-econ-cell:hover .rw-econ-body { color: rgba(255,255,255,.88); }
+
+@media (max-width: 720px) {
+  .rw-econ-grid { grid-template-columns: 1fr; }
+}
+
 /* & MORE - support services as a chip cloud; pointing/tapping a pill reveals
    its description below, the same hover-to-reveal idiom as the territory map. */
 .rw-chips { display: flex; flex-wrap: wrap; gap: clamp(9px, 1vw, 13px); }
@@ -1179,6 +1221,32 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   }
 }
 
+/* --- PageIntro illustration beside the copy (Channel Partners hero) ---- */
+.rw-intro-with-image {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+  align-items: center;
+  gap: clamp(32px, 4vw, 64px);
+}
+.rw-intro-copy { min-width: 0; }
+.rw-intro-visual {
+  width: 100%;
+  max-width: 360px;
+  min-width: 0;
+  justify-self: end;
+}
+.rw-intro-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+}
+@media (max-width: 900px) {
+  .rw-intro-with-image { grid-template-columns: 1fr; }
+  .rw-intro-visual { max-width: 320px; justify-self: center; }
+}
+
 /* ===========================================================================
    RESPONSIVE LADDER - every column count declared here, one descending run,
    rungs chosen by where content actually breaks (not device names):
@@ -1187,6 +1255,49 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
      ≤700 two-ups→one | ≤560 phone | ≤400 small phone, fixed gutters give way
    `.rw-pad`'s !important is what lets the gutter beat the inline padding those wrappers carry.
    =========================================================================== */
+
+/* Assessment session showcase. The grid areas keep the copy first on mobile
+   while preserving the visual-left editorial layout on wider screens. */
+#how .rw-assessment-session-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
+  grid-template-areas: 'visual content';
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+}
+
+#how .rw-assessment-session-content {
+  grid-area: content;
+  min-width: 0;
+}
+
+#how .rw-assessment-session-visual {
+  grid-area: visual;
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  aspect-ratio: 1150 / 765;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#how .rw-assessment-session-visual img {
+  border-radius: 0;
+}
+
+#how .rw-assessment-session-visual::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: -1px;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, var(--bg) 0%, transparent 4%, transparent 96%, var(--bg) 100%),
+    linear-gradient(to bottom, var(--bg) 0%, transparent 3%, transparent 91%, var(--bg) 100%);
+}
 
 /* --- Gutters ------------------------------------------------------------- */
 @media (max-width: 1200px) { .rw-pad { padding-left: 32px !important; padding-right: 32px !important; } }
@@ -1217,6 +1328,27 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 @media (max-width: 900px) {
   /* The dense two-up role lists inside Experience have no room left. */
   .rw-grid-2 { grid-template-columns: 1fr !important; }
+
+  /* Assessment session: keep the editorial copy above the real KRISAH frame on mobile. */
+  #how .rw-assessment-session-grid {
+    grid-template-areas: 'content' 'visual';
+  }
+}
+
+@media (max-width: 560px) {
+  #how .rw-assessment-session-visual {
+    border-radius: 0;
+  }
+
+  #how .rw-assessment-session-visual img {
+    border-radius: 0;
+  }
+
+  #how .rw-assessment-session-visual::after {
+    background:
+      linear-gradient(to right, var(--bg) 0%, transparent 2.5%, transparent 97.5%, var(--bg) 100%),
+      linear-gradient(to bottom, var(--bg) 0%, transparent 2%, transparent 94%, var(--bg) 100%);
+  }
 }
 
 /* --- ≤700: two-ups become one -------------------------------------------- */

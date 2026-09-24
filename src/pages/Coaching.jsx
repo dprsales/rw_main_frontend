@@ -19,7 +19,7 @@ import ClosingCTA from '../components/ClosingCTA'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
-import { ACHIEVE, ASSESSMENT_AREAS, COACHING_PROGRAMS, COACHING_TESTIMONIALS, CURRICULUM, KRISAH_ASSESSMENT_URL } from '../data/content'
+import { ACHIEVE, ASSESSMENT_AREAS, COACHING_PROGRAMS, COACHING_TESTIMONIALS, CURRICULUM } from '../data/content'
 import { track } from '../data/analytics'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import {
@@ -149,7 +149,7 @@ export default function Coaching() {
               You get a full scored report after your session. I review it before our first coaching call, so we start from what the data shows, not what I assume.
             </p>
             <div style={{ marginTop: 32 }}>
-              <CtaButton href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'coaching-assessment-section' })}>
+              <CtaButton href="/assesment" live onClick={() => track('assessment_page_click', { location: 'coaching-assessment-section' })}>
                 TAKE YOUR FREE ASSESSMENT <span className="rw-cta-arrow">→</span>
               </CtaButton>
             </div>

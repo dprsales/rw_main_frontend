@@ -102,8 +102,8 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
           <FinderSteps finder={finder} onStartOver={startOver}>
             <div className="rw-finder-links">
               {stepIndex > 0 && <CtaButton variant="secondary" arrow="←" onClick={back}>Back</CtaButton>}
-              <BookButton specular source="finder_skip" skipQuestions>JUST BOOK A CALL</BookButton>
-              <CtaButton variant="secondary" arrow="→" onClick={browseServices}>Browse the three services</CtaButton>
+              <BookButton specular source="finder_skip" skipQuestions> BOOK A CALL</BookButton>
+              <CtaButton variant="secondary" arrow="→" onClick={browseServices}>BROWSE SERVICES </CtaButton>
             </div>
           </FinderSteps>
 
@@ -171,7 +171,7 @@ const ResultCard = forwardRef(function ResultCard({ result, guidance, onDeepPath
             {secondary.label}
           </CtaButton>
         )}
-        <CtaButton variant="secondary" arrow="→" onClick={onBrowse}>Browse all three services</CtaButton>
+        <CtaButton variant="secondary" arrow="→" onClick={onBrowse}>BROWSE SERVICES </CtaButton>
       </div>
     </div>
     </BorderGlow>

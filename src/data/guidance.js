@@ -23,7 +23,6 @@ export const WHO = [
   { key: 'sales_leader', label: 'Sales head / manager' },
   { key: 'sales_pro', label: 'Sales professional' },
   { key: 'investor', label: 'Investor / Buyer' },
-  { key: 'unsure', label: 'Not sure yet' },
 ]
 
 // Q2 — options depend on Q1. Personas not listed here skip the question.

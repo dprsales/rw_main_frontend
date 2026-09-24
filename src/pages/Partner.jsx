@@ -7,6 +7,7 @@ import Reveal from '../components/Reveal'
 import PageIntro from '../components/PageIntro'
 import ClosingCTA from '../components/ClosingCTA'
 import { BookButton } from '../components/BookingModal'
+import saplingImage from '../assets/site/channel-partner-sapling-transparent.png'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { submitChannelPartner, getErrorMessage } from '../data/api'
 import { track } from '../data/analytics'
@@ -299,8 +300,11 @@ export default function Partner() {
       <PageIntro
         eyebrow="RW REALTY · CHANNEL PARTNERS"
         headline={HEADLINE}
+        headlineStyle={{ fontSize: 'clamp(42px,4.4vw,64px)' }}
         lede="Exclusive mandates, golden-rate commissions, and a team that runs the funnel with you."
         intro="RW Realty carries a small number of projects at a time, on exclusive mandates. Partners inside those mandates get inventory worth carrying, leads we keep warm, and the training to close at the ticket size."
+        image={saplingImage}
+        imageAlt="RW Realty partnership tree: trust, strong relationships, open communication, mutual respect, shared vision, consistent support and long-term growth."
         cta={<>
           <button type="button" onClick={() => scrollToId('apply')} className="rw-cta rw-cta--live" style={ctaCopper}>
             APPLY TO BECOME A CHANNEL PARTNER <span className="rw-cta-arrow" aria-hidden> →</span>
