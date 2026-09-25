@@ -4,6 +4,7 @@ import { BookingProvider } from './components/BookingModal'
 import ScrollProgress from './components/ScrollProgress'
 import SiteLoader from './components/SiteLoader'
 import { ThemeProvider } from './components/ThemeProvider'
+import { useSiteVisitTracker } from './hooks/useSiteVisitTracker'
 import About from './pages/About'
 import Assessment from './pages/Assessment'
 import AssessmentResult from './pages/AssessmentResult'
@@ -29,6 +30,8 @@ function ScrollToTop() {
 }
 
 export default function App() {
+  useSiteVisitTracker()
+
   return (
     <ThemeProvider>
       {/* <SiteLoader /> */}

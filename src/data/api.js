@@ -216,6 +216,11 @@ export const submitChannelPartner = (data) =>
     body: data,
   })
 
+// Site visit tracker — fire-and-forget ping on app load. Short timeout since nothing
+// in the UI waits on this; a slow/unreachable API must never delay or block the page.
+export const recordSiteVisit = (data) =>
+  request('/site-visits', { method: 'POST', body: data, timeoutMs: 5000 })
+
 // 8. PAYMENTS — coaching module checkout (Razorpay). See data/paymentService.js
 // for the Checkout orchestration; these three are the raw backend calls.
 

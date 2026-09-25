@@ -209,7 +209,6 @@ export default function Partner() {
   const [files, setFiles] = useState({})
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
-  const [referenceNo, setReferenceNo] = useState('')
   const honeypot = useRef('')
 
   const set = (id) => (e) => setValues((prev) => ({ ...prev, [id]: e.target.value }))
@@ -275,8 +274,7 @@ export default function Partner() {
     fd.append('cancelledCheque', files.cancelledCheque)
 
     try {
-      const res = await submitChannelPartner(fd)
-      setReferenceNo(res?.referenceNo || res?.reference || '')
+      await submitChannelPartner(fd)
       setStatus('done')
       track('partner_application_submitted', payload)
     } catch (err) {
@@ -391,12 +389,10 @@ export default function Partner() {
                 </svg>
               </div>
               <h3 style={{ fontFamily: serif, fontWeight: 400, fontSize: 'clamp(24px,3vw,32px)', color: 'var(--ink)', marginTop: 26 }}>
-                Application received{referenceNo ? ` · ${referenceNo}` : ''}.
+                Application received.
               </h3>
               <p style={{ ...note, marginTop: 14, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em' }}>
-                We respond within two working days, usually sooner. {
-                  referenceNo ? 'Reference it as ' + referenceNo : 'No need to follow up'
-                } — and if you would rather talk first, call or WhatsApp us below.
+                It's under review. We respond within two hours, usually we reply faster and if you would rather talk first, call or WhatsApp us below.
               </p>
               <div style={{ display: 'flex', justifyContent: 'center', gap: 20, flexWrap: 'wrap', marginTop: 32 }}>
                 <a className="rw-cta" style={{ ...ctaCopper }} href={WHATSAPP} target="_blank" rel="noreferrer">
