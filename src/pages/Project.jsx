@@ -100,7 +100,7 @@ function ProjectHero({ hero, details, name }) {
   const facts = [
     ['CONFIGURATION', bhk],
     ['SIZES', sqft],
-    ['PRICE', details?.sftPrice ? `${rupees(details.sftPrice)}/sq.ft.` : null],
+    // ['PRICE', details?.sftPrice ? `${rupees(details.sftPrice)}/sq.ft.` : null],
     ['UNITS', details?.units],
     ['TOWERS', details?.towers],
   ].filter(([, value]) => value)

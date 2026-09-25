@@ -524,6 +524,8 @@ export const LOCALITIES = [
   { name: 'APPA Junction', x: 73, y: 58 },
   { name: 'Tukkuguda', x: 90, y: 74 },
   { name: 'Mamidipally', x: 76, y: 84 },
+  { name: 'Tellapur', x: 25, y: 14 },
+  { name: 'Gaganpahad', x: 48, y: 64 },
 ]
 
 /** Collapses sub-localities and alternate spellings to one node per real place. */
@@ -550,6 +552,9 @@ export const AREA_TO_LOCALITY = {
   'TGSPA Junction': 'TGSPA Junction',
   'Tukkuguda': 'Tukkuguda',
   'Mamidipally': 'Mamidipally',
+  'Tellapur': 'Tellapur',
+  'Gaganpahad': 'Gaganpahad',
+  'Gaganpahad, Rajendranagar Mandal': 'Gaganpahad',
 }
 
 /** Maps free-text `location` strings from the API onto the curated locality keys. */
@@ -566,7 +571,7 @@ const LOCATION_TO_LOCALITY = {
   'hitec city': 'HITEC City',
   'shaikpet': 'Shaikpet',
   'kollur': 'Kollur',
-  'tellapur': 'Kollur',
+  'tellapur': 'Tellapur',
   'mokila': 'Mokila',
   'manchirevula': 'Manchirevula',
   'gandipet': 'Gandipet',
@@ -579,18 +584,22 @@ const LOCATION_TO_LOCALITY = {
   'tukkuguda': 'Tukkuguda',
   'mamidpally': 'Mamidipally',
   'mamidipally': 'Mamidipally',
-  'gaganpahad': 'Narsingi',
-  'rajendranagar': 'Narsingi',
+  'gaganpahad': 'Gaganpahad',
+  'rajendranagar': 'Gaganpahad',
 }
 
-/** Best-effort: resolve a raw API `location` string to a LOCALITIES node name. */
+/**
+ * Best-effort: resolve a raw API `location` string to a LOCALITIES node name.
+ * Returns null for anything unrecognised — an unresolved project is left off the
+ * map entirely (still counted in totals) rather than dumped into a wrong locality,
+ * which is what a "default to Kokapet" fallback used to do.
+ */
 export function resolveLocality(location = '') {
   const text = String(location).toLowerCase()
   for (const [key, ls] of Object.entries(LOCATION_TO_LOCALITY)) {
     if (text.includes(key)) return ls
   }
-  // Unrecognised geographies still get a node so no live project is dropped from the count.
-  return 'Kokapet'
+  return null
 }
 
 export const PROJECTS = [
@@ -601,28 +610,28 @@ export const PROJECTS = [
   { name: 'Niche', area: 'Shaikpet', status: 'Active' },
   { name: 'Palatium', area: 'APPA Junction', status: 'Ready for Interiors' },
   { name: 'Rainbow Waters', area: 'Raidurg - Gachibowli', status: 'Under Construction' },
-  { name: 'Megaleio', area: 'TGSPA Junction', status: 'Under Construction' },
+  { name: 'Megaleio', area: 'APPA Junction', status: 'Under Construction' },
   { name: 'Villa Verde', area: 'Green Hills Road, HITEC City', status: 'Mandate' },
   { name: 'MSN One', area: 'Neopolis', status: 'Mandate' },
-  { name: 'Skymarq', area: 'Narsingi, Financial District', status: 'Mandate' },
+  { name: 'Skymarq', area: 'Puppalaguda', status: 'Mandate' },
   { name: 'CINQ', area: 'Financial District', status: 'Mandate' },
   { name: 'Sylvanor', area: 'Mokila', status: 'Mandate' },
   { name: 'Iris', area: 'Raidurgam', status: 'Under Construction' },
   { name: 'Trilight', area: 'Golden Mile, Kokapet', status: 'Mandate' },
   { name: 'Skyline', area: 'Financial District', status: 'Under Construction' },
-  { name: 'Songs of the Sun', area: 'Financial District', status: 'Under Construction' },
-  { name: 'Rise With 9', area: 'Neopolis', status: 'Under Construction' },
+  { name: 'Songs of the Sun', area: 'Puppalaguda', status: 'Under Construction' },
+  { name: 'Rise With 9', area: 'Kokapet', status: 'Under Construction' },
   { name: 'Bayleaf', area: 'Manchirevula', status: 'Under Construction' },
-  { name: 'Yula Globus', area: 'Neopolis, Kokapet', status: 'Under Construction' },
+  { name: 'Yula Globus', area: 'Kokapet', status: 'Under Construction' },
   { name: 'Sage', area: 'Kollur', status: 'Mandate' },
   { name: 'Bridge Epsilon', area: 'Tukkuguda', status: 'Mandate' },
-  { name: 'Allura', area: 'Kokapet', status: 'Mandate' },
+  { name: 'Allura', area: 'Gandipet', status: 'Mandate' },
   { name: 'Luxury Park II', area: 'Mamidipally', status: 'Mandate' },
   { name: 'ONE OAK', area: 'Manchirevula', status: 'Mandate' },
   { name: 'The Twins', area: 'Puppalaguda', status: 'Mandate' },
   { name: 'Ankura Homes', area: 'Shankarpally', status: 'Mandate' },
   { name: 'Som Boulevard', area: 'Mokila', status: 'Mandate' },
-  { name: 'Cascades', area: 'Kokapet', status: 'Mandate' },
-  { name: 'Bliss in the Woods', area: 'Kokapet', status: 'Mandate' },
+  { name: 'Cascades', area: 'Neopolis', status: 'Mandate' },
+  { name: 'Bliss in the Woods', area: 'Tukkuguda', status: 'Mandate' },
   { name: 'Mirai Mist', area: 'Gandipet', status: 'Mandate' },
 ]

@@ -322,6 +322,7 @@ export default function Partner() {
           </Reveal>
 
           <div
+            className="rw-grid-3"
             style={{
               display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
               gap: 'clamp(16px, 2.2vw, 30px)', marginTop: 'clamp(40px,5vw,64px)',
@@ -357,7 +358,7 @@ export default function Partner() {
           Three steps, about two weeks.
         </Reveal>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(28px,4vw,56px)', marginTop: 'clamp(44px,6vw,64px)' }}>
+        <div className="rw-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(28px,4vw,56px)', marginTop: 'clamp(44px,6vw,64px)' }}>
           {STEPS.map((step, i) => (
             <Reveal key={step.n} delay={i * 90}>
               <div style={{ fontFamily: mono, fontSize: 13, letterSpacing: '.08em', color: 'var(--copper)', borderBottom: '1px solid var(--line)', paddingBottom: 14 }}>STEP {step.n}</div>

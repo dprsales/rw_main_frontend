@@ -19,6 +19,8 @@ import { FOOTER_LINKS, mono, serif } from '../theme'
 import {
   container, eyebrow, note, sectionHeading, sectionRule, statLabel,
 } from '../styles'
+import krisahHero from '../assets/site/krisah-hero.png'
+import krisahHeroMobile from '../assets/site/krisah-hero-mobile.png'
 import krisahInterviewVisual from '../assets/site/krisah-interview-left-visual.png'
 
 const HEADLINE = [
@@ -74,45 +76,53 @@ export default function Assessment() {
       <Header />
 
       {/* Intro */}
-      <PageIntro
-        eyebrow="RAJIV WILLIAMS AI ASSESSMENT · POWERED BY KRISAH"
-        headline={HEADLINE}
-        lede="AI-led assessment to understand your starting point before the programme begins"
-        intro="Answer the way you would in a real room. You finish with a clearer read on yourself; we get to see how you think under pressure. Any role, any stage of your career."
-        cta={<>
-          <CtaButton ref={heroCtaRef} href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'hero' })}>
-            START ASSESSMENT <span className="rw-cta-arrow">→</span>
-          </CtaButton>
-          <CtaButton variant="outline" onClick={() => document.getElementById('how')?.scrollIntoView({ behavior: 'smooth' })}>
-            See how it works →
-          </CtaButton>
-        </>}
-        extra={
-          <Reveal delay={120} style={{ marginTop: 48, borderTop: '1px solid var(--line)', paddingTop: 26 }}>
-            <div style={{ display: 'flex', gap: 56, flexWrap: 'wrap' }}>
-              <div>
-                <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>STRUCTURED</div>
-                <div style={{ ...statLabel, marginTop: 8 }}>ASSESSMENT</div>
+      <div
+        className="rw-assessment-hero"
+        style={{
+          '--krisah-hero-desktop': `url(${krisahHero})`,
+          '--krisah-hero-mobile': `url(${krisahHeroMobile})`,
+        }}
+      >
+        <PageIntro
+          eyebrow="RAJIV WILLIAMS AI ASSESSMENT · POWERED BY KRISAH"
+          headline={HEADLINE}
+          lede="AI-led assessment to understand your starting point before the programme begins"
+          intro="Answer the way you would in a real room. You finish with a clearer read on yourself; we get to see how you think under pressure. Any role, any stage of your career."
+          cta={<>
+            <CtaButton ref={heroCtaRef} href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'hero' })}>
+              START ASSESSMENT <span className="rw-cta-arrow">→</span>
+            </CtaButton>
+            <CtaButton variant="outline" onClick={() => document.getElementById('how')?.scrollIntoView({ behavior: 'smooth' })}>
+              See how it works →
+            </CtaButton>
+          </>}
+          extra={
+            <Reveal delay={120} style={{ marginTop: 48, borderTop: '1px solid var(--line)', paddingTop: 26 }}>
+              <div style={{ display: 'flex', gap: 56, flexWrap: 'wrap' }}>
+                <div>
+                  <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>STRUCTURED</div>
+                  <div style={{ ...statLabel, marginTop: 8 }}>ASSESSMENT</div>
+                </div>
+                <div>
+                  <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>ONE</div>
+                  <div style={{ ...statLabel, marginTop: 8 }}>SITTING</div>
+                </div>
+                <div>
+                  <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>AI-LED</div>
+                  <div style={{ ...statLabel, marginTop: 8 }}>INTERVIEW</div>
+                </div>
+                <div>
+                  <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>PERSONALISED</div>
+                  <div style={{ ...statLabel, marginTop: 8 }}>QUESTIONS</div>
+                </div>
               </div>
-              <div>
-                <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>ONE</div>
-                <div style={{ ...statLabel, marginTop: 8 }}>SITTING</div>
+              <div style={{ marginTop: 22, display: 'flex', gap: 28, flexWrap: 'wrap', fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--faded)' }}>
+                {TRUST.map((item) => <span key={item}>{item}</span>)}
               </div>
-              <div>
-                <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>AI-LED</div>
-                <div style={{ ...statLabel, marginTop: 8 }}>INTERVIEW</div>
-              </div>
-              <div>
-                <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>PERSONALISED</div>
-                <div style={{ ...statLabel, marginTop: 8 }}>QUESTIONS</div>
-              </div>
-            </div>
-            <div style={{ marginTop: 22, display: 'flex', gap: 28, flexWrap: 'wrap', fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--faded)' }}>
-              {TRUST.map((item) => <span key={item}>{item}</span>)}
-            </div>
-          </Reveal>
-        }
-      />
+            </Reveal>
+          }
+        />
+      </div>
 
       {/* Team statement — "we" voice, RW Team; skyline photo lifted so the gold linework reads */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', position: 'relative', overflow: 'hidden' }}>
@@ -286,8 +296,19 @@ export default function Assessment() {
       {/* A note from the team — reassurance, placed right before the ask so the last
           thing a candidate reads before clicking through is a human voice, not FAQ copy.
           Team voice, not Rajiv alone, matching how the rest of the site frames this. */}
-      <section style={sectionRule}>
-        <div className="rw-pad" style={{ maxWidth: 720, margin: '0 auto', padding: 'clamp(70px,9vw,100px) 40px', textAlign: 'center' }}>
+      <section style={{ ...sectionRule, position: 'relative', overflow: 'hidden' }}>
+        <img
+          src={goldWatermark}
+          alt=""
+          aria-hidden
+          style={{
+            position: 'absolute', left: '50%', top: '50%',
+            width: 'clamp(260px,38vw,500px)', height: 'auto',
+            transform: 'translate(-50%, -50%)', opacity: 0.055,
+            pointerEvents: 'none', userSelect: 'none',
+          }}
+        />
+        <div className="rw-pad" style={{ maxWidth: 720, margin: '0 auto', padding: 'clamp(70px,9vw,100px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrow, marginBottom: 24 }}>A NOTE FROM THE RW TEAM</Reveal>
           <Reveal delay={100}>
             <PullQuote size="clamp(21px,2.6vw,28px)" lineHeight={1.5}>

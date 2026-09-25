@@ -13,6 +13,126 @@ img, svg, video, canvas { max-width: 100%; }
 /* `svh` is the small-viewport height, so a phone's address bar leaves no dead space. */
 .rw-app-shell { min-height: 100vh; min-height: 100svh; }
 
+/* Initial-load brand cover. It mounts once with App and never runs on route changes. */
+.rw-site-loader {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #0B0A09;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .42s ease, visibility 0s linear .42s;
+}
+
+.rw-site-loader.is-leaving {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.rw-site-loader-logo {
+  position: relative;
+  width: clamp(116px, 16vw, 176px);
+  filter: drop-shadow(0 16px 36px rgba(195,155,83,.18));
+}
+
+.rw-site-loader-logo-base {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: .16;
+}
+
+/* A faint silhouette edge with a travelling highlight, like the card rims. */
+.rw-site-loader-outline,
+.rw-site-loader-glow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.rw-site-loader-outline { opacity: .24; }
+
+.rw-site-loader-glow {
+  --rw-loader-glow-angle: -90deg;
+  opacity: 0;
+  filter: drop-shadow(0 0 2px rgba(232,201,122,.8)) drop-shadow(0 0 7px rgba(195,155,83,.45));
+}
+
+.rw-site-loader-glow-sweep {
+  display: block;
+  width: 100%;
+  height: 100%;
+  -webkit-mask-image: conic-gradient(from var(--rw-loader-glow-angle), transparent 0deg, transparent 200deg, #000 285deg, transparent 355deg);
+  mask-image: conic-gradient(from var(--rw-loader-glow-angle), transparent 0deg, transparent 200deg, #000 285deg, transparent 355deg);
+}
+
+/* The PNG's alpha channel confines the liquid to the original RW mark. */
+.rw-site-loader-fill {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: var(--rw-loader-logo);
+  mask-image: var(--rw-loader-logo);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.rw-site-loader-liquid {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(155deg, #C39B53 0%, #E8C97A 48%, #A67C3D 100%);
+  transform: translateY(calc(100% + 18px));
+}
+
+.rw-site-loader-wave {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% - 1px);
+  width: 200%;
+  max-width: none;
+  height: 16px;
+  fill: #C39B53;
+}
+
+.rw-site-loader-logo.is-ready .rw-site-loader-liquid {
+  animation: rw-loader-fill 1.4s cubic-bezier(.3,.1,.35,1) .12s both;
+}
+
+.rw-site-loader-logo.is-ready .rw-site-loader-wave {
+  animation: rw-loader-wave 1.15s linear infinite;
+}
+
+@keyframes rw-loader-fill {
+  from { transform: translateY(calc(100% + 18px)); }
+  to { transform: translateY(0); }
+}
+
+@keyframes rw-loader-wave {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rw-site-loader { transition: opacity .15s ease, visibility 0s linear .15s; }
+  .rw-site-loader-logo.is-ready .rw-site-loader-liquid,
+  .rw-site-loader-logo.is-ready .rw-site-loader-wave {
+    animation: none;
+    transform: none;
+  }
+  .rw-site-loader-wave { display: none; }
+  .rw-site-loader-glow { opacity: .3; }
+  .rw-site-loader-glow-sweep { -webkit-mask-image: none; mask-image: none; }
+}
+
 a { color: var(--copper, #C39B53); text-decoration: none; transition: color .2s; }
 a:hover { color: var(--ink, #12100D); }
 
@@ -776,7 +896,7 @@ a:hover { color: var(--ink, #12100D); }
   background:
     linear-gradient(rgba(11,10,9,.68), rgba(11,10,9,.68)),
     url('./assets/site/project-location-bg.png') center / cover no-repeat;
-  opacity: .58; pointer-events: none;
+  opacity: 2; pointer-events: none;
   -webkit-mask-image: radial-gradient(ellipse at center, #000 40%, transparent 76%);
   mask-image: radial-gradient(ellipse at center, #000 40%, transparent 76%);
 }
@@ -1258,6 +1378,15 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 
 /* Assessment session showcase. The grid areas keep the copy first on mobile
    while preserving the visual-left editorial layout on wider screens. */
+.rw-assessment-hero {
+  background-image:
+    linear-gradient(90deg, rgba(8,8,7,.18) 0%, rgba(8,8,7,.06) 55%, rgba(8,8,7,.28) 100%),
+    var(--krisah-hero-desktop);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 #how .rw-assessment-session-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
@@ -1353,6 +1482,13 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 
 /* --- ≤700: two-ups become one -------------------------------------------- */
 @media (max-width: 700px) {
+  .rw-assessment-hero {
+    background-image:
+      linear-gradient(180deg, rgba(8,8,7,.28) 0%, rgba(8,8,7,.34) 60%, rgba(8,8,7,.46) 100%),
+      var(--krisah-hero-mobile);
+    background-position: center top;
+  }
+
   .rw-grid-3, .rw-grid-4 { grid-template-columns: 1fr !important; }
   .rw-achieve-grid { grid-template-columns: 1fr; }
   .rw-matrix { grid-template-columns: 1fr; }

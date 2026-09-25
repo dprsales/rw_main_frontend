@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { BookingProvider } from './components/BookingModal'
 import ScrollProgress from './components/ScrollProgress'
+import SiteLoader from './components/SiteLoader'
 import { ThemeProvider } from './components/ThemeProvider'
 import About from './pages/About'
 import Assessment from './pages/Assessment'
@@ -30,6 +31,7 @@ function ScrollToTop() {
 export default function App() {
   return (
     <ThemeProvider>
+      {/* <SiteLoader /> */}
       <BookingProvider>
         <ScrollToTop />
         <ScrollProgress />

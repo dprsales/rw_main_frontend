@@ -49,6 +49,8 @@ const LOCALITY_QUADRANT = {
   'Manchirevula': 'South',
   'TGSPA Junction': 'South',
   'Mamidipally': 'South',
+  'Gaganpahad': 'South',
+  'Tellapur': 'North',
 }
 const QUADRANTS = ['All', 'West', 'East', 'North', 'South']
 
