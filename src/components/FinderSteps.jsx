@@ -3,8 +3,8 @@ import { CHALLENGES, WHO, goalOptions, labelFor } from '../data/guidance'
 import './GuidedFinder.css'
 
 const TITLES = {
-  who: 'Who are you?',
-  challenge: "What's in the way right now?",
+  who: 'Choose what best describes you',
+  challenge: 'What’s the biggest challenge right now?',
   goal: 'What would help most?',
 }
 

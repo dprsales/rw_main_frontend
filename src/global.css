@@ -2560,4 +2560,11 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-cta-secondary--back .rw-cta-secondary-arrow { order: -1; }
 .rw-cta-secondary--back:hover .rw-cta-secondary-arrow { transform: translateX(-4px); }
 @media (max-width: 560px) { .rw-cta-secondary { white-space: normal; text-align: center; height: auto; min-height: 48px; padding: 12px 18px; line-height: 1.3; } }
+/* `.rw-cta` (ctaCopper/ctaInk in styles.js) sets white-space:nowrap and a fixed 48px
+   height inline, so a long label — "APPLY TO BECOME A CHANNEL PARTNER →" — overflows
+   past the pill on a phone instead of wrapping. !important is required here since a
+   plain class rule can't beat an inline style of the same property. */
+@media (max-width: 560px) {
+  .rw-cta { white-space: normal !important; text-align: center !important; height: auto !important; min-height: 48px; padding: 12px 20px !important; line-height: 1.3 !important; }
+}
 @media (prefers-reduced-motion: reduce) { .rw-cta-secondary, .rw-cta-secondary .rw-cta-secondary-arrow { transition: none; } }

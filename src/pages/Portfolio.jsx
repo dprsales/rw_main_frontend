@@ -31,6 +31,7 @@ import vamsiramHomes from '../assets/site/LOGOS/vamsiram-homes.svg'
 import vibrant from '../assets/site/LOGOS/vibrant.svg'
 import zuari from '../assets/site/LOGOS/zuari.svg'
 import CountUp from '../components/CountUp'
+import AboutSection from '../components/AboutSection'
 import ExperienceSection from '../components/ExperienceSection'
 import Footer from '../components/Footer'
 import GlimpsesSection from '../components/GlimpsesSection'
@@ -181,6 +182,8 @@ export default function Portfolio() {
 
       {/* Same mosaic as home; no through-link since you're already on the portfolio. */}
       {/* <GlimpsesSection showCta={false} linkTo={null} /> */}
+
+      <AboutSection />
 
       <ExperienceSection />
 

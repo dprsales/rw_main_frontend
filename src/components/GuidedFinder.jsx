@@ -91,7 +91,7 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
         <div className="rw-finder-lead">
           <Reveal style={{ ...eyebrow, marginBottom: 22 }}>FIND THE RIGHT FIT</Reveal>
           <Reveal as={variant === 'page' ? 'h1' : 'h2'} id="finder-heading" delay={80} style={{ ...sectionHeadingLg, fontSize: 'clamp(28px,3.1vw,44px)', lineHeight: 1.08 }}>
-            Tell us who you are. <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>We&rsquo;ll point you to the right service.</span>
+            Tell us who you are. <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>We&rsquo;ll point you in right direction.</span>
           </Reveal>
           <Reveal as="p" delay={140} style={{ ...body, marginTop: 22, maxWidth: '30em' }}>
             One to three taps, no typing. You can change an answer at any point, or skip this and book a call directly.

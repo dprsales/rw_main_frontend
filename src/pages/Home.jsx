@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import heroImage from '../assets/site/hero-rajiv.webp'
 import backdropImage from '../assets/site/sales-mandate.png'
 import consultingImage from '../assets/site/consulting.jpeg'
-import portraitImage from '../assets/site/portrait-rajiv.png'
 import whiteboardImage from '../assets/site/coaching.png'
 import hraLogo from '../assets/site/logo-hra.png'
 import narLogo from '../assets/site/logo-nar.png'
@@ -13,7 +12,6 @@ import GuidedFinder from '../components/GuidedFinder'
 import GlimpsesSection from '../components/GlimpsesSection'
 import Seo from '../components/Seo'
 import Header from '../components/Header'
-import ImageSlot from '../components/ImageSlot'
 import { Skeleton } from 'boneyard-js/react'
 import { BookButton } from '../components/BookingModal'
 import Marquee from '../components/Marquee'
@@ -22,15 +20,13 @@ import FoldText from '../components/FoldText'
 import StrokeText from '../components/StrokeText'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { SectionCount } from '../components/SectionHead'
-import SignatureOverlay from '../components/SignatureOverlay'
 import { useParallax } from '../hooks/useParallax'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
-import { useTilt } from '../hooks/useTilt'
 import { BLOGS, HERO_COPY, HOME_TESTIMONIALS, MARQUEE_ITEMS, WAYS } from '../data/content'
 import { fetchBlogs } from '../data/blogs'
 import { HOME_FOOTER_LINKS, mono, serif, text } from '../theme'
 import {
-  body, container, ctaInk, ctaInline, eyebrow,
+  body, container, ctaInk, ctaInline,
   sectionHeading, sectionHeadingLg, sectionRule,
 } from '../styles'
 
@@ -59,24 +55,6 @@ function BlogFeedSkeleton({ count = HOME_BLOG_COUNT }) {
   )
 }
 
-/** A tilting, revealing image frame - used for editorial portraits. */
-function TiltFrame({ ratio = '4/5', children, style }) {
-  const tilt = useTilt({ max: 5 })
-  return (
-    <Reveal delay={120} style={{ position: 'relative', ...style }}>
-      <div
-        ref={tilt.ref}
-        onPointerMove={tilt.onPointerMove}
-        onPointerLeave={tilt.onPointerLeave}
-        className="rw-frame"
-        style={{ ...tilt.style, aspectRatio: ratio, border: '1px solid var(--line)', overflow: 'hidden', background: 'var(--chip)' }}
-      >
-        {children}
-      </div>
-    </Reveal>
-  )
-}
-
 /** Covers for the three service cards, in WAYS order. */
 const WAY_COVERS = [
   { src: whiteboardImage, alt: 'Rajiv coaching at the whiteboard' },
@@ -84,7 +62,7 @@ const WAY_COVERS = [
   { src: backdropImage, alt: 'Rajiv beside the RW backdrop' },
 ]
 
-function HeroCinematic({ onStory }) {
+function HeroCinematic() {
   const { targetRef, targetStyle, container: parallax } = useParallax()
 
   return (
@@ -160,9 +138,9 @@ function HeroCinematic({ onStory }) {
 
         <Reveal delay={240} style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 'clamp(14px,2.4vw,24px)', flexWrap: 'wrap' }}>
           <BookButton specular>BOOK A STRATEGY CALL</BookButton>
-          <button type="button" onClick={onStory} className="rw-inline-cta" style={{ ...ctaInline, color: '#F2EFE9' }}>
+          <Link to="/portfolio" className="rw-inline-cta" style={{ ...ctaInline, color: '#F2EFE9' }}>
             The story →
-          </button>
+          </Link>
         </Reveal>
 
         {/* Separator rules only read correctly while the line holds; below the
@@ -195,7 +173,6 @@ export default function Home() {
   const scrollToId = useSmoothScroll()
   const navigate = useNavigate()
   const location = useLocation()
-  const goStory = () => scrollToId('about')
 
   // /start sends "browse the three services" back here with a target section.
   useEffect(() => {
@@ -228,7 +205,7 @@ export default function Home() {
       <Seo route="/" />
       <Header />
 
-      <HeroCinematic onStory={goStory} />
+      <HeroCinematic />
 
 
       {/* Philosophy */}
@@ -242,31 +219,6 @@ He doesn&apos;t wait for the market to move.<br />
             Years spent solving the industry's toughest problems have shaped a singular mission: to define what real estate in
             Hyderabad becomes next. It's the standard he carries into every client he works with.
           </Reveal>
-        </div>
-      </section>
-
-      {/* About */}
-      <section id="about" className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,130px) 40px' }}>
-        <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.44fr .56fr', gap: 60, alignItems: 'center' }}>
-          <TiltFrame ratio="4/5">
-            <ImageSlot src={portraitImage} alt="Rajiv Williams" placeholder="Portrait of Rajiv" caption="pics/ · office or studio" position="45% 28%" />
-            <SignatureOverlay />
-          </TiltFrame>
-          <div>
-            <Reveal style={{ ...eyebrow, letterSpacing: '.24em', marginBottom: 22 }}>ABOUT &nbsp;/&nbsp; (01)</Reveal>
-            <Reveal as="h2" style={{ ...sectionHeadingLg, fontSize: 'clamp(34px,4.6vw,62px)', lineHeight: 1.02 }}>
-              Practitioner first.<br />Everything else follows.
-            </Reveal>
-            <Reveal as="p" delay={120} style={{ ...body, marginTop: 30, maxWidth: '37em' }}>
-              Over fifteen years of live deals, and still counting. Everything Rajiv shares was earned in the market first. That single fact decides everything on this page.
-            </Reveal>
-            <Reveal as="p" delay={200} style={{ ...body, marginTop: 20, maxWidth: '37em' }}>
-              In a business built on trust, Rajiv Williams believes reputation is the only asset that compounds forever and every deal is judged against it.
-            </Reveal>
-            {/* <Reveal delay={280} style={{ marginTop: 40, display: 'flex', gap: 40, flexWrap: 'wrap', fontFamily: mono, fontSize: 12, letterSpacing: '.06em', color: 'var(--faded)', borderTop: '1px solid var(--line)', paddingTop: 24 }}>
-              <div>TGRERA REGISTERED REALTOR</div><div>FOUNDER, RW REALTY</div><div>HYDERABAD, TELANGANA</div>
-            </Reveal> */}
-          </div>
         </div>
       </section>
 

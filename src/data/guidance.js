@@ -58,7 +58,6 @@ export const GOALS = [
   { key: 'train_team', label: 'Train the team we have' },
   { key: 'fix_process', label: 'Rebuild how sales is run — process, structure, CRM' },
   { key: 'hand_over', label: 'Hand sales to a dedicated external team', only: ['developer'] },
-  { key: 'unsure', label: "Not sure — let's talk" },
 ]
 
 /** Q3 is asked only for these (who, challenge) combinations. */
