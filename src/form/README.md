@@ -26,11 +26,27 @@ import AssessmentForm from './form/AssessmentForm'
 | --- | --- | --- |
 | `initialTrack` | — | `'coaching' \| 'consulting' \| 'realty'`, opens that questionnaire and skips the picker. Anything else is ignored. |
 | `onTrackChange(key \| null)` | — | Fires on every pick and on going back, so the host can mirror the choice into the URL. |
-| `onSubmit(payload)` | logs to console | Receives `{ track, answers, submittedAt }`. |
+| `onSubmit(payload)` | logs to console | Receives `{ track, answers, submittedAt }`. It may return a promise; the confirmation is shown only after that promise resolves. |
 | `stickyOffset` | `0` | Px from the top of the viewport where the progress rail parks — set this to the height of the host page's own sticky header. |
+| `prefill` | `{}` | Initial visible answers keyed by question `id`. Values should match the target track's configured options/types. |
+| `extraAnswers` | `{}` | Additional context merged into `payload.answers` at submission without rendering new questions. Keep its keys separate from visible question IDs. |
 
 `answers` is keyed by question `id`: a string for `pill`, `input` and `text`
 questions, an array of strings for `check`.
+
+The submission payload is assembled as:
+
+```js
+{
+  track,
+  answers: { ...visibleAnswers, ...extraAnswers },
+  submittedAt: new Date().toISOString(),
+}
+```
+
+Because `extraAnswers` is merged last, a duplicate key would replace the visible
+answer in the payload. The site integration uses the dedicated `finder` key and
+does not overlap questionnaire IDs.
 
 ## On this site
 
@@ -48,10 +64,34 @@ An unknown or differently-cased segment redirects to the canonical URL, and the
 older `/form?track=x` links redirect onto `/form/x`. React Router matches
 case-insensitively, so `/FORM` resolves there too.
 
-Submission is not wired yet. `POST /leads` requires a name, email and ten-digit
-phone, none of which this form asks for — those arrive with the Meta lead form
-upstream. Either widen the endpoint, or carry the lead id through in the query
-string and `PATCH` it from `onSubmit`.
+Submission is wired. Every track includes the required name, phone and email
+questions from `CONTACT_QUESTIONS`. `Form.jsx` passes the completed payload to
+`submitSaleLead`, which posts it to the public `POST /saleleads` endpoint. The
+backend accepts `{ track, answers, submittedAt }`; `track` must be `coaching`,
+`consulting` or `realty`. The form shows its confirmation only after the request
+resolves. A failed request keeps the questionnaire open and displays the current
+error alert so the visitor can retry.
+
+When a visitor arrives from the guided Finder, `Form.jsx` reads the Finder data
+from React Router location state. It prefills the track's `role` only when the
+mapped label exists in that track's configured options, and passes the complete
+Finder context through:
+
+```js
+extraAnswers={{
+  finder: {
+    who,
+    challenge,
+    goal,
+    recommendedService,
+    rule,
+  },
+}}
+```
+
+That context is stored under `answers.finder` and is also available to the
+backend's CRM mapping. Direct visits to `/form/:track` work without Finder state
+and simply submit the questionnaire answers.
 
 ## Colours and type
 

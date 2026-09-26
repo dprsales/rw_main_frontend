@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ASSESSMENT_TRACKS, TRACK_ORDER } from './tracks'
 import { useReveal } from './useReveal'
 import './form.css'
@@ -24,7 +24,27 @@ function blankAnswers(track) {
   return Object.fromEntries(track.questions.map((q) => [q.id, q.type === 'check' ? [] : '']))
 }
 
-const isAnswered = (q, value) => (q.type === 'check' ? value.length > 0 : String(value).trim() !== '')
+/**
+ * Two-column layout: questions share a row (pills simply wrap inside a half
+ * cell); checkbox lists span it and lay their options out in two columns instead.
+ * A question that would be left alone beside a spanning one is widened too, so
+ * the panel has no holes and the reading order stays exactly the question order.
+ */
+const isShort = (q) => q.type !== 'check'
+function wideQuestions(questions) {
+  const wide = new Set()
+  let pending = null   // short question waiting for a partner
+  for (const q of questions) {
+    if (isShort(q)) { pending = pending ? null : q; continue }
+    if (pending) wide.add(pending.id)
+    pending = null
+    wide.add(q.id)
+  }
+  if (pending) wide.add(pending.id)
+  return wide
+}
+
+const isAnswered =(q, value) => (q.type === 'check' ? value.length > 0 : String(value).trim() !== '')
 
 const Arrow = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
@@ -33,17 +53,22 @@ const Arrow = () => (
 )
 
 /** Pre-consultation assessment: track picker, questionnaire, confirmation. Self-contained inside `src/form/`. */
-export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, stickyOffset = 0, prefill = {}, extraAnswers = {} }) {
+export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, stickyOffset = 0, prefill = {}, extraAnswers = {}, onFirstInput }) {
   const [trackKey, setTrackKey] = useState(ASSESSMENT_TRACKS[initialTrack] ? initialTrack : null)
   const track = trackKey ? ASSESSMENT_TRACKS[trackKey] : null
 
   // `prefill` seeds answers by question id (from the guided finder); `extraAnswers` ride along in the payload untouched.
   const [answers, setAnswers] = useState(() => (track ? { ...blankAnswers(track), ...prefill } : {}))
   const [sent, setSent] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState('idle')
+  const [submitError, setSubmitError] = useState('')
+  const submitLock = useRef(false)
+  const isSubmitting = submitStatus === 'submitting'
 
   /* Scroll to top on each view change so a new track/confirmation starts visible. */
   useEffect(() => { window.scrollTo(0, 0) }, [trackKey, sent])
 
+  const wide = useMemo(() => (track ? wideQuestions(track.questions) : new Set()), [track])
   const required = useMemo(() => (track ? track.questions.filter((q) => q.required) : []), [track])
   const done = required.filter((q) => isAnswered(q, answers[q.id] ?? '')).length
   const left = required.length - done
@@ -52,24 +77,36 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
     setTrackKey(key)
     setAnswers(blankAnswers(ASSESSMENT_TRACKS[key]))
     setSent(false)
+    setSubmitStatus('idle')
+    setSubmitError('')
     onTrackChange?.(key)
   }
 
   function reset() {
+    if (submitLock.current) return
+
     setTrackKey(null)
     setAnswers({})
     setSent(false)
+    setSubmitStatus('idle')
+    setSubmitError('')
     onTrackChange?.(null)
   }
 
-  const set = (id, value) => setAnswers((prev) => ({ ...prev, [id]: value }))
+  // Optional analytics hook: the parent decides what (if anything) to record.
+  const set = (id, value) => { onFirstInput?.(); setAnswers((prev) => ({ ...prev, [id]: value })) }
 
-  const toggle = (id, option) => setAnswers((prev) => {
+  const toggle = (id, option) => { onFirstInput?.(); setAnswers((prev) => {
     const current = prev[id]
     return { ...prev, [id]: current.includes(option) ? current.filter((v) => v !== option) : [...current, option] }
-  })
+  }) }
 
   async function submit() {
+    if (left > 0 || submitLock.current) return
+
+    submitLock.current = true
+    setSubmitStatus('submitting')
+    setSubmitError('')
     const payload = { track: trackKey, answers: { ...answers, ...extraAnswers }, submittedAt: new Date().toISOString() }
     try {
       if (onSubmit) {
@@ -78,10 +115,14 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
         console.log('RW assessment', payload)
       }
 
+      setSubmitStatus('idle')
       setSent(true)
     } catch (error) {
       console.error('Lead submission failed:', error)
-      alert(error?.message || 'Unable to submit your enquiry. Please try again.')
+      setSubmitError(error?.message || 'Unable to submit your enquiry.')
+      setSubmitStatus('error')
+    } finally {
+      submitLock.current = false
     }
   }
 
@@ -157,7 +198,7 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
       {/* Progress rail counts required questions only. */}
       <div className="rw-form-rail" style={{ top: stickyOffset }}>
         <div className="rw-form-pad rw-form-wrap rw-form-rail-inner">
-          <button type="button" className="rw-form-back" onClick={reset}>← All tracks</button>
+          <button type="button" className="rw-form-back" onClick={reset} disabled={isSubmitting}>← All tracks</button>
           <span className="rw-form-rail-label">{track.label} form · {done} of {required.length}</span>
           <div className="rw-form-bar">
             <div className="rw-form-bar-fill" style={{ transform: `scaleX(${required.length ? done / required.length : 0})` }} />
@@ -178,9 +219,9 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
           <span className="rw-form-time">{track.intro.time}</span>
         </Reveal>
 
-        <div className="rw-form-questions">
+        <div className="rw-form-questions rw-form-panel rw-form-panel--questions">
           {track.questions.map((q, i) => (
-            <Reveal key={q.id} delay={Math.min(i, 4) * 60} className="rw-form-q">
+            <Reveal key={q.id} delay={Math.min(i, 4) * 60} className={`rw-form-field-wrap${wide.has(q.id) ? ' rw-form-field-wrap--wide' : ''}`}>
               <div className="rw-form-q-title">
                 {q.title}
                 {q.required
@@ -248,13 +289,29 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
         </div>
 
         <div className="rw-form-submit-bar">
-          <span className="rw-form-left">
-            {left > 0 ? `${left} required question${left === 1 ? '' : 's'} left` : 'Ready to submit'}
+          <span className="rw-form-left" role="status" aria-live="polite">
+            {isSubmitting
+              ? 'Submitting your details…'
+              : left > 0
+                ? `${left} required question${left === 1 ? '' : 's'} left`
+                : 'Ready to submit'}
           </span>
-          <button type="button" className="rw-form-submit rw-cta" onClick={submit} disabled={left > 0}>
-            SUBMIT &amp; SCHEDULE CONSULTATION
+          <button
+            type="button"
+            className="rw-form-submit rw-cta"
+            onClick={submit}
+            disabled={left > 0 || isSubmitting}
+            aria-busy={isSubmitting}
+            aria-describedby={submitStatus === 'error' ? 'rw-form-submit-error' : undefined}
+          >
+            {isSubmitting ? 'SUBMITTING…' : 'SUBMIT & SCHEDULE CONSULTATION'}
           </button>
         </div>
+        {submitStatus === 'error' && (
+          <p id="rw-form-submit-error" className="rw-form-submit-error" role="alert">
+            {submitError} Your answers are still here. Please try again.
+          </p>
+        )}
       </section>
     </div>
   )

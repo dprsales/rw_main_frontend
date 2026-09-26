@@ -13,6 +13,7 @@ import { BookButton } from '../components/BookingModal'
 import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import ClosingCTA from '../components/ClosingCTA'
+import RelatedReading from '../components/RelatedReading'
 import PageIntro from '../components/PageIntro'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { SectionAside } from '../components/SectionHead'
@@ -329,6 +330,8 @@ export default function Consulting() {
           </Reveal>
         </div>
       </section>
+
+      <RelatedReading service="consulting" title="Reading for sales leaders & teams." />
 
       <ClosingCTA id="talk" chip title="If the inventory is right and the velocity is wrong, talk.">
         <CtaButton variant="outline" href="/form/consulting">TELL US ABOUT YOUR BUSINESS</CtaButton>

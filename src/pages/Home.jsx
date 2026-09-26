@@ -23,7 +23,7 @@ import SectionHead, { SectionCount } from '../components/SectionHead'
 import { useParallax } from '../hooks/useParallax'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { BLOGS, HERO_COPY, HOME_TESTIMONIALS, MARQUEE_ITEMS, WAYS } from '../data/content'
-import { fetchBlogs } from '../data/blogs'
+import { HOME_FEATURED, featureFirst, fetchBlogsOnce } from '../data/blogs'
 import { HOME_FOOTER_LINKS, mono, serif, text } from '../theme'
 import {
   body, container, ctaInk, ctaInline,
@@ -182,16 +182,16 @@ export default function Home() {
     return () => cancelAnimationFrame(id)
   }, [location.state, scrollToId])
 
-  // Live blog feed, newest first, falls back to the static set on failure.
+  // Live blog feed: one featured post per vertical, then newest first; falls back to the static set on failure.
   // `visibleCount` grows a page at a time on "Load more".
   const [allBlogs, setAllBlogs] = useState(FALLBACK_BLOG_ITEMS)
   const [visibleCount, setVisibleCount] = useState(HOME_BLOG_COUNT)
   const [loadingBlogs, setLoadingBlogs] = useState(true)
   useEffect(() => {
     let alive = true
-    fetchBlogs()
+    fetchBlogsOnce()
       .then((cards) => {
-        if (alive && cards.length) setAllBlogs(cards)
+        if (alive && cards.length) setAllBlogs(featureFirst(cards, HOME_FEATURED))
       })
       .catch(() => {})
       .finally(() => { if (alive) setLoadingBlogs(false) })

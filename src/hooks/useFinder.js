@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { track } from '../data/analytics'
+import { newId, track } from '../data/analytics'
 import { CHALLENGES, WHO, needsGoal, recommend } from '../data/guidance'
 
 /**
@@ -26,22 +26,33 @@ export function useFinder({ seed = {}, location = 'home' } = {}) {
   const done = !current && Boolean(answers.who)
   const result = useMemo(() => (done ? recommend(answers) : null), [done, answers])
 
+  // One opaque ID per Finder attempt; "start over" begins a new one. Analytics-only —
+  // toLead() and the /form payload never include it.
+  const [attemptId, setAttemptId] = useState(newId)
+  const startedRef = useRef(false)
+  const completedRuleRef = useRef(null)
+
   useEffect(() => {
     if (!result) return
-    track('finder_completed', { visitorType: answers.who, challenge: answers.challenge, goal: answers.goal, steps: steps.length, location })
-    track('finder_recommendation', { visitorType: answers.who, challenge: answers.challenge, goal: answers.goal, recommendedService: result.outcome.key, rule: result.rule, location })
+    // Once per attempt; an edit after completion counts again only if the recommendation changes.
+    if (completedRuleRef.current === result.rule) return
+    completedRuleRef.current = result.rule
+    track('finder_completed', { visitorType: answers.who, challenge: answers.challenge, goal: answers.goal, steps: steps.length, location, attemptId })
+    track('finder_recommendation', { visitorType: answers.who, challenge: answers.challenge, goal: answers.goal, recommendedService: result.outcome.key, rule: result.rule, location, attemptId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result])
 
-  // Abandonment: left with at least one answer and no recommendation.
+  // Abandonment (diagnostic, best-effort — not a KPI): left with at least one answer and no recommendation.
   const answersRef = useRef(answers)
   answersRef.current = answers
   const doneRef = useRef(done)
   doneRef.current = done
+  const attemptRef = useRef(attemptId)
+  attemptRef.current = attemptId
   useEffect(() => {
     const abandon = () => {
       const a = answersRef.current
-      if (!doneRef.current && a.who) track('finder_abandoned', { lastStep: Object.keys(a).length, visitorType: a.who, location })
+      if (!doneRef.current && a.who) track('finder_abandoned', { lastStep: Object.keys(a).length, visitorType: a.who, location, attemptId: attemptRef.current, bestEffort: true })
     }
     const onHide = () => { if (document.visibilityState === 'hidden') abandon() }
     document.addEventListener('visibilitychange', onHide)
@@ -49,7 +60,11 @@ export function useFinder({ seed = {}, location = 'home' } = {}) {
   }, [location])
 
   const answer = useCallback((key, value) => {
-    track('finder_step', { step: ['who', 'challenge', 'goal'].indexOf(key) + 1, key, value, location })
+    if (!startedRef.current) {
+      startedRef.current = true
+      track('finder_started', { location, visitorType: key === 'who' ? value : answersRef.current.who, attemptId: attemptRef.current })
+    }
+    track('finder_step', { step: ['who', 'challenge', 'goal'].indexOf(key) + 1, key, value, location, attemptId: attemptRef.current })
     setAnswers((prev) => {
       const next = { ...prev, [key]: value }
       // Changing an earlier answer invalidates the later ones.
@@ -72,14 +87,20 @@ export function useFinder({ seed = {}, location = 'home' } = {}) {
     editStep(prevStep)
   }, [steps, stepIndex, editStep])
 
-  const restart = useCallback(() => setAnswers({}), [])
+  const restart = useCallback(() => {
+    setAnswers({})
+    setAttemptId(newId())
+    startedRef.current = false
+    completedRuleRef.current = null
+  }, [])
 
   /** What the booking modal / lead payload carries. */
   const guidance = result ? {
     who: answers.who, challenge: answers.challenge, goal: answers.goal,
     recommended: result.outcome.key === 'strategy_call' ? undefined : result.outcome.name,
     recommendedKey: result.outcome.key,
+    attemptId,
   } : null
 
-  return { answers, steps, current, stepIndex, done, result, guidance, answer, editStep, back, restart }
+  return { answers, steps, current, stepIndex, done, result, guidance, attemptId, answer, editStep, back, restart }
 }

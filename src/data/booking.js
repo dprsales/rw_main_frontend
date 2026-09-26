@@ -39,7 +39,7 @@ export function guidanceSummary(g) {
   if (!g) return ''
   const parts = [
     g.who && `Visitor: ${labelFor('who', g.who)}`,
-    g.challenge && `Challenge: ${labelFor('challenge', g.challenge)}`,
+    g.challenge && `Challenge: ${labelFor('challenge', g.challenge, g.who)}`,
     g.goal && `Wants: ${labelFor('goal', g.goal)}`,
     g.recommended && `Recommended: ${g.recommended}`,
   ].filter(Boolean)

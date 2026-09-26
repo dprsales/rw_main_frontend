@@ -5,7 +5,7 @@ import SpecularButton from './SpecularButton'
 import { mono, serif, text } from '../theme'
 import { CAREERS_INTEREST, INTERESTS, isValidPhone, submitBooking } from '../data/booking'
 import { labelFor } from '../data/guidance'
-import { track } from '../data/analytics'
+import { crmDeliveryOf, errorCategory, newId, track } from '../data/analytics'
 import { useFinder } from '../hooks/useFinder'
 import FinderSteps from './FinderSteps'
 import CtaButton from './CtaButton'
@@ -163,23 +163,40 @@ function BookingModal({ preset, onClose }) {
     }
   }, [onClose])
 
-  const startedRef = useRef(false)
-  useEffect(() => {
-    if (startedRef.current) return   // StrictMode double-invokes effects in dev
-    startedRef.current = true
-    track('booking_started', {
-      source: preset.source || (guidance ? 'guided_finder' : 'site_cta'),
-      interest: normaliseInterest(preset.interest) || undefined,
-      recommendedService: guidance?.recommendedKey,
-      visitorType: guidance?.who,
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }))
-  const setConsent = (e) => setForm((f) => ({ ...f, privacyConsent: e.target.checked }))
-
   const isApplying = form.interest === CAREERS_INTEREST
+
+  // Safe, categorical context for lead_* events (never name/phone/email/message).
+  const leadContext = () => ({
+    flow: 'booking_modal',
+    source: form.source || (guidance ? 'guided_finder' : 'site_cta'),
+    interest: form.interest || undefined,
+    recommendedService: guidance?.recommendedKey,
+    visitorType: guidance?.who,
+    attemptId: guidance?.attemptId,
+  })
+
+  // lead_form_viewed: the details form is on screen (not while the questions run).
+  // Careers opens are applications, so they stay out of the lead namespace.
+  const viewedRef = useRef(false)
+  useEffect(() => {
+    if (phase !== 'details' || viewedRef.current || isApplying) return   // ref also absorbs StrictMode double effects
+    viewedRef.current = true
+    track('lead_form_viewed', leadContext())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase])
+
+  // One submissionId per open modal, reused across retries; lead_started fires on first deliberate input.
+  const submissionRef = useRef({ id: null, attempts: 0, started: false, accepted: false })
+  const ensureSubmissionId = () => (submissionRef.current.id ||= newId())
+  const markStarted = () => {
+    const sub = submissionRef.current
+    if (sub.started || isApplying) return
+    sub.started = true
+    track('lead_started', { ...leadContext(), submissionId: ensureSubmissionId() })
+  }
+
+  const set = (key) => (e) => { markStarted(); setForm((f) => ({ ...f, [key]: e.target.value })) }
+  const setConsent = (e) => { markStarted(); setForm((f) => ({ ...f, privacyConsent: e.target.checked })) }
   const selectedRole = roleOptions.find((role) => role === form.role)
   // A preset the select doesn't list (e.g. "General enquiry") still needs to be visible and submittable.
   const interestOptions = form.interest && !INTERESTS.includes(form.interest) ? [form.interest, ...INTERESTS] : INTERESTS
@@ -215,21 +232,28 @@ function BookingModal({ preset, onClose }) {
 
     setStatus('sending')
     setError('')
+    const sub = submissionRef.current
+    const submissionId = ensureSubmissionId()
+    sub.attempts += 1
     try {
       const result = await submitBooking({ ...form, guidance })
       setRepeat(Boolean(result?.repeat))
       setStatus('sent')
-      track('booking_completed', {
-        source: form.source || (guidance ? 'guided_finder' : 'site_cta'),
-        interest: form.interest || undefined,
-        recommendedService: guidance?.recommendedKey,
-        visitorType: guidance?.who,
-        repeat: Boolean(result?.repeat),
-        deep: false,
-      })
+      if (!sub.accepted) {
+        sub.accepted = true
+        if (isApplying) {
+          track('application_submitted', { applicationType: 'careers', source: form.source || 'site_cta', jobId: form.jobId || undefined, submissionId, submitAttempt: sub.attempts })
+        } else {
+          // Accepted and saved enquiry — not a confirmed meeting (see handoff §10).
+          track('lead_submitted', { ...leadContext(), submissionId, submitAttempt: sub.attempts, repeat: Boolean(result?.repeat) })
+        }
+      }
     } catch (err) {
       setError(err?.message || 'Something went wrong. Please try again.')
       setStatus('error')
+      track(isApplying ? 'application_submission_failed' : 'lead_submission_failed', isApplying
+        ? { applicationType: 'careers', source: form.source || 'site_cta', errorCategory: errorCategory(err), submitAttempt: sub.attempts, submissionId }
+        : { ...leadContext(), submissionId, submitAttempt: sub.attempts, errorCategory: errorCategory(err) })
     }
   }
 
@@ -322,7 +346,7 @@ function BookingModal({ preset, onClose }) {
                 {guidance && (
                   <div className="rw-guidance-chips" aria-label="Your answers" style={{ marginBottom: 22 }}>
                     {guidance.who && <span className="rw-guidance-chip">{labelFor('who', guidance.who)}</span>}
-                    {guidance.challenge && <span className="rw-guidance-chip">{labelFor('challenge', guidance.challenge)}</span>}
+                    {guidance.challenge && <span className="rw-guidance-chip">{labelFor('challenge', guidance.challenge, guidance.who)}</span>}
                     {guidance.goal && <span className="rw-guidance-chip">{labelFor('goal', guidance.goal)}</span>}
                     {guidance.recommended && <span className="rw-guidance-chip is-result">→ {guidance.recommended}</span>}
                     {guidance.onEdit && (

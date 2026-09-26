@@ -196,9 +196,18 @@
   align-items: center;
   gap: 20px;
   flex-wrap: wrap;
-  padding-top: 18px;
-  padding-bottom: 18px;
+  position: relative;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
+/* The progress line sits on the rail's bottom edge instead of wrapping onto its
+   own row, so the sticky rail stays one compact line. */
+.rw-form-rail-inner .rw-form-bar {
+  position: absolute; left: 0; right: 0; bottom: -1px; width: auto;
+  /* Inherit the rail's side padding so the line still aligns with the button and label. */
+  padding-left: inherit; padding-right: inherit; background-clip: content-box; box-sizing: border-box;
+}
+.rw-form-rail .rw-form-back { padding-top: 7px; padding-bottom: 7px; }
 .rw-form-rail-label {
   margin-left: auto;
   font-family: var(--rw-sans);
@@ -304,6 +313,22 @@
 
 @media (max-width: 900px) {
   .rw-form-panel { grid-template-columns: 1fr; }
+}
+
+/* Questionnaire variant (/form): same joined two-column panel, but the questions
+   are full sentences, so they keep a readable sentence-case title instead of the
+   small uppercase label. The body widens so two columns have room. */
+.rw-form-body:has(.rw-form-panel--questions) { max-width: 1080px; }
+.rw-form-panel--questions .rw-form-q-title {
+  font-size: 16px;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.45;
+}
+.rw-form-panel--questions .rw-form-optional { font-size: 13px; letter-spacing: 0; }
+.rw-form-panel--questions .rw-form-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 900px) {
+  .rw-form-panel--questions .rw-form-checks { grid-template-columns: 1fr; }
 }
 .rw-form-q-title { font-family: var(--rw-sans); font-weight: 400; font-size: 17px; line-height: 1.45; color: var(--ink); }
 .rw-form-req { color: var(--copper); }
@@ -423,6 +448,17 @@
 /* Disabled reads as inert metal — the sweep only appears once the form is
    actually submittable. */
 .rw-form-submit:disabled { background: var(--chip); color: var(--faded); cursor: not-allowed; }
+.rw-form-rail .rw-form-back:disabled { opacity: .5; cursor: not-allowed; }
+.rw-form-submit-error {
+  margin: 16px 0 0;
+  padding: 13px 15px;
+  border-left: 2px solid #e5726a;
+  background: rgba(229, 114, 106, .08);
+  color: #f0a39d;
+  font-family: var(--rw-sans);
+  font-size: 14px;
+  line-height: 1.55;
+}
 
 /* --- Confirmation ---------------------------------------------------------- */
 .rw-form-done { text-align: center; padding-top: clamp(90px, 12vw, 150px); padding-bottom: clamp(90px, 12vw, 150px); }

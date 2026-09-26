@@ -2568,3 +2568,106 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   .rw-cta { white-space: normal !important; text-align: center !important; height: auto !important; min-height: 48px; padding: 12px 20px !important; line-height: 1.3 !important; }
 }
 @media (prefers-reduced-motion: reduce) { .rw-cta-secondary, .rw-cta-secondary .rw-cta-secondary-arrow { transition: none; } }
+
+/* --- Coaching program cards (/coaching "Three ways to work together") --------
+   Framed card; the cover fades into the card body; gold I/II/III numeral sits on
+   the fade (same numerals as the home "three ways"); icon list; full-width gold CTA. */
+.rw-programs {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 2.2vw, 28px); margin-top: 56px; align-items: stretch;
+}
+.rw-program {
+  position: relative; display: flex; flex-direction: column; overflow: hidden;
+  background: linear-gradient(180deg, var(--card) 0%, var(--bg) 100%);
+  border: 1px solid rgba(195, 155, 83, .32); border-radius: 12px;
+  color: var(--ink);
+  transition: transform .6s cubic-bezier(.2,.7,.2,1), border-color .4s ease, box-shadow .4s ease;
+}
+.rw-program:hover {
+  border-color: rgba(195, 155, 83, .7);
+  box-shadow: 0 24px 60px -30px rgba(195, 155, 83, .35);
+}
+.rw-program-media { position: relative; aspect-ratio: 4 / 3.3; overflow: hidden; }
+.rw-program-media img {
+  width: 100%; height: 100%; display: block; object-fit: cover; object-position: center 30%;
+  transition: transform 1.2s cubic-bezier(.2,.7,.2,1);
+}
+/* Fade the photo into the card body so the numeral and kicker sit on it cleanly. */
+.rw-program-media::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(11,10,9,0) 45%, rgba(11,10,9,.55) 72%, var(--card) 100%);
+}
+.rw-program-numeral {
+  position: absolute; left: clamp(22px, 2.2vw, 30px); bottom: 4px; z-index: 2;
+  font-size: clamp(52px, 4.6vw, 72px); line-height: .8; font-weight: 500;
+  background: var(--gold-gradient); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.rw-program-body {
+  flex: 1; display: flex; flex-direction: column; gap: 14px;
+  padding: 18px clamp(22px, 2.2vw, 30px) clamp(24px, 2.4vw, 30px);
+}
+.rw-program-kicker { font-size: 11px; letter-spacing: .14em; line-height: 1.6; text-transform: uppercase; color: var(--copper); }
+.rw-program-title { margin: 0; font-weight: 400; font-size: clamp(25px, 2vw, 30px); line-height: 1.1; letter-spacing: -.01em; }
+.rw-program-desc { margin: 0; font-weight: 300; font-size: 16px; line-height: 1.5; color: var(--faded); }
+.rw-program-rule { display: block; width: 72px; height: 1px; background: var(--gold-gradient); opacity: .8; }
+.rw-program-features { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 12px; }
+.rw-program-features li { display: flex; align-items: center; gap: 12px; font-size: 15px; line-height: 1.35; color: var(--ink); }
+.rw-program-icon {
+  flex: none; width: 32px; height: 32px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(195, 155, 83, .55); color: var(--copper);
+  background: rgba(195, 155, 83, .06);
+}
+.rw-program-outcome { margin: 4px 0 0; font-weight: 300; font-size: 15px; line-height: 1.55; color: var(--faded); }
+.rw-program-session { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--faded); }
+.rw-program-cta { width: 100%; margin-top: auto; gap: 10px; }
+@media (prefers-reduced-motion: reduce) {
+  .rw-program, .rw-program-media img { transition: none; }
+  .rw-program:hover, .rw-program:hover .rw-program-media img { transform: none; }
+}
+
+/* Compact card + "What's included" reveal (overlays the photo, so no height change).
+   Fade only — no slide/zoom/lift, which made the clipped photo edge flicker. */
+.rw-program-wrap { display: flex; }
+.rw-program-wrap > .rw-program { flex: 1; }
+.rw-program-media { isolation: isolate; }
+.rw-program-included {
+  position: absolute; inset: 0; z-index: 3;
+  display: flex; flex-direction: column; justify-content: flex-end; gap: 14px;
+  padding: clamp(20px, 2.2vw, 28px);
+  background: linear-gradient(to bottom, rgba(11,10,9,.72), rgba(11,10,9,.94) 45%, var(--card) 100%);
+  opacity: 0; visibility: hidden;
+  transition: opacity .35s ease, visibility 0s linear .35s;
+}
+.rw-program-included-label { font-size: 11px; letter-spacing: .2em; color: var(--copper); }
+.rw-program-numeral { transition: opacity .3s ease; }
+
+/* Open: pinned by click/tap (.is-open) … */
+.rw-program.is-open .rw-program-included { opacity: 1; visibility: visible; transition: opacity .35s ease, visibility 0s; }
+.rw-program.is-open .rw-program-numeral { opacity: 0; }
+
+/* … or, with a mouse/trackpad, previewed on hover or keyboard focus. No toggle button
+   there: hover previews, clicking the card pins it, clicking elsewhere closes it. */
+@media (hover: hover) and (pointer: fine) {
+  .rw-program { cursor: pointer; }
+  .rw-program:hover .rw-program-included,
+  .rw-program:has(:focus-visible) .rw-program-included { opacity: 1; visibility: visible; transition: opacity .35s ease, visibility 0s; }
+  .rw-program:hover .rw-program-numeral,
+  .rw-program:has(:focus-visible) .rw-program-numeral { opacity: 0; }
+  .rw-program-toggle { display: none !important; }
+}
+
+.rw-program-body { gap: 12px; }
+.rw-program-desc { min-height: 3em; }
+.rw-program-toggle {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: none; padding: 4px 0; cursor: pointer;
+  font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--copper);
+}
+.rw-program-toggle svg { transition: transform .35s ease; }
+.rw-program.is-open .rw-program-toggle svg { transform: rotate(180deg); }
+.rw-program-toggle:focus-visible { outline: 1px solid var(--copper); outline-offset: 4px; }
+.rw-program-cta { margin-top: auto; }
+@media (prefers-reduced-motion: reduce) {
+  .rw-program-included, .rw-program-numeral { transition: none !important; }
+}

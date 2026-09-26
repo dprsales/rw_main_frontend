@@ -86,6 +86,7 @@ export const OUTCOMES = {
     name: 'Sales Coaching',
     to: '/coaching',
     formTrack: 'coaching',
+    formCta: 'SHARE YOUR COACHING DETAILS',
     interest: 'Sales Coaching',
     cta: 'See how coaching works',
   },
@@ -94,6 +95,7 @@ export const OUTCOMES = {
     name: 'Sales Consulting',
     to: '/consulting',
     formTrack: 'consulting',
+    formCta: 'SHARE YOUR BUSINESS DETAILS',
     interest: 'Sales Consulting',
     cta: 'See how consulting works',
   },
@@ -102,6 +104,7 @@ export const OUTCOMES = {
     name: 'Sales Mandate · RW Realty',
     to: '/realty',
     formTrack: 'realty',
+    formCta: 'SHARE YOUR PROJECT DETAILS',
     interest: 'Sales Mandates',
     cta: 'See how a mandate works',
   },
@@ -136,29 +139,29 @@ export const RULES = [
     reason: "Let's work out the right fit on a short call." },
 
   { id: 'R3', who: 'sales_pro', challenge: 'low_closing', goal: '*', outcome: 'coaching',
-    reason: 'Closing at higher ticket sizes is a skill, and coaching is built around it.' },
+    reason: 'Coaching is a practical starting point for reviewing and strengthening how you handle and close opportunities.' },
   { id: 'R4', who: 'sales_pro', challenge: '*', goal: '*', outcome: 'coaching',
-    reason: 'Coaching is the individual track. The assessment is the fastest way to see where to start.',
+    reason: 'Coaching is the individual track. The assessment can help identify where to begin.',
     secondary: { label: 'Take the assessment first', to: '/assessment' } },
 
   { id: 'R5', who: 'sales_leader', challenge: 'low_closing', goal: '*', outcome: 'coaching',
-    reason: "Your team's conversion is a skills problem before it's a process problem." },
+    reason: 'Coaching is a practical starting point for reviewing and strengthening how the team handles and closes opportunities.' },
   { id: 'R6', who: 'sales_leader', challenge: 'process_crm', goal: '*', outcome: 'consulting',
-    reason: 'Pipeline discipline and CRM structure are consulting work, not training.' },
+    reason: 'Consulting is the relevant starting point for reviewing pipeline discipline, sales process and CRM structure.' },
   { id: 'R7', who: 'sales_leader', challenge: 'positioning', goal: '*', outcome: 'consulting',
-    reason: 'Positioning is fixed in the sales operation, not on the sales floor.' },
+    reason: 'Project positioning often needs changes beyond the sales floor. Consulting can examine the wider sales operation.' },
   { id: 'R8', who: 'sales_leader', challenge: '*', goal: 'train_team', outcome: 'coaching',
     reason: "You want the existing team performing. That's coaching." },
   { id: 'R9', who: 'sales_leader', challenge: '*', goal: 'fix_process', outcome: 'consulting',
     reason: "You want the operation rebuilt around the team. That's consulting." },
   { id: 'R10', who: 'sales_leader', challenge: '*', goal: 'unsure', outcome: 'strategy_call',
-    reason: 'Coaching or consulting — worth a 15-minute call to decide.',
+    reason: 'Coaching or consulting — a short strategy call can help clarify the right fit.',
     candidates: ['coaching', 'consulting'] },
 
   { id: 'R11', who: 'developer', challenge: '*', goal: 'train_team', outcome: 'coaching',
-    reason: 'Your team stays; its closing skill goes up.' },
+    reason: 'You want to keep the existing team and strengthen its closing skills. Coaching is the relevant starting point.' },
   { id: 'R12', who: 'developer', challenge: '*', goal: 'fix_process', outcome: 'consulting',
-    reason: 'Sales process, structure and CRM get rebuilt around conversion, not discounts.' },
+    reason: 'You want to review how sales is run across process, structure and CRM. Consulting is the relevant starting point.' },
   { id: 'R13', who: 'developer', challenge: '*', goal: 'hand_over', outcome: 'realty',
     reason: 'You build, RW Realty sells — strategy, onsite team and funnel, end to end.' },
   { id: 'R14', who: 'developer', challenge: '*', goal: 'unsure', outcome: 'strategy_call',
@@ -190,11 +193,13 @@ export function recommend(answers = {}) {
   }
 }
 
-/** Human labels for the chips and the lead message. */
-export function labelFor(key, value) {
+/** Human labels for the chips and lead message; `who` disambiguates shared challenge keys. */
+export function labelFor(key, value, who) {
   if (!value) return ''
   if (key === 'who') return WHO.find((w) => w.key === value)?.label || value
   if (key === 'challenge') {
+    const personaMatch = who && CHALLENGES[who]?.find((c) => c.key === value)
+    if (personaMatch) return personaMatch.label
     for (const list of Object.values(CHALLENGES)) {
       const hit = list.find((c) => c.key === value)
       if (hit) return hit.label

@@ -19,6 +19,7 @@ import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import RiseText from '../components/RiseText'
 import ClosingCTA from '../components/ClosingCTA'
+import RelatedReading from '../components/RelatedReading'
 import SectionHead, { SectionAside } from '../components/SectionHead'
 import { useInView } from '../hooks/useInView'
 import { MANDATE_SCOPE } from '../data/content'
@@ -343,6 +344,8 @@ export default function Realty() {
           </Reveal>
         </div>
       </section>
+
+      <RelatedReading service="realty" title="On mandates & luxury positioning." />
 
       <ClosingCTA title="Mandates are limited to a handful of projects at a time.">
         <CtaButton variant="outline" href="/form/realty">TELL US ABOUT YOUR PROJECT</CtaButton>

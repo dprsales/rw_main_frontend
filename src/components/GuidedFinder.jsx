@@ -75,8 +75,8 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
   }
 
   const deepPath = () => {
-    track('finder_service_click', { recommendedService: result.outcome.key, target: 'form', location })
-    navigate(`/form/${result.outcome.formTrack}`, { state: { prefill: { finder: { ...answers, recommendedService: result.outcome.key, rule: result.rule } } } })
+    track('finder_service_click', { recommendedService: result.outcome.key, target: 'form', location, attemptId: finder.attemptId })
+    navigate(`/form/${result.outcome.formTrack}`, { state: { prefill: { finder: { ...answers, recommendedService: result.outcome.key, rule: result.rule } }, attemptId: finder.attemptId } })
   }
 
   return (
@@ -91,7 +91,7 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
         <div className="rw-finder-lead">
           <Reveal style={{ ...eyebrow, marginBottom: 22 }}>FIND THE RIGHT FIT</Reveal>
           <Reveal as={variant === 'page' ? 'h1' : 'h2'} id="finder-heading" delay={80} style={{ ...sectionHeadingLg, fontSize: 'clamp(28px,3.1vw,44px)', lineHeight: 1.08 }}>
-            Tell us who you are. <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>We&rsquo;ll point you in right direction.</span>
+            Tell us who you are. <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>We&rsquo;ll point you in the right direction.</span>
           </Reveal>
           <Reveal as="p" delay={140} style={{ ...body, marginTop: 22, maxWidth: '30em' }}>
             One to three taps, no typing. You can change an answer at any point, or skip this and book a call directly.
@@ -148,10 +148,10 @@ const ResultCard = forwardRef(function ResultCard({ result, guidance, onDeepPath
       <div className="rw-finder-card-actions">
         <BookButton specular {...bookPreset}>BOOK A STRATEGY CALL</BookButton>
         {outcome.formTrack && (
-          <CtaButton variant="outline" onClick={onDeepPath}>TELL US MORE FIRST</CtaButton>
+          <CtaButton variant="outline" onClick={onDeepPath}>{outcome.formCta}</CtaButton>
         )}
         {isBrowse && (
-          <CtaButton variant="outline" href={outcome.to} onClick={() => track('finder_service_click', { recommendedService: outcome.key, target: 'browse', location })}>
+          <CtaButton variant="outline" href={outcome.to} onClick={() => track('finder_service_click', { recommendedService: outcome.key, target: 'browse', location, attemptId: guidance?.attemptId })}>
             BROWSE THE PROJECTS
           </CtaButton>
         )}
@@ -161,13 +161,13 @@ const ResultCard = forwardRef(function ResultCard({ result, guidance, onDeepPath
       <div className="rw-finder-card-secondary">
         {outcome.to && !isBrowse && (
           <CtaButton variant="secondary" to={outcome.to} arrow="→"
-            onClick={() => track('finder_service_click', { recommendedService: outcome.key, target: 'page', location })}>
+            onClick={() => track('finder_service_click', { recommendedService: outcome.key, target: 'page', location, attemptId: guidance?.attemptId })}>
             {outcome.cta}
           </CtaButton>
         )}
         {secondary && (
           <CtaButton variant="secondary" to={secondary.to} arrow="→"
-            onClick={() => track('finder_service_click', { recommendedService: outcome.key, target: 'secondary', location })}>
+            onClick={() => track('finder_service_click', { recommendedService: outcome.key, target: 'secondary', location, attemptId: guidance?.attemptId })}>
             {secondary.label}
           </CtaButton>
         )}

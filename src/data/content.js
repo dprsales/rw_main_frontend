@@ -12,7 +12,9 @@ export const ASSESSMENT_AREAS = [
   { n: '2', title: 'How you structure your answers', desc: 'Clear and easy to follow, or rambling and hard to act on.' },
   { n: '3', title: 'How you communicate', desc: 'Tone, vocabulary, and presence. Buyers form trust early in the conversation.' },
   { n: '4', title: 'How you carry yourself', desc: 'Confidence under pressure. Whether your delivery matches the price point you sell.' },
-  { n: '5', title: 'How you handle objections', desc: 'How you respond when a buyer pushes back. This separates closers from order-takers.' },
+  /* T25: the page promised "six areas" but listed five; "relevance" is the scoring model's sixth (coachingCategories.js). */
+  { n: '5', title: 'How relevant you stay', desc: "Whether your answers stay on the buyer's question and situation, or drift into a generic pitch." },
+  { n: '6', title: 'How you handle objections', desc: 'How you respond when a buyer pushes back. This separates closers from order-takers.' },
 ]
 
 /**
@@ -54,21 +56,35 @@ export const ACHIEVE = [
   { title: 'Eliminate Revenue Leaks', body: 'Identify where deals slow down or break and install systems that prevent loss of momentum.' },
 ]
 
+/* T14 — facts supplied by the user on 26 Sep 2026 (see COACHING_OFFER_FACT_SHEET.md).
+   Unconfirmed items (group format, number of sessions, pricing) are deliberately left out. */
 export const COACHING_PROGRAMS = [
   {
-    title: 'Hight Ticket Sales Mastery', subtitle: '1st Oppurtunity · For Developers · Hyderabad',
-    description: '90-120 mins session',
-    features: [''],
+    k: 'I',
+    audience: 'For Developers & Real-Estate Sales Professionals',
+    title: 'High Ticket Sales Mastery', subtitle: '1st Opportunity · For Developers & Real-Estate Sales Professionals · Hyderabad',
+    description: 'High-ticket selling fundamentals: conversion, negotiation and closing.',
+    features: ['Client psychology', 'Objection handling', 'Negotiation', 'Confidence & high-value closing'],
+    outcome: 'Built to help you present better, handle objections, negotiate with confidence and convert more consistently.',
+    session: '90-120 mins session',
   },
   {
-    title: 'Luxury Sales Mastery', subtitle: '2nd Oppurtunity · For Developers · Hyderabad',
-    description: '90-120 mins session',
-    features: [''],
+    k: 'II',
+    audience: 'For Developers & Luxury Real-Estate Sales Professionals',
+    title: 'Luxury Sales Mastery', subtitle: '2nd Opportunity · For Developers & Luxury Real-Estate Sales Professionals · Hyderabad',
+    description: 'Luxury buyer psychology, premium positioning and selling high-value properties.',
+    features: ['Luxury buyer psychology', 'Premium positioning', 'Trust & rapport', 'High-value negotiation & closing'],
+    outcome: 'Built to help you understand luxury buyers, position premium offerings and close high-value deals more effectively.',
+    session: '90-120 mins session',
   },
   {
-    title: 'One-to-One Mentoring', subtitle: "3rd Oppurtunity · For CXO's, Senior Leadership & Aspiring Individuals · Hyderabad",
-    description: '90-120 mins session',
-    features: [''],
+    k: 'III',
+    audience: 'For CXOs, Senior Leadership & Aspiring Individuals',
+    title: 'One-to-One Mentoring', subtitle: "3rd Opportunity · For CXO's, Senior Leadership & Aspiring Individuals · Hyderabad",
+    description: 'Personalised 1-to-1 guidance on your own sales, leadership or business gaps.',
+    features: ['Personal assessment', 'Strategy & gap discussion', 'Targeted mentoring', 'Action guidance'],
+    outcome: 'Built to help you apply a customised improvement plan to your sales, leadership or business challenges.',
+    session: '90-120 mins session · 1-to-1',
   },
 ]
 

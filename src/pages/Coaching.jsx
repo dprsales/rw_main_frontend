@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import goalsImage from '../assets/site/whiteboard-goals.png'
 import luxuryImage from '../assets/site/plate-desk.png'
 import mentoringImage from '../assets/site/plate-reading.png'
@@ -7,7 +7,6 @@ import hydMark from '../assets/site/hyd-03.svg'
 import CountUp from '../components/CountUp'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
-import ImageSlot from '../components/ImageSlot'
 import PageIntro from '../components/PageIntro'
 import Seo from '../components/Seo'
 import { BookButton } from '../components/BookingModal'
@@ -16,6 +15,7 @@ import Reveal from '../components/Reveal'
 import AchieveGrid from '../components/AchieveGrid'
 import Bullet from '../components/Bullet'
 import ClosingCTA from '../components/ClosingCTA'
+import RelatedReading from '../components/RelatedReading'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
@@ -23,9 +23,13 @@ import { ACHIEVE, ASSESSMENT_AREAS, COACHING_PROGRAMS, COACHING_TESTIMONIALS, CU
 import { track } from '../data/analytics'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import {
-  container, ctaInline, eyebrow,
+  container, ctaCopper, ctaInline, eyebrow,
   note, sectionRule, statLabel,
 } from '../styles'
+import {
+  ArrowRight, Award, Brain, ChevronDown, Compass, Crown, Gem, Handshake, HeartHandshake,
+  MessagesSquare, ShieldCheck, Target, Trophy, UserRoundSearch,
+} from 'lucide-react'
 
 const HEADLINE = [
   { text: 'Stop competing ' },
@@ -37,10 +41,86 @@ const HEADLINE = [
 /** Covers for COACHING_PROGRAMS, matched by index. */
 const PROGRAM_COVERS = [
   { src: goalsImage, alt: 'Rajiv running a closing framework at the whiteboard' },
-  /* Cutout portraits: `contain` keeps the full figure in frame instead of `cover` cropping it. */
-  { src: luxuryImage, alt: 'Rajiv, Luxury Sales Mastery programme', fit: 'contain' },
-  { src: mentoringImage, alt: 'Rajiv, One-to-One Mentoring programme', fit: 'contain' },
+  { src: luxuryImage, alt: 'Rajiv, Luxury Sales Mastery programme' },
+  { src: mentoringImage, alt: 'Rajiv, One-to-One Mentoring programme' },
 ]
+
+/** One icon per COACHING_PROGRAMS feature, matched by index (decorative only). */
+const PROGRAM_ICONS = [
+  [Brain, ShieldCheck, Handshake, Trophy],                   // psychology · objections · negotiation · closing
+  [Gem, Crown, HeartHandshake, Award],                       // luxury buyer · premium positioning · trust · high-value close
+  [UserRoundSearch, MessagesSquare, Target, Compass],        // assessment · strategy talk · targeted mentoring · action guidance
+]
+
+/**
+ * A compact program card: who it's for, title, one focus line and Apply stay visible.
+ * "What's included" slides up over the photo — on hover/focus with a pointer, or by
+ * tapping the toggle on touch screens — so nothing is hover-only and cards never
+ * change height. (Outcome line and "Nth Opportunity" label stay in content.js but
+ * are not shown: they repeated the list and meant little to visitors.)
+ */
+function ProgramCard({ program, index }) {
+  const [open, setOpen] = useState(false)
+  const cardRef = useRef(null)
+  const listId = `program-${index}-included`
+
+  // Pinned open: a click/tap anywhere outside the card, or Esc, closes it again.
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e) => { if (!cardRef.current?.contains(e.target)) setOpen(false) }
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
+    document.addEventListener('pointerdown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => { document.removeEventListener('pointerdown', onDown); document.removeEventListener('keydown', onKey) }
+  }, [open])
+
+  // Clicking the card pins/unpins the details; its own buttons (Apply, toggle) keep their jobs.
+  const onCardClick = (e) => { if (!e.target.closest('button, a')) setOpen((v) => !v) }
+
+  return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- keyboard users get the same list via focus and the toggle
+    <article ref={cardRef} className={`rw-program${open ? ' is-open' : ''}`} onClick={onCardClick}>
+      <div className="rw-program-media">
+        <img src={PROGRAM_COVERS[index]?.src} alt={PROGRAM_COVERS[index]?.alt} loading="lazy" />
+        <span className="rw-program-numeral" style={{ fontFamily: serif }} aria-hidden>{program.k}</span>
+        {program.features?.length > 0 && (
+          <div className="rw-program-included" id={listId}>
+            <div className="rw-program-included-label" style={{ fontFamily: mono }}>WHAT'S INCLUDED</div>
+            <ul className="rw-program-features" style={{ fontFamily: text }}>
+              {program.features.map((feature, j) => {
+                const Icon = PROGRAM_ICONS[index]?.[j]
+                return (
+                  <li key={feature}>
+                    <span className="rw-program-icon" aria-hidden>{Icon && <Icon size={16} strokeWidth={1.6} />}</span>
+                    {feature}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      <div className="rw-program-body">
+        {program.audience && <span className="rw-program-kicker" style={{ fontFamily: mono }}>{program.audience}</span>}
+        <h3 className="rw-program-title" style={{ fontFamily: serif }}>{program.title}</h3>
+        <p className="rw-program-desc" style={{ fontFamily: text }}>{program.description}</p>
+        {program.features?.length > 0 && (
+          <button
+            type="button" className="rw-program-toggle" style={{ fontFamily: mono }}
+            aria-expanded={open} aria-controls={listId} onClick={() => setOpen((v) => !v)}
+          >
+            {open ? 'Hide details' : "What's included"}
+            <ChevronDown size={14} strokeWidth={1.8} aria-hidden />
+          </button>
+        )}
+        <BookButton interest="Coaching" className="rw-cta rw-program-cta" style={ctaCopper}>
+          APPLY NOW <ArrowRight size={16} strokeWidth={1.8} aria-hidden />
+        </BookButton>
+      </div>
+    </article>
+  )
+}
 
 /** Syllabus as a pill cloud: hovering a category reveals its detail panel, same
  *  hover-to-reveal idiom as Consulting's "& More" chip cloud. */
@@ -187,41 +267,13 @@ export default function Coaching() {
         <CenteredHead
           eyebrow="THREE WAYS IN"
           title={<><span style={{ color: 'var(--copper)' }}>Three</span> ways to work together</>}
-          intro="The application is the filter. If the fit is right, you will hear back within two working days."
+          intro="Each session runs 90–120 minutes. The application is the filter: if the fit is right, you will hear back within two working days."
         />
 
-        <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 40, marginTop: 56 }}>
+        <div className="rw-grid-3 rw-programs">
           {COACHING_PROGRAMS.map((program, i) => (
-            <Reveal key={program.title} delay={i * 90} className="rw-figure" style={{ border: '1px solid var(--line)', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ aspectRatio: '16/9', borderBottom: '1px solid var(--line)' }}>
-                <ImageSlot
-                  src={PROGRAM_COVERS[i]?.src}
-                  alt={PROGRAM_COVERS[i]?.alt}
-                  placeholder={program.title}
-                  caption="Program cover"
-                  spec="Landscape 16:9 · ≥1800px wide · the programme in progress, faces engaged"
-                  tag={program.subtitle.replace(/[()]/g, '')}
-                  position="center 35%"
-                  fit={PROGRAM_COVERS[i]?.fit}
-                />
-              </div>
-              <div style={{ padding: 'clamp(22px,3.4vw,40px)', display: 'flex', flexDirection: 'column', gap: 18, flex: 1 }}>
-              <div>
-                <div style={{ fontFamily: serif, fontSize: 'clamp(23px,2.6vw,29px)', color: 'var(--ink)' }}>{program.title}</div>
-                <div style={{ marginTop: 6, fontFamily: mono, fontSize: 12, letterSpacing: '.06em', color: 'var(--copper)' }}>{program.subtitle}</div>
-              </div>
-              <div style={{ ...note, lineHeight: 1.5 }}>{program.description}</div>
-              {program.features?.length > 0 && (
-                <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 8 }}>
-                  {program.features.map((feature) => (
-                    <Bullet key={feature}>{feature}</Bullet>
-                  ))}
-                </div>
-              )}
-              <BookButton interest="Coaching" specular style={{ marginTop: 'auto' }}>
-                APPLY NOW
-              </BookButton>
-              </div>
+            <Reveal key={program.title} delay={i * 90} className="rw-program-wrap">
+              <ProgramCard program={program} index={i} />
             </Reveal>
           ))}
         </div>
@@ -253,6 +305,8 @@ export default function Coaching() {
           ))}
         </div>
       </section>
+
+      <RelatedReading service="coaching" title="Reading for sellers." />
 
       <ClosingCTA title="The application is the filter. Serious applications get serious answers." titleStyle={{ maxWidth: '15em' }}>
         <CtaButton variant="outline" href="/form/coaching">TELL US ABOUT YOUR COACHING NEEDS</CtaButton>

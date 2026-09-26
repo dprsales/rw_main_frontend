@@ -39,8 +39,8 @@ export default function FinderSteps({ finder, compact = false, onStartOver, chil
       {answers.who && (
         <div className="rw-guidance-chips">
           {steps.filter((s) => answers[s]).map((s) => (
-            <button key={s} type="button" className="rw-guidance-chip is-step" onClick={() => editStep(s)} aria-label={`Change answer: ${labelFor(s, answers[s])}`}>
-              {labelFor(s, answers[s])}
+            <button key={s} type="button" className="rw-guidance-chip is-step" onClick={() => editStep(s)} aria-label={`Change answer: ${labelFor(s, answers[s], answers.who)}`}>
+              {labelFor(s, answers[s], answers.who)}
             </button>
           ))}
           {done && onStartOver && <button type="button" className="rw-guidance-chip is-edit" onClick={onStartOver}>start over</button>}

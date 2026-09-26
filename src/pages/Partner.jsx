@@ -10,7 +10,7 @@ import { BookButton } from '../components/BookingModal'
 import saplingImage from '../assets/site/channel-partner-sapling-transparent.png'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { submitChannelPartner, getErrorMessage } from '../data/api'
-import { track } from '../data/analytics'
+import { errorCategory, track } from '../data/analytics'
 import { FOOTER_LINKS, mono, serif, text, WHATSAPP } from '../theme'
 import { container, ctaCopper, eyebrow, note, sectionHeading, sectionRule } from '../styles'
 import '../form/form.css'
@@ -120,9 +120,9 @@ function FileDropzone({ title, hint, required, accept, maxBytes, file, onSelect 
   }
 
   return (
-    // --wide: full-width row, so PAN card and cancelled cheque stack one above the
-    // other rather than sharing the panel's two-column grid side by side.
-    <div className="rw-form-field-wrap rw-form-field-wrap--wide">
+    // Not --wide: PAN card and cancelled cheque share one row of the panel's
+    // two-column grid, which already collapses to a single column below 900px.
+    <div className="rw-form-field-wrap">
       <span className="rw-form-q-title">
         {title}
         {required
@@ -222,6 +222,18 @@ export default function Partner() {
 
   const setPill = (id, option) => setPills((prev) => ({ ...prev, [id]: prev[id] === option ? '' : option }))
 
+  // Bounded, non-personal properties only (handoff §10.4). UTM values are length-limited.
+  const clip = (v) => (v ? String(v).slice(0, 64) : undefined)
+  const partnerAnalytics = () => ({
+    applicationType: 'channel_partner',
+    source: 'partner_page',
+    utmSource: clip(attribution.utmSource),
+    utmMedium: clip(attribution.utmMedium),
+    utmCampaign: clip(attribution.utmCampaign),
+    hasRera: pills.hasRera || undefined,
+    projectCategoryCount: checks.projectCategories.length,
+  })
+
   async function handleSubmit(e) {
     e.preventDefault()
     if (honeypot.current.value) {
@@ -276,10 +288,12 @@ export default function Partner() {
     try {
       await submitChannelPartner(fd)
       setStatus('done')
-      track('partner_application_submitted', payload)
+      // Safe whitelist only — the application itself (contact, RERA, documents, notes) never goes to analytics.
+      track('application_submitted', partnerAnalytics())
     } catch (err) {
       setError(getErrorMessage(err))
       setStatus('idle')
+      track('application_submission_failed', { ...partnerAnalytics(), errorCategory: errorCategory(err) })
     }
   }
 
