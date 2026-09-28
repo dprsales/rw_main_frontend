@@ -15,7 +15,7 @@ export const ROUTE_SEO = {
   '/': {
     title: 'Luxury Real Estate Sales Mentor in Hyderabad | Rajiv Williams',
     description:
-      '₹2,700 Cr generated across 15 years in Hyderabad luxury real estate. Coaching for realtors, consulting for developers, and exclusive sales mandates.',
+      '₹2,700 Cr generated across 16 years in Hyderabad luxury real estate. Coaching for realtors, consulting for developers, and exclusive sales mandates.',
   },
   '/coaching': {
     title: 'Luxury Real Estate Sales Coaching in Hyderabad | Rajiv Williams',

@@ -6,6 +6,7 @@ import consultingImage from '../assets/site/consulting.jpeg'
 import whiteboardImage from '../assets/site/coaching.png'
 import hraLogo from '../assets/site/logo-hra.png'
 import narLogo from '../assets/site/logo-nar.png'
+import signature from '../assets/site/gold2.png'
 import Footer from '../components/Footer'
 import Gallery from '../components/Gallery'
 import GuidedFinder from '../components/GuidedFinder'
@@ -322,7 +323,13 @@ He doesn&apos;t wait for the market to move.<br />
           <Reveal>
             <PullQuote
               size="clamp(28px,3.8vw,48px)" lineHeight={1.24} space={30}
-              name="RAJIV" nameStyle={{ letterSpacing: '.24em' }}
+              name={
+                <img
+                  src={signature}
+                  alt="Rajiv Williams"
+                  style={{ display: 'block', width: 'min(220px, 70%)', height: 'auto', margin: '0 auto' }}
+                />
+              }
             >
               &ldquo;I never stopped selling. That is the whole method; everything I pass on was closed first, shared second.&rdquo;
             </PullQuote>

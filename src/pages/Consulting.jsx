@@ -1,9 +1,9 @@
-import { memo, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
 import sessionImage from '../assets/site/consulting-desk.webp'
 import signature from '../assets/site/gold2.png'
-import monogram from '../assets/site/gold1.png'
+import monogram from '../assets/site/rw-logo-ccr.png'
 import hydMark from '../assets/site/hyd-04.svg'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -105,43 +105,110 @@ function Shift({ shift }) {
   )
 }
 
-/** One ecosystem phase as a compact card; points stay behind a "Read more" toggle
- *  so the grid reads as four short cards, not a wall of bullets. */
-function PhaseCard({ flow, index, delay }) {
-  const [open, setOpen] = useState(false)
+/** The four ecosystem phases. Only one card is open at a time: hovering peeks a card
+ *  open, clicking pins it (any other collapses), and a click anywhere outside the grid
+ *  collapses it again — so the section never becomes a wall of open bullets. */
+function PhaseGrid({ items }) {
+  const [pinned, setPinned] = useState(null) // clicked-open card; survives mouse-leave
+  const [hover, setHover] = useState(null)   // peek-open card while the cursor is on it
+  const gridRef = useRef(null)
+
+  // A click or tap anywhere outside the grid collapses the pinned card.
+  useEffect(() => {
+    if (pinned === null) return
+    const onDown = (e) => {
+      if (gridRef.current && !gridRef.current.contains(e.target)) setPinned(null)
+    }
+    document.addEventListener('pointerdown', onDown)
+    return () => document.removeEventListener('pointerdown', onDown)
+  }, [pinned])
 
   return (
-    <Reveal delay={delay} className="rw-phase-card">
+    <div className="rw-phase-grid" ref={gridRef}>
+      {items.map((flow, i) => (
+        <PhaseCard
+          key={flow.phase}
+          flow={flow}
+          index={i}
+          delay={(i % 2) * 90}
+          active={pinned === i}
+          /* A pinned card stays open; hovering any other card previews its points too.
+             Clicking that preview transfers the pinned state to the new card. */
+          expanded={pinned === i || hover === i}
+          onToggle={() => {
+            // Clicking an already-pinned card (or its "Read less") collapses it — and
+            // we drop the hover peek too, so the cursor still resting on the card can't
+            // immediately re-open it. Clicking any other card just pins that one.
+            if (pinned === i) { setPinned(null); setHover(null) }
+            else { setPinned(i); setHover(null) }
+          }}
+          onHover={() => setHover(i)}
+          onLeave={() => setHover((h) => (h === i ? null : h))}
+        />
+      ))}
+    </div>
+  )
+}
+
+/** One ecosystem phase card. The whole card is the click target (pins/unpins); its
+ *  points live in an always-mounted collapse wrapper so they animate open/closed. */
+function PhaseCard({ flow, index, delay, active, expanded, onToggle, onHover, onLeave }) {
+  return (
+    <Reveal
+      delay={delay}
+      className={`rw-phase-card${active ? ' is-active' : ''}${expanded ? ' is-open' : ''}`}
+      role="button"
+      tabIndex={0}
+      aria-expanded={expanded}
+      onClick={onToggle}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() }
+      }}
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+    >
       <span className="rw-phase-num" style={{ fontFamily: serif }} aria-hidden>
         {String(index + 1).padStart(2, '0')}
       </span>
       <h4 style={{ ...sectionHeading, marginTop: 10, fontSize: 'clamp(21px,1.9vw,25px)', lineHeight: 1.12 }}>
         {flow.title}
       </h4>
-      <p style={{ ...note, marginTop: 8, fontSize: 14, lineHeight: 1.5 }}>
-        {flow.line}
-      </p>
+
+      {/* Desktop & laptop: the line and the points share one grid cell and cross-slide,
+          so hovering (or pinning) the card replaces the copy in place without changing
+          its height. Mobile: the same points sit in the button-toggled accordion below
+          the line instead — a fixed-height swap is too cramped on a phone. Both are the
+          same DOM; the breakpoint decides which behaviour the CSS applies. */}
+      <div className="rw-phase-body">
+        <p className="rw-phase-line" style={{ ...note, fontSize: 14, lineHeight: 1.5 }}>
+          {flow.line}
+        </p>
+
+        {/* Clicks inside don't bubble to the card's toggle, so reading a revealed
+            point never collapses the card. */}
+        <div className="rw-phase-collapse" onClick={(e) => e.stopPropagation()}>
+          <div className="rw-phase-collapse-inner">
+            <div className="rw-phase-points-wrap">
+              <img src={monogram} alt="" aria-hidden className="rw-phase-watermark" />
+              <ul className="rw-phase-points">
+                {flow.points.map((point) => (
+                  <li key={point} style={{ fontFamily: text }}>{point}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <button
         type="button"
         className="rw-phase-toggle"
         style={{ fontFamily: mono }}
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
+        onClick={(e) => { e.stopPropagation(); onToggle() }}
+        aria-expanded={expanded}
       >
-        {open ? 'Read less' : 'Read more'}<i className="rw-phase-toggle-arrow" aria-hidden>{open ? '−' : '+'}</i>
+        {active ? 'Hide details' : 'View details'}<i className="rw-phase-toggle-arrow" aria-hidden>{active ? '−' : '+'}</i>
       </button>
-
-      {open && (
-        <div className="rw-phase-points-wrap">
-          <img src={monogram} alt="" aria-hidden className="rw-phase-watermark" />
-          <ul className="rw-phase-points">
-            {flow.points.map((point) => (
-              <li key={point} style={{ fontFamily: text }}>{point}</li>
-            ))}
-          </ul>
-        </div>
-      )}
     </Reveal>
   )
 }
@@ -160,9 +227,9 @@ function SupportCloud() {
             type="button"
             className={`rw-chip${i === active ? ' is-on' : ''}`}
             style={{ fontFamily: mono }}
-            onMouseEnter={() => setActive(i)}
             onFocus={() => setActive(i)}
             onClick={() => setActive(i)}
+            aria-pressed={i === active}
           >
             {svc.title}
           </button>
@@ -273,11 +340,7 @@ export default function Consulting() {
             </Reveal>
           </div>
 
-          <div className="rw-phase-grid">
-            {ECOSYSTEM.map((flow, i) => (
-              <PhaseCard key={flow.phase} flow={flow} index={i} delay={(i % 2) * 90} />
-            ))}
-          </div>
+          <PhaseGrid items={ECOSYSTEM} />
         </div>
       </section>
 

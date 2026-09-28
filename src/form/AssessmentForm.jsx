@@ -35,6 +35,8 @@ function wideQuestions(questions) {
   const wide = new Set()
   let pending = null   // short question waiting for a partner
   for (const q of questions) {
+    // Role is a multi-select, but it stays in a half-width field beside Email.
+    if (q.id === 'role') { pending = null; continue }
     if (isShort(q)) { pending = pending ? null : q; continue }
     if (pending) wide.add(pending.id)
     pending = null
@@ -210,7 +212,7 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
         <Reveal className="rw-form-preamble">
           <div className="rw-form-eyebrow" style={{ fontSize: 13 }}>{track.intro.eyebrow}</div>
           <h1 className="rw-form-h2" style={{ marginTop: 18 }}>{track.intro.title}</h1>
-          <p className="rw-form-thanks">{track.intro.thanks}</p>
+          {track.intro.thanks && <p className="rw-form-thanks">{track.intro.thanks}</p>}
           {track.intro.lines.map((line) => (
             <p key={line} className="rw-form-note" style={{ marginTop: 10, marginLeft: 'auto', marginRight: 'auto', maxWidth: '34em' }}>
               {line}
@@ -251,7 +253,7 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
                 )}
 
                 {q.type === 'check' && (
-                  <div className="rw-form-checks">
+                  <div className={`rw-form-checks${q.id === 'role' ? ' rw-form-checks--single' : ''}`}>
                     {q.options.map((option) => {
                       const on = answers[q.id].includes(option)
                       return (

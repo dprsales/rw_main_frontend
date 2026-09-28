@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import goalsImage from '../assets/site/whiteboard-goals.png'
 import luxuryImage from '../assets/site/plate-desk.png'
 import mentoringImage from '../assets/site/plate-reading.png'
-import monogram from '../assets/site/gold1.png'
+import monogram from '../assets/site/rw-logo-ccr.png'
+import signature from '../assets/site/gold2.png'
 import hydMark from '../assets/site/hyd-03.svg'
 import CountUp from '../components/CountUp'
 import Footer from '../components/Footer'
@@ -35,7 +36,7 @@ const HEADLINE = [
   { text: 'Stop competing ' },
   { text: 'on commission. ' },
   { br: true },
-  { text: 'Start operating in the high-value segment.', italic: true, copper: true },
+  { text: 'Start building communities people aspire to live in.', italic: true, copper: true },
 ]
 
 /** Covers for COACHING_PROGRAMS, matched by index. */
@@ -122,14 +123,13 @@ function ProgramCard({ program, index }) {
   )
 }
 
-/** Syllabus as a pill cloud: hovering a category reveals its detail panel, same
- *  hover-to-reveal idiom as Consulting's "& More" chip cloud. */
+/** Syllabus categories stay selected until another category is clicked. */
 function SyllabusCloud({ categories }) {
-  const [active, setActive] = useState(null)
-  const cat = active === null ? null : categories[active]
+  const [active, setActive] = useState(0)
+  const cat = categories[active]
 
   return (
-    <div onMouseLeave={() => setActive(null)}>
+    <div>
       <div className="rw-chips">
         {categories.map((c, i) => (
           <button
@@ -137,15 +137,16 @@ function SyllabusCloud({ categories }) {
             type="button"
             className={`rw-chip${active === i ? ' is-on' : ''}`}
             style={{ fontFamily: mono }}
-            onMouseEnter={() => setActive(i)}
-            onFocus={() => setActive(i)}
+            aria-pressed={active === i}
+            aria-controls="syllabus-panel"
+            onClick={() => setActive(i)}
           >
             {c.n} · {c.title}
           </button>
         ))}
       </div>
 
-      <div className={`rw-syllabus-panel${cat ? ' is-active' : ''}`}>
+      <div id="syllabus-panel" className={`rw-syllabus-panel${cat ? ' is-active' : ''}`} aria-live="polite">
         {cat && (
           <>
             <img src={monogram} alt="" aria-hidden className="rw-syllabus-watermark" />
@@ -167,7 +168,7 @@ function SyllabusCloud({ categories }) {
             </div>
           </>
         )}
-        {!cat && <div className="rw-syllabus-hint" style={{ fontFamily: mono }}>Hover a category above to see what it covers.</div>}
+        {!cat && <div className="rw-syllabus-hint" style={{ fontFamily: mono }}>Select a category above to see what it covers.</div>}
       </div>
     </div>
   )
@@ -185,8 +186,10 @@ export default function Coaching() {
       <PageIntro
         eyebrow="COACHING · FOR DEVELOPERS, SENIOR SALES LEADERSHIP & TOP CLOSERS"
         headline={HEADLINE}
-        lede="For developers, senior sales leadership, and top sales closers who are done with volume games."
-        intro="What changes: your ticket size, your client register, and how the market treats your word."
+        headlineStyle={{ fontSize: 'clamp(28px, 4.2vw, 56px)', lineHeight: 1.12, maxWidth: 'none' }}
+        lede="For developers, senior sales leadership, and top sales closers who wish to level up."
+        intro="What changes: 1. Your ticket size, 2. Your client register, and 3. How the market treats your word."
+        introStyle={{ maxWidth: 'none' }}
         cta={<>
           <BookButton interest="Coaching" specular>BOOK A STRATEGY CALL</BookButton>
           <button type="button" onClick={() => scrollToId('premium-programs')} className="rw-inline-cta" style={ctaInline}>
@@ -201,7 +204,7 @@ export default function Coaching() {
               <div style={{ ...statLabel, marginTop: 8 }}>GENERATED FOR DEVELOPER BRANDS</div>
             </div>
             <div>
-              <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}><CountUp to={15} suffix="+" duration={1400} /></div>
+              <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}><CountUp to={16} suffix="+" duration={1400} /></div>
               <div style={{ ...statLabel, marginTop: 8 }}>YEARS AT THE TOP</div>
             </div>
           </Reveal>
@@ -258,7 +261,7 @@ export default function Coaching() {
             aside={<SectionAside>Your pipeline becomes the syllabus. Nothing theoretical survives the first session.</SectionAside>}
           />
 
-          <AchieveGrid items={ACHIEVE} className="rw-achieve-grid" arrows />
+          <AchieveGrid items={ACHIEVE} className="rw-achieve-grid" arrows numberPrefix="#" />
         </div>
       </section>
 
@@ -277,6 +280,7 @@ export default function Coaching() {
             </Reveal>
           ))}
         </div>
+
       </section>
 
       {/* Curriculum - the full syllabus, as six numbered category cards */}
@@ -293,16 +297,31 @@ export default function Coaching() {
       </section>
 
       {/* Testimonials */}
-      <section style={{ ...sectionRule, background: 'var(--chip)', position: 'relative', overflow: 'hidden' }}>
-        <img src={hydMark} alt="" aria-hidden className="rw-watermark is-left" />
-        <div className="rw-pad" style={{ maxWidth: 1000, margin: '0 auto', padding: 'clamp(80px,10vw,110px) 40px', position: 'relative', zIndex: 1 }}>
+      <section style={{ background: 'var(--bg)', position: 'relative', overflow: 'hidden' }}>
+        <img src={hydMark} alt="" aria-hidden className="rw-watermark rw-coaching-testimonial-mark is-left" />
+        <div className="rw-pad rw-coaching-testimonials" style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(80px,10vw,110px) 40px', position: 'relative', zIndex: 1 }}>
           {COACHING_TESTIMONIALS.map((t, i) => (
-            <Reveal key={t.name} delay={i * 90} style={{ borderTop: '1px solid var(--line)', padding: '36px 0', textAlign: 'center' }}>
-              <PullQuote as="p" size="clamp(20px,2.4vw,26px)" lineHeight={1.4} space={18} name={t.name}>
+            <Reveal key={t.name} delay={i * 90} style={{ padding: '30px 0', textAlign: 'center' }}>
+              <PullQuote as="p" size="clamp(16px,1.5vw,20px)" lineHeight={1.5} space={16} name={t.name}>
                 “{t.text}”
               </PullQuote>
             </Reveal>
           ))}
+        </div>
+      </section>
+
+      <section style={{ background: 'var(--chip)', borderTop: '1px solid var(--line)' }}>
+        <div className="rw-pad" style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(70px,9vw,110px) 40px', textAlign: 'center' }}>
+          <Reveal>
+            <PullQuote as="p" size="clamp(26px,3.6vw,44px)" lineHeight={1.2}>
+              “Hyderabad real estate has leveled up. It is now your turn.”
+            </PullQuote>
+            <img
+              src={signature}
+              alt="Rajiv Williams"
+              style={{ display: 'block', width: 'min(220px, 70%)', height: 'auto', margin: '30px auto 0' }}
+            />
+          </Reveal>
         </div>
       </section>
 

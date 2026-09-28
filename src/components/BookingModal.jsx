@@ -303,7 +303,7 @@ function BookingModal({ preset, onClose }) {
             <FinderSteps finder={finder} compact>
               <div className="rw-finder-links" style={{ marginTop: 18 }}>
                 {finder.stepIndex > 0 && <CtaButton variant="secondary" arrow="←" onClick={finder.back}>Back</CtaButton>}
-                <CtaButton variant="secondary" onClick={skipQuestions}>Skip — just give me the form</CtaButton>
+                <CtaButton variant="secondary" onClick={skipQuestions}>Skip &amp; fill in your details</CtaButton>
               </div>
             </FinderSteps>
           </>

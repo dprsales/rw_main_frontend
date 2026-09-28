@@ -1,5 +1,5 @@
 import skylineImage from '../assets/site/skyline.png'
-import goldWatermark from '../assets/site/gold1.png'
+import goldWatermark from '../assets/site/rw-logo-ccr.png'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import ImageSlot from '../components/ImageSlot'

@@ -5,14 +5,14 @@ import { serif } from '../theme'
  * Numbered outcome cards shared by Coaching and Careers off different arrays.
  * `stagger` must match the grid's column count or the delay restarts mid-row.
  */
-export default function AchieveGrid({ items, className, stagger = 3, arrows = false }) {
+export default function AchieveGrid({ items, className, stagger = 3, arrows = false, numberPrefix = '' }) {
   return (
     <div className={className}>
       {items.map((item, i) => (
         <Reveal key={item.title} delay={(i % stagger) * 90} style={{ position: 'relative' }}>
           <div className="rw-achieve">
             <span className="rw-achieve-num" style={{ fontFamily: serif }} aria-hidden>
-              {String(i + 1).padStart(2, '0')}
+              {numberPrefix ? `${numberPrefix}${i + 1}` : String(i + 1).padStart(2, '0')}
             </span>
             <div className="rw-achieve-title" style={{ fontFamily: serif }}>{item.title}</div>
             <div className="rw-achieve-body" style={{ fontFamily: serif }}>{item.body}</div>

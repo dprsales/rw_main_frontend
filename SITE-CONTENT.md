@@ -32,7 +32,7 @@ Home · Coaching · Consulting · RW Realty · Portfolio · Book a call
 
 **Marquee strip (home)**
 RERA registered · Member — HRA & NAR India · 500+ professionals mentored · 4.9/5 rating ·
-15+ years in luxury real estate · Clarity · Confidence · Conversion
+16+ years in luxury real estate · Clarity · Confidence · Conversion
 
 ### Booking modal
 
@@ -66,7 +66,7 @@ RERA registered · Member — HRA & NAR India · 500+ professionals mentored · 
   market falls flat. We teach sales teams how the top of the market actually buys.
 - CTAs — BOOK A STRATEGY CALL · The story →
 - Stats — 500+ PROFESSIONALS MENTORED · 4.9/5 CLIENT RATING
-- Meta — 15+ YEARS IN LUXURY REAL ESTATE | RERA REGISTERED | MEMBER — HRA & NAR INDIA
+- Meta — 16+ years IN LUXURY REAL ESTATE | RERA REGISTERED | MEMBER — HRA & NAR INDIA
 
 ### Philosophy
 
@@ -417,7 +417,7 @@ expert real estate consultation." — **SANDEEP KYLAS**
 ### Track record
 
 500+ PROFESSIONALS MENTORED · 30+ LUXURY PROJECTS REPRESENTED ·
-15+ YEARS IN LUXURY REAL ESTATE · 4.9/5 CLIENT RATING
+16+ years IN LUXURY REAL ESTATE · 4.9/5 CLIENT RATING
 
 ### The track — experience (`#experience`)
 

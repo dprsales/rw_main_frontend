@@ -327,8 +327,16 @@
 }
 .rw-form-panel--questions .rw-form-optional { font-size: 13px; letter-spacing: 0; }
 .rw-form-panel--questions .rw-form-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.rw-form-panel--questions .rw-form-checks--single { grid-template-columns: 1fr 1fr; }
+/* Pills use the same 2-column grid as the checks here, so every option sits in a
+   column instead of flex-wrapping by text width (which left odd trailing chips —
+   "4 then 1", "3 then 1"). Each pill stretches to fill its cell so the two columns
+   stay perfectly aligned; text is centred inside the widened pill. */
+.rw-form-panel--questions .rw-form-pills { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.rw-form-panel--questions .rw-form-pill { text-align: center; }
 @media (max-width: 900px) {
-  .rw-form-panel--questions .rw-form-checks { grid-template-columns: 1fr; }
+  .rw-form-panel--questions .rw-form-checks,
+  .rw-form-panel--questions .rw-form-pills { grid-template-columns: 1fr; }
 }
 .rw-form-q-title { font-family: var(--rw-sans); font-weight: 400; font-size: 17px; line-height: 1.45; color: var(--ink); }
 .rw-form-req { color: var(--copper); }

@@ -23,7 +23,7 @@ import { MODULE_BASE_PRICE, calculatePricing, formatINR } from '../data/pricing'
 import { KRISAH_ASSESSMENT_URL } from '../data/content'
 import { FOOTER_LINKS, mono, serif } from '../theme'
 import { container, ctaInline, eyebrow, note, sectionHeading, sectionRule } from '../styles'
-import goldWatermark from '../assets/site/gold1.png'
+import goldWatermark from '../assets/site/rw-logo-ccr.png'
 
 const chipStyle = {
   fontFamily: mono,

@@ -15,30 +15,31 @@ export const ASSESSMENT_TRACKS = {
     cardCta: 'Share your coaching details',
     intro: {
       eyebrow: 'RAJIV WILLIAMS COACHING',
-      title: 'Welcome to Rajiv Williams Coaching',
-      thanks: 'Thank you for choosing Rajiv Williams.',
+
+      title: 'Let’s Understand Where You Are Today',
+
       lines: [
-        'We would like to understand your business, your current challenges, and your goals a little more in detail.',
-        'Your responses help us prepare a programme tailored to your situation.',
+        'A few thoughtful questions about your business, challenges, and where you want to go.',
       ],
+
       time: 'About 2 minutes',
     },
     confirm: 'We will prepare a personalised coaching recommendation from your responses and be in touch shortly.',
     questions: [
       ...CONTACT_QUESTIONS,
       {
-        id: 'role', type: 'pill', required: true,
+        id: 'role', type: 'check', required: true,
         title: 'Which of the below best describes your role?',
         options: ['Builder / Developer', 'Sales Head', 'Sales Manager', 'Sales Executive', 'Channel Partner', 'Entrepreneur', 'Other'],
       },
       {
         id: 'experience', type: 'pill', required: true,
         title: 'How long have you been in the real estate industry?',
-        options: ['Less than 1 year', '1–3 years', '3–5 years', 'More than 5 years'],
+        options: ['> 1 year', '1–3 yrs', '3–5 yrs', '< 5 yrs'],
       },
       {
         id: 'projectType', type: 'pill', required: true,
-        title: 'What type of projects are you selling?',
+        title: 'What type of projects do you sell most often?',
         options: ['Apartments', 'Villas', 'Plots', 'Commercial', 'Mixed projects'],
       },
       {

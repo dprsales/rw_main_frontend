@@ -81,6 +81,7 @@ export const HOME_FOOTER_LINKS = [
   EMAIL_LINK, PHONE_LINK, HH_LINK, ...SOCIAL_LINKS,
   { label: 'RW Realty →', to: '/realty', muted: true },
   { label: 'Careers →', to: '/careers', muted: true },
+  { label: 'Channel Partners →', to: '/partner', muted: true },
 ]
 
 /** A project detail page goes back up its own branch, not to the home page. */

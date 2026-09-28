@@ -641,8 +641,23 @@ a:hover { color: var(--ink, #12100D); }
   width: min(38%, 190px); height: auto;
 }
 
+.rw-coaching-testimonials {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 34px;
+}
+
+.rw-coaching-testimonial-mark {
+  width: clamp(150px, 18vw, 240px);
+  max-height: 100%;
+}
+
+@media (max-width: 700px) {
+  .rw-coaching-testimonials { grid-template-columns: 1fr; gap: 0; }
+}
+
 /* The syllabus - six category pills (.rw-chip reused from Consulting's "& More"
-   cloud). Hover/focus reveals sub-groups in the panel below, with a gold monogram watermark, matching the brand's print collateral. */
+   cloud). Selecting a category shows its sub-groups in the panel below, with a gold monogram watermark, matching the brand's print collateral. */
 .rw-syllabus-panel {
   position: relative; overflow: hidden;
   min-height: 200px;
@@ -1108,25 +1123,34 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-phase-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  /* Default stretch: on desktop the cards swap content in place (fixed height), so
+     equal-height rows read tidiest. */
   gap: clamp(16px, 2.2vw, 28px);
+  align-items: start;
 }
-@media (max-width: 700px) { .rw-phase-grid { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .rw-phase-grid { grid-template-columns: 1fr; align-items: start; } }
 
 .rw-phase-card {
   position: relative;
+  cursor: pointer;
   padding: clamp(22px, 2.2vw, 30px) clamp(20px, 2vw, 26px) clamp(24px, 2.4vw, 30px);
   background: var(--card);
   border: 1px solid var(--line);
-  transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s cubic-bezier(.2,.7,.2,1), border-color .5s ease;
+  transition: box-shadow .5s cubic-bezier(.2,.7,.2,1), border-color .5s ease;
 }
-.rw-phase-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: transparent; }
+/* Hover peeks a card, click pins it (.is-active): both share the same lifted look —
+   copper border, shadow, filled top bar, brightened number. Transform isn't used for
+   the lift because Reveal sets an inline transform that would override a :hover one. */
+.rw-phase-card:hover,
+.rw-phase-card.is-active { box-shadow: var(--shadow); border-color: var(--copper); }
 .rw-phase-card::before {
   content: ''; position: absolute; top: 0; left: 0;
   width: 100%; height: 2px; background: var(--copper);
   transform: scaleX(0); transform-origin: left;
   transition: transform .55s cubic-bezier(.2,.7,.2,1);
 }
-.rw-phase-card:hover::before { transform: scaleX(1); }
+.rw-phase-card:hover::before,
+.rw-phase-card.is-active::before { transform: scaleX(1); }
 
 .rw-phase-num {
   display: block; font-style: italic; font-weight: 500;
@@ -1134,7 +1158,26 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   color: transparent; -webkit-text-stroke: 1px var(--copper);
   opacity: .4; transition: opacity .5s ease, color .5s ease;
 }
-.rw-phase-card:hover .rw-phase-num { opacity: 1; color: var(--copper); }
+.rw-phase-card:hover .rw-phase-num,
+.rw-phase-card.is-active .rw-phase-num { opacity: 1; color: var(--copper); }
+
+.rw-phase-body { margin-top: 8px; }
+
+/* Mobile (base): the points sit in a button-toggled accordion below the line. The row
+   track animates 0fr → 1fr (a real height transition), the inner div clips the overflow
+   while it grows, and the content fades in with it. .is-open is set by the button/tap. */
+.rw-phase-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .5s cubic-bezier(.2,.7,.2,1);
+}
+.rw-phase-card.is-open .rw-phase-collapse { grid-template-rows: 1fr; }
+.rw-phase-collapse-inner {
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.rw-phase-card.is-open .rw-phase-collapse-inner { opacity: 1; }
 
 .rw-phase-toggle {
   display: inline-flex; align-items: center; gap: 8px;
@@ -1148,12 +1191,11 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   position: relative; overflow: hidden;
   margin-top: 14px; padding: 14px 0 2px;
   border-top: 1px solid var(--line);
-  animation: rw-fade .35s ease both;
 }
 .rw-phase-watermark {
-  position: absolute; right: -18px; bottom: -14px;
-  width: clamp(90px, 9vw, 130px); height: auto;
-  opacity: .1; pointer-events: none; user-select: none;
+  position: absolute; right: 10px; bottom: 8px;
+  width: clamp(110px, 10vw, 150px); height: auto;
+  opacity: .12; pointer-events: none; user-select: none;
 }
 .rw-phase-points {
   position: relative; list-style: none; margin: 0; padding: 0;
@@ -1171,6 +1213,24 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 .rw-phase-points li:hover { color: var(--ink); padding-left: 22px; }
 .rw-phase-points li:hover::before { width: 10px; }
+
+/* Desktop / laptop: cards share a clean row height, then grow naturally when their
+   supporting points are hovered or pinned. */
+@media (min-width: 701px) {
+  .rw-phase-grid { align-items: stretch; }
+  .rw-phase-card { height: 100%; display: flex; flex-direction: column; }
+  .rw-phase-card { overflow: visible; }
+  .rw-phase-card.is-open { z-index: 5; }
+  .rw-phase-body { display: block; overflow: visible; }
+  .rw-phase-card.is-open .rw-phase-line { display: none; }
+  .rw-phase-collapse { display: none; }
+  .rw-phase-card.is-open .rw-phase-collapse { display: block; }
+  .rw-phase-collapse-inner { overflow: visible; opacity: 1; }
+  .rw-phase-points-wrap { margin-top: 14px; padding: 14px 0 2px; border-top: 1px solid var(--line); }
+
+  .rw-phase-toggle { display: inline-flex; margin-top: auto; }
+  .rw-phase-card:hover:not(.is-active) .rw-phase-toggle { display: none; }
+}
 
 /* Filter pills. */
 .rw-pill { cursor: pointer; transition: background .25s, color .25s, border-color .25s; }
@@ -2621,6 +2681,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-program-outcome { margin: 4px 0 0; font-weight: 300; font-size: 15px; line-height: 1.55; color: var(--faded); }
 .rw-program-session { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--faded); }
 .rw-program-cta { width: 100%; margin-top: auto; gap: 10px; }
+
 @media (prefers-reduced-motion: reduce) {
   .rw-program, .rw-program-media img { transition: none; }
   .rw-program:hover, .rw-program:hover .rw-program-media img { transform: none; }

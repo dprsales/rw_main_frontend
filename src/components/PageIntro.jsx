@@ -29,9 +29,9 @@ export default function PageIntro({
       <div className={image ? 'rw-intro-copy' : undefined}>
         <Reveal style={{ ...eyebrowToken, marginBottom: 30 }}>{eyebrow}</Reveal>
 
-        <h1 style={{ ...pageHeading, maxWidth: '17em', ...headlineStyle }}>
+        <h3 style={{ ...pageHeading, maxWidth: '17em', ...headlineStyle }}>
           <RiseText lines={headline} step={headlineStep} />
-        </h1>
+        </h3>
 
         {lede && (
           <Reveal as="p" delay={140} style={{ ...ledeToken, marginTop: 28, ...ledeStyle }}>
