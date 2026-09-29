@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import Reveal from './Reveal'
 import { EXPERIENCE, EXPERIENCE_PHASES } from '../data/content'
 import { mono, serif, text } from '../theme'
-import { container, eyebrowFaded, sectionHeading, sectionRule } from '../styles'
+import { fs, container, eyebrowFaded, sectionHeading, sectionRule } from '../styles'
 
 /**
  * Tracks which phase block crosses viewport centre, so the pinned column shows reading position.
@@ -43,10 +43,10 @@ export default function ExperienceSection() {
           {/* Pinned while the track scrolls past — the heading stays as context. */}
           <div className="rw-sticky-aside">
             <Reveal style={{ ...eyebrowFaded, marginBottom: 18 }}>THE TRACK</Reveal>
-            <Reveal as="h2" delay={80} style={{ ...sectionHeading, fontSize: 'clamp(28px,3.4vw,44px)', lineHeight: 1.05, maxWidth: '11em' }}>
+            <Reveal as="h2" delay={80} style={{ ...sectionHeading, fontSize: fs('clamp(28px,3.4vw,44px)'), lineHeight: 1.05, maxWidth: '11em' }}>
               Fifteen years, from the call floor to the boardroom.
             </Reveal>
-            <Reveal as="p" delay={140} style={{ marginTop: 22, fontFamily: text, fontWeight: 300, fontSize: 17, lineHeight: 1.6, color: 'var(--faded)', maxWidth: '26em' }}>
+            <Reveal as="p" delay={140} style={{ marginTop: 22, fontFamily: text, fontWeight: 300, fontSize: fs('17px'), lineHeight: 1.6, color: 'var(--faded)', maxWidth: '26em' }}>
               A path that runs from enterprise operations through developer sales leadership into independent mentoring and mandate work.
             </Reveal>
             {/* Decorative — phase headings already carry these labels to the reader. */}
@@ -64,7 +64,7 @@ export default function ExperienceSection() {
                     />
                     <span
                       style={{
-                        fontFamily: mono, fontSize: 10, letterSpacing: '.12em', textTransform: 'uppercase',
+                        fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.12em', textTransform: 'uppercase',
                         color: on ? 'var(--copper)' : 'var(--faded)',
                         opacity: on ? 1 : .6, transition: 'color .45s, opacity .45s',
                       }}
@@ -77,7 +77,7 @@ export default function ExperienceSection() {
             </Reveal>
 
             {/* Stated once here rather than repeated on all thirteen rows. */}
-            <Reveal delay={240} style={{ marginTop: 24, paddingTop: 18, borderTop: '1px solid var(--line)', fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--faded)' }}>
+            <Reveal delay={240} style={{ marginTop: 24, paddingTop: 18, borderTop: '1px solid var(--line)', fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)' }}>
               ALL ROLES · HYDERABAD, INDIA
             </Reveal>
           </div>
@@ -106,10 +106,10 @@ export default function ExperienceSection() {
                         boxShadow: p === 0 ? '0 0 0 4px rgba(195,155,83,.16)' : 'none',
                       }}
                     />
-                    <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.14em', textTransform: 'uppercase', color: p === 0 ? 'var(--copper)' : 'var(--ink)' }}>
+                    <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', textTransform: 'uppercase', color: p === 0 ? 'var(--copper)' : 'var(--ink)' }}>
                       {phase.label}
                     </div>
-                    <div style={{ marginTop: 5, fontFamily: text, fontWeight: 300, fontSize: 13, color: 'var(--faded)' }}>{phase.note}</div>
+                    <div style={{ marginTop: 5, fontFamily: text, fontWeight: 300, fontSize: fs('13px'), color: 'var(--faded)' }}>{phase.note}</div>
                   </Reveal>
 
                   <div
@@ -130,7 +130,7 @@ export default function ExperienceSection() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                           <span style={{ fontFamily: serif, fontSize: phase.dense ? 16 : 21, color: 'var(--ink)' }}>{role.company}</span>
                           {role.current && (
-                            <span style={{ fontFamily: mono, fontSize: 9, letterSpacing: '.12em', color: 'var(--copper)', border: '1px solid var(--copper)', borderRadius: 100, padding: '3px 9px' }}>
+                            <span style={{ fontFamily: mono, fontSize: fs('9px'), letterSpacing: '.12em', color: 'var(--copper)', border: '1px solid var(--copper)', borderRadius: 100, padding: '3px 9px' }}>
                               CURRENT
                             </span>
                           )}

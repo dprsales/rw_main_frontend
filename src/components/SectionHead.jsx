@@ -1,5 +1,5 @@
 import Reveal from './Reveal'
-import { eyebrow, eyebrowFaded, note, sectionHeading, sectionHeadingLg, sectionHeadingSm } from '../styles'
+import { fs, eyebrow, eyebrowFaded, note, sectionHeading, sectionHeadingLg, sectionHeadingSm } from '../styles'
 import { mono, serif } from '../theme'
 
 // The two section-opening patterns used site-wide; replaces ten near-identical inline copies.
@@ -50,11 +50,11 @@ export function CenteredHead({ eyebrow: kicker, title, intro }) {
   return (
     <Reveal style={{ textAlign: 'center', marginBottom: 20 }}>
       <div style={{ ...eyebrow, letterSpacing: '.24em' }}>{kicker}</div>
-      <div style={{ marginTop: 16, fontFamily: serif, fontSize: 'clamp(28px,3.4vw,42px)', color: 'var(--ink)' }}>
+      <div style={{ marginTop: 16, fontFamily: serif, fontSize: fs('clamp(28px,3.4vw,42px)'), color: 'var(--ink)' }}>
         {title}
       </div>
       {intro && (
-        <div style={{ ...note, marginTop: 14, fontSize: 'clamp(16px,1.7vw,18px)', maxWidth: '40em', marginLeft: 'auto', marginRight: 'auto' }}>
+        <div style={{ ...note, marginTop: 14, fontSize: fs('clamp(16px,1.7vw,18px)'), maxWidth: '40em', marginLeft: 'auto', marginRight: 'auto' }}>
           {intro}
         </div>
       )}
@@ -69,5 +69,5 @@ export function SectionAside({ children, width = '22em', style }) {
 
 /** The small mono line some sections use as an aside - a count, a location. */
 export function SectionCount({ children }) {
-  return <p style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.1em', color: 'var(--faded)' }}>{children}</p>
+  return <p style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.1em', color: 'var(--faded)' }}>{children}</p>
 }

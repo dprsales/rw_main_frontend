@@ -16,7 +16,7 @@ import { track } from '../data/analytics'
 import useCtaEntrance from '../hooks/useCtaEntrance'
 import { useInView } from '../hooks/useInView'
 import { FOOTER_LINKS, mono, serif } from '../theme'
-import {
+import { fs,
   container, eyebrow, note, sectionHeading, sectionRule, statLabel,
 } from '../styles'
 import krisahHero from '../assets/site/krisah-hero.png'
@@ -100,23 +100,23 @@ export default function Assessment() {
             <Reveal delay={120} style={{ marginTop: 48, borderTop: '1px solid var(--line)', paddingTop: 26 }}>
               <div style={{ display: 'flex', gap: 56, flexWrap: 'wrap' }}>
                 <div>
-                  <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>STRUCTURED</div>
+                  <div style={{ fontFamily: serif, fontSize: fs('clamp(28px,3.4vw,34px)'), color: 'var(--ink)' }}>STRUCTURED</div>
                   <div style={{ ...statLabel, marginTop: 8 }}>ASSESSMENT</div>
                 </div>
                 <div>
-                  <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>ONE</div>
+                  <div style={{ fontFamily: serif, fontSize: fs('clamp(28px,3.4vw,34px)'), color: 'var(--ink)' }}>ONE</div>
                   <div style={{ ...statLabel, marginTop: 8 }}>SITTING</div>
                 </div>
                 <div>
-                  <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>AI-LED</div>
+                  <div style={{ fontFamily: serif, fontSize: fs('clamp(28px,3.4vw,34px)'), color: 'var(--ink)' }}>AI-LED</div>
                   <div style={{ ...statLabel, marginTop: 8 }}>INTERVIEW</div>
                 </div>
                 <div>
-                  <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>PERSONALISED</div>
+                  <div style={{ fontFamily: serif, fontSize: fs('clamp(28px,3.4vw,34px)'), color: 'var(--ink)' }}>PERSONALISED</div>
                   <div style={{ ...statLabel, marginTop: 8 }}>QUESTIONS</div>
                 </div>
               </div>
-              <div style={{ marginTop: 22, display: 'flex', gap: 28, flexWrap: 'wrap', fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--faded)' }}>
+              <div style={{ marginTop: 22, display: 'flex', gap: 28, flexWrap: 'wrap', fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)' }}>
                 {TRUST.map((item) => <span key={item}>{item}</span>)}
               </div>
             </Reveal>
@@ -140,13 +140,13 @@ export default function Assessment() {
         <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(11,10,9,.55) 0%, rgba(11,10,9,.22) 45%, rgba(11,10,9,.62) 100%)' }} />
         <div className="rw-pad" style={{ ...container, padding: 'clamp(64px,8vw,96px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrow, marginBottom: 16 }}>THE RW TEAM</Reveal>
-          <Reveal as="p" style={{ ...sectionHeading, fontSize: 'clamp(26px,3.4vw,44px)', lineHeight: 1.12 }}>
+          <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12 }}>
             Before we coach you, we want you to know 
           </Reveal>
-          <Reveal as="p" delay={120} style={{ ...sectionHeading, fontSize: 'clamp(26px,3.4vw,44px)', lineHeight: 1.12, fontStyle: 'italic', color: 'var(--copper)', marginTop: 12 }}>
+          <Reveal as="p" delay={120} style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, fontStyle: 'italic', color: 'var(--copper)', marginTop: 12 }}>
             how you perform !
           </Reveal>
-          <Reveal as="p" delay={200} style={{ ...note, marginTop: 20, marginLeft: 'auto', marginRight: 'auto', maxWidth: '32em', fontSize: 'clamp(16px,1.7vw,18px)', lineHeight: 1.6, color: 'var(--ink)', textShadow: '0 1px 20px rgba(11,10,9,.6), 0 0 2px rgba(11,10,9,.8)' }}>
+          <Reveal as="p" delay={200} style={{ ...note, marginTop: 20, marginLeft: 'auto', marginRight: 'auto', maxWidth: '32em', fontSize: fs('clamp(16px,1.7vw,18px)'), lineHeight: 1.6, color: 'var(--ink)', textShadow: '0 1px 20px rgba(11,10,9,.6), 0 0 2px rgba(11,10,9,.8)' }}>
             Over 16+ years of high-value sales, the same lesson keeps repeating: the gap between a good professional and a great one is not knowledge. It is how they perform when it matters. The interview lets us measure that before we begin.
           </Reveal>
         </div>
@@ -157,14 +157,14 @@ export default function Assessment() {
         <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
           <div className="rw-grid-2 rw-assessment-session-grid">
             <Reveal delay={120} className="rw-assessment-session-content">
-              <div style={{ ...eyebrow, fontSize: 'clamp(14px,1vw,18px)', marginBottom: 20 }}>WHAT THE SESSION LOOKS LIKE</div>
-              <h2 style={{ ...sectionHeading, fontSize: 'clamp(30px,3.4vw,52px)', lineHeight: 1.08 }}>
+              <div style={{ ...eyebrow, fontSize: fs('clamp(14px,1vw,18px)'), marginBottom: 20 }}>WHAT THE SESSION LOOKS LIKE</div>
+              <h2 style={{ ...sectionHeading, fontSize: fs('clamp(30px,3.4vw,52px)'), lineHeight: 1.08 }}>
                 A real interview. With a highly intelligent, purpose-trained AI.
               </h2>
-              <p style={{ ...note, marginTop: 24, fontSize: 'clamp(17px,1.35vw,22px)', lineHeight: 1.62 }}>
+              <p style={{ ...note, marginTop: 24, fontSize: fs('clamp(17px,1.35vw,22px)'), lineHeight: 1.62 }}>
                 Twenty questions from an AI interviewer engineered for this role. It waits, listens, and captures not just what you say, but how you structure, pace, and hold the answer.
               </p>
-              <p style={{ ...note, marginTop: 20, fontSize: 'clamp(17px,1.35vw,22px)', lineHeight: 1.62 }}>
+              <p style={{ ...note, marginTop: 20, fontSize: fs('clamp(17px,1.35vw,22px)'), lineHeight: 1.62 }}>
                 Answer out loud. Hesitate the way you would in the room. It is rehearsal under real pressure, and the only audience is you.
               </p>
             </Reveal>
@@ -188,10 +188,10 @@ export default function Assessment() {
               <div className="rw-track-steps">
                 {STEPS.map((step, i) => (
                   <Reveal key={step.n} delay={i * 90} className="rw-track-step" style={{ textAlign: 'center' }}>
-                    <div className="rw-track-node" style={{ fontFamily: mono, fontSize: 13, letterSpacing: '.08em' }}>{step.n}</div>
+                    <div className="rw-track-node" style={{ fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em' }}>{step.n}</div>
                     <div>
-                      <div style={{ marginTop: 22, fontFamily: serif, fontSize: 'clamp(21px,2.4vw,27px)', color: 'var(--ink)' }}>{step.title}</div>
-                      <div style={{ ...note, marginTop: 8, marginLeft: 'auto', marginRight: 'auto', maxWidth: '22em', fontSize: 16, lineHeight: 1.5 }}>{step.body}</div>
+                      <div style={{ marginTop: 22, fontFamily: serif, fontSize: fs('clamp(21px,2.4vw,27px)'), color: 'var(--ink)' }}>{step.title}</div>
+                      <div style={{ ...note, marginTop: 8, marginLeft: 'auto', marginRight: 'auto', maxWidth: '22em', fontSize: fs('16px'), lineHeight: 1.5 }}>{step.body}</div>
                     </div>
                   </Reveal>
                 ))}
@@ -215,10 +215,10 @@ export default function Assessment() {
             <div>
               {AREAS.map((area, i) => (
                 <Reveal key={area.n} delay={i * 50} style={{ display: 'flex', gap: 18, padding: '15px 0', borderBottom: '1px solid var(--line)' }}>
-                  <div style={{ fontFamily: serif, fontSize: 'clamp(20px,2vw,24px)', color: 'var(--copper)', flexShrink: 0, width: '2em' }}>{area.n}</div>
+                  <div style={{ fontFamily: serif, fontSize: fs('clamp(20px,2vw,24px)'), color: 'var(--copper)', flexShrink: 0, width: '2em' }}>{area.n}</div>
                   <div>
-                    <div style={{ fontFamily: serif, fontSize: 'clamp(18px,2vw,22px)', color: 'var(--ink)' }}>{area.title}</div>
-                    <div style={{ ...note, marginTop: 4, fontSize: 15, lineHeight: 1.5 }}>{area.line}</div>
+                    <div style={{ fontFamily: serif, fontSize: fs('clamp(18px,2vw,22px)'), color: 'var(--ink)' }}>{area.title}</div>
+                    <div style={{ ...note, marginTop: 4, fontSize: fs('15px'), lineHeight: 1.5 }}>{area.line}</div>
                   </div>
                 </Reveal>
               ))}
@@ -230,23 +230,23 @@ export default function Assessment() {
                 <div style={{ padding: 'clamp(22px,3vw,32px)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
                     <div>
-                      <div style={{ fontFamily: mono, fontSize: 10, letterSpacing: '.16em', color: 'var(--copper)' }}>ASSESSMENT REPORT</div>
-                      <div style={{ fontFamily: serif, fontSize: 17, color: 'var(--ink)', marginTop: 2 }}>Interview Readiness Score</div>
+                      <div style={{ fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.16em', color: 'var(--copper)' }}>ASSESSMENT REPORT</div>
+                      <div style={{ fontFamily: serif, fontSize: fs('17px'), color: 'var(--ink)', marginTop: 2 }}>Interview Readiness Score</div>
                     </div>
-                    <div style={{ fontFamily: mono, fontSize: 9, letterSpacing: '.1em', color: 'var(--faded)' }}>SAMPLE</div>
+                    <div style={{ fontFamily: mono, fontSize: fs('9px'), letterSpacing: '.1em', color: 'var(--faded)' }}>SAMPLE</div>
                   </div>
 
                   <div style={{ textAlign: 'center', margin: '20px 0 18px' }}>
-                    <div style={{ fontFamily: serif, fontSize: 'clamp(48px,6vw,64px)', color: 'var(--copper)', lineHeight: 1 }}>71</div>
-                    <div style={{ fontFamily: mono, fontSize: 10, letterSpacing: '.16em', color: 'var(--faded)', marginTop: 6 }}>OUT OF 100</div>
+                    <div style={{ fontFamily: serif, fontSize: fs('clamp(48px,6vw,64px)'), color: 'var(--copper)', lineHeight: 1 }}>71</div>
+                    <div style={{ fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.16em', color: 'var(--faded)', marginTop: 6 }}>OUT OF 100</div>
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                     {SAMPLE_BARS.map((bar) => (
                       <div key={bar.label}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                          <span style={{ fontFamily: mono, fontSize: 10, letterSpacing: '.08em', color: 'var(--faded)' }}>{bar.label.toUpperCase()}</span>
-                          <span style={{ fontFamily: mono, fontSize: 11, color: 'var(--copper)' }}>{bar.val}</span>
+                          <span style={{ fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.08em', color: 'var(--faded)' }}>{bar.label.toUpperCase()}</span>
+                          <span style={{ fontFamily: mono, fontSize: fs('11px'), color: 'var(--copper)' }}>{bar.val}</span>
                         </div>
                         <div style={{ height: 2, background: 'var(--chip)', marginTop: 5 }}>
                           <div style={{ height: '100%', width: `${bar.val}%`, background: 'var(--gold-gradient)' }} />
@@ -257,7 +257,7 @@ export default function Assessment() {
 
                   <div style={{ marginTop: 20, paddingTop: 14, borderTop: '1px solid var(--line)', display: 'flex', alignItems: 'center', gap: 8 }}>
                     <span aria-hidden style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--copper)', flexShrink: 0 }} />
-                    <span style={{ fontFamily: mono, fontSize: 9, letterSpacing: '.06em', color: 'var(--faded)' }}>STRONGEST: CONTENT · PRIORITY: RELEVANCE</span>
+                    <span style={{ fontFamily: mono, fontSize: fs('9px'), letterSpacing: '.06em', color: 'var(--faded)' }}>STRONGEST: CONTENT · PRIORITY: RELEVANCE</span>
                   </div>
                 </div>
               </div>
@@ -286,7 +286,7 @@ export default function Assessment() {
           <Reveal as="h2" delay={80} style={{ ...sectionHeading, marginBottom: 30 }}>Before you start.</Reveal>
           {FAQS.map((faq, i) => (
             <Reveal key={faq.q} delay={i * 70} style={{ borderTop: '1px solid var(--line)', padding: '24px 0' }}>
-              <div style={{ fontFamily: serif, fontSize: 'clamp(18px,2vw,22px)', color: 'var(--ink)' }}>{faq.q}</div>
+              <div style={{ fontFamily: serif, fontSize: fs('clamp(18px,2vw,22px)'), color: 'var(--ink)' }}>{faq.q}</div>
               <p style={{ ...note, marginTop: 8, lineHeight: 1.5 }}>{faq.a}</p>
             </Reveal>
           ))}
@@ -327,7 +327,7 @@ export default function Assessment() {
           </CtaButton>
             <BookButton interest="Coaching" specular>OR BOOK A CALL FIRST</BookButton>
           </div>
-          <p style={{ ...note, marginTop: 22, fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--faded)' }}>
+          <p style={{ ...note, marginTop: 22, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)' }}>
             COMPLIMENTARY · NO OBLIGATION · SCORE REPORT INCLUDED · INSTANT RESULTS
           </p>
         </div>

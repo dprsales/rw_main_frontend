@@ -14,7 +14,7 @@ import { useTilt } from '../hooks/useTilt'
 import { fetchProject, flattenGallery, projectImage } from '../data/projects'
 import { projectSeo } from '../data/seo-config'
 import { PROJECT_FOOTER_LINKS, mono, serif, text } from '../theme'
-import { body, container, ctaInk, eyebrow, pageHeading, sectionRule } from '../styles'
+import { fs, body, container, ctaInk, eyebrow, pageHeading, sectionRule } from '../styles'
 
 /* ₹9,500 → "₹9,500". The API gives a plain number. */
 const rupees = (n) => (typeof n === 'number' ? `₹${n.toLocaleString('en-IN')}` : n)
@@ -36,7 +36,7 @@ function splitLines(str, n = 3) {
 /* Parse an API stat string into an animatable value; only clean integers count up. */
 function StatValue({ raw }) {
   const m = String(raw ?? '').match(/^(\D*)([\d,]+(?:\.\d+)?)(.*)$/)
-  const style = { fontFamily: serif, fontSize: 'clamp(30px,4.2vw,58px)', lineHeight: .95, letterSpacing: '-.02em', color: 'var(--copper)' }
+  const style = { fontFamily: serif, fontSize: fs('clamp(30px,4.2vw,58px)'), lineHeight: .95, letterSpacing: '-.02em', color: 'var(--copper)' }
   if (m) {
     const prefix = m[1] || ''
     const numStr = m[2]
@@ -55,8 +55,8 @@ function Section({ id, eyebrow: kicker, title, intro, chip = false, bleed = fals
   // API heading fields vary from a tight headline to a full paragraph; long titles drop to prose scale.
   const isParagraph = typeof title === 'string' && title.trim().length > 72
   const titleStyle = isParagraph
-    ? { fontFamily: serif, fontWeight: 400, fontSize: 'clamp(21px,2.3vw,30px)', letterSpacing: '-.01em', lineHeight: 1.32, color: 'var(--ink)', maxWidth: '32em' }
-    : { fontFamily: serif, fontWeight: 400, fontSize: 'clamp(30px,3.4vw,46px)', letterSpacing: '-.015em', lineHeight: 1.08, color: 'var(--ink)', maxWidth: '15em' }
+    ? { fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(21px,2.3vw,30px)'), letterSpacing: '-.01em', lineHeight: 1.32, color: 'var(--ink)', maxWidth: '32em' }
+    : { fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(30px,3.4vw,46px)'), letterSpacing: '-.015em', lineHeight: 1.08, color: 'var(--ink)', maxWidth: '15em' }
   return (
     <section id={id} style={{ ...sectionRule, ...(chip ? { background: 'var(--chip)' } : {}) }}>
       <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,11vw,140px) 40px' }}>
@@ -181,7 +181,7 @@ function ProjectHero({ hero, details, name }) {
               className="rw-nav-link rw-projx-in"
               style={{
                 fontFamily: mono,
-                fontSize: 11,
+                fontSize: fs('11px'),
                 letterSpacing: '.16em',
                 color: 'rgba(234,241,249,.72)',
               }}
@@ -239,7 +239,7 @@ function ProjectHero({ hero, details, name }) {
                   marginTop: 20,
                   fontFamily: serif,
                   fontWeight: 400,
-                  fontSize: 'clamp(48px, 8vw, 110px)',
+                  fontSize: fs('clamp(48px, 8vw, 110px)'),
                   lineHeight: .92,
                   letterSpacing: '-.02em',
                   color: '#F2EFE9',
@@ -257,7 +257,7 @@ function ProjectHero({ hero, details, name }) {
                   marginTop: 'clamp(20px, 2.5vw, 34px)',
                   fontFamily: serif,
                   fontWeight: 400,
-                  fontSize: 'clamp(30px, 4vw, 58px)',
+                  fontSize: fs('clamp(30px, 4vw, 58px)'),
                   lineHeight: 1.04,
                   letterSpacing: '-.02em',
                   color: '#F2EFE9',
@@ -295,7 +295,7 @@ function ProjectHero({ hero, details, name }) {
                       style={{
                         fontFamily: text,
                         fontWeight: 400,
-                        fontSize: 'clamp(17px, 1.7vw, 23px)',
+                        fontSize: fs('clamp(17px, 1.7vw, 23px)'),
                         letterSpacing: '.02em',
                         fontVariantNumeric: 'lining-nums',
                         color: '#F2EFE9',
@@ -309,7 +309,7 @@ function ProjectHero({ hero, details, name }) {
                     <div
                       style={{
                         ...eyebrow,
-                        fontSize: 10,
+                        fontSize: fs('10px'),
                         letterSpacing: '.16em',
                         color: 'rgba(234,241,249,.58)',
                         marginTop: 8,
@@ -345,7 +345,7 @@ function ProjectHero({ hero, details, name }) {
                 <span
                   style={{
                     fontFamily: mono,
-                    fontSize: 11,
+                    fontSize: fs('11px'),
                     letterSpacing: '.12em',
                     color: 'rgba(234,241,249,.6)',
                   }}
@@ -380,7 +380,7 @@ function ProjectHero({ hero, details, name }) {
         <span
           style={{
             fontFamily: mono,
-            fontSize: 9,
+            fontSize: fs('9px'),
             letterSpacing: '.22em',
           }}
         >
@@ -446,7 +446,7 @@ export default function Project() {
       {state === 'error' && (
         <div className="rw-pad" style={{ ...container, minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: 22, padding: '120px 40px' }}>
           <div style={{ ...eyebrow }}>PROJECT UNAVAILABLE</div>
-          <h1 style={{ ...pageHeading, fontSize: 'clamp(34px,5vw,64px)', letterSpacing: '-.02em', maxWidth: '13em' }}>
+          <h1 style={{ ...pageHeading, fontSize: fs('clamp(34px,5vw,64px)'), letterSpacing: '-.02em', maxWidth: '13em' }}>
             We couldn’t load this project right now.
           </h1>
           <p style={{ ...body, maxWidth: '32em' }}>The listing may have moved, or the connection dropped. Explore the full portfolio, or reach out and we’ll send the details directly.</p>
@@ -490,7 +490,7 @@ function ProjectBody({ data, name }) {
       {(about?.des || details?.description || aboutStats.length > 0) && (
         <Section id="about" eyebrow="THE RESIDENCE" title={`About ${name}.`}>
           <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: aboutImages.length ? '1.05fr .95fr' : '1fr', gap: 'clamp(36px,6vw,80px)', alignItems: 'center' }}>
-            <Reveal as="p" style={{ fontFamily: serif, fontWeight: 400, fontSize: 'clamp(21px,2.6vw,34px)', lineHeight: 1.34, letterSpacing: '-.01em', color: 'var(--ink)', maxWidth: '18em' }}>
+            <Reveal as="p" style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(21px,2.6vw,34px)'), lineHeight: 1.34, letterSpacing: '-.01em', color: 'var(--ink)', maxWidth: '18em' }}>
               {about?.des || details?.description}
             </Reveal>
             {aboutImages[0] && <FeatureImage src={aboutImages[0]} alt={name} ratio="4/5" />}
@@ -501,7 +501,7 @@ function ProjectBody({ data, name }) {
               {aboutStats.map((s, i) => (
                 <Reveal key={i} delay={(i % 4) * 100} className="rw-projx-stat">
                   <StatValue raw={s.h1} />
-                  <div style={{ ...eyebrow, fontSize: 10, color: 'var(--faded)', marginTop: 16 }}>{s.d1}</div>
+                  <div style={{ ...eyebrow, fontSize: fs('10px'), color: 'var(--faded)', marginTop: 16 }}>{s.d1}</div>
                 </Reveal>
               ))}
             </div>
@@ -531,8 +531,8 @@ function ProjectBody({ data, name }) {
             <div>
               {(layout?.highlights || []).map((h, i) => (
                 <Reveal key={i} delay={(i % 8) * 60} style={{ display: 'flex', gap: 20, padding: 'clamp(16px,1.8vw,22px) 0', borderTop: '1px solid var(--line)' }}>
-                  <span style={{ fontFamily: serif, fontStyle: 'italic', fontSize: 'clamp(20px,2vw,26px)', color: 'var(--copper)', flexShrink: 0, lineHeight: 1 }}>{String(i + 1).padStart(2, '0')}</span>
-                  <span style={{ fontFamily: text, fontWeight: 300, fontSize: 'clamp(15px,1.6vw,18px)', lineHeight: 1.5, color: 'var(--ink)' }}>{h}</span>
+                  <span style={{ fontFamily: serif, fontStyle: 'italic', fontSize: fs('clamp(20px,2vw,26px)'), color: 'var(--copper)', flexShrink: 0, lineHeight: 1 }}>{String(i + 1).padStart(2, '0')}</span>
+                  <span style={{ fontFamily: text, fontWeight: 300, fontSize: fs('clamp(15px,1.6vw,18px)'), lineHeight: 1.5, color: 'var(--ink)' }}>{h}</span>
                 </Reveal>
               ))}
             </div>
@@ -562,10 +562,10 @@ function ProjectBody({ data, name }) {
                   )}
                   <div style={{ padding: 'clamp(20px,2.2vw,28px)', borderTop: '1px solid var(--line)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 16 }}>
                     <div>
-                      <div style={{ fontFamily: serif, fontSize: 'clamp(22px,2.2vw,28px)', color: 'var(--ink)' }}>{u.bhk} BHK</div>
-                      {u.facing && <div style={{ ...eyebrow, fontSize: 13, letterSpacing: '.1em', color: 'var(--faded)', marginTop: 10 }}>{String(u.facing).toUpperCase()} FACING</div>}
+                      <div style={{ fontFamily: serif, fontSize: fs('clamp(22px,2.2vw,28px)'), color: 'var(--ink)' }}>{u.bhk} BHK</div>
+                      {u.facing && <div style={{ ...eyebrow, fontSize: fs('13px'), letterSpacing: '.1em', color: 'var(--faded)', marginTop: 10 }}>{String(u.facing).toUpperCase()} FACING</div>}
                     </div>
-                    {u.sft && <div style={{ fontFamily: mono, fontSize: 13, letterSpacing: '.06em', color: 'var(--copper)' }}>{u.sft} sq.ft.</div>}
+                    {u.sft && <div style={{ fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.06em', color: 'var(--copper)' }}>{u.sft} sq.ft.</div>}
                   </div>
                 </Reveal>
               )
@@ -606,7 +606,7 @@ function ProjectBody({ data, name }) {
   />
 </div>
                   )}
-                  <span className="rw-projx-amenity-label" style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.12em', color: 'var(--ink)', lineHeight: 1.4, transition: 'color .4s ease' }}>{(a.h1 || '').trim()}</span>
+                  <span className="rw-projx-amenity-label" style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.12em', color: 'var(--ink)', lineHeight: 1.4, transition: 'color .4s ease' }}>{(a.h1 || '').trim()}</span>
                 </Reveal>
               )
             })}
@@ -630,8 +630,8 @@ function ProjectBody({ data, name }) {
                   <ul style={{ listStyle: 'none' }}>
                     {(g.data || []).map((p, pi) => (
                       <li key={pi} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 16, padding: '13px 0', borderTop: '1px solid var(--line)' }}>
-                        <span style={{ fontFamily: serif, fontSize: 'clamp(16px,1.7vw,19px)', color: 'var(--ink)' }}>{p.h1}</span>
-                        {p.time != null && <span style={{ fontFamily: mono, fontSize: 12, letterSpacing: '.06em', color: 'var(--copper)', flexShrink: 0 }}>{p.time} min</span>}
+                        <span style={{ fontFamily: serif, fontSize: fs('clamp(16px,1.7vw,19px)'), color: 'var(--ink)' }}>{p.h1}</span>
+                        {p.time != null && <span style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.06em', color: 'var(--copper)', flexShrink: 0 }}>{p.time} min</span>}
                       </li>
                     ))}
                   </ul>
@@ -651,7 +651,7 @@ function ProjectBody({ data, name }) {
           </div>
         )}
         <div className="rw-pad" style={{ position: 'relative', zIndex: 1, maxWidth: 900, margin: '0 auto', padding: 'clamp(100px,14vw,180px) 40px', textAlign: 'center' }}>
-          <Reveal as="h2" style={{ fontFamily: serif, fontWeight: 400, fontSize: 'clamp(34px,5vw,68px)', lineHeight: 1.04, letterSpacing: '-.02em', color: '#F2EFE9', maxWidth: '15em', margin: '0 auto' }}>
+          <Reveal as="h2" style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(34px,5vw,68px)'), lineHeight: 1.04, letterSpacing: '-.02em', color: '#F2EFE9', maxWidth: '15em', margin: '0 auto' }}>
 Let’s connect and discover if {name} feels like home.
 </Reveal>
           <Reveal delay={140} style={{ marginTop: 44 }}>

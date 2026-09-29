@@ -1,6 +1,6 @@
 import Reveal from './Reveal'
 import { mono, serif } from '../theme'
-import { eyebrow, note } from '../styles'
+import { fs, eyebrow, note } from '../styles'
 
 /* Score → tone lines, honest to the band the route maps to. Never a made-up number. */
 function bandLineFor(overall) {
@@ -20,7 +20,7 @@ const BAR_STYLE = {
 
 const bandChip = {
   fontFamily: mono,
-  fontSize: 9,
+  fontSize: fs('9px'),
   letterSpacing: '.14em',
   color: 'var(--faded)',
   border: '1px solid var(--line)',
@@ -59,10 +59,10 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
         <div style={{ padding: 'clamp(26px,3.4vw,36px)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, flexWrap: 'wrap' }}>
             <div>
-              <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.16em', color: 'var(--copper)' }}>
+              <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.16em', color: 'var(--copper)' }}>
                 YOUR ASSESSMENT SCORE
               </div>
-              <div style={{ fontFamily: serif, fontSize: 17, color: 'var(--ink)', marginTop: 4 }}>
+              <div style={{ fontFamily: serif, fontSize: fs('17px'), color: 'var(--ink)', marginTop: 4 }}>
                 Interview Readiness Score
               </div>
             </div>
@@ -82,13 +82,13 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
               {headline}
             </span>
             {isNumber && (
-              <span style={{ fontFamily: mono, fontSize: 10, letterSpacing: '.16em', color: 'var(--faded)' }}>
+              <span style={{ fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.16em', color: 'var(--faded)' }}>
                 OUT OF 100
               </span>
             )}
           </div>
           {statusLine && (
-            <p style={{ ...note, fontSize: 16, color: 'var(--ink)', lineHeight: 1.5 }}>{statusLine}</p>
+            <p style={{ ...note, fontSize: fs('16px'), color: 'var(--ink)', lineHeight: 1.5 }}>{statusLine}</p>
           )}
 
           {/* Per-dimension bars when real scores exist */}
@@ -97,10 +97,10 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
               {dims.map((d) => (
                 <div key={d.key}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                    <span style={{ fontFamily: mono, fontSize: 10, letterSpacing: '.08em', color: 'var(--faded)' }}>
+                    <span style={{ fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.08em', color: 'var(--faded)' }}>
                       {d.label.toUpperCase()}
                     </span>
-                    <span style={{ fontFamily: mono, fontSize: 12, color: 'var(--copper)' }}>
+                    <span style={{ fontFamily: mono, fontSize: fs('12px'), color: 'var(--copper)' }}>
                       {d.value}%{d.value < 50 ? ' · HIGH PRIORITY' : ''}
                     </span>
                   </div>
@@ -112,7 +112,7 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
             </div>
           ) : (
             <div style={{ marginTop: 22, border: '1px dashed var(--line)', padding: '13px 16px' }}>
-              <span style={{ ...note, fontSize: 14, color: 'var(--ink)', lineHeight: 1.5 }}>
+              <span style={{ ...note, fontSize: fs('14px'), color: 'var(--ink)', lineHeight: 1.5 }}>
                 Your priority areas and the full development plan follow below.
               </span>
             </div>
@@ -122,7 +122,7 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
           <div style={{ marginTop: 22, paddingTop: 14, borderTop: '1px solid var(--line)', display: 'flex', gap: 22, flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span aria-hidden style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--copper)', flexShrink: 0 }} />
-              <span style={{ fontFamily: mono, fontSize: 9, letterSpacing: '.06em', color: 'var(--faded)' }}>
+              <span style={{ fontFamily: mono, fontSize: fs('9px'), letterSpacing: '.06em', color: 'var(--faded)' }}>
                 {strongest
                   ? `STRONGEST: ${strongest.short.toUpperCase()} (${strongest.value}%)`
                   : 'STRONGEST AREAS ARRIVE WITH YOUR FULL REPORT'}
@@ -130,7 +130,7 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span aria-hidden style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--copper)', flexShrink: 0 }} />
-              <span style={{ fontFamily: mono, fontSize: 9, letterSpacing: '.06em', color: 'var(--faded)' }}>
+              <span style={{ fontFamily: mono, fontSize: fs('9px'), letterSpacing: '.06em', color: 'var(--faded)' }}>
                 {priorityDims.length
                   ? `PRIORITY: ${priorityDims.map((d) => d.short.toUpperCase()).join(' · ')}`
                   : 'PRIORITY: FOCUSED DEVELOPMENT'}

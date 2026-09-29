@@ -12,7 +12,7 @@ import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { submitChannelPartner, getErrorMessage } from '../data/api'
 import { errorCategory, track } from '../data/analytics'
 import { FOOTER_LINKS, mono, serif, text, WHATSAPP } from '../theme'
-import { container, ctaCopper, eyebrow, note, sectionHeading, sectionRule } from '../styles'
+import { fs, container, ctaCopper, eyebrow, note, sectionHeading, sectionRule } from '../styles'
 import '../form/form.css'
 
 const PARTNER_INTEREST = 'Channel partner application'
@@ -312,7 +312,7 @@ export default function Partner() {
       <PageIntro
         eyebrow="RW REALTY · CHANNEL PARTNERS"
         headline={HEADLINE}
-        headlineStyle={{ fontSize: 'clamp(42px,4.4vw,64px)' }}
+        headlineStyle={{ fontSize: fs('clamp(42px,4.4vw,64px)') }}
         lede="Exclusive mandates, golden-rate commissions, and a team that runs the funnel with you."
         intro="RW Realty carries a small number of projects at a time, on exclusive mandates. Partners inside those mandates get inventory worth carrying, leads we keep warm, and the training to close at the ticket size."
         image={saplingImage}
@@ -342,11 +342,11 @@ export default function Partner() {
           >
             {VALUE.map((item, i) => (
               <Reveal key={item.n} delay={i * 90} style={{ border: '1px solid var(--line)', background: 'var(--card)', padding: 'clamp(26px,3.4vw,38px)' }}>
-                <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--copper)' }}>{item.tag}</div>
-                <h3 style={{ marginTop: 16, fontFamily: serif, fontWeight: 400, fontSize: 'clamp(21px,2.3vw,25px)', lineHeight: 1.15, color: 'var(--ink)' }}>
+                <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--copper)' }}>{item.tag}</div>
+                <h3 style={{ marginTop: 16, fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(21px,2.3vw,25px)'), lineHeight: 1.15, color: 'var(--ink)' }}>
                   {item.title}
                 </h3>
-                <p style={{ ...note, marginTop: 12, fontSize: 16, lineHeight: 1.55 }}>{item.body}</p>
+                <p style={{ ...note, marginTop: 12, fontSize: fs('16px'), lineHeight: 1.55 }}>{item.body}</p>
               </Reveal>
             ))}
           </div>
@@ -356,7 +356,7 @@ export default function Partner() {
       {/* Statement band */}
       <section style={{ ...sectionRule, background: 'var(--card)', position: 'relative', overflow: 'hidden' }}>
         <div className="rw-pad" style={{ ...container, padding: 'clamp(64px,8vw,96px) 40px', textAlign: 'center' }}>
-          <Reveal as="p" style={{ ...sectionHeading, fontSize: 'clamp(26px,3.4vw,44px)', lineHeight: 1.12, maxWidth: '20em', margin: '0 auto' }}>
+          <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, maxWidth: '20em', margin: '0 auto' }}>
             Serious inventory. Serious commissions.{' '}
             <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>A partner who keeps score openly.</span>
           </Reveal>
@@ -373,12 +373,12 @@ export default function Partner() {
         <div className="rw-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(28px,4vw,56px)', marginTop: 'clamp(44px,6vw,64px)' }}>
           {STEPS.map((step, i) => (
             <Reveal key={step.n} delay={i * 90}>
-              <div style={{ fontFamily: mono, fontSize: 13, letterSpacing: '.08em', color: 'var(--copper)', borderBottom: '1px solid var(--line)', paddingBottom: 14 }}>STEP {step.n}</div>
+              <div style={{ fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em', color: 'var(--copper)', borderBottom: '1px solid var(--line)', paddingBottom: 14 }}>STEP {step.n}</div>
               {/* Sans, not the display serif: Cormorant Garamond's capital Q carries a long
                   decorative swash that reads as italic/cursive next to "Apply"/"Mandate in" —
                   the webfont has no alternate glyph (tested via font-feature-settings, no effect). */}
-              <div style={{ marginTop: 20, fontFamily: text, fontWeight: 500, fontSize: 'clamp(19px,2.1vw,23px)', color: 'var(--ink)' }}>{step.title}</div>
-              <p style={{ ...note, marginTop: 8, fontSize: 16, lineHeight: 1.55 }}>{step.body}</p>
+              <div style={{ marginTop: 20, fontFamily: text, fontWeight: 500, fontSize: fs('clamp(19px,2.1vw,23px)'), color: 'var(--ink)' }}>{step.title}</div>
+              <p style={{ ...note, marginTop: 8, fontSize: fs('16px'), lineHeight: 1.55 }}>{step.body}</p>
             </Reveal>
           ))}
         </div>
@@ -391,7 +391,7 @@ export default function Partner() {
           <Reveal as="h2" delay={80} style={{ ...sectionHeading, marginTop: 16 }}>
             Apply to become a channel partner.
           </Reveal>
-          <Reveal as="p" delay={140} style={{ ...note, marginTop: 14, fontSize: 'clamp(16px,1.7vw,18px)', maxWidth: '36em' }}>
+          <Reveal as="p" delay={140} style={{ ...note, marginTop: 14, fontSize: fs('clamp(16px,1.7vw,18px)'), maxWidth: '36em' }}>
             Ten minutes, references over a big deck. Everything you share stays between us.
           </Reveal>
 
@@ -402,7 +402,7 @@ export default function Partner() {
                   <path d="M4 12.5 9.5 18 20 6.5" />
                 </svg>
               </div>
-              <h3 style={{ fontFamily: serif, fontWeight: 400, fontSize: 'clamp(24px,3vw,32px)', color: 'var(--ink)', marginTop: 26 }}>
+              <h3 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(24px,3vw,32px)'), color: 'var(--ink)', marginTop: 26 }}>
                 Application received.
               </h3>
               <p style={{ ...note, marginTop: 14, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em' }}>
@@ -516,7 +516,7 @@ export default function Partner() {
                       />
                     )}
                     {pills.hasRera === 'No' && (
-                      <span className="rw-form-help" style={{ marginTop: 12, color: 'var(--ink)', fontSize: 13, lineHeight: 1.55, letterSpacing: '.02em' }}>
+                      <span className="rw-form-help" style={{ marginTop: 12, color: 'var(--ink)', fontSize: fs('13px'), lineHeight: 1.55, letterSpacing: '.02em' }}>
                         As per TG RERA, it is mandatory for every agent, channel partner, broker to have a RERA number, we recommend you encourage you to file for a RERA number ASAP to avoid future inconvenience.
                       </span>
                     )}
@@ -554,7 +554,7 @@ export default function Partner() {
                 </div>
 
                 {error && (
-                  <p style={{ fontFamily: text, fontWeight: 300, fontSize: 14, color: 'var(--copper)', margin: 0 }}>{error}</p>
+                  <p style={{ fontFamily: text, fontWeight: 300, fontSize: fs('14px'), color: 'var(--copper)', margin: 0 }}>{error}</p>
                 )}
 
                 <div className="rw-form-submit-bar">

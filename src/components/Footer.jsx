@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import { fs } from '../styles'
 import Credit from './Credit'
 import Wordmark from './Wordmark'
 import { mono, PAGE_SOCIAL_LINKS, SOCIAL_LINKS } from '../theme'
@@ -76,7 +77,7 @@ export default function Footer({ links, chip = false }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <Wordmark size={48} />
-            <span style={{ fontFamily: mono, fontSize: 12, letterSpacing: '.06em', color: 'var(--faded)' }}>
+            <span style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.06em', color: 'var(--faded)' }}>
               © 2026 Rajiv Williams · Hyderabad · 500032
             </span>
           </div>
@@ -90,7 +91,7 @@ export default function Footer({ links, chip = false }) {
             className="rw-footer-links"
             style={{
               display: 'flex', gap: 28, alignItems: 'center', flexWrap: 'wrap',
-              fontFamily: mono, fontSize: 12, letterSpacing: '.04em',
+              fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.04em',
             }}
           >
             {restLinks.map((link) =>

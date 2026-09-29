@@ -19,7 +19,7 @@ import { CAREER_CATEGORIES, CAREER_CULTURE, CAREER_HOOK, CAREER_PROCESS, CAREER_
 import { CAREERS_INTEREST } from '../data/booking'
 import { fetchRoles } from '../data/jobs'
 import { FOOTER_LINKS, mono, serif } from '../theme'
-import {
+import { fs,
   container, ctaInline, eyebrow,
   note, sectionHeading, sectionRule,
 } from '../styles'
@@ -104,10 +104,10 @@ export default function Careers() {
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--card)', position: 'relative', overflow: 'hidden' }}>
         <img src={hydMark} alt="" aria-hidden className="rw-why-watermark" />
         <div className="rw-pad" style={{ ...container, padding: 'clamp(64px,8vw,96px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-          <Reveal as="p" style={{ ...sectionHeading, fontSize: 'clamp(26px,3.4vw,44px)', lineHeight: 1.12 }}>
+          <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12 }}>
             {CAREER_HOOK.lead}
           </Reveal>
-          <Reveal as="p" delay={120} style={{ ...sectionHeading, fontSize: 'clamp(26px,3.4vw,44px)', lineHeight: 1.12, fontStyle: 'italic', color: 'var(--copper)', marginTop: 10 }}>
+          <Reveal as="p" delay={120} style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, fontStyle: 'italic', color: 'var(--copper)', marginTop: 10 }}>
             {CAREER_HOOK.accent}
           </Reveal>
         </div>
@@ -160,7 +160,7 @@ export default function Careers() {
             <h2
               style={{
                 ...sectionHeading,
-                fontSize: 'clamp(26px,3.2vw,40px)',
+                fontSize: fs('clamp(26px,3.2vw,40px)'),
                 lineHeight: 1.08
               }}
             >
@@ -171,7 +171,7 @@ export default function Careers() {
               style={{
                 ...note,
                 marginTop: 18,
-                fontSize: 'clamp(16px,1.7vw,18px)',
+                fontSize: fs('clamp(16px,1.7vw,18px)'),
                 lineHeight: 1.6
               }}
             >
@@ -184,7 +184,7 @@ export default function Careers() {
               style={{
                 ...note,
                 marginTop: 14,
-                fontSize: 'clamp(16px,1.7vw,18px)',
+                fontSize: fs('clamp(16px,1.7vw,18px)'),
                 lineHeight: 1.6
               }}
             >
@@ -211,7 +211,7 @@ export default function Careers() {
           <Reveal as="h2" delay={80} style={{ ...sectionHeading, lineHeight: 1.06, maxWidth: '13em', margin: '0 auto' }}>
             {CAREER_CULTURE.title}
           </Reveal>
-          <Reveal as="p" delay={140} style={{ ...note, marginTop: 18, marginLeft: 'auto', marginRight: 'auto', maxWidth: '38em', fontSize: 'clamp(16px,1.7vw,19px)', lineHeight: 1.6 }}>
+          <Reveal as="p" delay={140} style={{ ...note, marginTop: 18, marginLeft: 'auto', marginRight: 'auto', maxWidth: '38em', fontSize: fs('clamp(16px,1.7vw,19px)'), lineHeight: 1.6 }}>
             {CAREER_CULTURE.body}
           </Reveal>
           <Reveal delay={200} style={{ marginTop: 30 }}>
@@ -242,7 +242,7 @@ export default function Careers() {
                     aria-selected={filter === tab}
                     onClick={() => { setFilter(tab); setVisibleCount(ROLES_PER_PAGE) }}
                     className={`rw-tab${filter === tab ? ' is-on' : ''}`}
-                    style={{ fontFamily: mono, fontSize: 12, letterSpacing: '.12em', textTransform: 'uppercase' }}
+                    style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.12em', textTransform: 'uppercase' }}
                   >
                     {tab}
                   </button>
@@ -266,7 +266,7 @@ export default function Careers() {
             <Reveal style={{ marginTop: 48 }}>
               <BorderGlow {...CAREER_GLOW} className="rw-empty-roles-glow">
                 <div style={{ textAlign: 'center', padding: 'clamp(36px,6vw,64px)' }}>
-                  <div style={{ fontFamily: serif, fontSize: 'clamp(22px,2.6vw,28px)', color: 'var(--ink)' }}>No open positions this month.</div>
+                  <div style={{ fontFamily: serif, fontSize: fs('clamp(22px,2.6vw,28px)'), color: 'var(--ink)' }}>No open positions this month.</div>
                   <p style={{ ...note, marginTop: 12 }}>
                     Strong profiles are kept on file and called first when a seat opens.
                   </p>
@@ -330,7 +330,7 @@ export default function Careers() {
           <div className="rw-track-steps">
             {CAREER_PROCESS.map((step, i) => (
               <Reveal key={step.n} delay={i * 90} className="rw-track-step" style={{ textAlign: 'center' }}>
-                <div className="rw-track-node" style={{ fontFamily: mono, fontSize: 13, letterSpacing: '.08em' }}>
+                <div className="rw-track-node" style={{ fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em' }}>
                   {i === CAREER_PROCESS.length - 1 ? (
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
                       <path d="M4 12.5 9.5 18 20 6.5" />
@@ -338,8 +338,8 @@ export default function Careers() {
                   ) : step.n}
                 </div>
                 <div>
-                  <div style={{ marginTop: 22, fontFamily: serif, fontSize: 'clamp(21px,2.4vw,27px)', color: 'var(--ink)' }}>{step.title}</div>
-                  <div style={{ ...note, marginTop: 8, marginLeft: 'auto', marginRight: 'auto', maxWidth: '20em', fontSize: 16, lineHeight: 1.5 }}>{step.body}</div>
+                  <div style={{ marginTop: 22, fontFamily: serif, fontSize: fs('clamp(21px,2.4vw,27px)'), color: 'var(--ink)' }}>{step.title}</div>
+                  <div style={{ ...note, marginTop: 8, marginLeft: 'auto', marginRight: 'auto', maxWidth: '20em', fontSize: fs('16px'), lineHeight: 1.5 }}>{step.body}</div>
                 </div>
               </Reveal>
             ))}

@@ -13,7 +13,7 @@ import goldWatermark from '../assets/site/rw-logo-ccr.png'
 import goldLockup from '../assets/site/gold.png'
 import { KRISAH_ASSESSMENT_URL } from '../data/content'
 import { FOOTER_LINKS, mono, serif } from '../theme'
-import { container, eyebrow, note, sectionHeading, sectionRule } from '../styles'
+import { fs, container, eyebrow, note, sectionHeading, sectionRule } from '../styles'
 
 /**
  * Landing page for KRISAH's back button after the interview. It carries no
@@ -28,14 +28,14 @@ const fieldStyle = {
 }
 
 const fieldInputStyle = {
-  fontFamily: mono, fontSize: 11, letterSpacing: '.12em',
+  fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.12em',
   color: 'var(--ink)', background: 'transparent',
   border: '1px solid var(--line)', padding: '0 14px', outline: 'none',
   width: '100%', height: 48, boxSizing: 'border-box', textTransform: 'uppercase',
 }
 
 const fieldLabelStyle = {
-  fontFamily: mono, fontSize: 10, letterSpacing: '.14em', color: 'var(--faded)',
+  fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.14em', color: 'var(--faded)',
 }
 
 export default function AssessmentResult() {
@@ -84,18 +84,18 @@ export default function AssessmentResult() {
         <img src={goldWatermark} alt="" aria-hidden className="rw-watermark is-right" />
         <div className="rw-pad" style={{ ...container, maxWidth: 880, padding: 'clamp(80px,10vw,110px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrow, marginBottom: 20 }}>YOU'VE COMPLETED YOUR INTERVIEW</Reveal>
-          <Reveal as="h1" delay={80} style={{ ...sectionHeading, fontSize: 'clamp(30px,4.2vw,52px)', lineHeight: 1.1 }}>
+          <Reveal as="h1" delay={80} style={{ ...sectionHeading, fontSize: fs('clamp(30px,4.2vw,52px)'), lineHeight: 1.1 }}>
             Welcome back. Your interview is complete.
           </Reveal>
-          <Reveal as="p" delay={160} style={{ ...note, marginTop: 18, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em', fontSize: 'clamp(16px,1.7vw,18px)', lineHeight: 1.6 }}>
+          <Reveal as="p" delay={160} style={{ ...note, marginTop: 18, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em', fontSize: fs('clamp(16px,1.7vw,18px)'), lineHeight: 1.6 }}>
             In about twenty-five minutes, an AI interviewer read how you structure, pace, and hold your answers across six dimensions. Your scored report is yours to keep, free of charge. We work in sixteen areas of specialisation, ninety to one hundred and twenty minutes each, and we will point you at the ones your report turns up.
           </Reveal>
-          <Reveal delay={220} style={{ marginTop: 34, display: 'flex', gap: 34, justifyContent: 'center', flexWrap: 'wrap', fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--faded)' }}>
+          <Reveal delay={220} style={{ marginTop: 34, display: 'flex', gap: 34, justifyContent: 'center', flexWrap: 'wrap', fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)' }}>
             <span>16 AREAS</span>
             <span>90–120 MIN EACH</span>
             <span>OF SPECIALISATION</span>
           </Reveal>
-          <Reveal delay={280} style={{ marginTop: 22, fontFamily: mono, fontSize: 10, letterSpacing: '.16em', color: 'var(--copper)' }}>
+          <Reveal delay={280} style={{ marginTop: 22, fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.16em', color: 'var(--copper)' }}>
             CONDUCTED WITH KRISAH · BY RAJIV WILLIAMS
           </Reveal>
           <Reveal delay={340} style={{ marginTop: 32, display: 'flex', gap: 18, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
@@ -118,21 +118,21 @@ export default function AssessmentResult() {
         <Reveal className="rw-figure" style={{ border: '1px solid var(--line)', padding: 'clamp(28px,4vw,40px)', marginTop: 44 }}>
           {capStatus === 'ok' ? (
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: mono, fontSize: 10, letterSpacing: '.16em', color: 'var(--copper)' }}>DONE</div>
-              <h3 style={{ fontFamily: serif, fontSize: 'clamp(22px,2.6vw,30px)', color: 'var(--ink)', marginTop: 12 }}>
+              <div style={{ fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.16em', color: 'var(--copper)' }}>DONE</div>
+              <h3 style={{ fontFamily: serif, fontSize: fs('clamp(22px,2.6vw,30px)'), color: 'var(--ink)', marginTop: 12 }}>
                 The full write-up is on its way{cap.name.trim() ? `, ${cap.name.trim()}` : ''}.
               </h3>
-              <p style={{ ...note, marginTop: 10, fontSize: 15, lineHeight: 1.55 }}>
+              <p style={{ ...note, marginTop: 10, fontSize: fs('15px'), lineHeight: 1.55 }}>
                 We will send it to {cap.email.trim()} with the complete report, where your gaps sit, and how the sixteen areas map to them.
               </p>
             </div>
           ) : (
             <div>
-              <div style={{ fontFamily: mono, fontSize: 10, letterSpacing: '.16em', color: 'var(--copper)' }}>KEEP YOUR REPORT</div>
-              <h3 style={{ fontFamily: serif, fontSize: 'clamp(22px,2.6vw,30px)', color: 'var(--ink)', marginTop: 4 }}>
+              <div style={{ fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.16em', color: 'var(--copper)' }}>KEEP YOUR REPORT</div>
+              <h3 style={{ fontFamily: serif, fontSize: fs('clamp(22px,2.6vw,30px)'), color: 'var(--ink)', marginTop: 4 }}>
                 The full list of the sixteen areas arrives with your write-up.
               </h3>
-              <p style={{ ...note, fontSize: 15, lineHeight: 1.55, marginTop: 10, marginBottom: 22 }}>
+              <p style={{ ...note, fontSize: fs('15px'), lineHeight: 1.55, marginTop: 10, marginBottom: 22 }}>
                 Tell us where to send it, and we will follow up with the complete report, your gaps, and the exact areas they map to. No spam, no sequences.
               </p>
               <form onSubmit={submitCapture} style={{ display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'flex-end' }}>
@@ -164,7 +164,7 @@ export default function AssessmentResult() {
                 </CtaButton>
               </form>
               {capStatus === 'error' && (
-                <p style={{ ...note, marginTop: 14, fontSize: 13, lineHeight: 1.5, color: '#d9826b' }}>{capMsg}</p>
+                <p style={{ ...note, marginTop: 14, fontSize: fs('13px'), lineHeight: 1.5, color: '#d9826b' }}>{capMsg}</p>
               )}
             </div>
           )}
@@ -181,10 +181,10 @@ export default function AssessmentResult() {
               style={{ height: 'clamp(72px, 11vw, 120px)', width: 'auto', objectFit: 'contain', mixBlendMode: 'screen' }}
             />
           </Reveal>
-          <Reveal as="h2" style={{ ...sectionHeading, fontSize: 'clamp(26px,3.4vw,42px)', lineHeight: 1.12 }}>
+          <Reveal as="h2" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,42px)'), lineHeight: 1.12 }}>
             Take it again in a month and watch the score move.
           </Reveal>
-          <Reveal as="p" delay={120} style={{ ...note, marginTop: 16, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em', fontSize: 16, lineHeight: 1.6 }}>
+          <Reveal as="p" delay={120} style={{ ...note, marginTop: 16, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em', fontSize: fs('16px'), lineHeight: 1.6 }}>
             The assessment is complimentary and open anytime. Re-run it before you rehearse and after. Measure the delta.
           </Reveal>
           <Reveal delay={200} style={{ marginTop: 30, display: 'flex', gap: 18, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { fs } from '../styles'
 import ImageSlot from './ImageSlot'
 import Reveal from './Reveal'
 import { mono, serif, text } from '../theme'
@@ -54,9 +55,9 @@ export default function Gallery({ items }) {
               <ImageSlot src={item.src} fit="contain" alt={item.title} placeholder={item.placeholder || 'Photo'} spec={item.spec} tag={item.tag} />
             </div>
             <div style={{ padding: '18px 20px 22px', borderTop: '1px solid var(--line)' }}>
-              <div style={{ fontFamily: serif, fontSize: 19, lineHeight: 1.2, color: 'var(--ink)' }}>{item.title}</div>
+              <div style={{ fontFamily: serif, fontSize: fs('19px'), lineHeight: 1.2, color: 'var(--ink)' }}>{item.title}</div>
               {item.meta && (
-                <div style={{ marginTop: 8, fontFamily: mono, fontSize: 11, letterSpacing: '.1em', color: 'var(--faded)' }}>
+                <div style={{ marginTop: 8, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.1em', color: 'var(--faded)' }}>
                   {item.meta}
                 </div>
               )}
@@ -78,7 +79,7 @@ export default function Gallery({ items }) {
         >
           <button
             type="button" className="rw-lb-btn" onClick={close} aria-label="Close"
-            style={{ position: 'absolute', top: 'clamp(12px,2.4vw,22px)', right: 'clamp(12px,2.4vw,22px)', width: 48, height: 48, borderRadius: '50%', border: '1px solid rgba(255,255,255,.25)', background: 'transparent', color: '#fff', fontSize: 20 }}
+            style={{ position: 'absolute', top: 'clamp(12px,2.4vw,22px)', right: 'clamp(12px,2.4vw,22px)', width: 48, height: 48, borderRadius: '50%', border: '1px solid rgba(255,255,255,.25)', background: 'transparent', color: '#fff', fontSize: fs('20px') }}
           >
             ✕
           </button>
@@ -93,18 +94,18 @@ export default function Gallery({ items }) {
 
             <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
               <div style={{ maxWidth: '40em' }}>
-                {active.meta && <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--copper)', marginBottom: 8 }}>{active.meta}</div>}
-                <div style={{ fontFamily: serif, fontSize: 'clamp(20px,2.6vw,30px)', lineHeight: 1.15, color: '#fff', maxWidth: '20em' }}>{active.title}</div>
-                {active.desc && <p style={{ marginTop: 14, fontFamily: text, fontWeight: 300, fontSize: 16, lineHeight: 1.55, color: 'rgba(255,255,255,.72)' }}>{active.desc}</p>}
+                {active.meta && <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--copper)', marginBottom: 8 }}>{active.meta}</div>}
+                <div style={{ fontFamily: serif, fontSize: fs('clamp(20px,2.6vw,30px)'), lineHeight: 1.15, color: '#fff', maxWidth: '20em' }}>{active.title}</div>
+                {active.desc && <p style={{ marginTop: 14, fontFamily: text, fontWeight: 300, fontSize: fs('16px'), lineHeight: 1.55, color: 'rgba(255,255,255,.72)' }}>{active.desc}</p>}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <span style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.1em', color: 'rgba(255,255,255,.55)' }}>
+                <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.1em', color: 'rgba(255,255,255,.55)' }}>
                   {String(open + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
                 </span>
                 <button type="button" className="rw-lb-btn" onClick={() => move(-1)} aria-label="Previous"
-                  style={{ width: 48, height: 48, borderRadius: '50%', border: '1px solid rgba(255,255,255,.25)', background: 'transparent', color: '#fff', fontSize: 18 }}>←</button>
+                  style={{ width: 48, height: 48, borderRadius: '50%', border: '1px solid rgba(255,255,255,.25)', background: 'transparent', color: '#fff', fontSize: fs('18px') }}>←</button>
                 <button type="button" className="rw-lb-btn" onClick={() => move(1)} aria-label="Next"
-                  style={{ width: 48, height: 48, borderRadius: '50%', border: '1px solid rgba(255,255,255,.25)', background: 'transparent', color: '#fff', fontSize: 18 }}>→</button>
+                  style={{ width: 48, height: 48, borderRadius: '50%', border: '1px solid rgba(255,255,255,.25)', background: 'transparent', color: '#fff', fontSize: fs('18px') }}>→</button>
               </div>
             </div>
           </div>

@@ -3,7 +3,7 @@ import ImageSlot from './ImageSlot'
 import Reveal from './Reveal'
 import SignatureOverlay from './SignatureOverlay'
 import { useTilt } from '../hooks/useTilt'
-import { body, container, eyebrow, sectionHeadingLg } from '../styles'
+import { fs, body, container, eyebrow, sectionHeadingLg } from '../styles'
 
 export default function AboutSection() {
   const tilt = useTilt({ max: 5 })
@@ -25,7 +25,7 @@ export default function AboutSection() {
         </Reveal>
         <div>
           <Reveal style={{ ...eyebrow, letterSpacing: '.24em', marginBottom: 22 }}>ABOUT &nbsp;/&nbsp; (01)</Reveal>
-          <Reveal as="h2" style={{ ...sectionHeadingLg, fontSize: 'clamp(34px,4.6vw,62px)', lineHeight: 1.02 }}>
+          <Reveal as="h2" style={{ ...sectionHeadingLg, fontSize: fs('clamp(34px,4.6vw,62px)'), lineHeight: 1.02 }}>
             Practitioner first.<br />Everything else follows.
           </Reveal>
           <Reveal as="p" delay={120} style={{ ...body, marginTop: 30, maxWidth: '37em' }}>

@@ -29,7 +29,7 @@ import {
 import { payForModules } from '../data/paymentService'
 import useScoreData from '../hooks/useScoreData'
 import { FOOTER_LINKS, mono, serif } from '../theme'
-import { container, ctaCopper, eyebrow, note, sectionHeading, sectionRule } from '../styles'
+import { fs, container, ctaCopper, eyebrow, note, sectionHeading, sectionRule } from '../styles'
 import '../form/form.css'
 import './coaching-purchase.css'
 
@@ -65,7 +65,7 @@ function PriceSummary({ pricing, modules, modeLabel }) {
     <div className="rw-pur-summary">
       <div className="rw-pur-summary-inner">
         <div className="rw-pur-summary-head">
-          <span style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.16em', color: 'var(--ink)' }}>
+          <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.16em', color: 'var(--ink)' }}>
             YOUR SELECTION
           </span>
           <span className="rw-pur-summary-count">{labelForCount(pricing.count)}</span>
@@ -334,7 +334,7 @@ export default function CoachingPurchase() {
         {isRecommendedMode && (
           <div className="rw-pur-copy" style={{ marginTop: 26, border: '1px solid rgba(195,155,83,.28)', background: 'var(--card)', padding: '16px 20px' }}>
             <span className="rw-pur-chip" style={{ marginRight: 10 }}>{rec.type === 'complete_curriculum' ? 'COMPLETE CURRICULUM' : 'RECOMMENDED FOR YOU'}</span>
-            <span style={{ ...note, fontSize: 15, lineHeight: 1.5, color: 'var(--ink)' }}>{recommendationCopy(rec.type)}</span>
+            <span style={{ ...note, fontSize: fs('15px'), lineHeight: 1.5, color: 'var(--ink)' }}>{recommendationCopy(rec.type)}</span>
           </div>
         )}
 
@@ -366,7 +366,7 @@ export default function CoachingPurchase() {
                       <span style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                         <span className="rw-pur-pick-title">{mod.title}</span>
                         {showPriorityChip && (
-                          <span className="rw-pur-chip" style={{ fontSize: 8, padding: '3px 8px' }}>PRIORITY FOCUS</span>
+                          <span className="rw-pur-chip" style={{ fontSize: fs('8px'), padding: '3px 8px' }}>PRIORITY FOCUS</span>
                         )}
                       </span>
                       <span className="rw-pur-pick-sub">{mod.group.toUpperCase()} · 90&#8211;120 MIN · {formatINR(MODULE_BASE_PRICE)}</span>
@@ -401,10 +401,10 @@ export default function CoachingPurchase() {
         <Reveal>
           <div className="rw-pad" style={{ ...container, padding: 'clamp(56px,7vw,84px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
             <div style={{ ...eyebrow, marginBottom: 18 }}>COACHING · SELECT &amp; PURCHASE</div>
-            <div style={{ ...sectionHeading, fontSize: 'clamp(30px,4.4vw,52px)', lineHeight: 1.08 }}>
+            <div style={{ ...sectionHeading, fontSize: fs('clamp(30px,4.4vw,52px)'), lineHeight: 1.08 }}>
               Choose how you want to grow.
             </div>
-            <p style={{ ...note, marginTop: 14, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em', fontSize: 17, lineHeight: 1.6 }}>
+            <p style={{ ...note, marginTop: 14, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em', fontSize: fs('17px'), lineHeight: 1.6 }}>
               Every module is one focused 90&#8211;120 minute coaching area. Build your selection, watch the price update live, and pay securely to confirm.
             </p>
             {step !== 'status' && <Stepper current={step} />}
@@ -534,7 +534,7 @@ export default function CoachingPurchase() {
                       )}
                       <div className="rw-pur-line">
                         <span style={{ textTransform: 'uppercase', letterSpacing: '.12em', color: 'var(--ink)' }}>Payable</span>
-                        <b style={{ fontFamily: serif, fontSize: 22, color: 'var(--copper)' }}>{formatINR(pricing.payableAmount)}</b>
+                        <b style={{ fontFamily: serif, fontSize: fs('22px'), color: 'var(--copper)' }}>{formatINR(pricing.payableAmount)}</b>
                       </div>
                     </div>
                   </div>
@@ -572,7 +572,7 @@ export default function CoachingPurchase() {
                 </div>
                 <div style={{ ...eyebrow, marginTop: 28 }}>{status.status === 'completed' ? 'PAYMENT RECEIVED' : 'PAYMENT NOT COMPLETED'}</div>
                 <h2 style={{ ...sectionHeading, marginTop: 10 }}>{status.status === 'completed' ? 'You’re in.' : 'That payment did not go through.'}</h2>
-                <p style={{ ...note, marginTop: 16, marginLeft: 'auto', marginRight: 'auto', maxWidth: '34em', fontSize: 17, lineHeight: 1.6 }}>
+                <p style={{ ...note, marginTop: 16, marginLeft: 'auto', marginRight: 'auto', maxWidth: '34em', fontSize: fs('17px'), lineHeight: 1.6 }}>
                   {status.status === 'completed'
                     ? 'Payment received and your modules are confirmed. Our team will reach out to schedule your first session.'
                     : (status.message || 'No charge was made. You can try again, or reach out and we will take the payment directly.')}

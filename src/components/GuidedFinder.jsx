@@ -7,7 +7,7 @@ import FinderSteps from './FinderSteps'
 import Reveal from './Reveal'
 import { track } from '../data/analytics'
 import { useFinder } from '../hooks/useFinder'
-import { eyebrow, sectionHeadingLg, body } from '../styles'
+import { fs, eyebrow, sectionHeadingLg, body } from '../styles'
 import './GuidedFinder.css'
 
 /** Same cursor-tracked gold edge the careers cards use (CAREER_GLOW in Careers.jsx). */
@@ -90,7 +90,7 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
       <div className="rw-finder-inner">
         <div className="rw-finder-lead">
           <Reveal style={{ ...eyebrow, marginBottom: 22 }}>FIND THE RIGHT FIT</Reveal>
-          <Reveal as={variant === 'page' ? 'h1' : 'h2'} id="finder-heading" delay={80} style={{ ...sectionHeadingLg, fontSize: 'clamp(28px,3.1vw,44px)', lineHeight: 1.08 }}>
+          <Reveal as={variant === 'page' ? 'h1' : 'h2'} id="finder-heading" delay={80} style={{ ...sectionHeadingLg, fontSize: fs('clamp(28px,3.1vw,44px)'), lineHeight: 1.08 }}>
             Tell us who you are. <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>We&rsquo;ll point you in the right direction.</span>
           </Reveal>
           <Reveal as="p" delay={140} style={{ ...body, marginTop: 22, maxWidth: '30em' }}>

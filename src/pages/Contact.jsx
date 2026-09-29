@@ -6,7 +6,7 @@ import { BookButton } from '../components/BookingModal'
 import Reveal from '../components/Reveal'
 import hydMark from '../assets/site/hyd-05.svg'
 import { EMAIL, FOOTER_LINKS, PHONE, WHATSAPP, mono, serif } from '../theme'
-import { container, eyebrowFaded, sectionRule } from '../styles'
+import { fs, container, eyebrowFaded, sectionRule } from '../styles'
 
 const HEADLINE = [
   { text: 'One form. ' },
@@ -43,13 +43,13 @@ export default function Contact() {
           <div style={{ maxWidth: 560 }}>
             {CONTACT_ROWS.map((row) => (
               <div key={row.label} style={{ display: 'flex', alignItems: 'baseline', gap: 20, borderTop: '1px solid var(--line)', padding: '18px 0' }}>
-                <span style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--faded)', width: 110, flexShrink: 0 }}>
+                <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)', width: 110, flexShrink: 0 }}>
                   {row.label}
                 </span>
                 {row.href ? (
-                  <a href={row.href} style={{ fontFamily: serif, fontSize: 19, color: 'var(--ink)' }}>{row.value}</a>
+                  <a href={row.href} style={{ fontFamily: serif, fontSize: fs('19px'), color: 'var(--ink)' }}>{row.value}</a>
                 ) : (
-                  <span style={{ fontFamily: serif, fontSize: 19, color: 'var(--ink)' }}>{row.value}</span>
+                  <span style={{ fontFamily: serif, fontSize: fs('19px'), color: 'var(--ink)' }}>{row.value}</span>
                 )}
               </div>
             ))}

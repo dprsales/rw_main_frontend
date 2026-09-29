@@ -1,4 +1,5 @@
 import { mono } from '../theme'
+import { fs } from '../styles'
 
 /** Renders an image, or a designed cross-hatched placeholder that looks intentional until `src` lands. */
 export default function ImageSlot({
@@ -49,7 +50,7 @@ export default function ImageSlot({
         <span
           style={{
             position: 'absolute', top: 14, left: 14, zIndex: 2,
-            fontFamily: mono, fontSize: 10, letterSpacing: '.16em', color: 'var(--faded)',
+            fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.16em', color: 'var(--faded)',
           }}
         >
           {tag}
@@ -62,17 +63,17 @@ export default function ImageSlot({
           style={{
             width: 46, height: 46, margin: '0 auto 16px', display: 'grid', placeItems: 'center',
             border: '1px solid var(--line)', borderRadius: '50%',
-            color: 'var(--copper)', fontSize: 18,
+            color: 'var(--copper)', fontSize: fs('18px'),
             transition: 'transform .5s cubic-bezier(.2,.7,.2,1)',
           }}
         >
           ✦
         </div>
-        <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--faded)', textTransform: 'uppercase' }}>
+        <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)', textTransform: 'uppercase' }}>
           {placeholder}
         </div>
         {caption && (
-          <div style={{ marginTop: 8, fontFamily: mono, fontSize: 9, letterSpacing: '.1em', color: 'var(--faded)', opacity: 0.7 }}>
+          <div style={{ marginTop: 8, fontFamily: mono, fontSize: fs('9px'), letterSpacing: '.1em', color: 'var(--faded)', opacity: 0.7 }}>
             {caption}
           </div>
         )}
@@ -81,7 +82,7 @@ export default function ImageSlot({
           <div
             style={{
               marginTop: 12, paddingTop: 10, borderTop: '1px solid var(--line)',
-              fontFamily: mono, fontSize: 9, lineHeight: 1.6, letterSpacing: '.06em', color: 'var(--copper)',
+              fontFamily: mono, fontSize: fs('9px'), lineHeight: 1.6, letterSpacing: '.06em', color: 'var(--copper)',
             }}
           >
             NEEDS: {spec}

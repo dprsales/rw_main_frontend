@@ -26,7 +26,7 @@ import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { BLOGS, HERO_COPY, HOME_TESTIMONIALS, MARQUEE_ITEMS, WAYS } from '../data/content'
 import { HOME_FEATURED, featureFirst, fetchBlogsOnce } from '../data/blogs'
 import { HOME_FOOTER_LINKS, mono, serif, text } from '../theme'
-import {
+import { fs,
   body, container, ctaInk, ctaInline,
   sectionHeading, sectionHeadingLg, sectionRule,
 } from '../styles'
@@ -133,7 +133,7 @@ function HeroCinematic() {
           />
         </h1>
 
-        <Reveal as="p" delay={140} style={{ ...body, margin: '32px 0 0', maxWidth: '34em', fontSize: 'clamp(16px,1.6vw,19px)', lineHeight: 1.6, color: 'rgba(234,241,249,.82)' }}>
+        <Reveal as="p" delay={140} style={{ ...body, margin: '32px 0 0', maxWidth: '34em', fontSize: fs('clamp(16px,1.6vw,19px)'), lineHeight: 1.6, color: 'rgba(234,241,249,.82)' }}>
           {HERO_COPY}
         </Reveal>
 
@@ -146,7 +146,7 @@ function HeroCinematic() {
 
         {/* Separator rules only read correctly while the line holds; below the
             breakpoint they're dropped and the list stacks (.rw-hero-meta). */}
-        <Reveal delay={400} className="rw-hero-meta" style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid rgba(234,241,249,.22)', display: 'flex', gap: 20, fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'rgba(234,241,249,.7)', flexWrap: 'wrap' }}>
+        <Reveal delay={400} className="rw-hero-meta" style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid rgba(234,241,249,.22)', display: 'flex', gap: 20, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'rgba(234,241,249,.7)', flexWrap: 'wrap' }}>
           <span>TGRERA LICENSED REALTOR</span>
           <span className="rw-hero-meta-sep" style={{ opacity: 0.5 }}>|</span>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14 }}>
@@ -212,11 +212,11 @@ export default function Home() {
       {/* Philosophy */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ maxWidth: 1000, margin: '0 auto', padding: 'clamp(80px,11vw,130px) 40px', textAlign: 'center' }}>
-          <Reveal as="h2" style={{ ...sectionHeadingLg, fontSize: 'clamp(30px,4.2vw,56px)', lineHeight: 1.1 }}>
+          <Reveal as="h2" style={{ ...sectionHeadingLg, fontSize: fs('clamp(30px,4.2vw,56px)'), lineHeight: 1.1 }}>
 He doesn&apos;t wait for the market to move.<br />
             <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>He moves it every single day.</span>
           </Reveal>
-          <Reveal as="p" delay={160} style={{ ...body, margin: '34px auto 0', fontSize: 19, lineHeight: 1.65, maxWidth: '44em' }}>
+          <Reveal as="p" delay={160} style={{ ...body, margin: '34px auto 0', fontSize: fs('19px'), lineHeight: 1.65, maxWidth: '44em' }}>
             Years spent solving the industry's toughest problems have shaped a singular mission: to define what real estate in
             Hyderabad becomes next. It's the standard he carries into every client he works with.
           </Reveal>
@@ -230,7 +230,7 @@ He doesn&apos;t wait for the market to move.<br />
       {/* Three ways in */}
       <section id="services" style={sectionRule}>
         <div className="rw-pad" style={container}>
-          <Reveal style={{ padding: '54px 0 4px', fontFamily: mono, fontSize: 12, letterSpacing: '.26em', color: 'var(--faded)' }}>
+          <Reveal style={{ padding: '54px 0 4px', fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.26em', color: 'var(--faded)' }}>
             THREE MOVES. ONE OUTCOME: MORE CLOSED.
             {/* THREE WAYS IN WHICH DEVELOPERS AND SALES LEADER STANDS TO BENEFIT  */}
           </Reveal>
@@ -255,10 +255,10 @@ He doesn&apos;t wait for the market to move.<br />
                 </span>
 
                 <span className="rw-way-body">
-                  <span style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.18em', color: 'var(--copper)' }}>{way.kicker}</span>
-                  <span style={{ fontFamily: serif, fontSize: 'clamp(24px,1.9vw,29px)', lineHeight: 1.1, letterSpacing: '-.01em' }}>{way.title}</span>
-                  <span style={{ fontFamily: text, fontWeight: 300, fontSize: 17, lineHeight: 1.5, color: 'var(--faded)' }}>{way.line}</span>
-                  <span className="rw-way-cta" style={{ fontFamily: mono, fontSize: 12, letterSpacing: '.14em' }}>
+                  <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.18em', color: 'var(--copper)' }}>{way.kicker}</span>
+                  <span style={{ fontFamily: serif, fontSize: fs('clamp(24px,1.9vw,29px)'), lineHeight: 1.1, letterSpacing: '-.01em' }}>{way.title}</span>
+                  <span style={{ fontFamily: text, fontWeight: 300, fontSize: fs('17px'), lineHeight: 1.5, color: 'var(--faded)' }}>{way.line}</span>
+                  <span className="rw-way-cta" style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.14em' }}>
                     {way.ctaLabel}<i className="rw-way-arrow" aria-hidden>→</i>
                   </span>
                 </span>
@@ -293,7 +293,7 @@ He doesn&apos;t wait for the market to move.<br />
               style={{ ...ctaInk, cursor: 'pointer' }}
             >
               Load more
-              <span style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.1em', opacity: 0.7, marginLeft: 10 }}>
+              <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.1em', opacity: 0.7, marginLeft: 10 }}>
                 {blogItems.length} / {allBlogs.length}
               </span>
             </button>
@@ -310,8 +310,8 @@ He doesn&apos;t wait for the market to move.<br />
         <div className="rw-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', columnGap: 44 }}>
           {HOME_TESTIMONIALS.map((t, i) => (
             <Reveal key={t.name} delay={i * 90} style={{ borderTop: '1px solid var(--line)', padding: '34px 0 8px', display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <p style={{ fontFamily: serif, fontSize: 18, lineHeight: 1.55, color: 'var(--ink)' }}>“{t.text}”</p>
-              <div style={{ fontFamily: mono, fontSize: 12, letterSpacing: '.06em', color: 'var(--copper)' }}>{t.name}</div>
+              <p style={{ fontFamily: serif, fontSize: fs('18px'), lineHeight: 1.55, color: 'var(--ink)' }}>“{t.text}”</p>
+              <div style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.06em', color: 'var(--copper)' }}>{t.name}</div>
             </Reveal>
           ))}
         </div>

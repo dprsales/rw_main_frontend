@@ -49,7 +49,7 @@ import {
   ORGANISATIONS_WORKED, PORTFOLIO_TESTIMONIALS,
 } from '../data/content'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
-import {
+import { fs,
   container, eyebrow, eyebrowFaded,
   sectionHeadingSm, sectionRule,
 } from '../styles'
@@ -137,10 +137,10 @@ export default function Portfolio() {
         <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: 56, alignItems: 'center' }}>
           <div>
             <Reveal style={{ ...eyebrow, marginBottom: 30 }}>PORTFOLIO</Reveal>
-            <h1 style={{ fontFamily: serif, fontWeight: 400, fontSize: 'clamp(48px,6.4vw,98px)', lineHeight: .96, letterSpacing: '-.01em', color: 'var(--ink)', maxWidth: '13em' }}>
+            <h1 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(48px,6.4vw,98px)'), lineHeight: .96, letterSpacing: '-.01em', color: 'var(--ink)', maxWidth: '13em' }}>
               <RiseText lines={HEADLINE} step={0.085} />
             </h1>
-            <Reveal as="p" delay={140} style={{ marginTop: 32, maxWidth: '34em', fontFamily: text, fontWeight: 300, fontSize: 'clamp(17px,1.9vw,21px)', lineHeight: 1.55, color: 'var(--faded)' }}>
+            <Reveal as="p" delay={140} style={{ marginTop: 32, maxWidth: '34em', fontFamily: text, fontWeight: 300, fontSize: fs('clamp(17px,1.9vw,21px)'), lineHeight: 1.55, color: 'var(--faded)' }}>
               Where RW shows up: mentoring sessions, developer launches, industry gatherings and the conversations that shape Hyderabad&apos;s luxury real estate market.
             </Reveal>
           </div>
@@ -172,8 +172,8 @@ export default function Portfolio() {
           <div className="rw-grid-4 rw-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)' }}>
             {TRACK_RECORD.map((stat, i) => (
               <Reveal key={stat.label} delay={i * 80} className="rw-stat">
-                <div style={{ fontFamily: serif, fontSize: 'clamp(36px,4.2vw,54px)', lineHeight: 1, color: 'var(--ink)' }}>{stat.value}</div>
-                <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.16em', color: 'var(--faded)', marginTop: 14 }}>{stat.label}</div>
+                <div style={{ fontFamily: serif, fontSize: fs('clamp(36px,4.2vw,54px)'), lineHeight: 1, color: 'var(--ink)' }}>{stat.value}</div>
+                <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.16em', color: 'var(--faded)', marginTop: 14 }}>{stat.label}</div>
               </Reveal>
             ))}
           </div>
@@ -211,16 +211,16 @@ export default function Portfolio() {
             }}
           >
             {/* ~26em keeps line length comfortable without stranding empty space on desktop. */}
-            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: 'clamp(21px,2.3vw,31px)', lineHeight: 1.36, color: 'var(--ink)', margin: 0, maxWidth: '26em' }}>
+            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: fs('clamp(21px,2.3vw,31px)'), lineHeight: 1.36, color: 'var(--ink)', margin: 0, maxWidth: '26em' }}>
               “{LEAD_VOICE.text}”
             </p>
             {/* Attribution under the quote: a second column left a tall void beside shorter quotes. */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 'clamp(22px,2.4vw,30px)' }}>
               <span aria-hidden style={{ width: 34, height: 1, background: 'var(--copper)', flexShrink: 0 }} />
               <div>
-                <div style={{ fontFamily: mono, fontSize: 13, letterSpacing: '.08em', color: 'var(--copper)' }}>{LEAD_VOICE.name}</div>
+                <div style={{ fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em', color: 'var(--copper)' }}>{LEAD_VOICE.name}</div>
                 {LEAD_VOICE.role && (
-                  <div style={{ marginTop: 5, fontFamily: mono, fontSize: 11, letterSpacing: '.04em', lineHeight: 1.5, color: 'var(--faded)' }}>{LEAD_VOICE.role}</div>
+                  <div style={{ marginTop: 5, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.04em', lineHeight: 1.5, color: 'var(--faded)' }}>{LEAD_VOICE.role}</div>
                 )}
               </div>
             </div>
@@ -231,12 +231,12 @@ export default function Portfolio() {
         <div className="rw-voice-grid">
           {REST_VOICES.slice(0, 6).map((t, i) => (
             <Reveal key={t.name} delay={(i % 3) * 80} className="rw-voice-card">
-              <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: 16, lineHeight: 1.55, color: 'var(--ink)', margin: 0 }}>
+              <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: fs('16px'), lineHeight: 1.55, color: 'var(--ink)', margin: 0 }}>
                 “{t.text}”
               </p>
               <div className="rw-voice-attrib">
-                <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.06em', color: 'var(--copper)' }}>{t.name}</div>
-                {t.role && <div style={{ marginTop: 4, fontFamily: mono, fontSize: 10, letterSpacing: '.04em', lineHeight: 1.5, color: 'var(--faded)' }}>{t.role}</div>}
+                <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.06em', color: 'var(--copper)' }}>{t.name}</div>
+                {t.role && <div style={{ marginTop: 4, fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.04em', lineHeight: 1.5, color: 'var(--faded)' }}>{t.role}</div>}
               </div>
             </Reveal>
           ))}
@@ -250,7 +250,7 @@ export default function Portfolio() {
               rel="noreferrer"
               className="rw-outline-btn"
               style={{
-                fontFamily: mono, fontSize: 11, letterSpacing: '.14em', color: 'var(--ink)',
+                fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--ink)',
                 background: 'none', border: '1px solid var(--line)', padding: '13px 26px',
                 cursor: 'pointer', transition: 'background .3s, color .3s, border-color .3s',
                 display: 'inline-block',
@@ -327,13 +327,13 @@ export default function Portfolio() {
                   />
                 </div>
                 <div>
-                  <div style={{ fontFamily: serif, fontSize: 20, color: 'var(--ink)' }}>
+                  <div style={{ fontFamily: serif, fontSize: fs('20px'), color: 'var(--ink)' }}>
                     {assoc.name}
                     {assoc.href && <span aria-hidden style={{ marginLeft: 8, color: 'var(--copper)' }}>↗</span>}
                   </div>
-                  <div style={{ marginTop: 4, fontFamily: mono, fontSize: 11, letterSpacing: '.08em', color: 'var(--copper)' }}>{assoc.role}</div>
+                  <div style={{ marginTop: 4, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.08em', color: 'var(--copper)' }}>{assoc.role}</div>
                   {assoc.desc && (
-                    <div style={{ marginTop: 6, fontFamily: text, fontSize: 13, lineHeight: 1.45, color: 'var(--faded)' }}>{assoc.desc}</div>
+                    <div style={{ marginTop: 6, fontFamily: text, fontSize: fs('13px'), lineHeight: 1.45, color: 'var(--faded)' }}>{assoc.desc}</div>
                   )}
                 </div>
               </Reveal>

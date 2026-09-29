@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { fs } from '../styles'
 import { createPortal } from 'react-dom'
 import MagneticLink from './MagneticLink'
 import SpecularButton from './SpecularButton'
@@ -287,17 +288,17 @@ function BookingModal({ preset, onClose }) {
           style={{
             position: 'absolute', top: 16, right: 16, width: 38, height: 38, borderRadius: '50%',
             border: '1px solid var(--line)', background: 'transparent', color: 'var(--ink)',
-            fontSize: 17, cursor: 'pointer', lineHeight: 1,
+            fontSize: fs('17px'), cursor: 'pointer', lineHeight: 1,
           }}
         >×</button>
 
         {phase === 'questions' ? (
           <>
             <div style={{ ...eyebrow, marginBottom: 12, paddingRight: 44 }}>{preset.eyebrow || 'BOOK A STRATEGY CALL'}</div>
-            <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: 'clamp(24px,3.2vw,32px)', color: 'var(--ink)', lineHeight: 1.15, marginBottom: 8 }}>
+            <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: fs('clamp(24px,3.2vw,32px)'), color: 'var(--ink)', lineHeight: 1.15, marginBottom: 8 }}>
               First, a little about you.
             </h2>
-            <p style={{ fontFamily: text, fontWeight: 300, fontSize: 14, lineHeight: 1.6, color: 'var(--faded)', marginBottom: 22 }}>
+            <p style={{ fontFamily: text, fontWeight: 300, fontSize: fs('14px'), lineHeight: 1.6, color: 'var(--faded)', marginBottom: 22 }}>
               One to three taps, so the call starts on the right subject. Then your details.
             </p>
             <FinderSteps finder={finder} compact>
@@ -310,10 +311,10 @@ function BookingModal({ preset, onClose }) {
         ) : status === 'sent' ? (
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
             <div style={{ ...eyebrow, marginBottom: 14 }}>{isApplying ? 'APPLICATION RECEIVED' : 'REQUEST RECEIVED'}</div>
-            <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: 'clamp(24px,3.2vw,32px)', color: 'var(--ink)', lineHeight: 1.15, marginBottom: 14 }}>
+            <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: fs('clamp(24px,3.2vw,32px)'), color: 'var(--ink)', lineHeight: 1.15, marginBottom: 14 }}>
               Thank you — we’ll be in touch.
             </h2>
-            <p style={{ fontFamily: text, fontWeight: 300, fontSize: 15, lineHeight: 1.6, color: 'var(--faded)', maxWidth: '28em', margin: '0 auto 24px' }}>
+            <p style={{ fontFamily: text, fontWeight: 300, fontSize: fs('15px'), lineHeight: 1.6, color: 'var(--faded)', maxWidth: '28em', margin: '0 auto 24px' }}>
               {isApplying
                 ? 'Your application has reached the team. If there’s a fit, you’ll hear from us within one business day.'
                 : repeat
@@ -337,10 +338,10 @@ function BookingModal({ preset, onClose }) {
             ) : (
               <>
                 <div style={{ ...eyebrow, marginBottom: 12, paddingRight: 44 }}>{preset.eyebrow || 'BOOK A STRATEGY CALL'}</div>
-                <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: 'clamp(24px,3.2vw,32px)', color: 'var(--ink)', lineHeight: 1.15, marginBottom: 8 }}>
+                <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: fs('clamp(24px,3.2vw,32px)'), color: 'var(--ink)', lineHeight: 1.15, marginBottom: 8 }}>
                   {preset.title || 'Let’s start the conversation.'}
                 </h2>
-                <p style={{ fontFamily: text, fontWeight: 300, fontSize: 14, lineHeight: 1.6, color: 'var(--faded)', marginBottom: guidance ? 14 : 24 }}>
+                <p style={{ fontFamily: text, fontWeight: 300, fontSize: fs('14px'), lineHeight: 1.6, color: 'var(--faded)', marginBottom: guidance ? 14 : 24 }}>
                   {preset.subtitle || 'Share a few details and the team will reach out to schedule a call.'}
                 </p>
                 {guidance && (
@@ -543,7 +544,7 @@ function BookingModal({ preset, onClose }) {
               )}
 
               {status === 'error' && (
-                <p style={{ fontFamily: mono, fontSize: 12, color: '#E5726A', letterSpacing: '.02em' }}>{error}</p>
+                <p style={{ fontFamily: mono, fontSize: fs('12px'), color: '#E5726A', letterSpacing: '.02em' }}>{error}</p>
               )}
 
               <button type="submit" disabled={status === 'sending'} className={`rw-cta ${isApplying ? 'rw-career-submit' : ''}`.trim()} style={{ ...ctaBtn, marginTop: 6, opacity: status === 'sending' ? 0.6 : 1, cursor: status === 'sending' ? 'default' : 'pointer' }}>
@@ -571,7 +572,7 @@ function MetaIcon({ type }) {
 function Field({ label, required, children }) {
   return (
     <label style={{ display: 'grid', gap: 7 }}>
-      <span style={{ fontFamily: mono, fontSize: 11, letterSpacing: '.12em', color: 'var(--faded)' }}>
+      <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.12em', color: 'var(--faded)' }}>
         {label.toUpperCase()}{required && <span style={{ color: 'var(--copper)' }}> *</span>}
       </span>
       {children}
@@ -579,19 +580,19 @@ function Field({ label, required, children }) {
   )
 }
 
-const eyebrow = { fontFamily: mono, fontSize: 15, letterSpacing: '.22em', color: 'var(--copper)' }
+const eyebrow = { fontFamily: mono, fontSize: fs('15px'), letterSpacing: '.22em', color: 'var(--copper)' }
 
 // 16px is a floor: iOS Safari zooms in on focus for smaller input text and never zooms back out.
 const inputStyle = {
   width: '100%', boxSizing: 'border-box',
   background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: 2,
-  color: 'var(--ink)', fontFamily: text, fontWeight: 300, fontSize: 16, padding: '12px 14px', outline: 'none',
+  color: 'var(--ink)', fontFamily: text, fontWeight: 300, fontSize: fs('16px'), padding: '12px 14px', outline: 'none',
 }
 
 const ctaBtn = {
   display: 'inline-flex', width: '100%', alignItems: 'center', justifyContent: 'center',
   background: 'var(--gold-gradient)', color: '#16110a',
-  fontFamily: mono, fontSize: 13, letterSpacing: '.1em',
+  fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.1em',
   height: 48, padding: '0 30px', whiteSpace: 'nowrap', boxSizing: 'border-box',
   borderRadius: 10, border: '0 solid transparent', cursor: 'pointer',
 }

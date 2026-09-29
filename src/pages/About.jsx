@@ -9,7 +9,7 @@ import ClosingCTA from '../components/ClosingCTA'
 import hydMark from '../assets/site/hyd-01.svg'
 import { ASSOCIATIONS, CREDENTIALS } from '../data/content'
 import { FOOTER_LINKS, mono } from '../theme'
-import { container, eyebrowFaded, sectionRule } from '../styles'
+import { fs, container, eyebrowFaded, sectionRule } from '../styles'
 
 const HEADLINE = [
   { text: 'Practitioner first. ' },
@@ -42,7 +42,7 @@ export default function About() {
           <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40 }}>
             <div>
               {CREDENTIALS.map((c) => (
-                <div key={c} style={{ borderTop: '1px solid var(--line)', padding: '16px 0', fontFamily: mono, fontSize: 13, letterSpacing: '.02em', color: 'var(--ink)' }}>
+                <div key={c} style={{ borderTop: '1px solid var(--line)', padding: '16px 0', fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.02em', color: 'var(--ink)' }}>
                   {c}
                 </div>
               ))}
@@ -50,10 +50,10 @@ export default function About() {
             <div>
               {ASSOCIATIONS.map((a) => (
                 <div key={a.name} style={{ borderTop: '1px solid var(--line)', padding: '16px 0' }}>
-                  <div style={{ fontFamily: mono, fontSize: 13, letterSpacing: '.02em', color: 'var(--ink)' }}>
+                  <div style={{ fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.02em', color: 'var(--ink)' }}>
                     {a.name} <span style={{ color: 'var(--faded)' }}>· {a.role}</span>
                   </div>
-                  {a.desc && <div style={{ marginTop: 4, fontFamily: mono, fontSize: 11, color: 'var(--faded)' }}>{a.desc}</div>}
+                  {a.desc && <div style={{ marginTop: 4, fontFamily: mono, fontSize: fs('11px'), color: 'var(--faded)' }}>{a.desc}</div>}
                 </div>
               ))}
             </div>

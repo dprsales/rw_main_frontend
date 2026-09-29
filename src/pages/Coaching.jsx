@@ -21,7 +21,7 @@ import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { ACHIEVE, ASSESSMENT_AREAS, COACHING_PROGRAMS, COACHING_TESTIMONIALS, CURRICULUM } from '../data/content'
 import { track } from '../data/analytics'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
-import {
+import { fs,
   container, ctaCopper, eyebrow,
   note, sectionRule,
 } from '../styles'
@@ -235,16 +235,16 @@ export default function Coaching() {
         <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 56, alignItems: 'start' }}>
           <Reveal>
             <div style={{ ...eyebrow, marginBottom: 18 }}>THE ASSESSMENT</div>
-            <h2 style={{ fontFamily: serif, fontWeight: 400, fontSize: 'clamp(28px,3.6vw,42px)', lineHeight: 1.1, color: 'var(--ink)', maxWidth: '14em' }}>
+            <h2 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(28px,3.6vw,42px)'), lineHeight: 1.1, color: 'var(--ink)', maxWidth: '14em' }}>
               A live AI interview that measures what actually matters.
             </h2>
-            <p style={{ ...note, marginTop: 22, fontSize: 16, lineHeight: 1.6 }}>
+            <p style={{ ...note, marginTop: 22, fontSize: fs('16px'), lineHeight: 1.6 }}>
               I have partnered with KRISAH, an AI-powered assessment platform, to bring a scored sales assessment to real estate professionals across India.
             </p>
-            <p style={{ ...note, marginTop: 16, fontSize: 16, lineHeight: 1.6 }}>
+            <p style={{ ...note, marginTop: 16, fontSize: fs('16px'), lineHeight: 1.6 }}>
               It is a live AI interview, asking the kinds of questions a serious employer or buyer would ask, and scoring your performance across six areas.
             </p>
-            <p style={{ ...note, marginTop: 16, fontSize: 16, lineHeight: 1.6 }}>
+            <p style={{ ...note, marginTop: 16, fontSize: fs('16px'), lineHeight: 1.6 }}>
               You get a full scored report after your session. I review it before our first coaching call, so we start from what the data shows, not what I assume.
             </p>
             <div style={{ marginTop: 32 }}>
@@ -257,10 +257,10 @@ export default function Coaching() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {ASSESSMENT_AREAS.map((area, i) => (
               <Reveal key={area.n} delay={i * 70} style={{ display: 'flex', gap: 18, borderTop: '1px solid var(--line)', paddingTop: 12 }}>
-                <span style={{ fontFamily: serif, fontSize: 22, color: 'var(--copper)', lineHeight: 1, flexShrink: 0, width: 28 }}>{area.n}</span>
+                <span style={{ fontFamily: serif, fontSize: fs('22px'), color: 'var(--copper)', lineHeight: 1, flexShrink: 0, width: 28 }}>{area.n}</span>
                 <div>
-                  <div style={{ fontFamily: serif, fontSize: 18, color: 'var(--ink)', lineHeight: 1.3 }}>{area.title}</div>
-                  <p style={{ ...note, marginTop: 4, fontSize: 14, lineHeight: 1.5 }}>{area.desc}</p>
+                  <div style={{ fontFamily: serif, fontSize: fs('18px'), color: 'var(--ink)', lineHeight: 1.3 }}>{area.title}</div>
+                  <p style={{ ...note, marginTop: 4, fontSize: fs('14px'), lineHeight: 1.5 }}>{area.desc}</p>
                 </div>
               </Reveal>
             ))}

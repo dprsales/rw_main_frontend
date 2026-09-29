@@ -1,10 +1,11 @@
 import { serif } from '../theme'
+import { fs } from '../styles'
 
 // The ticker never wraps, so type must shrink with viewport or phones see barely two words.
 const strip = {
   display: 'flex', alignItems: 'center',
   gap: 'clamp(16px,3vw,30px)', paddingRight: 'clamp(16px,3vw,30px)',
-  fontFamily: serif, fontStyle: 'italic', fontSize: 'clamp(19px,3.2vw,30px)',
+  fontFamily: serif, fontStyle: 'italic', fontSize: fs('clamp(19px,3.2vw,30px)'),
   color: 'var(--ink)', whiteSpace: 'nowrap',
 }
 

@@ -1077,8 +1077,8 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-menu-btn { display: flex !important; }
 .rw-menu-btn:hover { border-color: var(--ink); }
 
-/* Whole-site text-size control (the three A's in the header). Baseline-aligned so the
-   increasing A's sit on one line; the active size is copper. */
+/* Whole-site text-size control (the three A's in the header). Small is the default
+   site size; Medium and Large are progressive increases. Keep them baseline-aligned. */
 .rw-fs-control { display: inline-flex; align-items: baseline; gap: 3px; }
 .rw-fs-btn {
   background: none; border: none; cursor: pointer; padding: 2px 4px;
@@ -1087,6 +1087,8 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 .rw-fs-btn:hover { color: var(--ink); }
 .rw-fs-btn.is-on { color: var(--copper); }
+.rw-fs-btn:disabled { cursor: default; opacity: 1; }
+.rw-fs-btn.is-on:disabled:hover { color: var(--copper); }
 .rw-fs-btn:focus-visible { outline: 1px solid var(--copper); outline-offset: 2px; }
 /* On the smallest phones the label wheel + logo already fill the bar; hide the least-
    used middle option is not worth it — instead tighten the gap so all three fit. */

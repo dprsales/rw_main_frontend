@@ -24,7 +24,7 @@ import SectionHead, { SectionAside } from '../components/SectionHead'
 import { useInView } from '../hooks/useInView'
 import { MANDATE_SCOPE } from '../data/content'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
-import { ctaInline,
+import { fs, ctaInline,
   body, container, eyebrow, headLink,
   intro, lede, pageHeading, sectionHeading, sectionRule,
 } from '../styles'
@@ -195,13 +195,13 @@ export default function Realty() {
         <div className="rw-split" style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56 }}>
           <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>WHY IT WORKS</Reveal>
           <div>
-            <Reveal as="h2" style={{ ...sectionHeading, fontSize: 'clamp(30px,3.8vw,48px)', lineHeight: 1.06, maxWidth: '16em' }}>
+            <Reveal as="h2" style={{ ...sectionHeading, fontSize: fs('clamp(30px,3.8vw,48px)'), lineHeight: 1.06, maxWidth: '16em' }}>
               One accountable partner, not another vendor to manage.
             </Reveal>
             <Reveal as="p" delay={120} style={{ ...body, marginTop: 26, maxWidth: '35em' }}>
               Most projects split sales across brokers, an in-house team, and a marketing agency, each optimising for a different number. Under the mandate model, one team owns the outcome end to end, with the same discipline used in the coaching room applied directly to your launch.
             </Reveal>
-            <Reveal as="p" delay={200} style={{ marginTop: 24, fontFamily: serif, fontStyle: 'italic', fontSize: 'clamp(16px,1.7vw,18px)', lineHeight: 1.55, color: 'var(--ink)', maxWidth: '35em' }}>
+            <Reveal as="p" delay={200} style={{ marginTop: 24, fontFamily: serif, fontStyle: 'italic', fontSize: fs('clamp(16px,1.7vw,18px)'), lineHeight: 1.55, color: 'var(--ink)', maxWidth: '35em' }}>
               Team RW operates primarily on projects with serious inventory, long-term developer intent, and real ambition. This is not for everyone, and that is by design.
             </Reveal>
           </div>
@@ -231,7 +231,7 @@ export default function Realty() {
                 scroll anyway, so a scroll-triggered reveal wasn't earning its keep here. */}
             <div className="rw-sticky-aside">
               <div style={{ ...eyebrow, letterSpacing: '.24em' }}>THE CASE FOR A MANDATE</div>
-              <h2 style={{ ...sectionHeading, fontSize: 'clamp(28px,3.2vw,40px)', lineHeight: 1.08, marginTop: 18, maxWidth: '11em' }}>
+              <h2 style={{ ...sectionHeading, fontSize: fs('clamp(28px,3.2vw,40px)'), lineHeight: 1.08, marginTop: 18, maxWidth: '11em' }}>
                 Why the sales mandate model works.
               </h2>
             </div>
@@ -248,7 +248,7 @@ export default function Realty() {
                     { l: 'C', text: <>A sales function that technically exists but that nobody actually owns.</> },
                   ].map((item) => (
                     <div key={item.l} style={{ display: 'flex', gap: 14, alignItems: 'baseline' }}>
-                      <span style={{ fontFamily: mono, fontSize: 12, letterSpacing: '.1em', color: 'var(--copper)', flexShrink: 0 }}>{item.l}</span>
+                      <span style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.1em', color: 'var(--copper)', flexShrink: 0 }}>{item.l}</span>
                       <span style={body}>{item.text}</span>
                     </div>
                   ))}
@@ -259,7 +259,7 @@ export default function Realty() {
                 <Reveal as="p" delay={160} style={body}>
                   A sales mandate fixes this by design, not by effort. We take <b style={strongInBody}>end-to-end ownership</b> of the sales outcome, from marketing strategy and buyer experience to negotiation and closing. All of it sits with one accountable partner instead of three misaligned ones.
                 </Reveal>
-                <Reveal as="p" delay={190} style={{ ...body, color: 'var(--ink)', fontFamily: serif, fontStyle: 'italic', fontSize: 'clamp(18px,1.9vw,21px)', lineHeight: 1.5 }}>
+                <Reveal as="p" delay={190} style={{ ...body, color: 'var(--ink)', fontFamily: serif, fontStyle: 'italic', fontSize: fs('clamp(18px,1.9vw,21px)'), lineHeight: 1.5 }}>
                   This changes the economics in three specific ways.
                 </Reveal>
               </div>
