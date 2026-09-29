@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { fs } from '../styles'
 import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import CrawlableNav from './CrawlableNav'
@@ -26,16 +25,16 @@ const SITE_NAV = [
 
 /**
  * Font size and edge inset for the fullscreen wheel, sized against the viewport since the
- * wheel positions options in real px and can't take a clamp(). Height matters as much as width.
+ * wheel positions options from their rem-sized rows and can't take a clamp().
  */
 function wheelMetrics() {
-  if (typeof window === 'undefined') return { fontSize: fs('3.2px'), inset: 96 }
+  if (typeof window === 'undefined') return { fontSize: 3.2, inset: 96 }
   const { innerWidth: w, innerHeight: h } = window
-  if (w < 480) return { fontSize: fs('1.6px'), inset: 22 }
-  if (w < 720) return { fontSize: fs('1.9px'), inset: 32 }
-  if (h < 620) return { fontSize: fs('2.1px'), inset: 48 }
-  if (w < 1100) return { fontSize: fs('2.6px'), inset: 64 }
-  return { fontSize: fs('3.2px'), inset: 96 }
+  if (w < 480) return { fontSize: 1.6, inset: 22 }
+  if (w < 720) return { fontSize: 1.9, inset: 32 }
+  if (h < 620) return { fontSize: 2.1, inset: 48 }
+  if (w < 1100) return { fontSize: 2.6, inset: 64 }
+  return { fontSize: 3.2, inset: 96 }
 }
 
 function MenuIcon({ open }) {
@@ -126,7 +125,7 @@ export default function Header() {
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px,1.6vw,20px)' }}>
-          {/* Whole-site text-size control (Default / Large / Larger). */}
+          {/* Whole-site text-size control (Small/default, Medium, Large). */}
           <FontSizeControl />
 
           {/* No inline nav — it lives in the wheel menu behind this button. */}

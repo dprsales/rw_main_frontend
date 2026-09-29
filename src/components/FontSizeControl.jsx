@@ -40,9 +40,17 @@ function applyDocumentScale(level) {
   }
 
   document.querySelectorAll('*').forEach((element) => {
-    // Keep the three selector buttons as their visual size examples; their labels
-    // should not grow along with page content.
-    if (element.closest('.rw-fs-control')) return
+    // Keep the selector buttons and wheel navigation at their designed UI sizes.
+    // The wheel has its own viewport-aware typography and should not be treated as
+    // ordinary page copy (especially on desktop/laptop screens).
+    if (element.closest('.rw-fs-control, .rw-wheel-menu')) {
+      const record = scaledElements.get(element)
+      if (record) {
+        element.style.fontSize = record.inlineFontSize
+        scaledElements.delete(element)
+      }
+      return
+    }
 
     let record = scaledElements.get(element)
     if (!record) {
