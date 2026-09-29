@@ -174,18 +174,13 @@ function PhaseCard({ flow, index, delay, active, expanded, onToggle, onHover, on
         {flow.title}
       </h4>
 
-      {/* Desktop & laptop: the line and the points share one grid cell and cross-slide,
-          so hovering (or pinning) the card replaces the copy in place without changing
-          its height. Mobile: the same points sit in the button-toggled accordion below
-          the line instead — a fixed-height swap is too cramped on a phone. Both are the
-          same DOM; the breakpoint decides which behaviour the CSS applies. */}
       <div className="rw-phase-body">
-        <p className="rw-phase-line" style={{ ...note, fontSize: 14, lineHeight: 1.5 }}>
+        <p className="rw-phase-line" style={{ ...note, marginTop: 8, fontSize: 14, lineHeight: 1.5 }}>
           {flow.line}
         </p>
 
-        {/* Clicks inside don't bubble to the card's toggle, so reading a revealed
-            point never collapses the card. */}
+        {/* Clicks inside don't bubble to the card's toggle, so reading a point never
+            collapses the card. */}
         <div className="rw-phase-collapse" onClick={(e) => e.stopPropagation()}>
           <div className="rw-phase-collapse-inner">
             <div className="rw-phase-points-wrap">

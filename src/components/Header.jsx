@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import CrawlableNav from './CrawlableNav'
 import OptionWheel from './OptionWheel'
 import Wordmark from './Wordmark'
+import FontSizeControl from './FontSizeControl'
 import { useBooking } from './BookingModal'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { mono } from '../theme'
@@ -123,21 +124,26 @@ export default function Header() {
           <Wordmark />
         </Link>
 
-        {/* No inline nav — it lives in the wheel menu behind this button. */}
-        <button
-          type="button"
-          className="rw-menu-btn"
-          onClick={() => setOpen((wasOpen) => !wasOpen)}
-          aria-expanded={open}
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          style={{
-            display: 'none', alignItems: 'center', justifyContent: 'center',
-            width: 40, height: 40, background: 'none', cursor: 'pointer',
-            border: '1px solid var(--line)', borderRadius: 100, color: 'var(--ink)',
-          }}
-        >
-          <MenuIcon open={open} />
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px,1.6vw,20px)' }}>
+          {/* Whole-site text-size control (Default / Large / Larger). */}
+          <FontSizeControl />
+
+          {/* No inline nav — it lives in the wheel menu behind this button. */}
+          <button
+            type="button"
+            className="rw-menu-btn"
+            onClick={() => setOpen((wasOpen) => !wasOpen)}
+            aria-expanded={open}
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            style={{
+              display: 'none', alignItems: 'center', justifyContent: 'center',
+              width: 40, height: 40, background: 'none', cursor: 'pointer',
+              border: '1px solid var(--line)', borderRadius: 100, color: 'var(--ink)',
+            }}
+          >
+            <MenuIcon open={open} />
+          </button>
+        </div>
       </div>
 
       {/* Portalled past the header (backdrop-filter would clip fixed descendants) but into

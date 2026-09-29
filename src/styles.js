@@ -1,18 +1,24 @@
 import { mono, serif, text } from './theme'
 
+/* Wraps a font-size so the site-wide text-size control (FontSizeControl) can scale it.
+ * `--rw-fs` is the multiplier (1 by default; the control raises it). Pass a full length
+ * — a px string or a clamp() — since calc(number * length) needs a unit on the length.
+ * e.g. fs('clamp(28px,3.6vw,46px)') or fs('17px'). */
+export const fs = (size) => `calc(var(--rw-fs, 1) * ${size})`
+
 /* The horizontal padding is the page gutter; `.rw-pad` steps it down by breakpoint - see global.css. */
 export const container = { maxWidth: 1320, margin: '0 auto', padding: '0 40px' }
 
 /* Section eyebrows / kickers, bumped to 15px to read as a label, not fine print.
  * Stat labels that want to stay small override fontSize inline. */
 export const eyebrow = {
-  fontFamily: mono, fontSize: 15, letterSpacing: '.22em', color: 'var(--copper)',
+  fontFamily: mono, fontSize: fs('15px'), letterSpacing: '.22em', color: 'var(--copper)',
 }
 
 export const eyebrowFaded = { ...eyebrow, color: 'var(--faded)' }
 
 export const statLabel = {
-  fontFamily: mono, fontSize: 10, letterSpacing: '.16em', color: 'var(--faded)', marginTop: 12,
+  fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.16em', color: 'var(--faded)', marginTop: 12,
 }
 
 /* DISPLAY TYPE - every headline shares the same serif/weight/tracking in
@@ -20,41 +26,41 @@ export const statLabel = {
 const display = { fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', color: 'var(--ink)' }
 
 /** Page h1 on the interior pages (Coaching, Careers, Consulting, Realty). */
-export const pageHeading = { ...display, fontSize: 'clamp(42px,5.6vw,84px)', lineHeight: 1.04 }
+export const pageHeading = { ...display, fontSize: fs('clamp(42px,5.6vw,84px)'), lineHeight: 1.04 }
 
 /** The largest section h2 - used where a section opens a page's second act. */
-export const sectionHeadingLg = { ...display, fontSize: 'clamp(30px,4vw,52px)', lineHeight: 1 }
+export const sectionHeadingLg = { ...display, fontSize: fs('clamp(30px,4vw,52px)'), lineHeight: 1 }
 
 /** The standard section h2. */
-export const sectionHeading = { ...display, fontSize: 'clamp(28px,3.6vw,46px)', lineHeight: 1.04 }
+export const sectionHeading = { ...display, fontSize: fs('clamp(28px,3.6vw,46px)'), lineHeight: 1.04 }
 
 /** A quieter section h2, for sections that sit under a larger one. */
-export const sectionHeadingSm = { ...display, fontSize: 'clamp(26px,3.4vw,44px)', lineHeight: 1.04 }
+export const sectionHeadingSm = { ...display, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.04 }
 
 export const closingHeading = {
-  ...display, fontSize: 'clamp(28px,3.6vw,46px)', lineHeight: 1.08,
+  ...display, fontSize: fs('clamp(28px,3.6vw,46px)'), lineHeight: 1.08,
   maxWidth: '16em', margin: '0 auto',
 }
 
 /* RUNNING TEXT */
 
 export const body = {
-  fontFamily: text, fontWeight: 300, fontSize: 'clamp(17px,1.8vw,20px)', lineHeight: 1.62, color: 'var(--faded)',
+  fontFamily: text, fontWeight: 400, fontSize: fs('clamp(17px,1.8vw,20px)'), lineHeight: 1.62, color: 'var(--faded)',
 }
 
 /** The copper standfirst that sits between an h1 and its intro paragraph. */
 export const lede = {
-  fontFamily: serif, fontWeight: 400, fontSize: 'clamp(19px,2.4vw,24px)', color: 'var(--copper)',
+  fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(19px,2.4vw,24px)'), color: 'var(--copper)',
 }
 
 /** The intro paragraph under a page h1. */
 export const intro = {
-  fontFamily: text, fontWeight: 300, fontSize: 'clamp(17px,1.8vw,20px)', lineHeight: 1.55, color: 'var(--faded)',
+  fontFamily: text, fontWeight: 400, fontSize: fs('clamp(17px,1.8vw,20px)'), lineHeight: 1.55, color: 'var(--faded)',
 }
 
 /** Supporting copy at a fixed size - section asides, card descriptions. */
 export const note = {
-  fontFamily: text, fontWeight: 300, fontSize: 17, lineHeight: 1.55, color: 'var(--faded)',
+  fontFamily: text, fontWeight: 400, fontSize: fs('17px'), lineHeight: 1.55, color: 'var(--faded)',
 }
 
 /* CONTROLS - CTA padding shrinks with the viewport so it stays inside the
@@ -66,7 +72,7 @@ export const note = {
 export const ctaCopper = {
   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
   background: 'var(--gold-gradient)', color: '#16110a',
-  fontFamily: mono, fontSize: 13, letterSpacing: '.1em',
+  fontFamily: mono, fontSize: 13, fontWeight: 500, letterSpacing: '.1em',
   height: 48, padding: '0 clamp(22px,3vw,32px)', whiteSpace: 'nowrap', boxSizing: 'border-box',
   borderRadius: 10, border: '0 solid transparent',
 }
@@ -87,7 +93,7 @@ export const ctaCard = {
 /** The bare "Explore x →" text button that sits beside a filled CTA. */
 export const ctaInline = {
   background: 'none', border: 'none', cursor: 'pointer',
-  fontFamily: serif, fontStyle: 'italic', fontSize: 'clamp(17px,1.8vw,20px)', color: 'var(--ink)',
+  fontFamily: serif, fontStyle: 'italic', fontSize: fs('clamp(17px,1.8vw,20px)'), color: 'var(--ink)',
 }
 
 /** The "VIEW FULL PORTFOLIO →" style link that trails a section heading. */

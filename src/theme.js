@@ -25,7 +25,7 @@ export const THEME = {
  * `serif` (Cormorant Garamond) - display headlines, names, titles, pull quotes;
  * narrow with near-normal tracking so hand-placed hero line breaks hold.
  * `mono` (Jost) - eyebrows, nav, buttons, counters, tags at 9-13px; stays crisp where a serif's thin strokes would collapse.
- * `text` (Jost, weight 300) - body copy at 13-21px; Cormorant turns faint and fussy at paragraph sizes. */
+ * `text` (Jost, Book/400) - body copy at 13-21px; Cormorant turns faint and fussy at paragraph sizes. */
 export const serif = "'Cormorant Garamond', 'Times New Roman', serif"
 export const text = "'Jost', system-ui, -apple-system, sans-serif"
 export const mono = "'Jost', system-ui, -apple-system, sans-serif"

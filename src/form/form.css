@@ -367,7 +367,7 @@
 }
 .rw-form-pill:hover { color: var(--ink); border-color: var(--copper); }
 /* The selected chip carries the gold sweep, matching every other filled CTA. */
-.rw-form-pill.is-on { background: var(--gold-gradient); border-color: transparent; color: #fff; }
+.rw-form-pill.is-on { background: var(--gold-gradient); border-color: transparent; color: #16110A; font-weight: 500; }
 
 .rw-form-checks { display: flex; flex-direction: column; gap: 8px; }
 .rw-form-check {

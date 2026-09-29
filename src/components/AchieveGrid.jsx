@@ -1,5 +1,5 @@
 import Reveal from './Reveal'
-import { serif } from '../theme'
+import { serif, text } from '../theme'
 
 /**
  * Numbered outcome cards shared by Coaching and Careers off different arrays.
@@ -15,7 +15,7 @@ export default function AchieveGrid({ items, className, stagger = 3, arrows = fa
               {numberPrefix ? `${numberPrefix}${i + 1}` : String(i + 1).padStart(2, '0')}
             </span>
             <div className="rw-achieve-title" style={{ fontFamily: serif }}>{item.title}</div>
-            <div className="rw-achieve-body" style={{ fontFamily: serif }}>{item.body}</div>
+            <div className="rw-achieve-body" style={{ fontFamily: text }}>{item.body}</div>
           </div>
           {arrows && i < items.length - 1 && (
             <span className="rw-achieve-arrow" aria-hidden="true"><i>→</i></span>

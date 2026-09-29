@@ -1077,6 +1077,21 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-menu-btn { display: flex !important; }
 .rw-menu-btn:hover { border-color: var(--ink); }
 
+/* Whole-site text-size control (the three A's in the header). Baseline-aligned so the
+   increasing A's sit on one line; the active size is copper. */
+.rw-fs-control { display: inline-flex; align-items: baseline; gap: 3px; }
+.rw-fs-btn {
+  background: none; border: none; cursor: pointer; padding: 2px 4px;
+  line-height: 1; color: var(--faded); letter-spacing: .02em;
+  transition: color .25s ease;
+}
+.rw-fs-btn:hover { color: var(--ink); }
+.rw-fs-btn.is-on { color: var(--copper); }
+.rw-fs-btn:focus-visible { outline: 1px solid var(--copper); outline-offset: 2px; }
+/* On the smallest phones the label wheel + logo already fill the bar; hide the least-
+   used middle option is not worth it — instead tighten the gap so all three fit. */
+@media (max-width: 400px) { .rw-fs-control { gap: 1px; } .rw-fs-btn { padding: 2px 3px; } }
+
 /* Fullscreen wheel navigation. */
 .rw-wheel-menu {
   position: fixed;
@@ -1161,11 +1176,10 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-phase-card:hover .rw-phase-num,
 .rw-phase-card.is-active .rw-phase-num { opacity: 1; color: var(--copper); }
 
-.rw-phase-body { margin-top: 8px; }
-
-/* Mobile (base): the points sit in a button-toggled accordion below the line. The row
-   track animates 0fr → 1fr (a real height transition), the inner div clips the overflow
-   while it grows, and the content fades in with it. .is-open is set by the button/tap. */
+/* The points sit in a button/hover-toggled accordion below the line. The row track
+   animates 0fr → 1fr (a real height transition), the inner div clips the overflow while
+   it grows, and the content fades in with it. .is-open is set on hover (peek) or click
+   (pin), so the compact card grows to its content height only when opened. */
 .rw-phase-collapse {
   display: grid;
   grid-template-rows: 0fr;
@@ -1692,13 +1706,180 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   --stroke-text-height: clamp(58px, 12vw, 120px) !important;
 }
 
+/* --- Coaching hero --------------------------------------------------------- */
+/* Clean editorial layout; a future visual layer can be added without changing
+   the copy, outcomes, or CTA structure. */
+.rw-coaching-hero {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--bg);
+}
+.rw-coaching-hero-copy {
+  min-height: 0;
+  margin: 0 auto;
+  padding: 80px 40px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.rw-coaching-hero-eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 16px;
+  max-width: 930px;
+  color: var(--copper);
+  font-size: clamp(11px, 1vw, 15px);
+  font-weight: 400;
+  letter-spacing: .16em;
+  line-height: 1.8;
+}
+.rw-coaching-hero-arrow { color: var(--copper); font-size: 1.25em; }
+.rw-coaching-hero-dot {
+  display: inline-block;
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--copper);
+}
+.rw-coaching-hero-title {
+  max-width: 18em;
+  margin: 30px 0 0;
+  color: #fff;
+  font-size: clamp(42px, 4.25vw, 74px);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -.018em;
+  line-height: .96;
+}
+.rw-coaching-hero-title span { display: block; }
+.rw-coaching-hero-title-gold {
+  color: var(--copper);
+}
+.rw-coaching-hero-lede {
+  max-width: 36em;
+  margin: 26px 0 0;
+  color: rgba(255,255,255,.9);
+  font-size: clamp(20px, 1.65vw, 26px);
+  font-weight: 400;
+  line-height: 1.28;
+}
+.rw-coaching-hero-outcomes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(960px, 100%);
+  margin-top: clamp(30px, 3.2vw, 44px);
+}
+.rw-coaching-hero-outcome {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 18px;
+  padding: 0 clamp(18px, 2vw, 30px);
+  border-left: 1px solid rgba(242,239,233,.22);
+  color: rgba(255,255,255,.94);
+  font-size: clamp(18px, 1.45vw, 23px);
+  line-height: 1.1;
+}
+.rw-coaching-hero-outcome:first-child { padding-left: 0; border-left: 0; }
+.rw-coaching-hero-outcome svg {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  padding: 8px;
+  border: 1px solid rgba(195,155,83,.62);
+  border-radius: 50%;
+  color: var(--copper);
+  filter: drop-shadow(0 0 8px rgba(195,155,83,.18));
+  stroke-width: 1.45;
+}
+.rw-coaching-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  width: min(940px, 100%);
+  gap: 18px 28px;
+  margin-top: 32px;
+}
+.rw-coaching-hero-book { width: auto; min-width: 0; }
+.rw-coaching-hero-explore {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: auto;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 28px;
+  border: 1px solid color-mix(in srgb, var(--copper) 72%, transparent);
+  border-radius: 10px;
+  background: rgba(11,10,9,.26);
+  color: var(--ink);
+  cursor: pointer;
+  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  transition: background .25s ease, border-color .25s ease, transform .18s cubic-bezier(.34,1.56,.64,1);
+}
+.rw-coaching-hero-explore:hover { background: rgba(195,155,83,.13); border-color: var(--copper); transform: translateY(-1px); }
+.rw-coaching-hero-explore:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.rw-cta-secondary.rw-coaching-hero-fit {
+  display: inline-flex;
+  height: auto;
+  min-height: 0;
+  margin-top: 24px;
+  padding: 0 0 4px;
+  border: 0;
+  border-bottom: 1px solid rgba(195,155,83,.72);
+  border-radius: 0;
+  background: none;
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.rw-cta-secondary.rw-coaching-hero-fit:hover { background: none; color: var(--copper); transform: none; }
+
+@media (max-width: 900px) {
+  .rw-coaching-hero-copy { padding-top: 80px; padding-bottom: 30px; }
+  .rw-coaching-hero-title { max-width: 14em; }
+  .rw-coaching-hero-outcomes { width: min(620px, 100%); }
+  .rw-coaching-hero-outcome { gap: 12px; padding: 0 14px; font-size: 17px; }
+  .rw-coaching-hero-outcome svg { width: 46px; height: 46px; }
+}
+@media (max-width: 620px) {
+  .rw-coaching-hero-copy { padding-top: 64px; padding-bottom: 30px; }
+  .rw-coaching-hero-eyebrow { gap: 0 10px; font-size: 10px; letter-spacing: .11em; }
+  .rw-coaching-hero-title { max-width: 12em; margin-top: 24px; font-size: clamp(40px, 11.4vw, 56px); line-height: 1; }
+  .rw-coaching-hero-lede { margin-top: 22px; font-size: 20px; }
+  .rw-coaching-hero-outcomes { grid-template-columns: 1fr; gap: 18px; margin-top: 30px; }
+  .rw-coaching-hero-outcome,
+  .rw-coaching-hero-outcome:first-child { padding: 0; border-left: 0; }
+  .rw-coaching-hero-actions { width: 100%; margin-top: 34px; gap: 14px; }
+  .rw-coaching-hero-book,
+  .rw-coaching-hero-explore { width: 100%; min-width: 0; }
+}
+
 /* SpecularButton has no font-family/letter-spacing props of its own; borrows this to match the site's other mono-set buttons. */
 .rw-specular-cta {
   font-family: 'Jost', system-ui, -apple-system, sans-serif !important;
   font-size: 13px !important;
-  font-weight: 500 !important;
+  font-weight: 400 !important;
   letter-spacing: .1em !important;
   text-transform: uppercase;
+}
+
+/* The gold Coaching CTA needs a stronger Jost weight so its dark label stays
+   readable against the metallic gradient. */
+.rw-coaching-hero-book {
+  font-weight: 500 !important;
 }
 
 /* The grid row stretches cards to the tallest one's height; BorderGlow's box
@@ -2609,7 +2790,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   border-radius: 10px; background: color-mix(in srgb, var(--copper) 6%, transparent);
   color: var(--ink); text-decoration: none; cursor: pointer; white-space: nowrap;
   font-family: 'Jost', system-ui, -apple-system, sans-serif;
-  font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+  font-size: 12px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase;
   transition: border-color .25s ease, background .25s ease, transform .18s cubic-bezier(.34, 1.56, .64, 1);
 }
 .rw-cta-secondary:hover { border-color: var(--copper); background: color-mix(in srgb, var(--copper) 14%, transparent); transform: translateY(-1px); }
@@ -2668,7 +2849,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 .rw-program-kicker { font-size: 11px; letter-spacing: .14em; line-height: 1.6; text-transform: uppercase; color: var(--copper); }
 .rw-program-title { margin: 0; font-weight: 400; font-size: clamp(25px, 2vw, 30px); line-height: 1.1; letter-spacing: -.01em; }
-.rw-program-desc { margin: 0; font-weight: 300; font-size: 16px; line-height: 1.5; color: var(--faded); }
+.rw-program-desc { margin: 0; font-weight: 400; font-size: 16px; line-height: 1.5; color: var(--faded); }
 .rw-program-rule { display: block; width: 72px; height: 1px; background: var(--gold-gradient); opacity: .8; }
 .rw-program-features { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 12px; }
 .rw-program-features li { display: flex; align-items: center; gap: 12px; font-size: 15px; line-height: 1.35; color: var(--ink); }
@@ -2678,7 +2859,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   border: 1px solid rgba(195, 155, 83, .55); color: var(--copper);
   background: rgba(195, 155, 83, .06);
 }
-.rw-program-outcome { margin: 4px 0 0; font-weight: 300; font-size: 15px; line-height: 1.55; color: var(--faded); }
+.rw-program-outcome { margin: 4px 0 0; font-weight: 400; font-size: 15px; line-height: 1.55; color: var(--faded); }
 .rw-program-session { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--faded); }
 .rw-program-cta { width: 100%; margin-top: auto; gap: 10px; }
 

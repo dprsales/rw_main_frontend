@@ -93,6 +93,16 @@
 </script>
 </head>
 <body>
+<!-- Apply the saved text-size before first paint, so a returning visitor who chose
+     Large/Larger never sees a flash at the default size. Sets the --rw-fs multiplier the
+     type tokens scale against. Kept in sync with SCALE in components/FontSizeControl.jsx. -->
+<script>
+  try {
+    var lvl = parseInt(localStorage.getItem('rw-fs-level'), 10);
+    var s = [1, 1.12, 1.24][lvl] || 1;
+    if (s !== 1) document.documentElement.style.setProperty('--rw-fs', s);
+  } catch (e) {}
+</script>
 <div id="root"></div>
 <script type="module" src="/src/main.jsx"></script>
 <script defer src="https://india.kenyt.ai/botapp/ChatbotUI/dist/js/bot-loader.js" type="text/javascript" data-bot="290431337"></script>

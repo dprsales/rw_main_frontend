@@ -5,10 +5,8 @@ import mentoringImage from '../assets/site/plate-reading.png'
 import monogram from '../assets/site/rw-logo-ccr.png'
 import signature from '../assets/site/gold2.png'
 import hydMark from '../assets/site/hyd-03.svg'
-import CountUp from '../components/CountUp'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
-import PageIntro from '../components/PageIntro'
 import Seo from '../components/Seo'
 import { BookButton } from '../components/BookingModal'
 import CtaButton from '../components/CtaButton'
@@ -24,32 +22,31 @@ import { ACHIEVE, ASSESSMENT_AREAS, COACHING_PROGRAMS, COACHING_TESTIMONIALS, CU
 import { track } from '../data/analytics'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import {
-  container, ctaCopper, ctaInline, eyebrow,
-  note, sectionRule, statLabel,
+  container, ctaCopper, eyebrow,
+  note, sectionRule,
 } from '../styles'
 import {
   ArrowRight, Award, Brain, ChevronDown, Compass, Crown, Gem, Handshake, HeartHandshake,
-  MessagesSquare, ShieldCheck, Target, Trophy, UserRoundSearch,
+  BarChart3, MessagesSquare, ShieldCheck, Target, Trophy, UserRoundSearch, UsersRound,
 } from 'lucide-react'
 
-const HEADLINE = [
-  { text: 'Stop competing ' },
-  { text: 'on commission. ' },
-  { br: true },
-  { text: 'Start building communities people aspire to live in.', italic: true, copper: true },
+const COACHING_OUTCOMES = [
+  { Icon: BarChart3, lines: ['Your ticket size', 'increases.'] },
+  { Icon: UsersRound, lines: ['Your client base', 'grows.'] },
+  { Icon: Trophy, lines: ['Your market credibility', 'strengthens.'] },
 ]
 
 /** Covers for COACHING_PROGRAMS, matched by index. */
 const PROGRAM_COVERS = [
-  { src: goalsImage, alt: 'Rajiv running a closing framework at the whiteboard' },
   { src: luxuryImage, alt: 'Rajiv, Luxury Sales Mastery programme' },
+  { src: goalsImage, alt: 'Rajiv running a closing framework at the whiteboard' },
   { src: mentoringImage, alt: 'Rajiv, One-to-One Mentoring programme' },
 ]
 
 /** One icon per COACHING_PROGRAMS feature, matched by index (decorative only). */
 const PROGRAM_ICONS = [
-  [Brain, ShieldCheck, Handshake, Trophy],                   // psychology · objections · negotiation · closing
   [Gem, Crown, HeartHandshake, Award],                       // luxury buyer · premium positioning · trust · high-value close
+  [Brain, ShieldCheck, Handshake, Trophy],                   // psychology · objections · negotiation · closing
   [UserRoundSearch, MessagesSquare, Target, Compass],        // assessment · strategy talk · targeted mentoring · action guidance
 ]
 
@@ -182,34 +179,53 @@ export default function Coaching() {
       <Seo route="/coaching" />
       <Header />
 
-      {/* Intro */}
-      <PageIntro
-        eyebrow="COACHING · FOR DEVELOPERS, SENIOR SALES LEADERSHIP & TOP CLOSERS"
-        headline={HEADLINE}
-        headlineStyle={{ fontSize: 'clamp(28px, 4.2vw, 56px)', lineHeight: 1.12, maxWidth: 'none' }}
-        lede="For developers, senior sales leadership, and top sales closers who wish to level up."
-        intro="What changes: 1. Your ticket size, 2. Your client register, and 3. How the market treats your word."
-        introStyle={{ maxWidth: 'none' }}
-        cta={<>
-          <BookButton interest="Coaching" specular>BOOK A STRATEGY CALL</BookButton>
-          <button type="button" onClick={() => scrollToId('premium-programs')} className="rw-inline-cta" style={ctaInline}>
-            Explore coaching programs →
-          </button>
-          <CtaButton variant="secondary" to="/start?who=sales_pro" arrow="→">Not sure? Find your fit</CtaButton>
-        </>}
-        extra={
-          <Reveal delay={120} style={{ marginTop: 48, display: 'flex', gap: 56, flexWrap: 'wrap', borderTop: '1px solid var(--line)', paddingTop: 26 }}>
-            <div>
-              <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}>₹2,700 Cr+</div>
-              <div style={{ ...statLabel, marginTop: 8 }}>GENERATED FOR DEVELOPER BRANDS</div>
-            </div>
-            <div>
-              <div style={{ fontFamily: serif, fontSize: 'clamp(28px,3.4vw,34px)', color: 'var(--ink)' }}><CountUp to={16} suffix="+" duration={1400} /></div>
-              <div style={{ ...statLabel, marginTop: 8 }}>YEARS AT THE TOP</div>
-            </div>
+      {/* Coaching hero: a clean editorial layout ready for a future visual layer. */}
+      <section id="top" className="rw-coaching-hero">
+        <div className="rw-coaching-hero-copy rw-pad">
+          <Reveal className="rw-coaching-hero-eyebrow" style={{ fontFamily: mono }}>
+            <span>COACHING</span>
+            <span className="rw-coaching-hero-arrow">→</span>
+            <span>DEVELOPERS</span>
+            <span className="rw-coaching-hero-dot" aria-hidden="true" />
+            <span>SENIOR SALES LEADERSHIP</span>
+            <span className="rw-coaching-hero-dot" aria-hidden="true" />
+            <span>TOP CLOSERS</span>
           </Reveal>
-        }
-      />
+
+          <Reveal as="h1" delay={80} className="rw-coaching-hero-title" style={{ fontFamily: serif }}>
+            <span className="rw-coaching-hero-title-gold">It’s time to value your team members</span>
+            <span>as much as you value your customers.</span>
+          </Reveal>
+
+          <Reveal as="p" delay={150} className="rw-coaching-hero-lede" style={{ fontFamily: text }}>
+            Build stronger sales professionals through sharper communication, buyer understanding, negotiation, follow-ups and closing.
+          </Reveal>
+
+          <Reveal delay={220} className="rw-coaching-hero-outcomes">
+            {COACHING_OUTCOMES.map(({ Icon, lines }) => (
+              <div key={lines[0]} className="rw-coaching-hero-outcome">
+                <Icon aria-hidden="true" />
+                <span style={{ fontFamily: text }}>{lines[0]}<br />{lines[1]}</span>
+              </div>
+            ))}
+          </Reveal>
+
+          <Reveal delay={300} className="rw-coaching-hero-actions">
+            <BookButton interest="Coaching" className="rw-cta rw-coaching-hero-book" style={ctaCopper}>
+              BOOK A STRATEGY CALL <span className="rw-cta-arrow">→</span>
+            </BookButton>
+            <button type="button" onClick={() => scrollToId('premium-programs')} className="rw-coaching-hero-explore">
+              EXPLORE COACHING PROGRAMS <span aria-hidden="true">→</span>
+            </button>
+          </Reveal>
+
+          <Reveal delay={360}>
+            <CtaButton variant="secondary" to="/start?who=sales_pro" arrow="→" className="rw-coaching-hero-fit">
+              Not sure? Find your fit
+            </CtaButton>
+          </Reveal>
+        </div>
+      </section>
 
       {/* Assessment — the KRISAH-powered scored interview, explained before the ask.
           Was a bare "START ASSESSMENT" button in the hero with no context; moved here
