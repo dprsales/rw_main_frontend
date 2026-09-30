@@ -38,7 +38,7 @@ export const ROUTE_SEO = {
       'Projects represented and mandated across Hyderabad’s luxury corridor, 27 developer partners, and recommendations from NAR India leadership.',
   },
   '/careers': {
-    title: 'Careers — Luxury Real Estate Sales Roles in Hyderabad | Rajiv Williams',
+    title: 'Careers: Luxury Real Estate Sales Roles in Hyderabad | Rajiv Williams',
     description:
       'Sales, business development, client relations and operations roles on exclusive luxury mandates. Premium inventory, in-house coaching, uncapped incentives.',
   },

@@ -250,7 +250,7 @@ export const PORTFOLIO_TESTIMONIALS = [
  * absent (empty title slots read as unfinished); add a `role` string and the card picks it up automatically.
  */
 export const TEAM = [
-  { name: 'Sridevi Vinjimur', photo: teamSridevi, linkedin: 'https://www.linkedin.com/in/sridevi-vinjimur-147125270/', title: 'Director of Operations', for: ['Coaching', 'Consulting', 'Realty'], bio:'With over 10 years of experience in a diverse range of industries, and maximum out of it being in real estate, Ms. Sridevi specializes in the back-end operations of hiring, finance, administration, client management. A key member of Rajiv Williams team, she is one of the most important members in the organization and has immense knowledge about branding, marketing, sales, technology, AI, and digital platforms. She continues to lead the team in times of challenges and is highly valued and regarded.'},
+  { name: 'Sridevi Vinjimur', photo: teamSridevi, linkedin: 'https://www.linkedin.com/in/sridevi-vinjimur-147125270/', title: 'Director of Operations', for: ['Coaching', 'Consulting', 'Realty'], bio:'With 10+ years across industries, most of them in real estate, Ms. Sridevi leads back-end operations at Rajiv Williams: hiring, finance, administration and client management. She brings deep expertise in branding, marketing, sales, technology, AI and digital platforms, and is the steady hand who leads the team through every challenge.'},
   { name: 'Priyanka Panda', photo: teamPriyanka, linkedin: 'https://www.linkedin.com/in/priyanka-panda-238451259/', title: 'Director of Sales', for: ['Realty'], bio: '8+ years in luxury real estate sales & marketing sells by positioning, excels at high-value closures. Under her leadership, Team RW runs high-value sales mandates end to end, from go-to-market strategy to a client experience that keeps your cash flows smooth.' },
 ]
 
@@ -305,18 +305,45 @@ export const CAREER_ROLES = [
     level: 'Senior',
     experience: '3–6 years',
     location: 'Hyderabad',
-    description: 'Own high-ticket conversations end to end — qualification, site visits, negotiation, closure — on live luxury mandates.',
+    description: 'Own high-ticket conversations end to end, from qualification and site visits through negotiation and closure, on live luxury mandates.',
     requirements: ['3+ years selling residential or commercial real estate', 'A closing record you can walk through deal by deal', 'Comfort with HNI and NRI buyers'],
   },
   {
-    title: 'Tele Marketing Executive',
+    title: 'Pre Sales Executive',
     type: 'FULL-TIME · HYDERABAD',
     category: 'Sales',
     level: 'Entry – Junior',
     experience: '1–3 years',
     location: 'Hyderabad',
-    description: 'Drive lead generation and qualification through outbound calling, managed follow-ups, and pipeline building for live sales mandates.',
-    requirements: ['1+ year in telemarketing, cold calling, or inside sales', 'Strong verbal communication in English and Hindi', 'Familiarity with CRM tools and call tracking systems'],
+    description: 'Qualify incoming enquiries, understand buyer intent, and create a well-managed pipeline for the on-ground sales team.',
+    requirements: ['1+ year in pre-sales, inside sales, or customer-facing lead qualification', 'Strong verbal communication in English and Hindi', 'Familiarity with CRM tools and structured follow-up'],
+  },
+  {
+    title: 'Sales Executive',
+    category: 'Sales',
+    level: 'Junior - Mid',
+    experience: '1-3 years',
+    location: 'Hyderabad',
+    description: 'Guide qualified buyers through project discovery, site visits, and follow-up while building a dependable sales pipeline.',
+    requirements: ['Experience in real estate, hospitality, or consultative sales', 'Clear communication and disciplined follow-up', 'Comfort meeting clients and working toward monthly targets'],
+  },
+  {
+    title: 'Sales Manager',
+    category: 'Sales',
+    level: 'Manager',
+    experience: '5-8 years',
+    location: 'Hyderabad',
+    description: 'Run daily sales execution across lead allocation, pipeline reviews, site visits, and coaching to deliver project targets.',
+    requirements: ['Experience leading a real estate sales team', 'Strong pipeline management and forecasting skills', 'Ability to coach, motivate, and hold a team accountable'],
+  },
+  {
+    title: 'Senior Sales Manager',
+    category: 'Sales',
+    level: 'Senior Manager',
+    experience: '7-10 years',
+    location: 'Hyderabad',
+    description: 'Own sales strategy and revenue delivery for premium mandates, leading managers and key client conversations from launch to closure.',
+    requirements: ['Proven leadership in premium real estate sales', 'A record of building and delivering high-value sales pipelines', 'Strong stakeholder management with developers and senior buyers'],
   },
   {
     title: 'Brand & Account Manager',
@@ -345,7 +372,7 @@ export const CAREER_ROLES = [
     level: 'Mid – Senior',
     experience: '4–8 years',
     location: 'Hyderabad',
-    description: 'Lead the digital function end to end — channel strategy, budgets, team, and the enquiry pipeline across every project launch.',
+    description: 'Lead the digital function end to end, covering channel strategy, budgets, team, and the enquiry pipeline across every project launch.',
     requirements: ['4+ years running digital marketing, with time leading a team', 'Proven ownership of paid, organic, and CRM-led funnels', 'Comfort reporting numbers to founders and developer partners'],
   },
   {
@@ -375,7 +402,7 @@ export const CAREER_ROLES = [
     level: 'Mid',
     experience: '2–5 years',
     location: 'Hyderabad',
-    description: 'Run paid acquisition across Meta, Google, and programmatic — bidding, creative testing, and cost-per-qualified-lead on live mandates.',
+    description: 'Run paid acquisition across Meta, Google, and programmatic, covering bidding, creative testing, and cost per qualified lead on live mandates.',
     requirements: ['Hands-on ownership of Meta and Google Ads budgets', 'Strong grasp of attribution, CPL, and funnel metrics', 'Disciplined experimentation and reporting'],
   },
   {

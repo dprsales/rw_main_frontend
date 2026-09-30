@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { BookingProvider } from './components/BookingModal'
 import ScrollProgress from './components/ScrollProgress'
@@ -9,6 +9,7 @@ import About from './pages/About'
 import Assessment from './pages/Assessment'
 import AssessmentResult from './pages/AssessmentResult'
 import Careers from './pages/Careers'
+import CareersApply from './pages/CareersApply'
 import Coaching from './pages/Coaching'
 import CoachingResult from './pages/CoachingResult'
 import CoachingPurchase from './pages/CoachingPurchase'
@@ -22,10 +23,10 @@ import Realty from './pages/Realty'
 import Start from './pages/Start'
 import Partner from './pages/Partner'
 
-/** Every route change lands at the top, the way a full page load used to. */
+/** Every route change lands at the top before the page is painted. */
 function ScrollToTop() {
   const { pathname } = useLocation()
-  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  useLayoutEffect(() => { window.scrollTo(0, 0) }, [pathname])
   return null
 }
 
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="/consulting" element={<Consulting />} />
           <Route path="/realty" element={<Realty />} />
           <Route path="/careers" element={<Careers />} />
+          <Route path="/careers/apply" element={<CareersApply />} />
           <Route path="/assessment" element={<Assessment />} />
           <Route path="/assesment" element={<Assessment />} />
           <Route path="/assessment/result" element={<AssessmentResult />} />

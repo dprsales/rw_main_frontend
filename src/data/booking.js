@@ -94,8 +94,13 @@ async function submitApplication(form) {
   if (form.jobId) fd.append('jobId', form.jobId)
   const experience = form.experience === 'Other' ? form.experienceCustom : form.experience
   if (experience?.trim()) fd.append('experience', experience.trim())
-  ;['currentCtc', 'expectedCtc', 'currentLocation', 'noticePeriod', 'relocation', 'workMode', 'applicationSource', 'ref1Name', 'ref1Number', 'ref1Relationship', 'ref2Name', 'ref2Number', 'ref2Relationship'].forEach((field) => {
-    if (form[field]?.trim()) fd.append(field, form[field].trim())
+  ;['currentCtc', 'expectedCtc', 'currentLocation', 'noticePeriod', 'relocation', 'workMode', 'applicationSource', 'ref1Name', 'ref1Number', 'ref1Relationship', 'ref2Name', 'ref2Number', 'ref2Relationship',
+    // Character/mindset short answers + raw HEXACO answers (careers apply page).
+    // Trait scores are computed on the server from hexacoAnswers, not sent here.
+    'qImpact', 'qDuties', 'qMotivation', 'qIntegrity', 'qSetback', 'qLoyalty', 'qFlexibility',
+    'hexacoAnswers',
+  ].forEach((field) => {
+    if (form[field] != null && String(form[field]).trim()) fd.append(field, String(form[field]).trim())
   })
   fd.append('privacyConsent', form.privacyConsent ? 'true' : 'false')
   if (form.linkedinUrl?.trim()) fd.append('linkedinUrl', form.linkedinUrl.trim())

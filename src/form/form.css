@@ -279,17 +279,37 @@
    hairline rules. Drawn through a 1px grid gap (so the panel background shows
    through as the divider) with a divider tone stronger than the flat body
    `--line` — at 10% white on near-black, `--line` alone reads as nothing. */
+/* Dividers are drawn as hairlines on each field cell (inset top + left), not
+   through a light panel background showing in 1px grid gaps. A trailing empty
+   cell (odd field count, e.g. a hidden conditional field) then shows the plain
+   dark panel background instead of a bright grey block. */
 .rw-form-panel {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: rgba(242, 239, 233, 0.15);
+  gap: 0;
+  background: var(--card);
   border: 1px solid var(--line);
   border-left: 2px solid var(--copper);
 }
+/* The careers apply panel sits inside a <BorderGlow>, which draws the single
+   outer edge. The panel gives up its border so the two can't stack.
+   No per-cell hairlines here, unlike the panel above. That system paints an
+   inset top+left rule on every cell, which is only a divider when a cell has
+   neighbours on those sides; on the first column and on any full-width
+   (`--wide`) cell it lands on the panel's own edge and reads as a second
+   border. `:nth-child` can't rescue it either, since a `--wide` cell resets
+   the    odd/even-to-column mapping. So the cells sit on the panel fill with no
+   dividers at all, and each input keeps its own `--line` border for structure.
+   Spacing between cells comes from their padding, so no gap is needed. */
+.rw-form-panel--glow {
+  border: 0;
+  border-radius: 0;
+}
+.rw-form-panel--glow > .rw-form-field-wrap { box-shadow: none; }
 .rw-form-field-wrap {
   display: block;
   background: var(--card);
+  box-shadow: inset 1px 1px 0 rgba(242, 239, 233, 0.15);
   padding: clamp(22px, 2.6vw, 30px);
 }
 /* Multi-line groups (developer ties, segment lists, final notes) span the full row. */
@@ -487,4 +507,302 @@
    one type-only control, so it gets the taller hit area on touch. */
 @media (max-width: 900px), (pointer: coarse) {
   .rw-form-back { padding-top: 12px; padding-bottom: 12px; }
+}
+
+/* --- Likert assessment (careers apply) ------------------------------------- */
+/* Each statement sits on one row with a 5-point scale on the right; on narrow
+   screens the scale drops beneath the statement. The chosen point carries the
+   same gold sweep as every other selected control in the system. */
+.rw-likert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.rw-likert:last-child { border-bottom: 0; }
+.rw-likert-text {
+  flex: 1 1 260px;
+  min-width: 0;
+  margin: 0;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.rw-likert-scale { display: flex; gap: 6px; flex: 0 0 auto; }
+.rw-likert-dot {
+  width: 44px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--faded);
+  font-size: 11px;
+  letter-spacing: .04em;
+  cursor: pointer;
+  transition: color .3s, border-color .3s, background .3s;
+}
+.rw-likert-dot:hover { color: var(--ink); border-color: var(--copper); }
+.rw-likert-dot.is-on { background: var(--gold-gradient); border-color: transparent; color: #16110A; font-weight: 500; }
+.rw-likert-legend {
+  margin-top: 14px;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--faded);
+}
+@media (max-width: 560px) {
+  .rw-likert { align-items: flex-start; }
+  .rw-likert-scale { width: 100%; justify-content: space-between; gap: 4px; }
+  .rw-likert-dot { flex: 1 1 0; width: auto; }
+}
+
+/* --- Success animation (careers apply confirmation) ------------------------ */
+/* Sits at the top of the confirmation panel, where the tick ring used to be, so
+   it reads as a receipt for sending the form rather than a score on the
+   personality snapshot below. Shown whether or not that snapshot rendered.
+   Flex keeps it centred now that the player, not the wrapper, carries the size. */
+.rw-success-anim { display: flex; justify-content: center; margin: 0 0 26px; cursor: pointer; }
+.rw-success-anim svg { display: block; }
+/* Replaying on hover needs a tactile cue, or the replay reads as a glitch. */
+.rw-success-anim > div { transition: transform .28s cubic-bezier(.2, .7, .3, 1); transform-origin: center; }
+.rw-success-anim:hover > div,
+.rw-success-anim:active > div { transform: scale(1.07); }
+@media (prefers-reduced-motion: reduce) {
+  .rw-success-anim { cursor: default; }
+  .rw-success-anim > div { transition: none; }
+  .rw-success-anim:hover > div,
+  .rw-success-anim:active > div { transform: none; }
+}
+
+/* --- Personality snapshot card (careers apply confirmation) ---------------- */
+.rw-hexa-card {
+  max-width: 640px;
+  margin: 34px auto 0;
+  padding: clamp(22px, 3vw, 30px);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--copper);
+  border-radius: 2px;
+}
+.rw-hexa-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+.rw-hexa-overall { text-align: center; flex: 0 0 auto; }
+.rw-hexa-overall-num { display: block; font-size: 30px; line-height: 1; color: var(--copper); }
+.rw-hexa-overall-cap {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--rw-sans);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--faded);
+}
+.rw-hexa-trait { margin-top: 20px; }
+.rw-hexa-trait-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.rw-hexa-trait-name { font-family: var(--rw-sans); font-size: 14px; letter-spacing: .04em; color: var(--ink); }
+.rw-hexa-trait-pct { font-size: 14px; color: var(--faded); }
+.rw-hexa-bar {
+  margin-top: 8px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(242, 239, 233, 0.1);
+  overflow: hidden;
+}
+.rw-hexa-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--gold-gradient);
+  transition: width .8s cubic-bezier(.16,.84,.28,1);
+}
+.rw-hexa-trait-text {
+  margin: 10px 0 0;
+  font-family: var(--rw-sans);
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--faded);
+}
+.rw-hexa-foot {
+  margin: 22px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-family: var(--rw-sans);
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--faded);
+  font-style: italic;
+}
+
+/* --- Stepper progress tracker (careers apply wizard) ----------------------- */
+.rw-stepper {
+  display: flex;
+  align-items: flex-start;
+  margin: clamp(20px, 3vw, 30px) 0 clamp(8px, 2vw, 16px);
+}
+.rw-step {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  text-align: center;
+}
+/* Connector runs from the previous dot's centre to this one's, behind the dots. */
+.rw-step-line {
+  position: absolute;
+  top: 16px;
+  right: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--line);
+}
+.rw-step-line.is-filled { background: var(--gold-gradient); }
+.rw-step-dot {
+  position: relative;
+  z-index: 1;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--faded);
+  font-family: var(--rw-sans);
+  font-size: 13px;
+  cursor: default;
+  transition: color .3s, border-color .3s, background .3s;
+}
+.rw-step--done .rw-step-dot {
+  background: var(--gold-gradient);
+  border-color: transparent;
+  color: #16110a;
+  cursor: pointer;
+}
+.rw-step--active .rw-step-dot {
+  border-color: var(--copper);
+  color: var(--copper);
+  background: var(--card);
+  box-shadow: 0 0 0 4px rgba(195, 155, 83, .13), 0 0 16px rgba(195, 155, 83, .10);
+}
+/* A single ring on a pseudo-element, so it can breathe without fighting the
+   static halo on the dot itself. Scale only, so it stays on the compositor. */
+.rw-step--active .rw-step-dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--copper);
+  opacity: 0;
+  animation: rw-step-pulse 2.6s var(--rw-ease) infinite;
+}
+@keyframes rw-step-pulse {
+  0%   { opacity: .45; transform: scale(1); }
+  70%  { opacity: 0;   transform: scale(1.5); }
+  100% { opacity: 0;   transform: scale(1.5); }
+}
+.rw-step--done .rw-step-dot:hover { filter: brightness(1.06); }
+.rw-step-label {
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--faded);
+}
+.rw-step--active .rw-step-label { color: var(--ink); }
+.rw-step--done .rw-step-label { color: var(--faded); }
+/* Steps still to come sit back a step, so the eye reads the track as progress. */
+.rw-step--todo .rw-step-label { color: var(--faded); opacity: .5; }
+
+/* --- Step transition -------------------------------------------------------- */
+/* The step body is keyed on the step index, so React remounts it and this
+   entrance replays on every move. Direction is set in the page so Back slides
+   the opposite way from Continue. Transform only, so nothing reflows mid-move. */
+@keyframes rw-step-in-fwd {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes rw-step-in-back {
+  from { opacity: 0; transform: translate3d(0, -18px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+.rw-step-panel--fwd { animation: rw-step-in-fwd .46s var(--rw-ease) both; }
+.rw-step-panel--back { animation: rw-step-in-back .46s var(--rw-ease) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rw-step-panel--fwd, .rw-step-panel--back { animation: none; }
+  .rw-step--active .rw-step-dot::after { animation: none; }
+}
+
+/* --- Step navigation bar --------------------------------------------------- */
+.rw-step-nav {
+  margin-top: clamp(26px, 4vw, 36px);
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.rw-step-back {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  height: 48px;
+  padding: 0 22px;
+  color: var(--ink);
+  font-family: var(--rw-sans);
+  font-size: 13px;
+  letter-spacing: .06em;
+  cursor: pointer;
+  transition: border-color .3s, color .3s, opacity .3s;
+}
+.rw-step-back:hover:not(:disabled) { border-color: var(--copper); color: var(--copper); }
+.rw-step-back:disabled { opacity: .35; cursor: not-allowed; }
+.rw-step-count {
+  flex: 1 1 auto;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faded);
+}
+
+@media (max-width: 600px) {
+  .rw-step-label { display: none; }
+  .rw-step--active .rw-step-label {
+    display: block;
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+  .rw-stepper { margin-bottom: 34px; }
+  .rw-step-nav { justify-content: center; }
+  .rw-step-count { order: -1; flex-basis: 100%; }
+  .rw-step-back, .rw-step-nav .rw-form-submit { flex: 1 1 auto; }
 }

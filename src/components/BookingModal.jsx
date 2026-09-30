@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { fs } from '../styles'
 import { createPortal } from 'react-dom'
 import MagneticLink from './MagneticLink'
@@ -34,9 +35,14 @@ const DEFAULT_SPECULAR_PROPS = {
 }
 
 // Magnetic button that opens the booking modal instead of a mailto: link; role/jobId tag careers applications.
-export function BookButton({ interest, role, jobId, roleOptions, guidance, source, skipQuestions, eyebrow: eyebrowText, title, subtitle, style, children, specular = false, specularProps, className = '', ...rest }) {
+export function BookButton({ interest, role, jobId, roleOptions, guidance, source, skipQuestions, eyebrow: eyebrowText, title, subtitle, to, style, children, specular = false, specularProps, className = '', ...rest }) {
   const open = useBooking()
-  const handleClick = () => open({ interest, role, jobId, roleOptions, guidance, source, skipQuestions, eyebrow: eyebrowText, title, subtitle })
+  const navigate = useNavigate()
+  // `to` turns the CTA into a route navigation (e.g. the careers apply page) instead of the modal.
+  const handleClick = () => {
+    if (to) { navigate(to); return }
+    open({ interest, role, jobId, roleOptions, guidance, source, skipQuestions, eyebrow: eyebrowText, title, subtitle })
+  }
 
   if (specular) {
     return (

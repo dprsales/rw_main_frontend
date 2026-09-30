@@ -93,7 +93,7 @@ export default function Careers() {
         lede="A small floor, selling Hyderabad’s luxury inventory."
         intro="We hire for judgement and follow-through, then train the rest. If you have been carrying a target and want the ticket size to match the effort, this is the room."
         cta={<>
-          <BookButton interest={APPLY_INTEREST} roleOptions={roleOptions} specular>APPLY TO THE TEAM</BookButton>
+          <BookButton to="/careers/apply" interest={APPLY_INTEREST} roleOptions={roleOptions} specular>APPLY TO THE TEAM</BookButton>
           <button type="button" onClick={() => scrollToId('roles')} className="rw-inline-cta" style={ctaInline}>
             See open roles →
           </button>
@@ -228,7 +228,7 @@ export default function Careers() {
           <CenteredHead
             eyebrow="OPEN ROLES"
             title="Where we are hiring right now"
-            intro="Every role is Hyderabad-based and on the floor. The band on each card is what we are looking for; if you are close — or simply belong here — apply anyway and say why."
+            intro="Every role is Hyderabad-based and on the floor. The band on each card is what we are looking for. If you are close, or simply belong here, apply anyway and say why."
           />
 
           {openRoles.length > 0 && (
@@ -270,7 +270,7 @@ export default function Careers() {
                   <p style={{ ...note, marginTop: 12 }}>
                     Strong profiles are kept on file and called first when a seat opens.
                   </p>
-                  <BookButton interest={APPLY_INTEREST} roleOptions={roleOptions} specular style={{ marginTop: 26 }}>SEND YOUR PROFILE</BookButton>
+                  <BookButton to="/careers/apply" interest={APPLY_INTEREST} roleOptions={roleOptions} specular style={{ marginTop: 26 }}>SEND YOUR PROFILE</BookButton>
                 </div>
               </BorderGlow>
             </Reveal>
@@ -293,7 +293,7 @@ export default function Careers() {
                         </div>
                         <p>{role.description}</p>
                       </div>
-                      <BookButton className="rw-role-apply" interest={APPLY_INTEREST} role={role.title} jobId={role.id} roleOptions={roleOptions} specular style={{ marginTop: 0 }}>
+                      <BookButton className="rw-role-apply" to={`/careers/apply?role=${encodeURIComponent(role.title)}${role.id ? `&jobId=${role.id}` : ''}`} interest={APPLY_INTEREST} role={role.title} jobId={role.id} roleOptions={roleOptions} specular style={{ marginTop: 0 }}>
                         APPLY NOW <span aria-hidden>→</span>
                       </BookButton>
                       </article>
@@ -348,7 +348,7 @@ export default function Careers() {
       </section>
 
       <ClosingCTA title="Tell us what you have closed, and what you want to be closing a year from now." titleStyle={{ maxWidth: '15em' }}>
-        <BookButton interest={APPLY_INTEREST} roleOptions={roleOptions} specular>APPLY TO THE TEAM</BookButton>
+        <BookButton to="/careers/apply" interest={APPLY_INTEREST} roleOptions={roleOptions} specular>APPLY TO THE TEAM</BookButton>
       </ClosingCTA>
 
       <Footer links={FOOTER_LINKS} />

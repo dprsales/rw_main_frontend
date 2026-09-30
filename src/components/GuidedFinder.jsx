@@ -37,6 +37,7 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
   const cardRef = useRef(null)
   const rootRef = useRef(null)
   const openedRef = useRef(false)
+  const previousStepRef = useRef(finder.current)
 
   // finder_opened once, when the section is actually seen.
   useEffect(() => {
@@ -53,8 +54,13 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
     return () => io.disconnect()
   }, [variant, location, seed.who])
 
-  // Keep the section in view as it changes height between steps; focus the result when it lands.
+  // Keep the section in view only after a visitor changes a step. On first render,
+  // the inline finder must not pull a fresh homepage load away from the hero.
   useEffect(() => {
+    const previousStep = previousStepRef.current
+    previousStepRef.current = finder.current
+    if (previousStep === finder.current) return
+
     if (done) cardRef.current?.focus({ preventScroll: true })
     if (rootRef.current && rootRef.current.getBoundingClientRect().top < 0) {
       rootRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' })
