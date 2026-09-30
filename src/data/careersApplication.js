@@ -106,6 +106,15 @@ export const HEXACO_TRAITS = [
       { id: 'flex3', text: 'I prefer a fixed routine and dislike sudden changes to my plans.', reverse: true },
     ],
   },
+  {
+    key: 'Mindset',
+    field: 'hexacoMindset',
+    statements: [
+      { id: 'mind1', text: 'I actively seek out feedback, even when it is uncomfortable to hear.' },
+      { id: 'mind2', text: 'When something goes wrong, I focus on what I can change instead of who is to blame.' },
+      { id: 'mind3', text: 'I avoid new challenges unless I already know how to do them well.', reverse: true },
+    ],
+  },
 ]
 
 /** Flat list of every statement id, for "have all been answered" checks. */

@@ -12,6 +12,9 @@ import { track } from '../data/analytics'
 import {
   ANSWER_MAX, CHARACTER_QUESTIONS, LIKERT, likertLabel, HEXACO_TRAITS, HEXACO_STATEMENT_IDS,
 } from '../data/careersApplication'
+import {
+  readDraft, writeDraft, clearDraft, hasDraftContent, readResumeFile, saveResumeFile, deleteResumeFile,
+} from '../data/draftStore'
 import { FOOTER_LINKS, mono, serif, text, WHATSAPP } from '../theme'
 import { ctaCopper, eyebrow, fs, note, sectionRule } from '../styles'
 import SuccessAnimation from '../components/SuccessAnimation'
@@ -67,6 +70,12 @@ const INITIAL = {
   message: '', privacyConsent: false,
 }
 
+/** Clamp a persisted step index into range, so a stale draft can't open on a step
+ *  that no longer exists (steps get added and removed between releases). */
+function safeStep(n) {
+  return Math.min(LAST_STEP, Math.max(0, Math.floor(Number(n) || 0)))
+}
+
 /** A titled block of the form. Uses the same joined-panel styling as the other forms.
  *  `panel` carries the step-transition direction; the caller also keys the element on
  *  the step index so React remounts it and the entrance animation replays. */
@@ -87,35 +96,59 @@ function Section({ eyebrow: kicker, title, children, panel }) {
   )
 }
 
-function TextField({ label, id, values, set, required, type = 'text', placeholder, wide }) {
+function TextField({ label, id, values, set, setValues, required, type = 'text', placeholder, wide }) {
+  const filled = String(values[id] || '').trim() !== ''
   return (
     <label className={`rw-form-field-wrap${wide ? ' rw-form-field-wrap--wide' : ''}`} style={{ display: 'block' }}>
       <span className="rw-form-q-title">
         {label}
         {required ? <span className="rw-form-req"> *</span> : <span className="rw-form-optional"> (optional)</span>}
       </span>
-      <input
-        className="rw-form-field" type={type} style={{ marginTop: 10 }}
-        placeholder={placeholder} value={values[id] || ''} onChange={set(id)}
-      />
+      <span className="rw-clearable">
+        <input
+          className="rw-form-field" type={type} style={{ marginTop: 10 }}
+          placeholder={placeholder} value={values[id] || ''} onChange={set(id)}
+        />
+        {filled && (
+          <button
+            type="button" className="rw-field-clear" tabIndex={-1}
+            aria-label={`Clear ${label}`} title={`Clear ${label}`}
+            onClick={() => setValues((prev) => ({ ...prev, [id]: '' }))}
+          >
+            ×
+          </button>
+        )}
+      </span>
     </label>
   )
 }
 
-function SelectField({ label, id, values, set, options, required, wide }) {
+function SelectField({ label, id, values, set, setValues, options, required, wide }) {
+  const filled = String(values[id] || '').trim() !== ''
   return (
     <div className={`rw-form-field-wrap${wide ? ' rw-form-field-wrap--wide' : ''}`}>
       <span className="rw-form-q-title">
         {label}
         {required ? <span className="rw-form-req"> *</span> : <span className="rw-form-optional"> (optional)</span>}
       </span>
-      <select
-        className="rw-form-field" style={{ marginTop: 10, appearance: 'none' }}
-        value={values[id] || ''} onChange={set(id)}
-      >
-        <option value="">Select…</option>
-        {options.map((o) => <option key={o} value={o}>{o}</option>)}
-      </select>
+      <span className="rw-clearable">
+        <select
+          className="rw-form-field" style={{ marginTop: 10, appearance: 'none' }}
+          value={values[id] || ''} onChange={set(id)}
+        >
+          <option value="">Select…</option>
+          {options.map((o) => <option key={o} value={o}>{o}</option>)}
+        </select>
+        {filled && (
+          <button
+            type="button" className="rw-field-clear" tabIndex={-1}
+            aria-label={`Clear ${label}`} title={`Clear ${label}`}
+            onClick={() => setValues((prev) => ({ ...prev, [id]: '' }))}
+          >
+            ×
+          </button>
+        )}
+      </span>
     </div>
   )
 }
@@ -162,19 +195,46 @@ export default function CareersApply() {
   const presetRole = params.get('role') || ''
   const presetJobId = params.get('jobId') || ''
 
-  const [values, setValues] = useState(() => ({ ...INITIAL, role: presetRole }))
-  const [hex, setHex] = useState({}) // { statementId: -2..2 }
+  // The text half of the draft is synchronous, so it can seed the lazy state
+  // initialisers below and be on screen at first paint — no empty-then-populated
+  // flash, and no chance of an in-progress edit being clobbered by a later read.
+  const draft = useMemo(() => {
+    const loaded = readDraft()
+    return loaded && hasDraftContent(loaded) ? loaded : null
+  }, [])
+
+  const [values, setValues] = useState(() => ({
+    ...INITIAL,
+    ...(draft ? draft.values : {}),
+    role: presetRole || draft?.values?.role || '',
+  }))
+  const [hex, setHex] = useState(() => draft?.hex || {})
   const [resume, setResume] = useState(null)
   const [roleOptions, setRoleOptions] = useState([])
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
-  const [referenceNo, setReferenceNo] = useState('')
   const [firstName, setFirstName] = useState('')
-  const [step, setStep] = useState(0)
-  const [reached, setReached] = useState(0) // furthest step unlocked
+  const [step, setStep] = useState(() => safeStep(draft?.step))
+  const [reached, setReached] = useState(() => safeStep(Math.max(draft?.reached || 0, draft?.step || 0)))
   const [dir, setDir] = useState('fwd') // slide direction for the step transition
+  const [restored, setRestored] = useState(() => Boolean(draft))
+  // Bumped only by "start over", so the scroll effect below can also re-anchor
+  // when the form grows back under a candidate who was scrolled at the bottom.
+  const [viewNonce, setViewNonce] = useState(0)
   const honeypot = useRef('')
   const formTopRef = useRef(null)
+  const successTopRef = useRef(null)
+  const firstView = useRef(true)
+
+  // IndexedDB serialises transactions per connection and each write here opens
+  // its own, so a save and a delete fired back to back could land out of order and
+  // resurrect a resume the candidate had just removed. One promise chain per
+  // session removes the race.
+  const resumeQueue = useRef(null)
+  function queueResumeWrite(op) {
+    resumeQueue.current = (resumeQueue.current || Promise.resolve()).then(op, op)
+    return resumeQueue.current
+  }
 
   const set = (id) => (e) => setValues((prev) => ({ ...prev, [id]: e.target.value }))
 
@@ -190,12 +250,81 @@ export default function CareersApply() {
 
   useEffect(() => { track('careers_apply_view') }, [])
 
+  // The resume is stored as a blob and rebuilt into a File, so it can only arrive
+  // after first paint. Two things must not happen here: a late read overwriting a
+  // file the candidate just picked, and a read resurrecting one they just removed.
+  // The mirror ref covers the first, `restoredResume` latches the second so the
+  // read can never be re-armed by a state change. Mount-only, deliberately.
+  const resumeMirror = useRef(null)
+  const restoredResume = useRef(false)
+  useEffect(() => { resumeMirror.current = resume }, [resume])
+
+  useEffect(() => {
+    let live = true
+    readResumeFile().then((file) => {
+      if (!live || restoredResume.current || resumeMirror.current) return
+      restoredResume.current = true
+      if (file) setResume(file)
+    })
+    return () => { live = false }
+  }, [])
+
+  // Debounced so a fast typist isn't writing on every keystroke. writeDraft is a
+  // no-op for an all-empty form, so wiping the form doesn't leave an empty shell
+  // behind for the next visit to "restore". The `done` guard matters: once the
+  // application is sent the draft is cleared, and a late write from this effect
+  // would put the candidate's answers and resume back on the device.
+  useEffect(() => {
+    if (status === 'done') return
+    const id = setTimeout(() => writeDraft({ values, hex, step, reached }), 400)
+    return () => clearTimeout(id)
+  }, [values, hex, step, reached, status])
+
+  /* Re-anchor the viewport whenever the page swaps between the form and the
+     confirmation. The submit path had nothing: goTo() only handles step changes,
+     and by the time the success panel renders, formTopRef is already unmounted
+     with the form. The last step is the tallest in the wizard, so candidates are
+     normally scrolled well down it — the swap then happens off-screen and they
+     land on empty space or the tail of the confirmation instead of the top of it.
+     AssessmentForm and CoachingPurchase already scroll on send; this was the one
+     form that didn't. Skipped on mount so a normal page load isn't yanked. */
+  useEffect(() => {
+    if (firstView.current) { firstView.current = false; return }
+    const el = status === 'done' ? successTopRef.current : formTopRef.current
+    if (!el) return
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' })
+  }, [status, viewNonce])
+
   const setResumeFile = (file) => {
-    if (!file) { setResume(null); return }
+    if (!file) { clearResume(); return }
     if (!/\.(pdf|docx?|DOC|DOCX|PDF)$/.test(file.name)) { setError('Resume must be a PDF, DOC or DOCX.'); return }
     if (file.size > RESUME_MAX) { setError('That resume is over 5MB. Please attach a smaller file.'); return }
     setError('')
     setResume(file)
+    queueResumeWrite(() => saveResumeFile(file))
+  }
+
+  function clearResume() {
+    setResume(null)
+    queueResumeWrite(() => deleteResumeFile())
+  }
+
+  /** Wipe the saved draft and every field. Used by "start over" and on submit. */
+  function resetEverything() {
+    // clearDraft() covers the resume too, so the extra delete would be redundant.
+    clearDraft()
+    setValues({ ...INITIAL, role: presetRole })
+    setHex({})
+    setResume(null)
+    setError('')
+    setStatus('idle')
+    setFirstName('')
+    setStep(0)
+    setReached(0)
+    setDir('back')
+    setRestored(false)
+    setViewNonce((n) => n + 1)
   }
 
   // `!== undefined`, not truthiness: the neutral answer is 0, which is a valid choice.
@@ -277,9 +406,14 @@ export default function CareersApply() {
     }
 
     try {
-      const res = await submitBooking(payload)
-      setReferenceNo(res?.referenceNo || res?.reference || '')
+      // The response carries a reference number, but it stays internal: HR sees it
+      // in the notification email and in the admin panel. Nothing here needs it.
+      await submitBooking(payload)
       setFirstName(String(values.name || '').trim().split(/\s+/)[0] || '')
+      // It's submitted, so the draft has done its job — clear it now rather than
+      // leaving a completed application (and the applicant's resume blob, with
+      // their name and contact details in it) sitting on the device.
+      clearDraft()
       // The trait scores and their read-back are for the hiring team, not the
       // applicant, so nothing is scored or rendered here — the raw answers go
       // up and the backend owns the result. Staff see it in the admin panel.
@@ -312,37 +446,40 @@ export default function CareersApply() {
           <Link to="/careers" style={{ ...eyebrow, fontSize: fs('12px'), color: 'var(--faded)', textDecoration: 'none' }}>← Back to open roles</Link>
 
           {status === 'done' ? (
-            <Reveal delay={100} style={{ textAlign: 'center', paddingTop: 'clamp(40px,6vw,60px)' }}>
+            /* Wrapped rather than put on the Reveal itself: Reveal keeps its own
+               internal ref for the in-view observer and does not forward one, so
+               the scroll anchor has to sit on a plain element outside it. */
+            <div ref={successTopRef} style={{ scrollMarginTop: 90 }}>
+              <Reveal delay={100} style={{ textAlign: 'center', paddingTop: 'clamp(40px,6vw,60px)' }}>
               {/* The thumbs-up replaces the old tick ring: it carries the same
                   "we got it" signal. Shown unconditionally, not tied to the
                   assessment, which is now scored for the hiring team only. */}
               <SuccessAnimation size={148} />
 
-              {/* The reference leads: it's the one piece of information the
-                  candidate needs to act on (quote it in a follow-up), so it sits
-                  above the thank-you rather than trailing a heading. */}
-              <div style={{ ...eyebrow, fontSize: fs('11px'), letterSpacing: '.2em', color: 'var(--copper)', marginTop: 26 }}>
+              {/* The reference number used to lead this screen. It is internal
+                  now (HR email and admin only): the candidate cannot act on it,
+                  they can already identify their application by name and email,
+                  and a serial number reads like a support ticket rather than the
+                  personal reply this site promises. So the eyebrow carries the
+                  weight instead — it is the confirmation, and the thank-you is
+                  the headline beneath it. */}
+              <div style={{ ...eyebrow, fontSize: fs('clamp(11px,1.4vw,12px)'), letterSpacing: '.28em', color: 'var(--copper)', marginTop: 28 }}>
                 APPLICATION RECEIVED
               </div>
 
-              {referenceNo && (
-                <div style={{ fontFamily: mono, fontSize: fs('clamp(26px,4.2vw,40px)'), letterSpacing: '.04em', color: 'var(--ink)', marginTop: 10, wordBreak: 'break-word' }}>
-                  {referenceNo}
-                </div>
-              )}
-
-              <h3 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(21px,2.6vw,27px)'), color: 'var(--ink)', marginTop: referenceNo ? 14 : 10 }}>
+              <h3 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(26px,3.4vw,38px)'), color: 'var(--ink)', marginTop: 14, letterSpacing: '-.01em' }}>
                 Thank you{firstName ? `, ${firstName}` : ''}.
               </h3>
-              <p style={{ ...note, marginTop: 14, marginLeft: 'auto', marginRight: 'auto', maxWidth: '34em' }}>
-                {referenceNo ? 'Quote that reference' : 'Keep this reference'} if you get in touch about this application. Someone from the team reads every one personally, and if there is a fit you will hear from us within a couple of working days.
+              <p style={{ ...note, marginTop: 16, marginLeft: 'auto', marginRight: 'auto', maxWidth: '34em' }}>
+                Someone from the team reads every one personally. If we see a fit, you will hear from us on the number or email you gave us within a couple of working days.
               </p>
 
               <div style={{ display: 'flex', justifyContent: 'center', gap: 20, flexWrap: 'wrap', marginTop: 32 }}>
                 <a className="rw-cta" style={{ ...ctaCopper }} href={WHATSAPP} target="_blank" rel="noreferrer">WHATSAPP THE TEAM</a>
                 <Link to="/careers" className="rw-cta" style={{ ...ctaCopper, background: 'transparent', color: 'var(--ink)', border: '1px solid var(--line)' }}>BACK TO CAREERS</Link>
               </div>
-            </Reveal>
+              </Reveal>
+            </div>
           ) : (
             <form onSubmit={handleSubmit} style={{ marginTop: 'clamp(24px,3vw,32px)' }}>
               {/* Honeypot — humans never see this. */}
@@ -353,37 +490,62 @@ export default function CareersApply() {
                 <Stepper steps={STEP_META} current={step} reached={reached} onJump={jumpTo} />
               </div>
 
+              {/* Saved-as-you-go, said out loud. A candidate who knows their answers
+                  are safe will type freely; one who suspects they might not will
+                  hoard them. The same row is the way back to a blank form. */}
+              <div className="rw-draft-note" style={{ fontFamily: text }}>
+                <span className="rw-draft-note-text">
+                  {restored
+                    ? 'We kept what you had already entered on this device. Pick up where you left off.'
+                    : 'Your answers are kept on this device as you go, so a refresh or a dropped connection will not lose your form.'}
+                </span>
+                <button type="button" className="rw-draft-clear" onClick={resetEverything}>
+                  START OVER
+                </button>
+              </div>
+
               {step === 0 && (
                 <Section key="about" panel={dir} eyebrow="ABOUT YOU">
-                  <TextField label="Full name" id="name" values={values} set={set} required placeholder="Your name" />
-                  <TextField label="Phone" id="phone" values={values} set={set} required type="tel" placeholder="10-digit mobile" />
-                  <TextField label="Email" id="email" values={values} set={set} required type="email" placeholder="you@email.com" />
+                  <TextField label="Full name" id="name" values={values} set={set} setValues={setValues} required placeholder="Your name" />
+                  <TextField label="Phone" id="phone" values={values} set={set} setValues={setValues} required type="tel" placeholder="10-digit mobile" />
+                  <TextField label="Email" id="email" values={values} set={set} setValues={setValues} required type="email" placeholder="you@email.com" />
                   <div className="rw-form-field-wrap">
                     <span className="rw-form-q-title">Role you are applying for <span className="rw-form-req"> *</span></span>
-                    <select className="rw-form-field" style={{ marginTop: 10, appearance: 'none' }} value={values.role} onChange={set('role')}>
-                      <option value="">Select a role…</option>
-                      {roleList.map((r) => <option key={r} value={r}>{r}</option>)}
-                      {values.role && !roleList.includes(values.role) && <option value={values.role}>{values.role}</option>}
-                    </select>
+                    <span className="rw-clearable">
+                      <select className="rw-form-field" style={{ marginTop: 10, appearance: 'none' }} value={values.role} onChange={set('role')}>
+                        <option value="">Select a role…</option>
+                        {roleList.map((r) => <option key={r} value={r}>{r}</option>)}
+                        {values.role && !roleList.includes(values.role) && <option value={values.role}>{values.role}</option>}
+                      </select>
+                      {values.role && (
+                        <button
+                          type="button" className="rw-field-clear" tabIndex={-1}
+                          aria-label="Clear the role" title="Clear the role"
+                          onClick={() => setValues((prev) => ({ ...prev, role: '' }))}
+                        >
+                          ×
+                        </button>
+                      )}
+                    </span>
                   </div>
-                  <TextField label="LinkedIn profile" id="linkedinUrl" values={values} set={set} type="url" placeholder="https://linkedin.com/in/your-name" />
-                  <TextField label="Portfolio or website" id="portfolioUrl" values={values} set={set} type="url" placeholder="https://yourportfolio.com" />
-                  <SelectField label="Experience level" id="experience" values={values} set={set} options={EXPERIENCE_LEVELS} required wide />
+                  <TextField label="LinkedIn profile" id="linkedinUrl" values={values} set={set} setValues={setValues} type="url" placeholder="https://linkedin.com/in/your-name" />
+                  <TextField label="Portfolio or website" id="portfolioUrl" values={values} set={set} setValues={setValues} type="url" placeholder="https://yourportfolio.com" />
+                  <SelectField label="Experience level" id="experience" values={values} set={set} setValues={setValues} options={EXPERIENCE_LEVELS} required wide />
                   {values.experience === 'Other' && (
-                    <TextField label="Your experience" id="experienceCustom" values={values} set={set} required placeholder="e.g. 18 months in luxury retail" wide />
+                    <TextField label="Your experience" id="experienceCustom" values={values} set={set} setValues={setValues} required placeholder="e.g. 18 months in luxury retail" wide />
                   )}
                 </Section>
               )}
 
               {step === 1 && (
                 <Section key="career" panel={dir} eyebrow="CAREER DETAILS">
-                  <SelectField label="Current CTC" id="currentCtc" values={values} set={set} options={CTC_OPTIONS} required />
-                  <SelectField label="Expected CTC" id="expectedCtc" values={values} set={set} options={CTC_OPTIONS} required />
-                  <TextField label="Current location" id="currentLocation" values={values} set={set} required placeholder="City, state" />
-                  <SelectField label="Notice period" id="noticePeriod" values={values} set={set} options={NOTICE_OPTIONS} required />
-                  <SelectField label="Open to relocate" id="relocation" values={values} set={set} options={RELOCATE_OPTIONS} required />
-                  <SelectField label="Preferred work mode" id="workMode" values={values} set={set} options={WORKMODE_OPTIONS} required />
-                  <SelectField label="How did you hear about us?" id="applicationSource" values={values} set={set} options={SOURCE_OPTIONS} required wide />
+                  <SelectField label="Current CTC" id="currentCtc" values={values} set={set} setValues={setValues} options={CTC_OPTIONS} required />
+                  <SelectField label="Expected CTC" id="expectedCtc" values={values} set={set} setValues={setValues} options={CTC_OPTIONS} required />
+                  <TextField label="Current location" id="currentLocation" values={values} set={set} setValues={setValues} required placeholder="City, state" />
+                  <SelectField label="Notice period" id="noticePeriod" values={values} set={set} setValues={setValues} options={NOTICE_OPTIONS} required />
+                  <SelectField label="Open to relocate" id="relocation" values={values} set={set} setValues={setValues} options={RELOCATE_OPTIONS} required />
+                  <SelectField label="Preferred work mode" id="workMode" values={values} set={set} setValues={setValues} options={WORKMODE_OPTIONS} required />
+                  <SelectField label="How did you hear about us?" id="applicationSource" values={values} set={set} setValues={setValues} options={SOURCE_OPTIONS} required wide />
                 </Section>
               )}
 
@@ -397,11 +559,22 @@ export default function CareersApply() {
                           {q.label}
                           {q.required ? <span className="rw-form-req"> *</span> : <span className="rw-form-optional"> (optional)</span>}
                         </span>
-                        <textarea
-                          className="rw-form-field" rows={3} maxLength={ANSWER_MAX}
-                          style={{ marginTop: 10, resize: 'vertical' }}
-                          placeholder={q.placeholder} value={val} onChange={set(q.id)}
-                        />
+                        <span className="rw-clearable">
+                          <textarea
+                            className="rw-form-field" rows={3} maxLength={ANSWER_MAX}
+                            style={{ marginTop: 10, resize: 'vertical' }}
+                            placeholder={q.placeholder} value={val} onChange={set(q.id)}
+                          />
+                          {val.trim() !== '' && (
+                            <button
+                              type="button" className="rw-field-clear" tabIndex={-1}
+                              aria-label={`Clear: ${q.label}`} title="Clear this answer"
+                              onClick={() => setValues((prev) => ({ ...prev, [q.id]: '' }))}
+                            >
+                              ×
+                            </button>
+                          )}
+                        </span>
                         <span className="rw-form-help" style={{ textAlign: 'right', color: val.length >= ANSWER_MAX ? 'var(--copper)' : 'var(--faded)' }}>
                           {val.length}/{ANSWER_MAX}
                         </span>
@@ -427,7 +600,15 @@ export default function CareersApply() {
                                     key={opt.v} type="button" title={opt.label} aria-pressed={on}
                                     className={`rw-likert-dot${on ? ' is-on' : ''}`}
                                     style={{ fontFamily: mono }}
-                                    onClick={() => setHex((prev) => ({ ...prev, [s.id]: opt.v }))}
+                                    onClick={() => setHex((prev) => {
+                                      // Tapping the chosen point clears it, so a
+                                      // mis-click can be undone without hunting
+                                      // for a "reset" on every row.
+                                      const next = { ...prev }
+                                      if (on) delete next[s.id]
+                                      else next[s.id] = opt.v
+                                      return next
+                                    })}
                                   >
                                     {likertLabel(opt.v)}
                                   </button>
@@ -447,12 +628,12 @@ export default function CareersApply() {
                 // A div rather than a fragment so the transition class has something to sit on.
                 <div key="wrapup" className={`rw-step-panel rw-step-panel--${dir}`}>
                   <Section eyebrow="REFERENCES" title="Optional. Please make sure anyone you list has agreed to be contacted.">
-                    <TextField label="Reference 1: name" id="ref1Name" values={values} set={set} placeholder="Full name" />
-                    <TextField label="Reference 1: number" id="ref1Number" values={values} set={set} type="tel" placeholder="Mobile number" />
-                    <TextField label="Reference 1: relationship" id="ref1Relationship" values={values} set={set} placeholder="Former manager, colleague…" />
-                    <TextField label="Reference 2: name" id="ref2Name" values={values} set={set} placeholder="Full name" />
-                    <TextField label="Reference 2: number" id="ref2Number" values={values} set={set} type="tel" placeholder="Mobile number" />
-                    <TextField label="Reference 2: relationship" id="ref2Relationship" values={values} set={set} placeholder="Former manager, colleague…" />
+                    <TextField label="Reference 1: name" id="ref1Name" values={values} set={set} setValues={setValues} placeholder="Full name" />
+                    <TextField label="Reference 1: number" id="ref1Number" values={values} set={set} setValues={setValues} type="tel" placeholder="Mobile number" />
+                    <TextField label="Reference 1: relationship" id="ref1Relationship" values={values} set={set} setValues={setValues} placeholder="Former manager, colleague…" />
+                    <TextField label="Reference 2: name" id="ref2Name" values={values} set={set} setValues={setValues} placeholder="Full name" />
+                    <TextField label="Reference 2: number" id="ref2Number" values={values} set={set} setValues={setValues} type="tel" placeholder="Mobile number" />
+                    <TextField label="Reference 2: relationship" id="ref2Relationship" values={values} set={set} setValues={setValues} placeholder="Former manager, colleague…" />
                   </Section>
 
                   <Section eyebrow="RESUME">
@@ -469,7 +650,7 @@ export default function CareersApply() {
                             <strong>{resume.name}</strong>
                             <small>{(resume.size / 1024).toFixed(1)} KB</small>
                           </span>
-                          <button type="button" className="rw-file-remove" onClick={() => setResume(null)} aria-label="Remove resume">×</button>
+                          <button type="button" className="rw-file-remove" onClick={clearResume} aria-label={`Remove ${resume.name}`} title="Remove this resume">×</button>
                         </div>
                       ) : (
                         <label className="rw-resume-dropzone" style={{ marginTop: 10 }}>
@@ -484,16 +665,37 @@ export default function CareersApply() {
                     </div>
                     <label className="rw-form-field-wrap rw-form-field-wrap--wide" style={{ display: 'block' }}>
                       <span className="rw-form-q-title">Anything else we should know? <span className="rw-form-optional"> (optional)</span></span>
-                      <textarea className="rw-form-field" rows={3} style={{ marginTop: 10, resize: 'vertical' }}
-                        placeholder="Anything about your experience, skills or situation that helps us read your application."
-                        value={values.message} onChange={set('message')} />
+                      <span className="rw-clearable">
+                        <textarea className="rw-form-field" rows={3} style={{ marginTop: 10, resize: 'vertical' }}
+                          placeholder="Anything about your experience, skills or situation that helps us read your application."
+                          value={values.message} onChange={set('message')} />
+                        {String(values.message || '').trim() !== '' && (
+                          <button
+                            type="button" className="rw-field-clear" tabIndex={-1}
+                            aria-label="Clear: anything else we should know" title="Clear this"
+                            onClick={() => setValues((prev) => ({ ...prev, message: '' }))}
+                          >
+                            ×
+                          </button>
+                        )}
+                      </span>
                     </label>
                   </Section>
 
-                  <label className="rw-career-consent" style={{ marginTop: 24 }}>
-                    <input type="checkbox" checked={values.privacyConsent} onChange={(e) => setValues((p) => ({ ...p, privacyConsent: e.target.checked }))} />
-                    <span>I consent to Team Rajiv Williams using my information for recruitment and selection purposes.</span>
-                  </label>
+                  {/* The step gate blocks a submit without this, so it carries the same
+                      required marker as every other field — the one gap was that
+                      the asterisk lived on the panel titles and this control sits
+                      outside the panel. Title above, control below, as elsewhere.
+                      aria-required covers screen readers without handing the
+                      checkbox to native browser validation, which would fight
+                      the per-step messages. */}
+                  <div className="rw-consent" style={{ marginTop: 24 }}>
+                    <span className="rw-consent-title">Consent to proceed <span className="rw-form-req">*</span></span>
+                    <label className="rw-career-consent">
+                      <input type="checkbox" aria-required="true" checked={values.privacyConsent} onChange={(e) => setValues((p) => ({ ...p, privacyConsent: e.target.checked }))} />
+                      <span>I consent to Team Rajiv Williams using my information for recruitment and selection purposes.</span>
+                    </label>
+                  </div>
                 </div>
               )}
 

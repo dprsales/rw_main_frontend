@@ -440,6 +440,95 @@
    single tall list otherwise, on a field-wrap already given the --wide span. */
 .rw-form-panel--compact .rw-form-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
+/* --- Clearable field --------------------------------------------------------- */
+/* Careers apply only. A wrapper carries the positioning so the × can sit inside
+   the field's own box without a second element in the grid flow. The button is
+   rendered only while the field has content, so an untouched form shows no extra
+   chrome — and it is 24px rather than a bare glyph because it is also the touch
+   target for anyone editing on a phone. Right-hand padding keeps the text from
+   running under it. Placed after the --compact overrides on purpose: both rules
+   have equal specificity, so the later one has to win the shorthand. */
+.rw-clearable { position: relative; display: block; }
+.rw-clearable > .rw-form-field { padding-right: 42px; }
+.rw-field-clear {
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  color: var(--faded);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color .2s ease, background .2s ease;
+}
+.rw-field-clear:hover { color: var(--copper); background: rgba(195, 155, 83, .12); }
+.rw-field-clear:focus-visible { outline: 1px solid var(--copper); outline-offset: 1px; }
+
+/* --- Draft notice ------------------------------------------------------------ */
+/* Sits directly under the step tracker. Says plainly that answers are kept, which
+   is the reassurance a long form needs, and carries the only route to a blank
+   form. Hairline-topped so it reads as a quiet status strip, not another step. */
+.rw-draft-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  padding: 11px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(242, 239, 233, .02);
+}
+.rw-draft-note-text {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--faded);
+}
+.rw-draft-clear {
+  flex: 0 0 auto;
+  padding: 7px 12px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--faded);
+  font-family: var(--rw-sans);
+  font-size: 10px;
+  letter-spacing: .14em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .25s ease, border-color .25s ease;
+}
+.rw-draft-clear:hover { color: var(--copper); border-color: var(--copper); }
+.rw-draft-clear:focus-visible { outline: 1px solid var(--copper); outline-offset: 1px; }
+
+/* --- Consent checkbox -------------------------------------------------------- */
+/* The final step's required control, and the only one that sits outside a
+   .rw-form-panel — which is why the panel's title scale never reached it. Standalone
+   class rather than a second class on .rw-form-q-title: two selectors of equal
+   specificity would leave the 17px base winning or losing on source order alone.
+   Sized between the panel title and the 11px consent sentence it sits over. */
+.rw-consent-title {
+  display: block;
+  margin-bottom: 11px;
+  font-family: var(--rw-sans);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
 /* --- Submit ---------------------------------------------------------------- */
 .rw-form-submit-bar {
   margin-top: 34px;
