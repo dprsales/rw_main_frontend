@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
-import hydMark from '../assets/site/hyd-02.svg'
-import cultureImage from '../assets/site/whiteboard-session.png'
+import skylineImage from '../assets/site/skyline.png'
+import careersHero from '../assets/site/careers-hero.png'
+import cultureImage from '../assets/site/the-floor.png'
 import teamImage from '../assets/site/team-rw.png'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import ImageSlot from '../components/ImageSlot'
 import Seo from '../components/Seo'
 import { BookButton } from '../components/BookingModal'
+import CtaButton from '../components/CtaButton'
 import BorderGlow from '../components/BorderGlow'
 import Reveal from '../components/Reveal'
 import AchieveGrid from '../components/AchieveGrid'
@@ -86,28 +88,63 @@ export default function Careers() {
       <Seo route="/careers" />
       <Header />
 
-      {/* Intro */}
-      <PageIntro
-        eyebrow="CAREERS · TEAM RAJIV WILLIAMS"
-        headline={HEADLINE}
-        lede="A small floor, selling Hyderabad’s luxury inventory."
-        intro="We hire for judgement and follow-through, then train the rest. If you have been carrying a target and want the ticket size to match the effort, this is the room."
-        cta={<>
-          <BookButton to="/careers/apply" interest={APPLY_INTEREST} roleOptions={roleOptions} specular>APPLY TO THE TEAM</BookButton>
-          <button type="button" onClick={() => scrollToId('roles')} className="rw-inline-cta" style={ctaInline}>
-            See open roles →
-          </button>
-        </>}
-      />
+      {/* Intro - careers-hero.png sits full-bleed behind the copy. PageIntro's own
+          `image` slot is a 4:5 portrait box with object-fit:contain, which would
+          letterbox this 16:9 frame, so the photo is layered here instead and
+          PageIntro keeps its own container. Same treatment as the culture band below. */}
+      <section style={{ position: 'relative', overflow: 'hidden' }}>
+        <img
+          src={careersHero}
+          alt=""
+          aria-hidden
+          fetchPriority="high"
+          style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: 'center 38%',
+            opacity: .34,
+          }}
+        />
+        <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(11,10,9,.80) 0%, rgba(11,10,9,.58) 42%, rgba(11,10,9,.92) 100%)' }} />
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <PageIntro
+            eyebrow="CAREERS · TEAM RAJIV WILLIAMS"
+            headline={HEADLINE}
+            lede="A small floor, selling Hyderabad’s luxury inventory."
+            intro="We hire for judgement and follow-through, then train the rest. If you have been carrying a target and want the ticket size to match the effort, this is the room."
+            cta={<>
+              <CtaButton to="/careers/apply">APPLY TO THE TEAM</CtaButton>
+              <button type="button" onClick={() => scrollToId('roles')} className="rw-inline-cta" style={ctaInline}>
+                See open roles →
+              </button>
+            </>}
+          />
+        </div>
+      </section>
 
       {/* Statement band */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--card)', position: 'relative', overflow: 'hidden' }}>
-        <img src={hydMark} alt="" aria-hidden className="rw-why-watermark" />
+        {/* Skyline across the full band, low and flush to the bottom edge so it reads as a
+            horizon under the line rather than a photo competing with the statement. */}
+        <img
+          src={skylineImage}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: 'center bottom',
+            opacity: .25,
+          }}
+        />
+        <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, var(--card) 0%, rgba(20,18,16,.36) 55%, rgba(20,18,16,.62) 100%)' }} />
         <div className="rw-pad" style={{ ...container, padding: 'clamp(64px,8vw,96px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-          <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12 }}>
+          <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, textShadow: '0 2px 24px rgba(11,10,9,.75)' }}>
             {CAREER_HOOK.lead}
           </Reveal>
-          <Reveal as="p" delay={120} style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, fontStyle: 'italic', color: 'var(--copper)', marginTop: 10 }}>
+          <Reveal as="p" delay={120} style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, fontStyle: 'italic', color: 'var(--copper)', marginTop: 10, textShadow: '0 2px 24px rgba(11,10,9,.75)' }}>
             {CAREER_HOOK.accent}
           </Reveal>
         </div>
@@ -348,7 +385,7 @@ export default function Careers() {
       </section>
 
       <ClosingCTA title="Tell us what you have closed, and what you want to be closing a year from now." titleStyle={{ maxWidth: '15em' }}>
-        <BookButton to="/careers/apply" interest={APPLY_INTEREST} roleOptions={roleOptions} specular>APPLY TO THE TEAM</BookButton>
+        <CtaButton to="/careers/apply">APPLY TO THE TEAM</CtaButton>
       </ClosingCTA>
 
       <Footer links={FOOTER_LINKS} />

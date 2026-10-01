@@ -46,6 +46,25 @@ export function guidanceSummary(g) {
   return parts.join(' · ')
 }
 
+// Which site page a lead came from, read from the route at submit time (the
+// visitor is still on that page while the modal is open). Becomes the CRM Source
+// so the team sees e.g. "RW Realty Page" with no internal jargon.
+const PAGE_AREAS = [
+  [/^\/coaching/, 'Coaching'],
+  [/^\/consulting/, 'Consulting'],
+  [/^\/(realty|projects)/, 'Realty'],
+  [/^\/careers/, 'Careers'],
+  [/^\/partner/, 'Partner'],
+  [/^\/contact/, 'Contact'],
+  [/^\/about/, 'About'],
+  [/^\/assessment/, 'Assessment'],
+]
+export function pageSourceLabel() {
+  const path = typeof window !== 'undefined' ? window.location.pathname : '/'
+  const hit = PAGE_AREAS.find(([re]) => re.test(path))
+  return `RW ${hit ? hit[1] : 'Home'} Page`
+}
+
 function toLead(form) {
   const notes = []
   if (form.interest) notes.push(`Interested in: ${form.interest}`)
@@ -64,6 +83,8 @@ function toLead(form) {
     message: notes.join('\n'),
     // Structured copies of the same facts, for filtering in admin/CRM. All optional server-side.
     source: form.source || (g.who ? 'guided_finder' : 'site_cta'),
+    // Branded page name for the CRM Source, e.g. "RW Realty Page".
+    pageSource: pageSourceLabel(),
     ...(form.company?.trim() && { company: form.company.trim() }),
     ...(g.who && { visitorType: g.who }),
     ...(g.challenge && { challenge: g.challenge }),

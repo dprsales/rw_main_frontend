@@ -66,6 +66,9 @@ const CtaButton = forwardRef(function CtaButton(
     ...ctaCopper,
     ...style,
   }
+  // Gold had no `to` branch, so a client-side route could only be reached by giving up
+  // SPA navigation for an href and a full reload. Same treatment as `secondary` above.
+  if (to) return <Link ref={ref} to={to} className={classes} style={base} {...rest}>{children}</Link>
   return (
     <Tag
       ref={ref}
