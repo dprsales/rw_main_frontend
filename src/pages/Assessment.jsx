@@ -141,10 +141,10 @@ export default function Assessment() {
         <div className="rw-pad" style={{ ...container, padding: 'clamp(64px,8vw,96px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrow, marginBottom: 16 }}>THE RW TEAM</Reveal>
           <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12 }}>
-            Before we coach you, we want you to know 
+            Before we coach you, we need to know exactly 
           </Reveal>
           <Reveal as="p" delay={120} style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, fontStyle: 'italic', color: 'var(--copper)', marginTop: 12 }}>
-            how you perform !
+            where you stand !
           </Reveal>
           <Reveal as="p" delay={200} style={{ ...note, marginTop: 20, marginLeft: 'auto', marginRight: 'auto', maxWidth: '32em', fontSize: fs('clamp(16px,1.7vw,18px)'), lineHeight: 1.6, color: 'var(--ink)', textShadow: '0 1px 20px rgba(11,10,9,.6), 0 0 2px rgba(11,10,9,.8)' }}>
             Over 16+ years of high-value sales, the same lesson keeps repeating: the gap between a good professional and a great one is not knowledge. It is how they perform when it matters. The interview lets us measure that before we begin.
@@ -312,7 +312,7 @@ export default function Assessment() {
           <Reveal style={{ ...eyebrow, marginBottom: 24 }}>A NOTE FROM THE RW TEAM</Reveal>
           <Reveal delay={100}>
             <PullQuote size="clamp(21px,2.6vw,28px)" lineHeight={1.5}>
-              “Before we begin working together, we want to understand where you are today: what you already do well and where we can focus your development. This assessment gives us that starting point. Don't try to impress it. Just answer naturally.”
+              “Before we begin working together, we want to understand where you are today, what's already working and what's holding you back. This assessment is your baseline. Don't perform. Don't polish. Answer honestly, because we can only fix what you let us see.”
             </PullQuote>
           </Reveal>
         </div>

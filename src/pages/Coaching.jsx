@@ -341,7 +341,7 @@ export default function Coaching() {
         </div>
       </section>
 
-      <RelatedReading service="coaching" title="Reading for sellers." />
+      <RelatedReading service="coaching" title="Must Read." />
 
       <ClosingCTA title="The application is the filter. Serious applications get serious answers." titleStyle={{ maxWidth: '15em' }}>
         <CtaButton variant="outline" href="/form/coaching">TELL US ABOUT YOUR COACHING NEEDS</CtaButton>
