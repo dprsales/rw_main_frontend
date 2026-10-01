@@ -330,7 +330,7 @@ export default function Coaching() {
         <div className="rw-pad" style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(70px,9vw,110px) 40px', textAlign: 'center' }}>
           <Reveal>
             <PullQuote as="p" size="clamp(26px,3.6vw,44px)" lineHeight={1.2}>
-              “Hyderabad real estate has leveled up. It is now your turn.”
+              “Hyderabad real estate has leveled up. Have you?”
             </PullQuote>
             <img
               src={signature}
