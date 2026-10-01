@@ -7,6 +7,7 @@ import whiteboardImage from '../assets/site/coaching.png'
 import hraLogo from '../assets/site/logo-hra.png'
 import narLogo from '../assets/site/logo-nar.png'
 import signature from '../assets/site/gold2.png'
+import founderSignature from '../assets/site/gold21.png'
 import Footer from '../components/Footer'
 import Gallery from '../components/Gallery'
 import GuidedFinder from '../components/GuidedFinder'
@@ -22,6 +23,7 @@ import StrokeText from '../components/StrokeText'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { SectionCount } from '../components/SectionHead'
 import { useParallax } from '../hooks/useParallax'
+import { useInView } from '../hooks/useInView'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { BLOGS, HERO_COPY, HOME_TESTIMONIALS, MARQUEE_ITEMS, WAYS } from '../data/content'
 import { HOME_FEATURED, featureFirst, fetchBlogsOnce } from '../data/blogs'
@@ -62,6 +64,20 @@ const WAY_COVERS = [
   { src: consultingImage, alt: 'Reviewing sales structures at the desk' },
   { src: backdropImage, alt: 'Rajiv beside the RW backdrop' },
 ]
+
+/** Rajiv's gold signature bottom-right over the hero photo — reuses the exact
+ *  Realty signature reveal (same "draw-on" sweep) inside a scrim so it stays
+ *  legible over the portrait; flows below the copy on mobile. */
+function FounderSignature() {
+  const [ref, inView] = useInView({ rootMargin: '0px 0px -10% 0px' })
+  return (
+    <div className="rw-hero-sign">
+      <span ref={ref} className={`rw-realty-signature-reveal${inView ? ' is-drawn' : ''}`}>
+        <img className="rw-realty-signature" src={founderSignature} alt="Rajiv Williams" />
+      </span>
+    </div>
+  )
+}
 
 function HeroCinematic() {
   const { targetRef, targetStyle, container: parallax } = useParallax()
@@ -166,6 +182,8 @@ function HeroCinematic() {
           {/* <span>FOUNDER, RW REALTY</span> */}
         </Reveal>
       </div>
+
+      <FounderSignature />
     </section>
   )
 }

@@ -253,6 +253,40 @@ a:hover { color: var(--ink, #12100D); }
   .rw-realty-signature-reveal::after { display: none; }
 }
 
+/* --- Founder signature in the Home hero ----------------------------------- */
+/* Reuses the Realty reveal (.rw-realty-signature-reveal/-signature) for the draw
+   animation. This wrapper just positions it bottom-right over the portrait and
+   lays a soft scrim behind it — the same idea as Realty's caption scrim — so the
+   gold stays legible over Rajiv. On mobile the hero stacks, so it flows in
+   centred below the copy with no scrim (the page is already dark there). */
+.rw-hero-sign {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  width: min(48%, 580px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 96px 32px clamp(30px, 6vh, 66px);
+  background: radial-gradient(130% 115% at 72% 120%, rgba(11, 10, 9, .74), rgba(11, 10, 9, 0) 68%);
+  pointer-events: none;
+}
+.rw-hero-sign .rw-realty-signature-reveal { width: min(64%, 240px); }
+@media (max-width: 1040px) {
+  .rw-hero-sign {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    padding: 0;
+    margin: 30px 0 0;
+    background: none;
+    justify-content: center;
+  }
+  .rw-hero-sign .rw-realty-signature-reveal { width: min(54%, 220px); }
+}
+
 /* Realty's "Why it works" - a barely-there gold-on-dark skyline watermark, rather than a photo competing with the copy. */
 .rw-why-watermark {
   position: absolute; left: 0; right: 0; bottom: 0;
