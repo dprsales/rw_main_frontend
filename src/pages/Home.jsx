@@ -65,9 +65,8 @@ const WAY_COVERS = [
   { src: backdropImage, alt: 'Rajiv beside the RW backdrop' },
 ]
 
-/** Rajiv's gold signature bottom-right over the hero photo — reuses the exact
- *  Realty signature reveal (same "draw-on" sweep) inside a scrim so it stays
- *  legible over the portrait; flows below the copy on mobile. */
+/** Rajiv's gold signature at the end of the hero meta row, beside the HRA/NAR
+ *  logos — reuses the exact Realty signature reveal (same "draw-on" sweep). */
 function FounderSignature() {
   const [ref, inView] = useInView({ rootMargin: '0px 0px -10% 0px' })
   return (
@@ -162,7 +161,7 @@ function HeroCinematic() {
 
         {/* Separator rules only read correctly while the line holds; below the
             breakpoint they're dropped and the list stacks (.rw-hero-meta). */}
-        <Reveal delay={400} className="rw-hero-meta" style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid rgba(234,241,249,.22)', display: 'flex', gap: 20, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'rgba(234,241,249,.7)', flexWrap: 'wrap' }}>
+        <Reveal delay={400} className="rw-hero-meta" style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid rgba(234,241,249,.22)', display: 'flex', alignItems: 'center', gap: 20, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'rgba(234,241,249,.7)', flexWrap: 'wrap' }}>
           <span>TGRERA LICENSED REALTOR</span>
           <span className="rw-hero-meta-sep" style={{ opacity: 0.5 }}>|</span>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14 }}>
@@ -178,12 +177,11 @@ function HeroCinematic() {
               style={{ height: 26, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 1, alignSelf: 'center' }}
             />
           </span>
-          <span className="rw-hero-meta-sep" style={{ opacity: 0.5 }}>|</span>
           {/* <span>FOUNDER, RW REALTY</span> */}
+          {/* In the same row as the logos so it is visible without scrolling. */}
+          <FounderSignature />
         </Reveal>
       </div>
-
-      <FounderSignature />
     </section>
   )
 }
