@@ -1708,8 +1708,9 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* The source is 16:9 with the subject right of centre. */
-  object-position: 72% center;
+  /* The source is 16:9 with the subject right of centre. Anchored to the top so wide
+     screens crop the chest, never the top of the head. */
+  object-position: 72% top;
 }
 
 .rw-hero-scrim,

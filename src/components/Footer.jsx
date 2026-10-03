@@ -1,6 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
 import { fs } from '../styles'
-import Credit from './Credit'
 import Wordmark from './Wordmark'
 import { mono, PAGE_SOCIAL_LINKS, SOCIAL_LINKS } from '../theme'
 
@@ -66,7 +65,6 @@ export default function Footer({ links, chip = false }) {
 
   return (
     <footer style={{ position: 'relative', borderTop: '1px solid var(--line)', background: chip ? 'var(--chip)' : undefined }}>
-      <Credit />
       <div
         className="rw-pad"
         style={{
