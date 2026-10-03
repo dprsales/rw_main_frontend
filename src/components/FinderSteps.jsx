@@ -20,9 +20,13 @@ const TITLES = {
 export default function FinderSteps({ finder, compact = false, onStartOver, children }) {
   const { answers, steps, current, stepIndex, done, answer, editStep } = finder
   const legendRef = useRef(null)
+  const mountedRef = useRef(false)
 
   // Focus follows the step so keyboard and screen-reader users land on the new question.
+  // Skipped on first render: Safari can ignore preventScroll and jump a fresh homepage
+  // load down to the finder.
   useEffect(() => {
+    if (!mountedRef.current) { mountedRef.current = true; return }
     legendRef.current?.focus({ preventScroll: true })
   }, [current])
 

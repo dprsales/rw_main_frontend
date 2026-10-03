@@ -23,6 +23,12 @@ import Realty from './pages/Realty'
 import Start from './pages/Start'
 import Partner from './pages/Partner'
 
+// Stop the browser (Safari especially) restoring the old scroll position on reload,
+// which would land a refreshed homepage on the finder instead of the hero.
+if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+  window.history.scrollRestoration = 'manual'
+}
+
 /** Every route change lands at the top before the page is painted. */
 function ScrollToTop() {
   const { pathname } = useLocation()
