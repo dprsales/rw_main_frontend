@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import CrawlableNav from './CrawlableNav'
@@ -12,9 +12,9 @@ import { mono } from '../theme'
 // Same wheel menu on every page: only route links belong here, not per-page scroll anchors.
 const SITE_NAV = [
   { label: 'Home', to: '/' },
-  { label: 'Coaching', to: '/coaching' },
-  { label: 'Consulting', to: '/consulting' },
-  { label: 'Realty', to: '/realty' },
+  { label: 'Sales Coaching', to: '/coaching' },
+  { label: 'Sales Consulting', to: '/consulting' },
+  { label: 'Sales Mandate', to: '/realty' },
   { label: 'Portfolio', to: '/portfolio' },
   { label: 'Careers', to: '/careers' },
   { label: 'Channel Partners', to: '/partner' },
@@ -22,6 +22,126 @@ const SITE_NAV = [
   // { label: 'Find your fit', to: '/start' },
   { label: 'Book a call', book: true },
 ]
+
+/**
+ * Desktop/laptop inline nav (approved wireframe Option B): a few top-level links plus
+ * one "Work with RW" glass mega menu. Tablet and phone keep the wheel menu instead.
+ */
+const MEGA_COLUMNS = [
+  {
+    heading: 'Grow your sales',
+    items: [
+      { label: 'Sales Coaching', to: '/coaching', desc: '1:1 and team sales coaching' },
+      { label: 'Sales Consulting', to: '/consulting', desc: 'Sales structure & strategy for developers' },
+      { label: 'Sales Mandate', to: '/realty', desc: 'RW runs your project sales mandate' },
+    ],
+  },
+  {
+    heading: 'Partners',
+    items: [
+      { label: 'Channel Partners', to: '/partner', desc: 'Partner with RW' },
+      // No page yet: rendered as a non-link with a "Coming soon" tag.
+      { label: 'Listing Properties', desc: 'Browse RW listed properties', soon: true },
+    ],
+  },
+  {
+    heading: 'Start here',
+    items: [
+      { label: 'KRISAH Assessment', to: '/assessment', desc: 'Find your sales strengths' },
+    ],
+    book: true,
+  },
+]
+const MEGA_PATHS = MEGA_COLUMNS.flatMap((col) => col.items.filter((item) => item.to).map((item) => item.to))
+const TOP_LINKS = [
+  { label: 'Portfolio', to: '/portfolio' },
+  { label: 'Careers', to: '/careers' },
+]
+
+function DesktopNav({ pathname, onBook }) {
+  const [megaOpen, setMegaOpen] = useState(false)
+  const wrapRef = useRef(null)
+  const hoverOpenedRef = useRef(false)
+  const closeTimerRef = useRef(null)
+  useEffect(() => () => clearTimeout(closeTimerRef.current), [])
+
+  useEffect(() => { setMegaOpen(false) }, [pathname])
+
+  // Esc or a click outside closes the mega menu.
+  useEffect(() => {
+    if (!megaOpen) return
+    const onKey = (e) => { if (e.key === 'Escape') setMegaOpen(false) }
+    const onDown = (e) => { if (!wrapRef.current?.contains(e.target)) setMegaOpen(false) }
+    window.addEventListener('keydown', onKey)
+    document.addEventListener('pointerdown', onDown)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.removeEventListener('pointerdown', onDown)
+    }
+  }, [megaOpen])
+
+  const linkClass = (to) => `rw-dnav-link${pathname === to ? ' is-active' : ''}`
+
+  return (
+    <nav className="rw-dnav" aria-label="Main">
+      <Link to="/" className={linkClass('/')}>Home</Link>
+
+      <div
+        ref={wrapRef}
+        className="rw-dnav-mega-wrap"
+        onMouseEnter={() => { clearTimeout(closeTimerRef.current); hoverOpenedRef.current = true; setMegaOpen(true) }}
+        /* Short grace period: the cursor crosses a strip of header between the trigger and the panel. */
+        onMouseLeave={() => { hoverOpenedRef.current = false; closeTimerRef.current = setTimeout(() => setMegaOpen(false), 180) }}
+      >
+        <button
+          type="button"
+          className={`rw-dnav-link${MEGA_PATHS.includes(pathname) ? ' is-active' : ''}`}
+          aria-expanded={megaOpen}
+          aria-controls="rw-mega"
+          onClick={() => {
+            // A mouse click right after hover-open keeps it open instead of toggling it shut.
+            if (hoverOpenedRef.current) { hoverOpenedRef.current = false; setMegaOpen(true); return }
+            setMegaOpen((wasOpen) => !wasOpen)
+          }}
+        >
+          Work with RW <span className="rw-dnav-caret" aria-hidden="true">▾</span>
+        </button>
+
+        {megaOpen && (
+          <div id="rw-mega" className="rw-mega">
+            <div className="rw-mega-panel">
+            {MEGA_COLUMNS.map((col) => (
+              <div key={col.heading} className="rw-mega-col">
+                <p className="rw-mega-head">{col.heading}</p>
+                {col.items.map((item) => item.soon ? (
+                  <div key={item.label} className="rw-mega-item is-soon" aria-disabled="true">
+                    <span className="rw-mega-title">{item.label} <span className="rw-mega-soon">Coming soon</span></span>
+                    <span className="rw-mega-desc">{item.desc}</span>
+                  </div>
+                ) : (
+                  <Link key={item.to} to={item.to} className={`rw-mega-item${pathname === item.to ? ' is-active' : ''}`}>
+                    <span className="rw-mega-title">{item.label}</span>
+                    <span className="rw-mega-desc">{item.desc}</span>
+                  </Link>
+                ))}
+                {col.book && (
+                  <button type="button" className="rw-mega-book" onClick={() => { setMegaOpen(false); onBook() }}>
+                    BOOK A STRATEGY CALL
+                  </button>
+                )}
+              </div>
+            ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {TOP_LINKS.map((item) => (
+        <Link key={item.to} to={item.to} className={linkClass(item.to)}>{item.label}</Link>
+      ))}
+    </nav>
+  )
+}
 
 /**
  * Font size and edge inset for the fullscreen wheel, sized against the viewport since the
@@ -105,14 +225,9 @@ export default function Header() {
   }, [])
 
   return (
-    <header
-      style={{
-        position: 'sticky', top: 0, zIndex: 50,
-        background: 'color-mix(in srgb, var(--bg) 84%, transparent)',
-        backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
-        borderBottom: '1px solid var(--line)',
-      }}
-    >
+    // Glass background lives on .rw-header::before (global.css), not on the header itself:
+    // a backdrop-filter on the header would stop the mega menu's own glass from blurring the page.
+    <header className="rw-header" style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid var(--line)' }}>
       <div
         className="rw-pad"
         style={{
@@ -124,11 +239,16 @@ export default function Header() {
           <Wordmark />
         </Link>
 
+        {/* Desktop/laptop only (CSS hides it below 1100px, where the wheel menu takes over). */}
+        <DesktopNav pathname={pathname} onBook={openBooking} />
+
         <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px,1.6vw,20px)' }}>
           {/* Whole-site text-size control (Small/default, Medium, Large). */}
           <FontSizeControl />
 
-          {/* No inline nav — it lives in the wheel menu behind this button. */}
+          <button type="button" className="rw-dnav-book" onClick={() => openBooking()}>BOOK A CALL</button>
+
+          {/* Tablet/phone: nav lives in the wheel menu behind this button. */}
           <button
             type="button"
             className="rw-menu-btn"
