@@ -1,4 +1,4 @@
-import coverImage from '../assets/site/AI_Image copy.jpg'
+import portraitImage from '../assets/site/portrait-rajiv.png'
 import hydMark from '../assets/site/hyd-01.svg'
 import Seo from '../components/Seo'
 import hraLogo from '../assets/site/logo-hra.png'
@@ -37,6 +37,7 @@ import Footer from '../components/Footer'
 import GlimpsesSection from '../components/GlimpsesSection'
 import Header from '../components/Header'
 import ImageSlot from '../components/ImageSlot'
+import SignatureOverlay from '../components/SignatureOverlay'
 import { BookButton } from '../components/BookingModal'
 import Reveal from '../components/Reveal'
 import RiseText from '../components/RiseText'
@@ -151,14 +152,9 @@ export default function Portfolio() {
               className="rw-frame"
               style={{ ...tilt.style, aspectRatio: '4/5', border: '1px solid var(--line)', overflow: 'hidden' }}
             >
-              <ImageSlot
-                src={coverImage}
-                alt="Rajiv Williams"
-                placeholder="Portrait of Rajiv"
-                caption="pics/ · studio or office"
-                spec="Portrait 4:5 · ≥1600px tall · shot vertical, not cropped from landscape"
-                position="center 22%"
-              />
+              {/* The About section's portrait (with its signature) now leads the page. */}
+              <ImageSlot src={portraitImage} alt="Rajiv Williams" placeholder="Portrait of Rajiv" caption="pics/ · office or studio" position="45% 28%" />
+              <SignatureOverlay />
             </div>
           </Reveal>
         </div>

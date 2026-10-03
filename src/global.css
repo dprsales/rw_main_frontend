@@ -264,8 +264,12 @@ a:hover { color: var(--ink, #12100D); }
   pointer-events: none;
 }
 /* Desktop: pushed to the far right end of the row, like a badge on the chest. */
-.rw-hero-sign { margin-left: auto; margin-right: 48px; }
-.rw-hero-sign .rw-realty-signature-reveal { width: 170px; }
+.rw-hero-sign { margin-left: auto; }
+/* The signature (66px) is taller than the logos (26px); negative block margins stop it
+   stretching the row, so the hero keeps its original spacing. */
+/* translateY lifts the name (the image carries a tagline below it) level with the logos. */
+@media (min-width: 1041px) { .rw-hero-sign { margin-block: -24px; transform: translateY(-6px); } }
+.rw-hero-sign .rw-realty-signature-reveal { width: 200px; }
 /* Brighter gold plus a soft glow so the signature reads clearly over the photo. */
 .rw-hero-sign .rw-realty-signature { filter: brightness(1.35) saturate(1.15) drop-shadow(0 0 6px rgba(232, 201, 122, .35)); }
 @media (max-width: 1040px) {
@@ -1136,14 +1140,15 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-mega {
   position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
   width: min(960px, calc(100vw - 80px)); padding-top: 18px;
-  animation: rw-mega-in .22s ease both;
 }
 .rw-mega-panel {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   border-radius: 12px;
-  /* Frosted, not see-through: dense enough that hero text never reads through the menu. */
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(28px) saturate(160%); -webkit-backdrop-filter: blur(28px) saturate(160%);
+  /* Frosted glass. The fade-in animation lives HERE, not on .rw-mega: an ancestor with an
+     opacity animation becomes a backdrop root and silently switches the blur off. */
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(32px) saturate(160%); -webkit-backdrop-filter: blur(32px) saturate(160%);
+  animation: rw-mega-in .22s ease both;
   border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
   box-shadow: 0 24px 60px rgba(0, 0, 0, .55), inset 0 1px 0 color-mix(in srgb, var(--ink) 10%, transparent);
 }
@@ -1171,7 +1176,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   background: none; border: 1px solid var(--copper); border-radius: 4px;
 }
 .rw-mega-book:hover { background: color-mix(in srgb, var(--copper) 16%, transparent); }
-@media (prefers-reduced-motion: reduce) { .rw-mega { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .rw-mega-panel { animation: none; } }
 
 /* Whole-site text-size control (the three A's in the header). Small is the default
    site size; Medium and Large are progressive increases. Keep them baseline-aligned. */
@@ -1708,9 +1713,9 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* The source is 16:9 with the subject right of centre. Anchored to the top so wide
-     screens crop the chest, never the top of the head. */
-  object-position: 72% top;
+  /* The source is 16:9 with the subject right of centre. Slightly above centre so the
+     crop on wide screens falls on the jacket rather than the top of the head. */
+  object-position: 72% 35%;
 }
 
 .rw-hero-scrim,
@@ -1735,8 +1740,10 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   width: 100%;
   max-width: 1240px;
   margin: 0 auto;
-  min-height: 100vh;
-  min-height: 100svh;
+  /* Fills the screen BELOW the sticky header, so the copy is truly centred and the
+     HRA row stays on the first screen (Header.jsx sets --rw-header-h). */
+  min-height: calc(100vh - var(--rw-header-h, 103px));
+  min-height: calc(100svh - var(--rw-header-h, 103px));
   display: flex;
   flex-direction: column;
   justify-content: center;

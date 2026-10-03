@@ -172,6 +172,19 @@ export default function Header() {
   const scrollToId = useSmoothScroll()
   const openBooking = useBooking()
   const [open, setOpen] = useState(false)
+  const headerRef = useRef(null)
+
+  /* Publish the header's height as --rw-header-h so the hero can fill exactly the
+     visible screen below it (100svh alone made the hero one header too tall). */
+  useEffect(() => {
+    const el = headerRef.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const ro = new ResizeObserver(() => {
+      document.documentElement.style.setProperty('--rw-header-h', `${el.offsetHeight}px`)
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
@@ -227,7 +240,7 @@ export default function Header() {
   return (
     // Glass background lives on .rw-header::before (global.css), not on the header itself:
     // a backdrop-filter on the header would stop the mega menu's own glass from blurring the page.
-    <header className="rw-header" style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid var(--line)' }}>
+    <header ref={headerRef} className="rw-header" style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid var(--line)' }}>
       <div
         className="rw-pad"
         style={{
