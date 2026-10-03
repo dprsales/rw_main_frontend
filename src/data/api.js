@@ -71,7 +71,7 @@ async function request(path, opts = {}) {
     })
   } catch (err) {
     if (err?.name === 'AbortError') throw new ApiError('Request timed out', 408)
-    throw new ApiError('Network error — check your connection', 0)
+    throw new ApiError('Network error. Check your connection.', 0)
   } finally {
     clearTimeout(timer)
   }
@@ -97,7 +97,7 @@ async function request(path, opts = {}) {
 // Turns any thrown error into a string that is safe to show a user.
 export function getErrorMessage(err) {
   if (err instanceof ApiError) {
-    if (err.status === 0) return 'Network error — please check your connection and try again.'
+    if (err.status === 0) return 'Network error. Please check your connection and try again.'
     if (err.status === 408) return 'That took too long. Please try again.'
     if (err.status === 429) return 'Too many attempts. Please try again in a minute.'
     return err.message

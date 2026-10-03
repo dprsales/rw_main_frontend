@@ -56,7 +56,7 @@ export const CHALLENGES = {
 
 export const GOALS = [
   { key: 'train_team', label: 'Train the team we have' },
-  { key: 'fix_process', label: 'Rebuild how sales is run — process, structure, CRM' },
+  { key: 'fix_process', label: 'Rebuild how sales is run, from process and structure to CRM' },
   { key: 'hand_over', label: 'Hand sales to a dedicated external team', only: ['developer'] },
 ]
 
@@ -155,7 +155,7 @@ export const RULES = [
   { id: 'R9', who: 'sales_leader', challenge: '*', goal: 'fix_process', outcome: 'consulting',
     reason: "You want the operation rebuilt around the team. That's consulting." },
   { id: 'R10', who: 'sales_leader', challenge: '*', goal: 'unsure', outcome: 'strategy_call',
-    reason: 'Coaching or consulting — a short strategy call can help clarify the right fit.',
+    reason: 'Coaching or consulting. A short strategy call can help clarify the right fit.',
     candidates: ['coaching', 'consulting'] },
 
   { id: 'R11', who: 'developer', challenge: '*', goal: 'train_team', outcome: 'coaching',
@@ -163,9 +163,9 @@ export const RULES = [
   { id: 'R12', who: 'developer', challenge: '*', goal: 'fix_process', outcome: 'consulting',
     reason: 'You want to review how sales is run across process, structure and CRM. Consulting is the relevant starting point.' },
   { id: 'R13', who: 'developer', challenge: '*', goal: 'hand_over', outcome: 'realty',
-    reason: 'You build, RW Realty sells — strategy, onsite team and funnel, end to end.' },
+    reason: 'You build, RW Realty sells. Strategy, onsite team and funnel, end to end.' },
   { id: 'R14', who: 'developer', challenge: '*', goal: 'unsure', outcome: 'strategy_call',
-    reason: 'Consulting or a mandate — depends on how much you want to keep in-house.',
+    reason: 'Consulting or a mandate, depending on how much you want to keep in-house.',
     candidates: ['consulting', 'realty'] },
 ]
 

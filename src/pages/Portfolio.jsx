@@ -142,7 +142,7 @@ export default function Portfolio() {
               <RiseText lines={HEADLINE} step={0.085} />
             </h1>
             <Reveal as="p" delay={140} style={{ marginTop: 32, maxWidth: '34em', fontFamily: text, fontWeight: 300, fontSize: fs('clamp(17px,1.9vw,21px)'), lineHeight: 1.55, color: 'var(--faded)' }}>
-              Where RW shows up: mentoring sessions, developer launches, industry gatherings and the conversations that shape Hyderabad&apos;s luxury real estate market.
+              Where RW shows up, from mentoring sessions and developer launches to industry gatherings and the conversations that shape Hyderabad&apos;s luxury real estate market.
             </Reveal>
           </div>
 

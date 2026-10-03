@@ -132,8 +132,8 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
               <span aria-hidden style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--copper)', flexShrink: 0 }} />
               <span style={{ fontFamily: mono, fontSize: fs('9px'), letterSpacing: '.06em', color: 'var(--faded)' }}>
                 {priorityDims.length
-                  ? `PRIORITY: ${priorityDims.map((d) => d.short.toUpperCase()).join(' · ')}`
-                  : 'PRIORITY: FOCUSED DEVELOPMENT'}
+                  ? `PRIORITY · ${priorityDims.map((d) => d.short.toUpperCase()).join(' · ')}`
+                  : 'PRIORITY · FOCUSED DEVELOPMENT'}
               </span>
             </div>
           </div>

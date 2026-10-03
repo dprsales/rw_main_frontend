@@ -58,7 +58,7 @@ export function moduleDimension(mod, index = 0) {
  */
 export function moduleRecommendationReason(mod, scenario, scoreData, type) {
   if (type === 'complete_curriculum') {
-    return 'Part of the complete 16-module curriculum — layered development across every key coaching area.'
+    return 'Part of the complete 16-module curriculum, with layered development across every key coaching area.'
   }
   const dim = moduleDimension(mod)
   const dimScore = dim && scoreData?.dimensions?.find((d) => d.key === dim.key)
@@ -72,7 +72,7 @@ export function moduleRecommendationReason(mod, scenario, scoreData, type) {
   if (PRESET_MODULE_IDS.includes(mod.id)) {
     return 'A recommended starting point, matched to your result.'
   }
-  return 'Builds the skills this module teaches — the areas your result called out.'
+  return 'Builds the skills this module teaches, the areas your result called out.'
 }
 
 /** Small chip label for a recommendation: "Complete curriculum" when all 16 are recommended. */

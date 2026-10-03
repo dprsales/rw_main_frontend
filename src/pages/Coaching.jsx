@@ -286,7 +286,7 @@ export default function Coaching() {
         <CenteredHead
           eyebrow="THREE WAYS IN"
           title={<><span style={{ color: 'var(--copper)' }}>Three</span> ways to work together</>}
-          intro="Each session runs 90–120 minutes. The application is the filter: if the fit is right, you will hear back within two working days."
+          intro="Each session runs 90–120 minutes. The application is the filter. If the fit is right, you will hear back within two working days."
         />
 
         <div className="rw-grid-3 rw-programs">

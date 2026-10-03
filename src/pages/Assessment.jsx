@@ -87,7 +87,7 @@ export default function Assessment() {
           eyebrow="RAJIV WILLIAMS AI ASSESSMENT · POWERED BY KRISAH"
           headline={HEADLINE}
           lede="AI-led assessment to understand your starting point before the programme begins"
-          intro="Answer the way you would in a real room. You finish with a clearer read on yourself; we get to see how you think under pressure. Any role, any stage of your career."
+          intro="Answer the way you would in a real room. You finish with a clearer read on yourself, and we get to see how you think under pressure. Any role, any stage of your career."
           cta={<>
             <CtaButton ref={heroCtaRef} href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'hero' })}>
               START ASSESSMENT <span className="rw-cta-arrow">→</span>
@@ -147,7 +147,7 @@ export default function Assessment() {
             where you stand !
           </Reveal>
           <Reveal as="p" delay={200} style={{ ...note, marginTop: 20, marginLeft: 'auto', marginRight: 'auto', maxWidth: '32em', fontSize: fs('clamp(16px,1.7vw,18px)'), lineHeight: 1.6, color: 'var(--ink)', textShadow: '0 1px 20px rgba(11,10,9,.6), 0 0 2px rgba(11,10,9,.8)' }}>
-            Over 16+ years of high-value sales, the same lesson keeps repeating: the gap between a good professional and a great one is not knowledge. It is how they perform when it matters. The interview lets us measure that before we begin.
+            Over 16+ years of high-value sales, the same lesson keeps repeating. The gap between a good professional and a great one is not knowledge. It is how they perform when it matters. The interview lets us measure that before we begin.
           </Reveal>
         </div>
       </section>

@@ -86,7 +86,7 @@ export const PACKAGES = [
     id: 'complete',
     label: 'Complete 16 Module',
     count: 16,
-    blurb: 'The full specialisation — all sixteen coaching areas.',
+    blurb: 'The full specialisation across all sixteen coaching areas.',
   },
 ]
 

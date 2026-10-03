@@ -70,7 +70,7 @@ export const ASSESSMENT_TRACKS = {
     numeral: 'II',
     label: 'Consulting',
     cardTitle: 'Business & Sales Consulting',
-    cardBody: 'Expert guidance on sales setup, branding, hiring, and process — tailored to where your business stands today.',
+    cardBody: 'Expert guidance on sales setup, branding, hiring and process, tailored to where your business stands today.',
     cardCta: 'Share your business details',
     intro: {
       eyebrow: 'RAJIV WILLIAMS CONSULTING',

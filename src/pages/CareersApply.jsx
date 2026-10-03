@@ -672,7 +672,7 @@ export default function CareersApply() {
                         {String(values.message || '').trim() !== '' && (
                           <button
                             type="button" className="rw-field-clear" tabIndex={-1}
-                            aria-label="Clear: anything else we should know" title="Clear this"
+                            aria-label="Clear anything else we should know" title="Clear this"
                             onClick={() => setValues((prev) => ({ ...prev, message: '' }))}
                           >
                             ×

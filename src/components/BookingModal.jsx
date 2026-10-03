@@ -318,13 +318,13 @@ function BookingModal({ preset, onClose }) {
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
             <div style={{ ...eyebrow, marginBottom: 14 }}>{isApplying ? 'APPLICATION RECEIVED' : 'REQUEST RECEIVED'}</div>
             <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: fs('clamp(24px,3.2vw,32px)'), color: 'var(--ink)', lineHeight: 1.15, marginBottom: 14 }}>
-              Thank you — we’ll be in touch.
+              Thank you. We’ll be in touch.
             </h2>
             <p style={{ fontFamily: text, fontWeight: 300, fontSize: fs('15px'), lineHeight: 1.6, color: 'var(--faded)', maxWidth: '28em', margin: '0 auto 24px' }}>
               {isApplying
                 ? 'Your application has reached the team. If there’s a fit, you’ll hear from us within one business day.'
                 : repeat
-                  ? 'You’re already with us — we’ve added this request to your existing enquiry and the team has been notified.'
+                  ? 'You’re already with us. We’ve added this request to your existing enquiry and the team has been notified.'
                   : 'Your request has reached the team. Expect a reply within one business day to arrange your strategy call.'}
             </p>
             <button type="button" onClick={onClose} style={{ ...ctaBtn }}>Close</button>
@@ -499,7 +499,7 @@ function BookingModal({ preset, onClose }) {
                   </Field>
                   <div className="rw-career-form-section">PROFESSIONAL REFERENCES <span>(OPTIONAL)</span></div>
                   <p className="rw-reference-disclaimer">
-                    Note: Please provide accurate reference details and ensure the individuals listed have consented to being contacted.
+                    Please provide accurate reference details and ensure the individuals listed have consented to being contacted.
                   </p>
                   <div className="rw-career-reference-title">REFERENCE 1</div>
                   <Field label="Name">

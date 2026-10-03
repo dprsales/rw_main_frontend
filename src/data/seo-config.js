@@ -25,45 +25,45 @@ export const ROUTE_SEO = {
   '/consulting': {
     title: 'Real Estate Sales Consulting for Developers, senior sales leadership & top closers. | Rajiv Williams',
     description:
-      'A four-phase engagement — audit, process design, deployment, refinement — that rebuilds a developer sales operation around conversion, not discounts.',
+      'A four-phase engagement of audit, process design, deployment and refinement that rebuilds a developer sales operation around conversion, not discounts.',
   },
   '/realty': {
-    title: 'RW Realty — Exclusive Luxury Sales Mandates, Hyderabad',
+    title: 'RW Realty | Exclusive Luxury Sales Mandates, Hyderabad',
     description:
       'Full ownership of sales strategy, a dedicated onsite team, and end-to-end funnel management for luxury residential projects across Hyderabad.',
   },
   '/realty/portfolio': {
-    title: 'Track Record — 31 Projects, ₹2,700 Cr | Rajiv Williams',
+    title: 'Track Record of 31 Projects, ₹2,700 Cr | Rajiv Williams',
     description:
       'Projects represented and mandated across Hyderabad’s luxury corridor, 27 developer partners, and recommendations from NAR India leadership.',
   },
   '/careers': {
-    title: 'Careers: Luxury Real Estate Sales Roles in Hyderabad | Rajiv Williams',
+    title: 'Careers in Luxury Real Estate Sales, Hyderabad | Rajiv Williams',
     description:
       'Sales, business development, client relations and operations roles on exclusive luxury mandates. Premium inventory, in-house coaching, uncapped incentives.',
   },
   '/partner': {
-    title: 'Channel Partners — Sell Luxury Inventory | Rajiv Williams',
+    title: 'Channel Partners, Sell Luxury Inventory | Rajiv Williams',
     description:
       'Exclusive RW Realty mandates, golden-rate commissions, in-house sales training and warm leads. Apply to become a channel partner with the Rajiv Williams team.',
   },
   '/about': {
-    title: 'About Rajiv Williams — Luxury Sales Mentor, Hyderabad',
+    title: 'About Rajiv Williams | Luxury Sales Mentor, Hyderabad',
     description:
       'Fifteen years from Dell to developer sales leadership to an independent mentoring practice. TGRERA registered, NAR India and HRA member.',
   },
   '/contact': {
-    title: 'Contact Rajiv Williams — Hyderabad',
+    title: 'Contact Rajiv Williams, Hyderabad',
     description:
       'Speak to Rajiv Williams about coaching, developer consulting, or an exclusive sales mandate. Based in Shaikpet, Hyderabad.',
   },
   '/start': {
     title: 'Find the Right Service | Rajiv Williams',
-    description: 'Answer one to three quick questions and we point you to the right Rajiv Williams service — coaching, consulting or an RW Realty mandate.',
+    description: 'Answer one to three quick questions and we point you to the right Rajiv Williams service, whether coaching, consulting or an RW Realty mandate.',
   },
   '/form': {
     title: 'Pre-Consultation Assessment | Rajiv Williams',
-    description: 'A short assessment before we speak — coaching, developer consulting, or an RW Realty mandate.',
+    description: 'A short assessment before we speak about coaching, developer consulting or an RW Realty mandate.',
   },
   '/assessment': {
     title: 'Discover where you stand before your training begins | Rajiv Williams',
@@ -73,15 +73,15 @@ export const ROUTE_SEO = {
   '/assessment/result': {
     title: 'Sixteen Areas of Specialisation After Your AI Assessment | Rajiv Williams',
     description:
-      'The sixteen areas of specialisation — 90 to 120 minutes each — matched to the gaps your AI assessment report turns up. No tiers, no split between coaching and consulting.',
+      'The sixteen areas of specialisation, 90 to 120 minutes each, matched to the gaps your AI assessment report turns up. No tiers, no split between coaching and consulting.',
   },
   '/coaching/result': {
-    title: 'Your Coaching Assessment Result — Recommended Coaching Areas | Rajiv Williams',
+    title: 'Your Coaching Assessment Result and Recommended Coaching Areas | Rajiv Williams',
     description:
       'Your assessment score and five recommended coaching starting points, with personalised development areas and all coaching specialisations from Rajiv Williams.',
   },
   '/coaching/purchase': {
-    title: 'Buy Coaching Modules — 16 Areas, Live Pricing | Rajiv Williams',
+    title: 'Buy Coaching Modules, 16 Areas with Live Pricing | Rajiv Williams',
     description:
       'Select coaching modules from the sixteen areas of specialisation with live pricing. Choose fixed packages or build your own selection, then place your purchase request.',
   },

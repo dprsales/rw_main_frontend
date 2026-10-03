@@ -233,7 +233,7 @@ He doesn&apos;t wait for the market to move.<br />
             <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>He moves it every single day.</span>
           </Reveal>
           <Reveal as="p" delay={160} style={{ ...body, margin: '34px auto 0', fontSize: fs('19px'), lineHeight: 1.65, maxWidth: '44em' }}>
-            Years spent solving the industry's toughest problems have shaped a singular mission: to define what real estate in
+            Years spent solving the industry's toughest problems have shaped a singular mission, to define what real estate in
             Hyderabad becomes next. It's the standard he carries into every client he works with.
           </Reveal>
         </div>
@@ -247,7 +247,7 @@ He doesn&apos;t wait for the market to move.<br />
       <section id="services" style={sectionRule}>
         <div className="rw-pad" style={container}>
           <Reveal style={{ padding: '54px 0 4px', fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.26em', color: 'var(--faded)' }}>
-            THREE MOVES. ONE OUTCOME: MORE CLOSED.
+            THREE MOVES. ONE OUTCOME. MORE CLOSED.
             {/* THREE WAYS IN WHICH DEVELOPERS AND SALES LEADER STANDS TO BENEFIT  */}
           </Reveal>
           <div className="rw-grid-3 rw-ways" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', columnGap: 44 }}>

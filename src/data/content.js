@@ -30,11 +30,11 @@ export const HERO_COPY =
 export const WAYS = [
   { k: 'I', kicker: 'Sales Coaching', title: 'Your ticket size is a ceiling you built. Break it.', line: 'For developers, senior sales leadership, and top sales closers done with volume games.', ctaLabel: 'Coaching', to: '/coaching' },
   { k: 'II', kicker: 'Sales Consulting', title: 'Right product, wrong velocity. That is fixable.', line: 'Advisory on the part of the business the brochure never fixes.', ctaLabel: 'Consulting', to: '/consulting' },
-  { k: 'III', kicker: 'Sales Mandates', title: 'You build. We sell — end to end.', line: 'Full ownership of sales strategy, a dedicated onsite team, and end-to-end funnel management.', ctaLabel: 'Realty', to: '/realty' },
+  { k: 'III', kicker: 'Sales Mandates', title: 'You build. We sell, end to end.', line: 'Full ownership of sales strategy, a dedicated onsite team, and end-to-end funnel management.', ctaLabel: 'Realty', to: '/realty' },
 ]
 
 export const HOME_TESTIMONIALS = [
-  { text: 'Rajiv negotiates like the asset is his own; his deep understanding of local market dynamics gave us a very good perspective on the opportunities in Hyderabad.', name: 'SANDEEP KYLAS' },
+  { text: 'Rajiv negotiates like the asset is his own. His deep understanding of local market dynamics gave us a very good perspective on the opportunities in Hyderabad.', name: 'SANDEEP KYLAS' },
   { text: 'He always says, "do it with your passion and heart or else don’t do it." Having a mentor like him makes you sharper on tasks, skills, focus and life.', name: 'MALLAREDDY PUTLURI' },
   { text: 'His expertise and guidance were instrumental in my professional growth, the best mentor I have come across.', name: 'MOHAMMED SHIRAZ' },
 ]
@@ -72,7 +72,7 @@ export const COACHING_PROGRAMS = [
     k: 'II',
     audience: 'For Developers & Real-Estate Sales Professionals',
     title: 'High Ticket Sales Mastery', subtitle: '2nd Opportunity · For Developers & Real-Estate Sales Professionals · Hyderabad',
-    description: 'High-ticket selling fundamentals: conversion, negotiation and closing.',
+    description: 'High-ticket selling fundamentals of conversion, negotiation and closing.',
     features: ['Client psychology', 'Objection handling', 'Negotiation', 'Confidence & high-value closing'],
     outcome: 'Built to help you present better, handle objections, negotiate with confidence and convert more consistently.',
     session: '90-120 mins session',
@@ -114,7 +114,7 @@ export const CURRICULUM = [
   {
     n: '04', title: 'Objection Handling & Client Management',
     groups: [
-      { label: 'Objection Resolution', items: ['Objection Handling: Price, Location & Delays'] },
+      { label: 'Objection Resolution', items: ['Objection Handling for Price, Location & Delays'] },
       { label: 'Complex Client Scenarios', items: ['Handling High-Involvement Clients & Families'] },
     ],
   },
@@ -161,7 +161,7 @@ export const ECOSYSTEM = [
   },
   {
     phase: '2', title: 'Process Design',
-    line: 'We design the systems that were missing: strategy, conversion, pipeline, and documented SOPs.',
+    line: 'We design the systems that were missing, including strategy, conversion, pipeline and documented SOPs.',
     points: [
       'End-to-end sales strategy framework design',
       'HNI & Ultra-HNI conversion systems',
@@ -172,7 +172,7 @@ export const ECOSYSTEM = [
   },
   {
     phase: '3', title: 'Implementation & Deployment',
-    line: 'We deploy the systems into daily operation: CRM, automation, team onboarding, and site experience.',
+    line: 'We deploy the systems into daily operation, including CRM, automation, team onboarding and site experience.',
     points: [
       'CRM setup, onboarding & dashboard integration',
       'Workflow automation & operational process deployment',
@@ -211,7 +211,7 @@ export const SUPPORT_SERVICES = [
 export const MANDATE_SCOPE = [
   { n: '01', title: 'Full ownership of sales strategy, positioning & execution' },
   { n: '02', title: 'A trained, dedicated sales team deployed onsite' },
-  { n: '03', title: 'End-to-end funnel management: leads to closure' },
+  { n: '03', title: 'End-to-end funnel management from lead to closure' },
   { n: '04', title: 'Pricing strategy & deal structuring' },
   { n: '05', title: 'High-ticket negotiation support & deal intervention' },
   { n: '06', title: 'Site visit design & conversion optimisation' },
@@ -232,7 +232,7 @@ export const ORGANISATIONS_WORKED = [
 /** The full testimonial wall - every brochure review, condensed. `highlight: true` marks the lines pulled out large. */
 export const PORTFOLIO_TESTIMONIALS = [
   { text: 'Rajiv is exceptional in what he does and consistently goes above and beyond to deliver outstanding results and ensure the success of the projects. I wholeheartedly recommend him.', name: 'SUMANTH REDDY', role: 'Chairman, NAR India', highlight: true },
-  { text: "His 'Luxury Sales Mastery' framework is a game-changer; it shifts the focus from chasing the lead to commanding the room, with psychological precision and consultative grace. The result? A massive boost in my conversion rates.", name: 'AMARJEET JAT', role: 'AGM Sales & Hospitality, Moonglade', highlight: true },
+  { text: "His 'Luxury Sales Mastery' framework is a game-changer. It shifts the focus from chasing the lead to commanding the room, with psychological precision and consultative grace. The result? A massive boost in my conversion rates.", name: 'AMARJEET JAT', role: 'AGM Sales & Hospitality, Moonglade', highlight: true },
   { text: "I couldn't have asked for a better advisor. Rajiv's deep understanding of the local market dynamics gave us a very good perspective on the opportunities in Hyderabad.", name: 'SANDEEP KYLAS', role: 'VP, Fintech & Payments, Zenoti · Ex-Amazon', highlight: true },
   { text: 'His ability to streamline systems, build effective strategies, and guide teams with clarity makes a significant impact on organizational success, especially in consultative selling and process-driven execution.', name: 'ARUN KUMAR ADGAPURAM', role: 'Head of Direct Sales, Zuari Infra' },
   { text: "Rajiv's expertise in the luxury real estate market is unparalleled. His ability to connect with clients uniquely, tailoring his approach to their mindset, is truly remarkable.", name: 'CHAKRAVARDHAN REDDY KESARI', role: 'Data Engineering Lead' },
@@ -241,7 +241,7 @@ export const PORTFOLIO_TESTIMONIALS = [
   { text: "Need market insights? He's got them. Have a real estate query at midnight? Don't be surprised if he replies in seconds. He simplifies things and always delivers with speed and clarity.", name: 'ARUN K GATTU', role: 'VP, Sales & Marketing' },
   { text: 'A professional with a deep understanding of the business and a continuous learner. Very good at relationship management, time and task management, and structured case analysis.', name: 'PRASAD KLNV', role: 'Business Consultant · 25+ Years in Sales & Operations' },
   { text: 'He has an exceptional ability to inspire and motivate. His insights in high-ticket real estate sales are invaluable, and his guidance helped me tackle complex challenges with confidence.', name: 'SUMANA SOUJANYA UNDETI', role: 'Assistant Manager, Sales' },
-  { text: 'His expertise and guidance were instrumental in my professional growth; he pushed me to expand my skills and always made time to offer support. By far the best mentor I have come across.', name: 'MOHAMMED SHIRAZ', role: 'Sales & Strategic Management · 14 Years' },
+  { text: 'His expertise and guidance were instrumental in my professional growth. He pushed me to expand my skills and always made time to offer support. By far the best mentor I have come across.', name: 'MOHAMMED SHIRAZ', role: 'Sales & Strategic Management · 14 Years' },
 ]
 
 /**
@@ -273,10 +273,10 @@ export const CREDENTIALS = ['TGRERA Licensed Realtor', "Member, Hyderabad Realto
 
 /* Why the room is worth joining. Deliberately four, for two even rows at every breakpoint. */
 export const CAREER_REASONS = [
-  { title: 'Premium inventory only', body: 'You sell what the market already respects: luxury and high-ticket projects carried on exclusive mandates, not a scattered listing sheet.' },
+  { title: 'Premium inventory only', body: 'You sell what the market already respects, luxury and high-ticket projects carried on exclusive mandates, not a scattered listing sheet.' },
   { title: 'Trained, not thrown in', body: 'The coaching practice runs in-house first. Every person on the floor is taken through the same frameworks Rajiv runs with developer sales teams.' },
   { title: 'Earnings without a ceiling', body: 'A fixed base plus an incentive structure written against closings. Higher ticket sizes mean the same effort is worth more.' },
-  { title: 'Access to the top of the market', body: 'HNI and NRI buyers, developer leadership, and channel networks: all in the room, from your first quarter.' },
+  { title: 'Access to the top of the market', body: 'HNI and NRI buyers, developer leadership, and channel networks, all in the room from your first quarter.' },
 ]
 
 /* The statement band under the intro - two lines, kept here for single-place editing. */

@@ -316,7 +316,7 @@ export default function Partner() {
         lede="Exclusive mandates, golden-rate commissions, and a team that runs the funnel with you."
         intro="RW Realty carries a small number of projects at a time, on exclusive mandates. Partners inside those mandates get inventory worth carrying, leads we keep warm, and the training to close at the ticket size."
         image={saplingImage}
-        imageAlt="RW Realty partnership tree: trust, strong relationships, open communication, mutual respect, shared vision, consistent support and long-term growth."
+        imageAlt="RW Realty partnership tree showing trust, strong relationships, open communication, mutual respect, shared vision, consistent support and long-term growth."
         cta={<>
           <button type="button" onClick={() => scrollToId('apply')} className="rw-cta rw-cta--live" style={ctaCopper}>
             APPLY TO BECOME A CHANNEL PARTNER <span className="rw-cta-arrow" aria-hidden> →</span>

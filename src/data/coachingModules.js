@@ -26,7 +26,7 @@ export const COACHING_MODULES = [
     id: 1, n: '01',
     title: 'High-Impact Property Presentation Skills',
     tags: ['presentation', 'property', 'communication'],
-    focus: 'Show a property so it sells itself — structure, story, and the staged walkthrough.',
+    focus: 'Show a property so it sells itself with structure, story and a staged walkthrough.',
     group: 'Presentation & Practical Selling',
   },
   {
@@ -40,14 +40,14 @@ export const COACHING_MODULES = [
     id: 3, n: '03',
     title: 'Messaging Skills & Information Delivery',
     tags: ['messaging', 'information', 'communication'],
-    focus: 'Say the right thing at the right pacing — no information dumping over value.',
+    focus: 'Say the right thing at the right pace, without dumping information over value.',
     group: 'Communication & Rapport',
   },
   {
     id: 4, n: '04',
     title: 'Understanding the Mid-to-Luxury Buyer Mindset',
     tags: ['buyer mindset', 'psychology', 'luxury'],
-    focus: 'Read what a premium buyer is really buying: status, safety, sequence, certainty.',
+    focus: 'Read what a premium buyer is really buying, from status and safety to sequence and certainty.',
     group: 'Foundation & Mindset',
   },
   {
@@ -66,7 +66,7 @@ export const COACHING_MODULES = [
   },
   {
     id: 7, n: '07',
-    title: 'Objection Handling — Price, Location & Delays',
+    title: 'Objection Handling for Price, Location & Delays',
     tags: ['objections', 'price', 'location', 'delays'],
     focus: 'Meet price, location, and timing objections without defaulting to discount.',
     group: 'Objection Handling & Client Management',
@@ -103,7 +103,7 @@ export const COACHING_MODULES = [
     id: 12, n: '12',
     title: 'Advanced Rapport & Trust Building',
     tags: ['trust', 'rapport', 'relationship'],
-    focus: 'The long-horizon layer — repeat buyers, referrals, and relationships that follow you.',
+    focus: 'The long-horizon layer of repeat buyers, referrals and relationships that follow you.',
     group: 'Communication & Rapport',
   },
   {
@@ -117,7 +117,7 @@ export const COACHING_MODULES = [
     id: 14, n: '14',
     title: 'Confidence Building for High-Ticket Sales',
     tags: ['confidence', 'high-ticket', 'self-belief'],
-    focus: 'Hold a premium conversation like it is yours to command — pricing and all.',
+    focus: 'Hold a premium conversation like it is yours to command, pricing and all.',
     group: 'Foundation & Mindset',
   },
   {
@@ -131,7 +131,7 @@ export const COACHING_MODULES = [
     id: 16, n: '16',
     title: 'Structured Negotiation Techniques',
     tags: ['negotiation', 'structure', 'deal terms'],
-    focus: 'Move from discount pressure to structured terms — trade value, never just price.',
+    focus: 'Move from discount pressure to structured terms. Trade value, never just price.',
     group: 'Lead Handling & Conversion',
   },
 ]
@@ -161,7 +161,7 @@ export const coachingResultScenarios = {
     focusTags: ['rapport', 'communication', 'presentation', 'confidence'],
     developmentAreas: [
       'First impressions and how you open a conversation',
-      'How clearly your info lands — pace, structure, no dump',
+      'How clearly your info lands through pace and structure',
       'The confidence you carry into a high-ticket price conversation',
     ],
   },
@@ -176,7 +176,7 @@ export const coachingResultScenarios = {
     recommendationMode: 'foundational',
     focusTags: ['confidence', 'rapport', 'communication', 'presentation', 'EQ'],
     developmentAreas: [
-      'Foundation and mindset — confidence, EQ, first impressions',
+      'Foundation and mindset with confidence, EQ and first impressions',
       'How you structure and deliver information',
       'The basics of a premium, high-ticket presence',
     ],
@@ -192,7 +192,7 @@ export const coachingResultScenarios = {
     recommendationMode: 'priority-gaps',
     focusTags: ['lead handling', 'follow-up', 'conversion', 'objections', 'CRM'],
     developmentAreas: [
-      'Lead handling — cold, new and digital leads',
+      'Lead handling for cold, new and digital leads',
       'Follow-up systems that hold momentum',
       'Objection handling around price, location and delays',
     ],
@@ -226,7 +226,7 @@ export const coachingResultScenarios = {
     developmentAreas: [
       'The mid-to-luxury buyer psychology, deeper',
       'Advanced rapport, trust and long-horizon relationships',
-      'High-involvement clients and families — leading the room',
+      'Leading the room with high-involvement clients and families',
     ],
   },
 }
