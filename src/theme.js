@@ -73,8 +73,14 @@ const PHONE_LINK = { label: PHONE.label, href: PHONE.href, muted: true }
 /** Contact, then the outbound profiles. Every footer ends with this. */
 const FOOTER_CONTACT = [{ ...EMAIL_LINK, muted: true }, PHONE_LINK, HH_LINK, ...SOCIAL_LINKS]
 
+/** Legal pages. Real routes, never hash placeholders. */
+const LEGAL_LINKS = [
+  { label: 'Privacy Policy', to: '/privacy-policy', muted: true, legal: true },
+  { label: 'Terms of Use', to: '/terms', muted: true, legal: true },
+]
+
 /** The interior pages - Coaching, Consulting, Realty, Careers, Portfolio. */
-export const FOOTER_LINKS = [{ label: '← Back to home', to: '/' }, ...FOOTER_CONTACT]
+export const FOOTER_LINKS = [{ label: '← Back to home', to: '/' }, ...FOOTER_CONTACT, ...LEGAL_LINKS]
 
 /** Home has no "back to home"; it leads on the email and points onward instead. */
 export const HOME_FOOTER_LINKS = [
@@ -82,6 +88,7 @@ export const HOME_FOOTER_LINKS = [
   { label: 'RW Realty →', to: '/realty', muted: true },
   { label: 'Careers →', to: '/careers', muted: true },
   { label: 'Channel Partners →', to: '/partner', muted: true },
+  ...LEGAL_LINKS,
 ]
 
 /** A project detail page goes back up its own branch, not to the home page. */
@@ -89,4 +96,5 @@ export const PROJECT_FOOTER_LINKS = [
   { label: '← RW Realty', to: '/realty' },
   { label: 'Portfolio', to: '/realty/portfolio' },
   ...FOOTER_CONTACT,
+  ...LEGAL_LINKS,
 ]

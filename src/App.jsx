@@ -22,6 +22,8 @@ import Project from './pages/Project'
 import Realty from './pages/Realty'
 import Start from './pages/Start'
 import Partner from './pages/Partner'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import Terms from './pages/Terms'
 
 // Stop the browser (Safari especially) restoring the old scroll position on reload,
 // which would land a refreshed homepage on the finder instead of the hero.
@@ -62,6 +64,8 @@ export default function App() {
           <Route path="/assessment/result" element={<AssessmentResult />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<Terms />} />
           {/* /start is the guided finder on its own page; service pages link here with ?who= */}
           <Route path="/start" element={<Start />} />
           {/* /form is the track picker; each questionnaire has its own URL (/form/coaching etc) for direct links */}

@@ -14,6 +14,8 @@ const CRAWLABLE_LINKS = [
   { label: 'Track record and portfolio', to: '/realty/portfolio' },
   { label: 'About Rajiv Williams', to: '/about' },
   { label: 'Contact', to: '/contact' },
+  { label: 'Privacy Policy', to: '/privacy-policy' },
+  { label: 'Terms of Use', to: '/terms' },
   { label: 'Careers', to: '/careers' },
   { label: 'Channel partner applications', to: '/partner' },
   { label: 'AI assessment', to: '/assessment' },

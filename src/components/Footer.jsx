@@ -62,6 +62,8 @@ function FooterSocialIcons() {
 export default function Footer({ links, chip = false }) {
   // Excluded by platform name, not href — PAGE_SOCIAL_LINKS overrides href per page.
   const restLinks = links.filter((link) => !PLATFORM_NAMES.includes(link.label.split(' ')[0]))
+  const legalLinks = restLinks.filter((link) => link.legal)
+  const mainLinks = restLinks.filter((link) => !link.legal)
 
   return (
     <footer style={{ position: 'relative', borderTop: '1px solid var(--line)', background: chip ? 'var(--chip)' : undefined }}>
@@ -92,7 +94,7 @@ export default function Footer({ links, chip = false }) {
               fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.04em',
             }}
           >
-            {restLinks.map((link) =>
+            {mainLinks.map((link) =>
               link.to ? (
                 <Link key={link.label} to={link.to} style={{ color: link.muted ? 'var(--faded)' : undefined }}>
                   {link.label}
@@ -110,6 +112,13 @@ export default function Footer({ links, chip = false }) {
               ),
             )}
           </div>
+          {legalLinks.length > 0 && (
+            <nav className="rw-footer-legal" aria-label="Legal">
+              {legalLinks.map((link) => (
+                <Link key={link.label} to={link.to}>{link.label}</Link>
+              ))}
+            </nav>
+          )}
         </div>
       </div>
     </footer>

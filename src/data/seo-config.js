@@ -57,6 +57,16 @@ export const ROUTE_SEO = {
     description:
       'Speak to Rajiv Williams about coaching, developer consulting, or an exclusive sales mandate. Based in Shaikpet, Hyderabad.',
   },
+  '/privacy-policy': {
+    title: 'Privacy Policy | Team RW · Rajiv Williams',
+    description:
+      'How Team RW, operated by Rajiv Williams in Hyderabad, collects, uses, stores and shares personal information on rajivwilliams.com.',
+  },
+  '/terms': {
+    title: 'Terms of Use | Team RW · Rajiv Williams',
+    description:
+      'Terms of Use for the Team RW website, including forms, assessments, chat widgets and related online tools.',
+  },
   '/start': {
     title: 'Find the Right Service | Rajiv Williams',
     description: 'Answer one to three quick questions and we point you to the right Rajiv Williams service, whether coaching, consulting or an RW Realty mandate.',

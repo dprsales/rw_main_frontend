@@ -14,24 +14,16 @@ import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import ClosingCTA from '../components/ClosingCTA'
 import RelatedReading from '../components/RelatedReading'
-import PageIntro from '../components/PageIntro'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { SectionAside } from '../components/SectionHead'
 import { DEVELOPER_SHIFTS, ECOSYSTEM, SUPPORT_SERVICES } from '../data/content'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
-import { fs, ctaInline,
+import { fs, ctaCopper, ctaInline,
   container, eyebrow,
   note, sectionHeading, sectionRule,
 } from '../styles'
 
 const MISSION = 'Team RW is out on a mission to revolutionize how the Hyderabad real estate industry conducts itself, and how it is perceived.'
-
-const HEADLINE = [
-  { text: '₹2,700+ cr ' },
-  { text: 'sold, quietly.' },
-  { br: true },
-  { text: ' Built on a proven sales process', italic: true, copper: true },
-]
 
 const ACRONYM = 'S.M.A.R.T.'
 
@@ -251,36 +243,52 @@ export default function Consulting() {
       <Seo route="/consulting" />
       <Header />
 
-      {/* Intro */}
-      <PageIntro
-        eyebrow="CONSULTING · FOR DEVELOPERS, SALES LEADERSHIP & TOP CLOSERS"
-        headline={HEADLINE}
-        headlineStyle={{ fontSize: fs('clamp(40px,5.2vw,78px)'), lineHeight: 1.05 }}
-        lede="Business Process consulting for Real Estate Developers & Sales Organizations."
-        ledeStyle={{ fontSize: fs('clamp(18px,2.2vw,22px)') }}
-        intro="Team RW advises developers on the part of the business the brochure never fixes, which is how the inventory actually sells. Engagements are few, structured, and measured in absorption."
-        introStyle={{ maxWidth: '38em' }}
-        padding="80px 40px 40px"
-        cta={<>
-          <BookButton interest="Consulting" specular>REQUEST A SALES CONSULTATION</BookButton>
-          <CtaButton variant="secondary" to="/start?who=developer" arrow="→">Not sure? Find your fit</CtaButton>
-        </>}
-      />
+      {/* Consulting hero. Mirrors the Coaching hero: the boardroom photograph sits on
+          .rw-consulting-hero::before in global.css under a left-weighted scrim, so all copy
+          sits on the dark side and the scale model stays clear on the right. */}
+      <section id="top" className="rw-consulting-hero">
+        <div className="rw-consulting-hero-copy rw-pad">
+          <Reveal className="rw-consulting-hero-eyebrow" style={{ fontFamily: mono }}>
+            CONSULTING · FOR DEVELOPERS, SALES LEADERSHIP &amp; TOP CLOSERS
+          </Reveal>
+
+          <Reveal as="h1" delay={80} className="rw-consulting-hero-title" style={{ fontFamily: serif }}>
+            <span>₹2,700+ Cr sold, quietly.</span>
+            <span className="rw-consulting-hero-title-italic">Built for absorption, not brochures.</span>
+          </Reveal>
+
+          <Reveal as="p" delay={150} className="rw-consulting-hero-subhead" style={{ fontFamily: text }}>
+            Business process consulting for real-estate developers &amp; sales organizations.
+          </Reveal>
+
+          <Reveal as="p" delay={190} className="rw-consulting-hero-lede" style={{ fontFamily: text }}>
+            Team RW advises real-estate developers on how inventory actually sells. Engagements are few,
+            structured &amp; measured in absorption.
+          </Reveal>
+
+          <Reveal delay={220} className="rw-hero-actions">
+            <BookButton
+              interest="Consulting"
+              className="rw-cta rw-hero-book"
+              style={ctaCopper}
+            >
+              REQUEST A SALES CONSULTATION
+            </BookButton>
+            {/* Same row as the request button; align-items: center is vertical, not a centered hero. */}
+            <CtaButton
+              variant="secondary"
+              to="/start?who=developer"
+              arrow="→"
+              className="rw-hero-fit"
+            >
+              Not sure? Find your fit
+            </CtaButton>
+          </Reveal>
+        </div>
+      </section>
 
       {/* Wide feature image */}
-      <section className="rw-pad" style={{ ...container, paddingBottom: 'clamp(20px,4vw,40px)' }}>
-        <Reveal className="rw-figure" style={{ border: '1px solid var(--line)', overflow: 'hidden' }}>
-          <div style={{ aspectRatio: '21/9' }}>
-            <ImageSlot
-              src={sessionImage}
-              alt="Rajiv Williams at his desk beside the RW backdrop"
-              placeholder="Working with a developer team"
-              caption="pics/ · session or site"
-              position="center 32%"
-            />
-          </div>
-        </Reveal>
-      </section>
+      
 
       {/* The mission, then the quote it runs on - signed. */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>

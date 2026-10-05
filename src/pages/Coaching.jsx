@@ -179,7 +179,8 @@ export default function Coaching() {
       <Seo route="/coaching" />
       <Header />
 
-      {/* Coaching hero: a clean editorial layout ready for a future visual layer. */}
+      {/* Coaching hero. Photography is applied in global.css on .rw-coaching-hero::before,
+          with a left-weighted scrim so this copy stays readable. */}
       <section id="top" className="rw-coaching-hero">
         <div className="rw-coaching-hero-copy rw-pad">
           <Reveal className="rw-coaching-hero-eyebrow" style={{ fontFamily: mono }}>

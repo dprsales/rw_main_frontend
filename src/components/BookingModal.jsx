@@ -2,7 +2,6 @@ import React, { createContext, useCallback, useContext, useEffect, useRef, useSt
 import { useNavigate } from 'react-router-dom'
 import { fs } from '../styles'
 import { createPortal } from 'react-dom'
-import MagneticLink from './MagneticLink'
 import SpecularButton from './SpecularButton'
 import { mono, serif, text } from '../theme'
 import { CAREERS_INTEREST, INTERESTS, isValidPhone, submitBooking } from '../data/booking'
@@ -34,7 +33,7 @@ const DEFAULT_SPECULAR_PROPS = {
   className: 'rw-specular-cta',
 }
 
-// Magnetic button that opens the booking modal instead of a mailto: link; role/jobId tag careers applications.
+// Button that opens the booking modal instead of a mailto: link; role/jobId tag careers applications.
 export function BookButton({ interest, role, jobId, roleOptions, guidance, source, skipQuestions, eyebrow: eyebrowText, title, subtitle, to, style, children, specular = false, specularProps, className = '', ...rest }) {
   const open = useBooking()
   const navigate = useNavigate()
@@ -52,9 +51,10 @@ export function BookButton({ interest, role, jobId, roleOptions, guidance, sourc
     )
   }
 
+  // Plain button, no cursor-follow: the magnetic drift read as the button chasing the
+  // pointer. Hover feedback is the gold shine sweep on .rw-cta (global.css) instead.
   return (
-    <MagneticLink
-      as="button"
+    <button
       type="button"
       onClick={handleClick}
       className={className || undefined}
@@ -62,7 +62,7 @@ export function BookButton({ interest, role, jobId, roleOptions, guidance, sourc
       {...rest}
     >
       {children}
-    </MagneticLink>
+    </button>
   )
 }
 
