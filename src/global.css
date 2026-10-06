@@ -495,7 +495,7 @@ a:hover { color: var(--ink, #12100D); }
   font-size: 12px; letter-spacing: .18em; color: var(--copper);
   transition: color .45s ease;
 }
-.rw-matrix-cell:hover .rw-matrix-num { color: rgba(255,255,255,.82); }
+.rw-matrix-cell:hover .rw-matrix-num { color: #111; }
 
 .rw-matrix-title {
   margin-top: auto; padding-top: 20px;
@@ -503,11 +503,10 @@ a:hover { color: var(--ink, #12100D); }
   color: var(--ink);
   transition: color .45s ease;
 }
-.rw-matrix-cell:hover .rw-matrix-title { color: #fff; }
+.rw-matrix-cell:hover .rw-matrix-title { color: #111; }
 
-/* Same hover language as .rw-matrix above (copper fill, white text) — the mandate
-   article's "three ways" cards, sized for a title plus a body paragraph instead of
-   a title alone. */
+/* Mandate "three ways" cards. Hover keeps the copper fill and turns the text
+   black. Weight stays the same so the type does not jump. */
 .rw-econ-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -524,24 +523,24 @@ a:hover { color: var(--ink, #12100D); }
 }
 .rw-econ-cell:hover { background: var(--copper); }
 
-.rw-econ-num { font-size: 12px; letter-spacing: .18em; color: var(--copper); transition: color .45s ease; }
-.rw-econ-cell:hover .rw-econ-num { color: rgba(255,255,255,.82); }
+.rw-econ-num { font-size: 12px; letter-spacing: .18em; font-weight: 600; color: var(--copper); transition: color .45s ease; }
+.rw-econ-cell:hover .rw-econ-num { color: #111; }
 
 .rw-econ-title {
   margin-top: 14px;
-  font-size: clamp(17px, 1.5vw, 20px); line-height: 1.24; letter-spacing: -.01em;
+  font-size: clamp(17px, 1.5vw, 20px); font-weight: 600; line-height: 1.24; letter-spacing: -.01em;
   color: var(--ink);
   transition: color .45s ease;
 }
-.rw-econ-cell:hover .rw-econ-title { color: #fff; }
+.rw-econ-cell:hover .rw-econ-title { color: #111; }
 
 .rw-econ-body {
   margin-top: 10px;
-  font-weight: 300; font-size: 14px; line-height: 1.55;
+  font-weight: 500; font-size: 14px; line-height: 1.55;
   color: var(--faded);
   transition: color .45s ease;
 }
-.rw-econ-cell:hover .rw-econ-body { color: rgba(255,255,255,.88); }
+.rw-econ-cell:hover .rw-econ-body { color: #111; }
 
 @media (max-width: 720px) {
   .rw-econ-grid { grid-template-columns: 1fr; }

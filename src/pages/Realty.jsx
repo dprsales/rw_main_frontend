@@ -24,7 +24,7 @@ import SectionHead, { SectionAside } from '../components/SectionHead'
 import { useInView } from '../hooks/useInView'
 import { MANDATE_SCOPE } from '../data/content'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
-import { fs, ctaInline,
+import { fs, ctaCopper, ctaInline,
   body, container, eyebrow, headLink,
   intro, lede, pageHeading, sectionHeading, sectionRule,
 } from '../styles'
@@ -139,7 +139,9 @@ export default function Realty() {
 
             <Reveal delay={220} className="rw-realty-hero-actions">
               <BookButton
-                interest="RW Realty mandate" specular
+                interest="RW Realty mandate"
+                className="rw-cta rw-hero-book"
+                style={ctaCopper}
                 eyebrow="DISCUSS A MANDATE"
                 title="Let’s talk about your mandate."
                 subtitle="Share a few details and Team RW will walk you through how the mandate model fits your launch."
@@ -175,7 +177,7 @@ export default function Realty() {
           <SectionHead
             eyebrow="WHAT THE MANDATE COVERS" tracking=".24em" titleWidth="12em"
             title="One team owns the whole funnel."
-            aside={<SectionAside>Eight responsibilities we take off your plate: from strategy and pricing through to closure and daily reporting.</SectionAside>}
+            aside={<SectionAside>Eight responsibilities we take off your plate from strategy and pricing through to closure and daily reporting.</SectionAside>}
           />
 
           <div className="rw-matrix">
@@ -288,7 +290,9 @@ export default function Realty() {
 
               <Reveal delay={510} style={{ marginTop: 34 }}>
                 <BookButton
-                  interest="RW Realty mandate" specular
+                  interest="RW Realty mandate"
+                  className="rw-cta rw-hero-book"
+                  style={ctaCopper}
                   eyebrow="DISCUSS A MANDATE"
                   title="Let’s see if a mandate fits."
                   subtitle="Tell us about the launch and where sales ownership is currently split, and Team RW will walk you through how a mandate would work for it."
