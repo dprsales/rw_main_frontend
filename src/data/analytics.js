@@ -1,13 +1,13 @@
-// analytics.js — central event funnel for GA4/GTM.
-// No tracker is loaded on the site yet, so events are pushed onto `window.dataLayer`
-// only when GTM/GA creates it; nothing leaks to a network otherwise. To wire GA4
-// later, drop the gtag container once and every track() call here starts flowing.
+// analytics.js — central event funnel for the GA4 tag in index.html (G-DNY8TXTM7G).
+// Page views go out from that tag. These calls send the named events (Finder, leads,
+// purchases) to the same property. Nothing here includes name, phone, email, or free text.
 
 export function track(eventName, params = {}) {
   try {
     if (typeof window === 'undefined') return
     const base = { event: eventName, ts: new Date().toISOString() }
     if (Array.isArray(window.dataLayer)) window.dataLayer.push({ ...base, ...params })
+    if (typeof window.gtag === 'function') window.gtag('event', eventName, params)
   } catch {
     // analytics must never break the page
   }
