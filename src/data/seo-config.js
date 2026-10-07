@@ -42,6 +42,11 @@ export const ROUTE_SEO = {
     description:
       'Sales, business development, client relations and operations roles on exclusive luxury mandates. Premium inventory, in-house coaching, uncapped incentives.',
   },
+  '/templates': {
+    title: 'Free Realty Forms for Brokers, Hyderabad | Rajiv Williams',
+    description:
+      'Forms a Hyderabad channel partner or broker fills across the deal: lead intake, builder relations, inventory, closing, and compliance.',
+  },
   '/partner': {
     title: 'Channel Partners, Sell Luxury Inventory | Rajiv Williams',
     description:
@@ -50,7 +55,7 @@ export const ROUTE_SEO = {
   '/about': {
     title: 'About Rajiv Williams | Luxury Sales Mentor, Hyderabad',
     description:
-      'Fifteen years from Dell to developer sales leadership to an independent mentoring practice. TGRERA registered, NAR India and HRA member.',
+      '16+ yrs from Dell to developer sales leadership to an independent mentoring practice. TGRERA registered, NAR India and HRA member.',
   },
   '/contact': {
     title: 'Contact Rajiv Williams, Hyderabad',

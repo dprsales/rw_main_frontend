@@ -26,7 +26,7 @@ export default function About() {
       <PageIntro
         eyebrow="ABOUT · RAJIV WILLIAMS"
         headline={HEADLINE}
-        lede="Fifteen years of live deals, and still counting."
+        lede="16+ yrs of live deals, and still counting."
         intro="Everything taught here was earned in the market first, and taught second. The practice and the teaching run in parallel, with mornings in the market and afternoons with cohorts and boardrooms."
         cta={<BookButton interest="About" specular>APPLY TO WORK WITH RAJIV</BookButton>}
       />

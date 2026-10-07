@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Reveal from './Reveal'
 import { EXPERIENCE, EXPERIENCE_PHASES } from '../data/content'
-import { mono, serif, text } from '../theme'
+import { mono, text } from '../theme'
 import { fs, container, eyebrowFaded, sectionHeading, sectionRule } from '../styles'
 
 /**
@@ -31,6 +31,15 @@ function useActivePhase(keys) {
   return [active, refs]
 }
 
+/* List type is Poppins on both levels. Cormorant stays on the section heading only.
+ * Main point is the company; the role under it is the subpoint, same face, one step down. */
+const point = {
+  fontFamily: text, fontWeight: 500, fontSize: fs('15px'), lineHeight: 1.35, letterSpacing: '.02em', color: 'var(--ink)',
+}
+const subpoint = {
+  fontFamily: text, fontWeight: 400, fontSize: fs('13px'), lineHeight: 1.45, letterSpacing: '.01em', color: 'var(--faded)',
+}
+
 /** Career track — Dell through PVR Developers to the independent practice today. */
 export default function ExperienceSection() {
   const phaseKeys = useMemo(() => EXPERIENCE_PHASES.map((p) => p.key), [])
@@ -44,7 +53,7 @@ export default function ExperienceSection() {
           <div className="rw-sticky-aside">
             <Reveal style={{ ...eyebrowFaded, marginBottom: 18 }}>THE TRACK</Reveal>
             <Reveal as="h2" delay={80} style={{ ...sectionHeading, fontSize: fs('clamp(28px,3.4vw,44px)'), lineHeight: 1.05, maxWidth: '11em' }}>
-              Fifteen years, from the call floor to the boardroom.
+              <span style={{ color: 'var(--copper)' }}>16+</span> yrs, from the call floor to the boardroom.
             </Reveal>
             <Reveal as="p" delay={140} style={{ marginTop: 22, fontFamily: text, fontWeight: 300, fontSize: fs('17px'), lineHeight: 1.6, color: 'var(--faded)', maxWidth: '26em' }}>
               A path that runs from enterprise operations through developer sales leadership into independent mentoring and mandate work.
@@ -109,7 +118,7 @@ export default function ExperienceSection() {
                     <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', textTransform: 'uppercase', color: p === 0 ? 'var(--copper)' : 'var(--ink)' }}>
                       {phase.label}
                     </div>
-                    <div style={{ marginTop: 5, fontFamily: text, fontWeight: 300, fontSize: fs('13px'), color: 'var(--faded)' }}>{phase.note}</div>
+                    <div style={{ ...subpoint, marginTop: 5 }}>{phase.note}</div>
                   </Reveal>
 
                   <div
@@ -128,14 +137,14 @@ export default function ExperienceSection() {
                         style={{ borderTop: '1px solid var(--line)', padding: phase.dense ? '13px 0' : '16px 0' }}
                       >
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                          <span style={{ fontFamily: serif, fontSize: phase.dense ? 16 : 21, color: 'var(--ink)' }}>{role.company}</span>
+                          <span style={point}>{role.company}</span>
                           {role.current && (
                             <span style={{ fontFamily: mono, fontSize: fs('9px'), letterSpacing: '.12em', color: 'var(--copper)', border: '1px solid var(--copper)', borderRadius: 100, padding: '3px 9px' }}>
                               CURRENT
                             </span>
                           )}
                         </div>
-                        <div style={{ marginTop: 5, fontFamily: mono, fontSize: phase.dense ? 11 : 12, letterSpacing: '.04em', color: 'var(--faded)' }}>
+                        <div style={{ ...subpoint, marginTop: 4 }}>
                           {role.role}
                         </div>
                       </Reveal>

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-const HEADER_OFFSET = 74
+export const HEADER_OFFSET = 74
 
 /** Returns scrollToId(id) - smooth-scrolls a section under the sticky header. */
 export function useSmoothScroll() {

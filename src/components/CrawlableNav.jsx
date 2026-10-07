@@ -10,6 +10,7 @@ const CRAWLABLE_LINKS = [
   { label: 'Home', to: '/' },
   { label: 'Luxury sales coaching', to: '/coaching' },
   { label: 'Developer sales consulting', to: '/consulting' },
+  { label: 'Investment advisory', to: '/consulting#investment-advisory' },
   { label: 'RW Realty mandates', to: '/realty' },
   { label: 'Track record and portfolio', to: '/realty/portfolio' },
   { label: 'About Rajiv Williams', to: '/about' },

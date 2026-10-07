@@ -292,7 +292,7 @@ He doesn&apos;t wait for the market to move.<br />
       {/* Cards link out to where each post already lives, so no article routes to maintain.
           Hidden once loading settles with nothing to show. */}
       {(loadingBlogs || allBlogs.length > 0) && (
-      <section id="blogs" className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,120px) 40px' }}>
+      <section id="blogs" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
         <SectionHead
           eyebrow="WRITING" faded size="lg" titleWidth="13em" space={34}
           title="Readings from a live market."
@@ -319,7 +319,7 @@ He doesn&apos;t wait for the market to move.<br />
       )}
 
       {/* Testimonials */}
-      <section id="testimonials" className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,120px) 40px' }}>
+      <section id="testimonials" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
         <Reveal style={{ borderBottom: '1px solid var(--line)', paddingBottom: 22 }}>
           <h2 style={sectionHeading}>In their words</h2>
         </Reveal>

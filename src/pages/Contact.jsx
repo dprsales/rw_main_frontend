@@ -37,7 +37,7 @@ export default function Contact() {
 
       <section style={{ ...sectionRule, background: 'var(--chip)', position: 'relative', overflow: 'hidden' }}>
         <img src={hydMark} alt="" aria-hidden className="rw-watermark is-right" />
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px', position: 'relative', zIndex: 1 }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>REACH RAJIV DIRECTLY</Reveal>
 
           <div style={{ maxWidth: 560 }}>

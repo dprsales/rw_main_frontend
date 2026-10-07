@@ -327,7 +327,7 @@ export default function Partner() {
 
       {/* Why partner with us */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <Reveal style={{ ...eyebrow, marginBottom: 14 }}>WHY PARTNER WITH US</Reveal>
           <Reveal as="h2" delay={80} style={{ ...sectionHeading, maxWidth: '14em' }}>
             A few mandates, run properly.
@@ -355,7 +355,7 @@ export default function Partner() {
 
       {/* Statement band */}
       <section style={{ ...sectionRule, background: 'var(--card)', position: 'relative', overflow: 'hidden' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(64px,8vw,96px) 40px', textAlign: 'center' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-sm) 40px', textAlign: 'center' }}>
           <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, maxWidth: '20em', margin: '0 auto' }}>
             Serious inventory. Serious commissions.{' '}
             <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>A partner who keeps score openly.</span>
@@ -364,7 +364,7 @@ export default function Partner() {
       </section>
 
       {/* How it works */}
-      <section className="rw-pad" style={{ ...container, ...sectionRule, padding: 'clamp(80px,10vw,110px) 40px' }}>
+      <section className="rw-pad" style={{ ...container, ...sectionRule, padding: 'var(--rw-sy) 40px' }}>
         <Reveal style={{ ...eyebrow, marginBottom: 16 }}>HOW IT WORKS</Reveal>
         <Reveal as="h2" delay={80} style={{ ...sectionHeading, maxWidth: '14em' }}>
           Three steps, about two weeks.
@@ -386,7 +386,7 @@ export default function Partner() {
 
       {/* Application */}
       <section id="apply" style={{ ...sectionRule, background: 'var(--chip)', borderBottom: '1px solid var(--line)' }}>
-        <div className="rw-pad" style={{ maxWidth: 860, margin: '0 auto', padding: 'clamp(80px,10vw,110px) 40px' }}>
+        <div className="rw-pad" style={{ maxWidth: 860, margin: '0 auto', padding: 'var(--rw-sy) 40px' }}>
           <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>APPLICATION</Reveal>
           <Reveal as="h2" delay={80} style={{ ...sectionHeading, marginTop: 16 }}>
             Apply to become a channel partner.

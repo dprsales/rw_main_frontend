@@ -20,15 +20,14 @@ export const THEME = {
   '--logo-filter': 'grayscale(1) brightness(0) invert(1)',
 }
 
-/* Two faces, three roles. Both are loaded in index.html - never name a family
+/* Two faces, three roles. Both are loaded in fonts.css - never name a family
  * here the page doesn't fetch.
- * `serif` (Cormorant Garamond) - display headlines, names, titles, pull quotes;
- * narrow with near-normal tracking so hand-placed hero line breaks hold.
- * `mono` (Jost) - eyebrows, nav, buttons, counters, tags at 9-13px; stays crisp where a serif's thin strokes would collapse.
- * `text` (Jost, Book/400) - body copy at 13-21px; Cormorant turns faint and fussy at paragraph sizes. */
+ * `serif` (Cormorant Garamond) - display headlines only.
+ * `mono` (Poppins) - eyebrows, nav, buttons, counters, tags.
+ * `text` (Poppins) - body, cards, and lists. */
 export const serif = "'Cormorant Garamond', 'Times New Roman', serif"
-export const text = "'Jost', system-ui, -apple-system, sans-serif"
-export const mono = "'Jost', system-ui, -apple-system, sans-serif"
+export const text = "'Poppins', system-ui, -apple-system, sans-serif"
+export const mono = "'Poppins', system-ui, -apple-system, sans-serif"
 
 export const EMAIL = 'mailto:connect@rajivwilliams.com'
 

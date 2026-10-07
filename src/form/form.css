@@ -14,7 +14,7 @@
    a var() that resolves nowhere silently falls back to the inherited serif. */
 :root {
   --rw-serif: 'Cormorant Garamond', 'Times New Roman', serif;
-  --rw-sans: 'Jost', system-ui, -apple-system, sans-serif;
+  --rw-sans: 'Poppins', system-ui, -apple-system, sans-serif;
   --rw-ease: cubic-bezier(.2, .75, .25, 1);
 }
 

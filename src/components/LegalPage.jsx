@@ -20,7 +20,7 @@ function sectionId(title) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 }
 
-/** Brand: Jost for counters, Cormorant for the title. "1. Who we are" splits that way. */
+/** Brand: Poppins for counters, Cormorant for the title. "1. Who we are" splits that way. */
 function splitHeading(title) {
   const match = String(title).match(/^(\d+(?:\.\d+)*)\.\s+(.*)$/)
   if (!match) return { num: null, rest: title }

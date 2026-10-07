@@ -63,8 +63,8 @@ export const COACHING_PROGRAMS = [
     k: 'I',
     audience: 'For Developers & Luxury Real-Estate Sales Professionals',
     title: 'Luxury Sales Mastery', subtitle: '1st Opportunity · For Developers & Luxury Real-Estate Sales Professionals · Hyderabad',
-    description: 'Luxury buyer coaching, premium positioning and selling high-value properties.',
-    features: ['Luxury buyer coaching', 'Premium positioning', 'Trust & rapport', 'High-value negotiation & closing'],
+    description: 'Luxury buyer psychology, premium positioning and selling high-value properties.',
+    features: ['Luxury buyer psychology', 'Premium positioning', 'Trust & rapport', 'High-value negotiation & closing'],
     outcome: 'Built to help you understand luxury buyers, position premium offerings and close high-value deals more effectively.',
     session: '90-120 mins session',
   },
@@ -209,7 +209,7 @@ export const SUPPORT_SERVICES = [
 
 /** What an exclusive sales mandate covers, from the brochure's inclusions. */
 export const MANDATE_SCOPE = [
-  { n: '01', title: 'Full ownership of sales strategy, positioning & execution' },
+  { n: '01', title: 'Complete ownership of sales strategy, positioning & execution' },
   { n: '02', title: 'A trained, dedicated sales team deployed onsite' },
   { n: '03', title: 'End-to-end funnel management from lead to closure' },
   { n: '04', title: 'Pricing strategy & deal structuring' },
@@ -226,7 +226,7 @@ export const ORGANISATIONS_WORKED = [
  'Zuari Infraworld', 'Landmark Group', 'Suchirindia', 'Kolla',
   'Nesta Developers', 'Tejase Developers', 'Haneesh Constructions', 'Vibrant Developers', 'Anantha Projects',
   'Avani', 'Gangothri', 'Identity', 'Rohas Ventures', 'CSK Builders & Developers',
-  'Mirai Infracon', 'e-Infra', 'Celestial', 'Navanaami', 'Promenade Villas', 'Radha Spaces',
+  'Mirai Infracon', 'e-Infra', 'Celestial', 'Navanaami', 'Promenade Villas',
 ]
 
 /** The full testimonial wall - every brochure review, condensed. `highlight: true` marks the lines pulled out large. */
@@ -250,8 +250,8 @@ export const PORTFOLIO_TESTIMONIALS = [
  * absent (empty title slots read as unfinished); add a `role` string and the card picks it up automatically.
  */
 export const TEAM = [
-  { name: 'Sridevi Vinjimur', photo: teamSridevi, linkedin: 'https://www.linkedin.com/in/sridevi-vinjimur-147125270/', title: 'Director of Operations', for: ['Coaching', 'Consulting', 'Realty'], bio:'With 10+ years across industries, most of them in real estate, Ms. Sridevi leads back-end operations at Rajiv Williams: hiring, finance, administration and client management. She brings deep expertise in branding, marketing, sales, technology, AI and digital platforms, and is the steady hand who leads the team through every challenge.'},
-  { name: 'Priyanka Panda', photo: teamPriyanka, linkedin: 'https://www.linkedin.com/in/priyanka-panda-238451259/', title: 'Director of Sales', for: ['Realty'], bio: '8+ years in luxury real estate sales & marketing sells by positioning, excels at high-value closures. Under her leadership, Team RW runs high-value sales mandates end to end, from go-to-market strategy to a client experience that keeps your cash flows smooth.' },
+  { name: 'Sridevi Vinjimur', photo: teamSridevi, linkedin: 'https://www.linkedin.com/in/sridevi-vinjimur-147125270/', title: 'Director of Operations', for: ['Coaching', 'Consulting', 'Realty'], bio:'With 10+ yrs across industries, most of them in real estate, Ms. Sridevi leads back-end operations at Rajiv Williams: hiring, finance, administration and client management. She brings deep expertise in branding, marketing, sales, technology, AI and digital platforms, and is the steady hand who leads the team through every challenge.'},
+  { name: 'Priyanka Panda', photo: teamPriyanka, linkedin: 'https://www.linkedin.com/in/priyanka-panda-238451259/', title: 'Director of Sales', for: ['Realty'], bio: '8+ yrs in luxury real estate sales & marketing sells by positioning, excels at high-value closures. Under her leadership, Team RW runs high-value sales mandates end to end, from go-to-market strategy to a client experience that keeps your cash flows smooth.' },
 ]
 
 /* TEAM mapped to ChromaGrid's item shape. Every card uses the same gold
@@ -299,7 +299,7 @@ export const CAREER_CATEGORIES = ['Sales', 'Marketing', 'Operations']
 // Open roles; an empty array renders the "no openings" state.
 export const CAREER_ROLES = [
   {
-    title: 'Sr Sales Consultant',
+    title: 'Sr. Sales Executive',
     type: 'FULL-TIME · HYDERABAD',
     category: 'Sales',
     level: 'Senior',
@@ -321,7 +321,7 @@ export const CAREER_ROLES = [
   {
     title: 'Sales Executive',
     category: 'Sales',
-    level: 'Junior - Mid',
+    level: 'Junior – Mid',
     experience: '1-3 years',
     location: 'Hyderabad',
     description: 'Guide qualified buyers through project discovery, site visits, and follow-up while building a dependable sales pipeline.',
@@ -484,16 +484,6 @@ export const CAREER_ROLES = [
     location: 'Hyderabad',
     description: 'Grow qualified discovery through technical SEO, content optimisation, and measurable search performance.',
     requirements: ['Hands-on technical and on-page SEO experience', 'Comfort with analytics and search tools', 'Ability to turn data into clear actions'],
-  },
-  {
-    title: 'Sr Sales Executive',
-    type: 'FULL-TIME · HYDERABAD',
-    category: 'Sales',
-    level: 'Senior',
-    experience: '3–6 years',
-    location: 'Hyderabad',
-    description: 'Lead high-ticket buyer conversations from qualification through negotiation and closure on luxury mandates.',
-    requirements: ['Track record in residential or commercial real estate sales', 'Strong closing and negotiation skills', 'Comfort with HNI and NRI buyers'],
   },
 ]
 

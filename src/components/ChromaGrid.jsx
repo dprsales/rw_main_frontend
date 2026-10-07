@@ -2,6 +2,35 @@ import { useRef, useEffect } from 'react'
 import { gsap } from 'gsap'
 import './ChromaGrid.css'
 
+/** Team RW and experience marks read in gold. "10+" is set larger than the card body. */
+function highlightMarks(text) {
+  const re = /(Team RW|\d+\+|yrs)/g
+  const out = []
+  let last = 0
+  let match
+  let i = 0
+  while ((match = re.exec(text)) !== null) {
+    if (match.index > last) out.push(text.slice(last, match.index))
+    const figure = match[0] === '10+'
+    out.push(
+      <span
+        key={i}
+        style={{
+          color: 'var(--copper)',
+          fontWeight: 500,
+          ...(figure ? { fontSize: '22px', lineHeight: 1 } : {}),
+        }}
+      >
+        {match[0]}
+      </span>,
+    )
+    i += 1
+    last = match.index + match[0].length
+  }
+  if (last < text.length) out.push(text.slice(last))
+  return out
+}
+
 /**
  * ChromaGrid (React Bits): a desaturating overlay with a radial mask that follows the
  * cursor, revealing colour only under the pointer. Changes from upstream: initials
@@ -107,7 +136,7 @@ export default function ChromaGrid({
           {c.bio && (
             <div className="chroma-citation" role="note">
               <span className="chroma-citation-mark" aria-hidden>“</span>
-              <p className="chroma-citation-text">{c.bio}</p>
+              <p className="chroma-citation-text">{highlightMarks(c.bio)}</p>
               <a
                 className="chroma-citation-link"
                 href={c.url}

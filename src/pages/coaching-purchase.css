@@ -34,7 +34,7 @@
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 9px 18px;
-  font-family: var(--rw-sans, 'Jost');
+  font-family: var(--rw-sans, 'Poppins');
   font-size: 12px;
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -68,7 +68,7 @@
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 12px 22px;
-  font-family: var(--rw-sans, 'Jost');
+  font-family: var(--rw-sans, 'Poppins');
   font-size: 13px;
   letter-spacing: .08em;
   color: var(--faded);
@@ -124,9 +124,9 @@
   align-items: flex-start;
   gap: 12px;
 }
-.rw-pur-card-num { font-family: var(--rw-sans, 'Jost'); font-size: 11px; letter-spacing: .14em; color: var(--copper); white-space: nowrap; }
+.rw-pur-card-num { font-family: var(--rw-sans, 'Poppins'); font-size: 11px; letter-spacing: .14em; color: var(--copper); white-space: nowrap; }
 .rw-pur-card-title { font-family: var(--rw-serif, 'Cormorant Garamond'); font-size: clamp(18px, 2.1vw, 22px); line-height: 1.15; color: var(--ink); }
-.rw-pur-card-group { font-family: var(--rw-sans, 'Jost'); font-size: 10px; letter-spacing: .12em; color: var(--faded); }
+.rw-pur-card-group { font-family: var(--rw-sans, 'Poppins'); font-size: 10px; letter-spacing: .12em; color: var(--faded); }
 .rw-pur-card-focus { font-size: 14px; line-height: 1.5; color: var(--faded); }
 .rw-pur-card-check {
   margin-left: auto;
@@ -161,7 +161,7 @@
   border: 1px solid rgba(195, 155, 83, .35);
   border-radius: 999px;
   padding: 4px 10px;
-  font-family: var(--rw-sans, 'Jost');
+  font-family: var(--rw-sans, 'Poppins');
   font-size: 9px;
   letter-spacing: .12em;
   color: var(--copper);
@@ -170,7 +170,7 @@
 .rw-pur-chip--quiet { border-color: var(--line); color: var(--faded); }
 
 .rw-pur-reason {
-  font-family: var(--rw-sans, 'Jost');
+  font-family: var(--rw-sans, 'Poppins');
   font-size: 12px;
   line-height: 1.5;
   color: var(--faded);
@@ -208,8 +208,8 @@
   gap: 12px;
 }
 .rw-pur-package-price { font-family: var(--rw-serif, 'Cormorant Garamond'); font-size: 30px; color: var(--copper); line-height: 1; margin-top: 4px; }
-.rw-pur-package-save { font-family: var(--rw-sans, 'Jost'); font-size: 10px; letter-spacing: .12em; color: var(--faded); }
-.rw-pur-package-list { font-family: var(--rw-sans, 'Jost'); font-size: 12px; line-height: 1.6; color: var(--faded); }
+.rw-pur-package-save { font-family: var(--rw-sans, 'Poppins'); font-size: 10px; letter-spacing: .12em; color: var(--faded); }
+.rw-pur-package-list { font-family: var(--rw-sans, 'Poppins'); font-size: 12px; line-height: 1.6; color: var(--faded); }
 
 /* --- Price summary (side + mobile) ---------------------------------------- */
 .rw-pur-summary {
@@ -234,7 +234,7 @@
   gap: 12px;
 }
 .rw-pur-summary-count {
-  font-family: var(--rw-sans, 'Jost');
+  font-family: var(--rw-sans, 'Poppins');
   font-size: 9px;
   letter-spacing: .12em;
   color: var(--faded);
@@ -254,14 +254,14 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-family: var(--rw-sans, 'Jost');
+  font-family: var(--rw-sans, 'Poppins');
   font-size: 14px;
   line-height: 1.4;
   color: var(--ink);
 }
-.rw-pur-summary-item-num { font-family: var(--rw-sans, 'Jost'); font-size: 10px; letter-spacing: .1em; color: var(--copper); flex-shrink: 0; }
+.rw-pur-summary-item-num { font-family: var(--rw-sans, 'Poppins'); font-size: 10px; letter-spacing: .1em; color: var(--copper); flex-shrink: 0; }
 .rw-pur-save-note {
-  font-family: var(--rw-sans, 'Jost');
+  font-family: var(--rw-sans, 'Poppins');
   font-size: 13px;
   line-height: 1.5;
   color: var(--faded);
@@ -272,7 +272,7 @@
 }
 
 .rw-pur-rows { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--line); padding-top: 16px; }
-.rw-pur-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-family: var(--rw-sans, 'Jost'); font-size: 13px; color: var(--faded); }
+.rw-pur-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-family: var(--rw-sans, 'Poppins'); font-size: 13px; color: var(--faded); }
 .rw-pur-row b, .rw-pur-row strong { color: var(--ink); font-weight: 400; }
 .rw-pur-row--discount { color: var(--copper); }
 .rw-pur-total {
@@ -284,7 +284,7 @@
   align-items: baseline;
   gap: 12px;
 }
-.rw-pur-total-label { font-family: var(--rw-sans, 'Jost'); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink); }
+.rw-pur-total-label { font-family: var(--rw-sans, 'Poppins'); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink); }
 .rw-pur-total-amount { font-family: var(--rw-serif, 'Cormorant Garamond'); font-size: 34px; color: var(--copper); line-height: 1; }
 
 /* --- Details form ----------------------------------------------------------- */
@@ -292,16 +292,16 @@
 .rw-pur-form-wrap .rw-form-field,
 .rw-pur-form-wrap .rw-form-q-title,
 .rw-pur-form-wrap .rw-form-pill {
-  font-family: var(--rw-sans, 'Jost');
+  font-family: var(--rw-sans, 'Poppins');
 }
 .rw-pur-form-note { margin-top: 12px; text-align: center; }
 
 /* --- Review recap ------------------------------------------------------------ */
 .rw-pur-recap { margin-top: 34px; display: flex; flex-direction: column; gap: 18px; }
 .rw-pur-block { border: 1px solid var(--line); background: var(--card); }
-.rw-pur-block-title { font-family: var(--rw-sans, 'Jost'); font-size: 10px; letter-spacing: .16em; color: var(--copper); padding: 18px 24px 0; }
+.rw-pur-block-title { font-family: var(--rw-sans, 'Poppins'); font-size: 10px; letter-spacing: .16em; color: var(--copper); padding: 18px 24px 0; }
 .rw-pur-block-body { padding: 14px 24px 22px; }
-.rw-pur-line { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 8px 0; border-bottom: 1px solid var(--line); font-family: var(--rw-sans, 'Jost'); font-size: 14px; color: var(--faded); }
+.rw-pur-line { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 8px 0; border-bottom: 1px solid var(--line); font-family: var(--rw-sans, 'Poppins'); font-size: 14px; color: var(--faded); }
 .rw-pur-line:last-child { border-bottom: none; }
 .rw-pur-line strong, .rw-pur-line b { color: var(--ink); font-weight: 400; text-align: right; }
 
@@ -329,7 +329,7 @@
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 8px 16px;
-  font-family: var(--rw-sans, 'Jost');
+  font-family: var(--rw-sans, 'Poppins');
   font-size: 11px;
   letter-spacing: .1em;
   color: var(--faded);
@@ -344,7 +344,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px 22px;
-  font-family: var(--rw-sans, 'Jost');
+  font-family: var(--rw-sans, 'Poppins');
   font-size: 11px;
   letter-spacing: .1em;
   color: var(--faded);
@@ -384,7 +384,7 @@
   color: inherit;
 }
 .rw-pur-pick-num {
-  font-family: var(--rw-sans, 'Jost');
+  font-family: var(--rw-sans, 'Poppins');
   font-size: 10px;
   letter-spacing: .12em;
   color: var(--faded);
@@ -407,7 +407,7 @@
 }
 .rw-pur-pick.is-on .rw-pur-pick-title { color: var(--copper); }
 .rw-pur-pick-sub {
-  font-family: var(--rw-sans, 'Jost');
+  font-family: var(--rw-sans, 'Poppins');
   font-size: 9px;
   letter-spacing: .1em;
   color: var(--faded);
@@ -440,7 +440,7 @@
   padding: 6px 2px;
   cursor: pointer;
   color: var(--faded);
-  font-family: var(--rw-sans, 'Jost');
+  font-family: var(--rw-sans, 'Poppins');
   font-size: 9px;
   letter-spacing: .12em;
   white-space: nowrap;

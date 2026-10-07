@@ -39,6 +39,23 @@ function toRole(job) {
   }
 }
 
+/** "Content Strategist" → "contentstrategist". Letters and digits only, lowercased. */
+export function careerRoleSlug(title) {
+  return String(title || '').toLowerCase().replace(/[^a-z0-9]/g, '')
+}
+
+/** Public apply URL for one open role. */
+export function careerRolePath(title) {
+  const slug = careerRoleSlug(title)
+  return slug ? `/careers/${slug}` : '/careers/apply'
+}
+
+export function findRoleBySlug(roles, slug) {
+  const key = String(slug || '').toLowerCase()
+  if (!key) return null
+  return (roles || []).find((role) => careerRoleSlug(role.title) === key) || null
+}
+
 /** Live open roles, falling back to the curated list; never rejects. */
 export async function fetchRoles() {
   let jobs

@@ -19,7 +19,7 @@ import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { useInView } from '../hooks/useInView'
 import { CAREER_CATEGORIES, CAREER_CULTURE, CAREER_HOOK, CAREER_PROCESS, CAREER_REASONS, CAREER_ROLES } from '../data/content'
 import { CAREERS_INTEREST } from '../data/booking'
-import { fetchRoles } from '../data/jobs'
+import { careerRolePath, fetchRoles } from '../data/jobs'
 import { FOOTER_LINKS, mono, serif } from '../theme'
 import { fs,
   container, ctaInline, eyebrow,
@@ -47,6 +47,44 @@ const CAREER_GLOW = {
 const ALL = 'All'
 const ROLES_PER_PAGE = 6
 
+/* Seniority order for the role list: Entry → Junior → Mid → Senior → Manager → Senior Manager.
+   Matched on keywords, not exact strings, because levels also arrive free-text from the jobs API
+   (and use both '-' and '–'). Anything unrecognised ('Open role') sorts last. */
+function levelRank(level = '') {
+  const l = level.toLowerCase()
+  if (l.includes('senior manager')) return 7
+  if (l.includes('manager')) return 6
+  if (l.includes('entry') || l.includes('trainee')) return 1
+  if (l.includes('junior')) return 2
+  if (l.includes('mid') && l.includes('senior')) return 4
+  if (l.includes('mid')) return 3
+  if (l.includes('senior')) return 5
+  return 99
+}
+// Array.prototype.sort is stable, so roles at the same level keep their curated order.
+const bySeniority = (roles) => [...roles].sort((a, b) => levelRank(a.level) - levelRank(b.level))
+
+/* One card per job: 'Sr. Sales Executive' and 'Sr Sales Executive' (or 'Senior Sales
+   Executive') in the same city are the same opening, whether the repeat comes from the
+   curated list or the jobs API. The first one wins; the same title in another city stays. */
+const roleKey = (role) => {
+  const title = (role.title || '').toLowerCase()
+    .replace(/\bsr\b\.?/g, 'senior')
+    .replace(/\bjr\b\.?/g, 'junior')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+  return `${title}|${(role.location || '').trim().toLowerCase()}`
+}
+const uniqueRoles = (roles) => {
+  const seen = new Set()
+  return roles.filter((role) => {
+    const key = roleKey(role)
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+}
+
 function RoleIcon({ type }) {
   const paths = type === 'location'
     ? <><path d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11Z" /><circle cx="12" cy="10" r="2" /></>
@@ -61,7 +99,7 @@ export default function Careers() {
   const [visibleCount, setVisibleCount] = useState(ROLES_PER_PAGE)
 
   // Seeded with the curated list, replaced if the jobs endpoint answers; fetchRoles never rejects.
-  const [openRoles, setOpenRoles] = useState(CAREER_ROLES)
+  const [openRoles, setOpenRoles] = useState(() => uniqueRoles(CAREER_ROLES))
 
   useEffect(() => {
     document.body.classList.add('rw-careers-page')
@@ -70,7 +108,7 @@ export default function Careers() {
 
   useEffect(() => {
     let live = true
-    fetchRoles().then((rows) => { if (live) setOpenRoles(rows) })
+    fetchRoles().then((rows) => { if (live) setOpenRoles(uniqueRoles(rows)) })
     return () => { live = false }
   }, [])
 
@@ -79,7 +117,7 @@ export default function Careers() {
 
   // Only categories with an open role get a tab.
   const tabs = [ALL, ...categories.filter((c) => openRoles.some((r) => r.category === c))]
-  const roles = filter === ALL ? openRoles : openRoles.filter((role) => role.category === filter)
+  const roles = bySeniority(filter === ALL ? openRoles : openRoles.filter((role) => role.category === filter))
   const visibleRoles = roles.slice(0, visibleCount)
   const roleOptions = openRoles.map((role) => role.title)
 
@@ -140,7 +178,7 @@ export default function Careers() {
           }}
         />
         <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, var(--card) 0%, rgba(20,18,16,.36) 55%, rgba(20,18,16,.62) 100%)' }} />
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(64px,8vw,96px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-sm) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, textShadow: '0 2px 24px rgba(11,10,9,.75)' }}>
             {CAREER_HOOK.lead}
           </Reveal>
@@ -152,7 +190,7 @@ export default function Careers() {
 
       {/* Why here */}
       <section id="why" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <SectionHead
             eyebrow="WHY HERE" titleWidth="11em"
             title="A floor built like a practice."
@@ -164,7 +202,7 @@ export default function Careers() {
       </section>
 
     {/* Life on the floor */}
-      <section className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+      <section className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
         <div
           className="rw-grid-2"
           style={{
@@ -243,7 +281,7 @@ export default function Careers() {
         {/* Dark wash so light body text stays readable over the mid-tone photo. */}
         <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(rgba(11,10,9,.55), rgba(11,10,9,.82))' }} />
 
-        <div className="rw-pad" style={{ ...container, position: 'relative', zIndex: 2, padding: 'clamp(70px,9vw,110px) 40px', textAlign: 'center' }}>
+        <div className="rw-pad" style={{ ...container, position: 'relative', zIndex: 2, padding: 'var(--rw-sy) 40px', textAlign: 'center' }}>
           <Reveal style={{ ...eyebrow, marginBottom: 16 }}>{CAREER_CULTURE.eyebrow}</Reveal>
           <Reveal as="h2" delay={80} style={{ ...sectionHeading, lineHeight: 1.06, maxWidth: '13em', margin: '0 auto' }}>
             {CAREER_CULTURE.title}
@@ -261,7 +299,7 @@ export default function Careers() {
 
       {/* Open roles */}
       <section id="roles" style={{ ...sectionRule, background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,130px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
           <CenteredHead
             eyebrow="OPEN ROLES"
             title="Where we are hiring right now"
@@ -330,7 +368,7 @@ export default function Careers() {
                         </div>
                         <p>{role.description}</p>
                       </div>
-                      <BookButton className="rw-role-apply" to={`/careers/apply?role=${encodeURIComponent(role.title)}${role.id ? `&jobId=${role.id}` : ''}`} interest={APPLY_INTEREST} role={role.title} jobId={role.id} roleOptions={roleOptions} specular style={{ marginTop: 0 }}>
+                      <BookButton className="rw-role-apply" to={careerRolePath(role.title)} interest={APPLY_INTEREST} role={role.title} jobId={role.id} roleOptions={roleOptions} specular style={{ marginTop: 0 }}>
                         APPLY NOW <span aria-hidden>→</span>
                       </BookButton>
                       </article>
@@ -356,7 +394,7 @@ export default function Careers() {
       </section>
 
       {/* Process */}
-      <section id="process" className="rw-pad" style={{ ...container, ...sectionRule, padding: 'clamp(80px,10vw,110px) 40px' }}>
+      <section id="process" className="rw-pad" style={{ ...container, ...sectionRule, padding: 'var(--rw-sy) 40px' }}>
         <Reveal style={{ ...eyebrow, marginBottom: 16 }}>HOW HIRING RUNS</Reveal>
         <Reveal as="h2" delay={80} style={{ ...sectionHeading, maxWidth: '14em' }}>
           Four steps, about two weeks.

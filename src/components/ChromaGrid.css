@@ -105,7 +105,7 @@
   align-items: center;
   gap: 8px;
   padding: 9px 14px;
-  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
   font-size: 10px;
   font-weight: 500;
   letter-spacing: .12em;
@@ -177,12 +177,12 @@
   color: var(--ink);
 }
 
-/* At 10px the serif's thin strokes disappear, so these take Jost explicitly. */
+/* At 10px the serif's thin strokes disappear, so these take Poppins explicitly. */
 .chroma-info .role,
 .chroma-info .handle,
 .chroma-info .location {
   margin: 0;
-  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
   font-size: 10px;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -200,7 +200,7 @@
   margin-top: auto;
   display: inline-flex; align-items: center; gap: 6px;
   padding: 7px 12px;
-  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
   font-size: 10px; font-weight: 500; letter-spacing: .12em;
   color: var(--ink); text-decoration: none;
   border: 1px solid var(--line); border-radius: 3px;

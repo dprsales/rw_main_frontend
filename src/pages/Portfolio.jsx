@@ -1,4 +1,4 @@
-import portraitImage from '../assets/site/portrait-rajiv.png'
+import portraitImage from '../assets/site/DSC08591.jpg'
 import hydMark from '../assets/site/hyd-01.svg'
 import Seo from '../components/Seo'
 import hraLogo from '../assets/site/logo-hra.png'
@@ -142,7 +142,7 @@ export default function Portfolio() {
               <RiseText lines={HEADLINE} step={0.085} />
             </h1>
             <Reveal as="p" delay={140} style={{ marginTop: 32, maxWidth: '34em', fontFamily: text, fontWeight: 300, fontSize: fs('clamp(17px,1.9vw,21px)'), lineHeight: 1.55, color: 'var(--faded)' }}>
-              Where RW shows up, from mentoring sessions and developer launches to industry gatherings and the conversations that shape Hyderabad&apos;s luxury real estate market.
+              Where <span style={{ color: 'var(--copper)', fontWeight: 500 }}>Team RW</span> shows up, from mentoring sessions and developer launches to industry gatherings and the conversations that shape Hyderabad&apos;s luxury real estate market.
             </Reveal>
           </div>
 
@@ -186,7 +186,7 @@ export default function Portfolio() {
       <TeamSection />
 
       {/* Testimonials wall: one line pulled out large, rest layer beneath as a denser grid. */}
-      <section id="voices" className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+      <section id="voices" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
         <SectionHead
           eyebrow="WHAT OUR CLIENTS SAY" faded size="lg" space={34}
           title="Results that speak."
@@ -207,7 +207,7 @@ export default function Portfolio() {
             }}
           >
             {/* ~26em keeps line length comfortable without stranding empty space on desktop. */}
-            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: fs('clamp(21px,2.3vw,31px)'), lineHeight: 1.36, color: 'var(--ink)', margin: 0, maxWidth: '26em' }}>
+            <p style={{ fontFamily: text, fontWeight: 400, fontSize: fs('clamp(18px,1.5vw,22px)'), lineHeight: 1.55, color: 'var(--ink)', margin: 0, maxWidth: '34em' }}>
               “{LEAD_VOICE.text}”
             </p>
             {/* Attribution under the quote: a second column left a tall void beside shorter quotes. */}
@@ -227,7 +227,7 @@ export default function Portfolio() {
         <div className="rw-voice-grid">
           {REST_VOICES.slice(0, 6).map((t, i) => (
             <Reveal key={t.name} delay={(i % 3) * 80} className="rw-voice-card">
-              <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: fs('16px'), lineHeight: 1.55, color: 'var(--ink)', margin: 0 }}>
+              <p style={{ fontFamily: text, fontWeight: 400, fontSize: fs('15px'), lineHeight: 1.6, color: 'var(--ink)', margin: 0 }}>
                 “{t.text}”
               </p>
               <div className="rw-voice-attrib">
@@ -260,7 +260,7 @@ export default function Portfolio() {
 
       {/* Organisations we've worked with - a typographic name wall. */}
       <section id="organisations" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <Reveal style={{ ...eyebrowFaded, marginBottom: 14 }}>ORGANISATIONS WE&apos;VE WORKED WITH</Reveal>
           <Reveal delay={80} as="h2" style={{ ...sectionHeadingSm, maxWidth: '14em' }}>
             Trusted across Hyderabad&apos;s luxury realestate market.
@@ -296,7 +296,7 @@ export default function Portfolio() {
 
       {/* Credentials + associations */}
       <section id="credentials" style={{ ...sectionRule, background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>CREDENTIALS &amp; MEMBERSHIPS</Reveal>
 
           <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>

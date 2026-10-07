@@ -22,6 +22,8 @@ const LEAD_TYPE = {
   'RW Realty mandate': 'contact',
   [CAREERS_INTEREST]: 'contact',
   'Something else': 'contact',
+  'Brokerage form': 'contact',
+  'Template form': 'contact',
 }
 const DEFAULT_LEAD_TYPE = 'contact'
 
@@ -55,6 +57,7 @@ const PAGE_AREAS = [
   [/^\/(realty|projects)/, 'Realty'],
   [/^\/careers/, 'Careers'],
   [/^\/partner/, 'Partner'],
+  [/^\/templates/, 'Templates'],
   [/^\/contact/, 'Contact'],
   [/^\/about/, 'About'],
   [/^\/assessment/, 'Assessment'],

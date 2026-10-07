@@ -113,7 +113,7 @@ function ProgramCard({ program, index }) {
           </button>
         )}
         <BookButton interest="Coaching" className="rw-cta rw-program-cta" style={ctaCopper}>
-          APPLY NOW <ArrowRight size={16} strokeWidth={1.8} aria-hidden />
+         Learn More <ArrowRight size={16} strokeWidth={1.8} aria-hidden />
         </BookButton>
       </div>
     </article>
@@ -187,6 +187,7 @@ export default function Coaching() {
             <span>COACHING</span>
             <span className="rw-coaching-hero-arrow">→</span>
             <span>DEVELOPERS</span>
+            <span className="rw-coaching-hero-break" aria-hidden="true" />
             <span className="rw-coaching-hero-dot" aria-hidden="true" />
             <span>SENIOR SALES LEADERSHIP</span>
             <span className="rw-coaching-hero-dot" aria-hidden="true" />
@@ -232,7 +233,7 @@ export default function Coaching() {
           Was a bare "START ASSESSMENT" button in the hero with no context; moved here
           with the content from the standalone assessment landing page so the CTA has
           a reason behind it. */}
-      <section id="assessment" className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,130px) 40px' }}>
+      <section id="assessment" className="rw-pad" style={{ ...container, padding: 'clamp(40px, 4vw, 56px) 40px clamp(72px, 8vw, 96px)' }}>
         <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 56, alignItems: 'start' }}>
           <Reveal>
             <div style={{ ...eyebrow, marginBottom: 18 }}>THE ASSESSMENT</div>
@@ -271,7 +272,7 @@ export default function Coaching() {
 
       {/* What you'll achieve - numbered outcome cards */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <SectionHead
             eyebrow="WHAT CHANGES" titleWidth="11em"
             title="Outcomes, not certificates."
@@ -283,7 +284,7 @@ export default function Coaching() {
       </section>
 
       {/* Premium programs */}
-      <section id="premium-programs" className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,130px) 40px' }}>
+      <section id="premium-programs" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
         <CenteredHead
           eyebrow="THREE WAYS IN"
           title={<><span style={{ color: 'var(--copper)' }}>Three</span> ways to work together</>}
@@ -302,7 +303,7 @@ export default function Coaching() {
 
       {/* Curriculum - the full syllabus, as six numbered category cards */}
       <section id="curriculum" className="rw-pad" style={{ ...sectionRule, background: 'var(--chip)' }}>
-        <div style={{ ...container, padding: 'clamp(90px,11vw,130px) 40px' }}>
+        <div style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
           <SectionHead
             eyebrow="THE SYLLABUS" titleWidth="15em"
             title="Sales upskilling, and the personality behind it."
@@ -316,7 +317,7 @@ export default function Coaching() {
       {/* Testimonials */}
       <section style={{ background: 'var(--bg)', position: 'relative', overflow: 'hidden' }}>
         <img src={hydMark} alt="" aria-hidden className="rw-watermark rw-coaching-testimonial-mark is-left" />
-        <div className="rw-pad rw-coaching-testimonials" style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(80px,10vw,110px) 40px', position: 'relative', zIndex: 1 }}>
+        <div className="rw-pad rw-coaching-testimonials" style={{ maxWidth: 1200, margin: '0 auto', padding: 'var(--rw-sy) 40px', position: 'relative', zIndex: 1 }}>
           {COACHING_TESTIMONIALS.map((t, i) => (
             <Reveal key={t.name} delay={i * 90} style={{ padding: '30px 0', textAlign: 'center' }}>
               <PullQuote as="p" size="clamp(16px,1.5vw,20px)" lineHeight={1.5} space={16} name={t.name}>
@@ -328,7 +329,7 @@ export default function Coaching() {
       </section>
 
       <section style={{ background: 'var(--chip)', borderTop: '1px solid var(--line)' }}>
-        <div className="rw-pad" style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(70px,9vw,110px) 40px', textAlign: 'center' }}>
+        <div className="rw-pad" style={{ maxWidth: 900, margin: '0 auto', padding: 'var(--rw-sy) 40px', textAlign: 'center' }}>
           <Reveal>
             <PullQuote as="p" size="clamp(26px,3.6vw,44px)" lineHeight={1.2}>
               “Hyderabad real estate has leveled up. Have you?”

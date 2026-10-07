@@ -4,6 +4,7 @@ import { BookingProvider } from './components/BookingModal'
 import ScrollProgress from './components/ScrollProgress'
 import SiteLoader from './components/SiteLoader'
 import { ThemeProvider } from './components/ThemeProvider'
+import { HEADER_OFFSET } from './hooks/useSmoothScroll'
 import { useSiteVisitTracker } from './hooks/useSiteVisitTracker'
 import About from './pages/About'
 import Assessment from './pages/Assessment'
@@ -31,10 +32,35 @@ if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
   window.history.scrollRestoration = 'manual'
 }
 
-/** Every route change lands at the top before the page is painted. */
+/** Every route change lands at the top before the page is painted - unless the link
+ *  names a section (e.g. /consulting#investment-advisory), which lands on that section. */
 function ScrollToTop() {
-  const { pathname } = useLocation()
-  useLayoutEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  const { pathname, hash } = useLocation()
+  useLayoutEffect(() => {
+    if (!hash) { window.scrollTo(0, 0); return }
+    const id = decodeURIComponent(hash.slice(1))
+    const targetY = (el) => Math.max(0, el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET)
+    let frame
+    let settleTimer
+    let tries = 0
+    const go = () => {
+      const el = document.getElementById(id)
+      if (!el) {
+        // The page may still be rendering; give it ~1s before falling back to the top.
+        if (++tries < 60) frame = requestAnimationFrame(go)
+        else window.scrollTo(0, 0)
+        return
+      }
+      window.scrollTo(0, targetY(el))
+      // Images above the section can still shift it; correct once, unless the visitor has scrolled.
+      const landedAt = window.scrollY
+      settleTimer = setTimeout(() => {
+        if (Math.abs(window.scrollY - landedAt) < 4 && Math.abs(targetY(el) - landedAt) > 8) window.scrollTo(0, targetY(el))
+      }, 700)
+    }
+    go()
+    return () => { cancelAnimationFrame(frame); clearTimeout(settleTimer) }
+  }, [pathname, hash])
   return null
 }
 
@@ -43,7 +69,7 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      {/* <SiteLoader /> */}
+      <SiteLoader />
       <BookingProvider>
         <ScrollToTop />
         <ScrollProgress />
@@ -59,6 +85,7 @@ export default function App() {
           <Route path="/realty" element={<Realty />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/careers/apply" element={<CareersApply />} />
+          <Route path="/careers/:roleSlug" element={<CareersApply />} />
           <Route path="/assessment" element={<Assessment />} />
           <Route path="/assesment" element={<Assessment />} />
           <Route path="/assessment/result" element={<AssessmentResult />} />

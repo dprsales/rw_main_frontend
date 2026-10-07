@@ -289,7 +289,7 @@ function ProjectHero({ hero, details, name }) {
               >
                 {facts.map(([label, value]) => (
                   <div key={label}>
-                    {/* Jost, not Cormorant: the values are mostly digits, and Cormorant's
+                    {/* Poppins, not Cormorant: the values are mostly digits, and Cormorant's
                         old-style figures sit at uneven heights (2, 2.5, 3, 3.5 / 1085 – 2615). */}
                     <div
                       style={{

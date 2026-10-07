@@ -13,7 +13,6 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 import LogoLoop from '../components/LogoLoop'
 import Seo from '../components/Seo'
-import ProjectsSection from '../components/ProjectsSection'
 import { BookButton } from '../components/BookingModal'
 import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
@@ -54,17 +53,17 @@ const MANDATE_ECONOMICS = [
   {
     n: '01',
     title: 'Absorption rate',
-    body: 'A mandate team is judged on velocity, not activity, so the entire funnel is built to move buyers from interest to signature faster.',
+    body: 'Built for velocity: buyers move from interest to signature faster.',
   },
   {
     n: '02',
     title: 'Price realisation',
-    body: 'When nobody owns pricing end to end, discounting becomes the default lever every time a deal stalls. We defend price because our own success is measured on it, not on how many enquiries we logged this week.',
+    body: 'We defend price, because our results are measured on it. No discounting by default.',
   },
   {
     n: '03',
     title: 'Cash flow predictability',
-    body: 'Developers don’t just need sales, they need sales that land on a schedule construction can plan around. A team accountable for the full funnel can forecast that. A patchwork of vendors cannot.',
+    body: 'Sales that land on a schedule construction can plan around.',
   },
 ]
 
@@ -173,7 +172,7 @@ export default function Realty() {
 
       {/* What the mandate covers - numbered scope cards */}
       <section id="scope" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <SectionHead
             eyebrow="WHAT THE MANDATE COVERS" tracking=".24em" titleWidth="12em"
             title="One team owns the whole funnel."
@@ -192,7 +191,7 @@ export default function Realty() {
       </section>
 
       {/* Why this model */}
-      <section id="why" className="rw-pad rw-why-section" style={{ ...container, padding: 'clamp(90px,11vw,130px) 40px', position: 'relative', overflow: 'hidden' }}>
+      <section id="why" className="rw-pad rw-why-section" style={{ ...container, padding: 'var(--rw-sy-lg) 40px', position: 'relative', overflow: 'hidden' }}>
         <img src={skylineImage} alt="" aria-hidden className="rw-why-watermark" />
         <div className="rw-split" style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56 }}>
           <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>WHY IT WORKS</Reveal>
@@ -219,7 +218,7 @@ export default function Realty() {
           title moved into the left column too (real weight, not just a tag), and
           the whole left column is sticky so it stays in view the entire scroll. */}
       <section id="mandate-article" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--card)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,130px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
           <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56 }}>
             {/* .rw-sticky-aside is the site's existing pinned-column pattern (already
                 used elsewhere, already disabled on mobile) — reused rather than
@@ -238,79 +237,63 @@ export default function Realty() {
               </h2>
             </div>
 
-            <div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 22, maxWidth: '42em' }}>
-                <Reveal as="p" delay={100} style={body}>
-                  We keep seeing the same pattern with developers before they come to us.
-                </Reveal>
-                <Reveal delay={112} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  {[
-                    { l: 'A', text: <>Sales that don&rsquo;t convert fast enough.</> },
-                    { l: 'B', text: <><b style={strongInBody}>Cash flow</b> that doesn&rsquo;t match the construction timeline.</> },
-                    { l: 'C', text: <>A sales function that technically exists but that nobody actually owns.</> },
-                  ].map((item) => (
-                    <div key={item.l} style={{ display: 'flex', gap: 14, alignItems: 'baseline' }}>
-                      <span style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.1em', color: 'var(--copper)', flexShrink: 0 }}>{item.l}</span>
-                      <span style={body}>{item.text}</span>
-                    </div>
-                  ))}
-                </Reveal>
-                <Reveal as="p" delay={130} style={body}>
-                  That last one is the real problem. Most projects split sales across a broker network, an in-house team, and a marketing agency. Each is optimising for a different number. The broker wants a fast commission. The agency wants engagement metrics. The structure itself guarantees nobody is accountable for the one number that matters. <b style={{ ...strongInBody, textTransform: 'uppercase' }}>Units closed, at the right price, on schedule.</b>
-                </Reveal>
-                <Reveal as="p" delay={160} style={body}>
-                  A sales mandate fixes this by design, not by effort. We take <b style={strongInBody}>end-to-end ownership</b> of the sales outcome, from marketing strategy and buyer experience to negotiation and closing. All of it sits with one accountable partner instead of three misaligned ones.
-                </Reveal>
-                <Reveal as="p" delay={190} style={{ ...body, color: 'var(--ink)', fontFamily: serif, fontStyle: 'italic', fontSize: fs('clamp(18px,1.9vw,21px)'), lineHeight: 1.5 }}>
-                  This changes the economics in three specific ways.
-                </Reveal>
-              </div>
-
-              <div className="rw-econ-grid">
-                {MANDATE_ECONOMICS.map((item, i) => (
-                  <Reveal key={item.n} delay={220 + i * 60} className="rw-econ-cell">
-                    <span className="rw-econ-num" style={{ fontFamily: mono }}>{item.n}</span>
-                    <div className="rw-econ-title" style={{ fontFamily: serif }}>{item.title}</div>
-                    <p className="rw-econ-body" style={{ fontFamily: text }}>{item.body}</p>
-                  </Reveal>
+            {/* Short form: problem, fix, three outcomes, ask - about one screen instead of two. */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 22, maxWidth: '42em' }}>
+              <Reveal as="p" delay={100} style={body}>
+                Most stalled launches share three problems:
+              </Reveal>
+              <Reveal delay={112} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {[
+                  { l: 'A', text: <>Sales that don&rsquo;t convert fast enough.</> },
+                  { l: 'B', text: <><b style={strongInBody}>Cash flow</b> that doesn&rsquo;t match the construction timeline.</> },
+                  { l: 'C', text: <>A sales function nobody actually owns.</> },
+                ].map((item) => (
+                  <div key={item.l} style={{ display: 'flex', gap: 14, alignItems: 'baseline' }}>
+                    <span style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.1em', color: 'var(--copper)', flexShrink: 0 }}>{item.l}</span>
+                    <span style={body}>{item.text}</span>
+                  </div>
                 ))}
-              </div>
-
-              <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 22, maxWidth: '42em' }}>
-                <Reveal as="p" delay={420} style={body}>
-                  None of this works without real skin in the game. A mandate is not a marketing retainer. It&rsquo;s us taking ownership of outcomes a developer would otherwise have to manage themselves, with the discipline of a team whose own numbers are on the line.
-                </Reveal>
-                <Reveal as="p" delay={450} style={body}>
-                  Hyderabad&rsquo;s luxury and premium segment has more competing launches chasing the same buyer pool than it used to. In that market, a sales function nobody owns isn&rsquo;t a manageable weakness. It&rsquo;s the reason a launch stalls.
-                </Reveal>
-                <Reveal as="p" delay={480} style={{ ...body, color: 'var(--ink)' }}>
-                  If your sales strategy is currently split across three vendors and owned by none of them, that&rsquo;s worth a conversation.
-                </Reveal>
-              </div>
-
-              <Reveal delay={510} style={{ marginTop: 34 }}>
-                <BookButton
-                  interest="RW Realty mandate"
-                  className="rw-cta rw-hero-book"
-                  style={ctaCopper}
-                  eyebrow="DISCUSS A MANDATE"
-                  title="Let’s see if a mandate fits."
-                  subtitle="Tell us about the launch and where sales ownership is currently split, and Team RW will walk you through how a mandate would work for it."
-                >
-                  DISCUSS A MANDATE
-                </BookButton>
+              </Reveal>
+              <Reveal as="p" delay={130} style={body}>
+                Brokers chase commission. Agencies chase engagement. Nobody owns the one number that matters: <b style={{ ...strongInBody, textTransform: 'uppercase' }}>Units closed, at the right price, on schedule.</b> A mandate puts all of it with <b style={strongInBody}>one accountable partner</b>, from marketing strategy to closing.
               </Reveal>
             </div>
+          </div>
+
+          {/* Outcome cards span the full section, not just the text column (they were 248px wide there). */}
+          <div className="rw-econ-grid rw-econ-grid--wide">
+            {MANDATE_ECONOMICS.map((item, i) => (
+              <Reveal key={item.n} delay={160 + i * 60} className="rw-econ-cell">
+                <span className="rw-econ-num" style={{ fontFamily: mono }}>{item.n}</span>
+                <div className="rw-econ-title" style={{ fontFamily: serif }}>{item.title}</div>
+                <p className="rw-econ-body" style={{ fontFamily: text }}>{item.body}</p>
+              </Reveal>
+            ))}
+          </div>
+
+          <div className="rw-mandate-close">
+            <Reveal as="p" delay={340} style={{ ...body, color: 'var(--ink)', maxWidth: '36em' }}>
+              Hyderabad&rsquo;s luxury market has more launches chasing the same buyers. If your sales are split across three vendors and owned by none, let&rsquo;s talk.
+            </Reveal>
+            <Reveal delay={380}>
+              <BookButton
+                interest="RW Realty mandate"
+                className="rw-cta rw-hero-book"
+                style={ctaCopper}
+                eyebrow="DISCUSS A MANDATE"
+                title="Let’s see if a mandate fits."
+                subtitle="Tell us about the launch and where sales ownership is currently split, and Team RW will walk you through how a mandate would work for it."
+              >
+                DISCUSS A MANDATE
+              </BookButton>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* Same "projects behind the numbers" section Portfolio carries, shared from one component. */}
-      <ProjectsSection />
-
       {/* Teaser into the portfolio: projects we hold photography for, not the mandate roster. */}
       <section id="clients" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <SectionHead
             eyebrow="SELECTED CLIENTS" faded size="sm" space={30}
             title="A few of the addresses."

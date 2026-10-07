@@ -14,6 +14,7 @@ import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import ClosingCTA from '../components/ClosingCTA'
 import RelatedReading from '../components/RelatedReading'
+import ProjectsSection from '../components/ProjectsSection'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { SectionAside } from '../components/SectionHead'
 import { DEVELOPER_SHIFTS, ECOSYSTEM, SUPPORT_SERVICES } from '../data/content'
@@ -258,12 +259,11 @@ export default function Consulting() {
           </Reveal>
 
           <Reveal as="p" delay={150} className="rw-consulting-hero-subhead" style={{ fontFamily: text }}>
-            Business process consulting for real-estate developers &amp; sales organizations.
+            Business process consulting for real-estate developers &amp; sales Org's.
           </Reveal>
 
           <Reveal as="p" delay={190} className="rw-consulting-hero-lede" style={{ fontFamily: text }}>
-            Team RW advises real-estate developers on how inventory actually sells. Engagements are few,
-            structured &amp; measured in absorption.
+          Team RW provides consulting & advisory to builders & real estate developers on inventory sales & marketing.
           </Reveal>
 
           <Reveal delay={220} className="rw-hero-actions">
@@ -292,7 +292,7 @@ export default function Consulting() {
 
       {/* The mission, then the quote it runs on - signed. */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,120px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
           <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56 }}>
             <Reveal style={{ ...eyebrow, fontSize: fs('clamp(15px,1.6vw,19px)'), letterSpacing: '.22em' }}>THE MISSION</Reveal>
             <Reveal delay={100}>
@@ -312,7 +312,7 @@ export default function Consulting() {
       </section>
 
       {/* Developer challenge - a ledger of what each problem is replaced by. */}
-      <section id="challenge" className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,120px) 40px' }}>
+      <section id="challenge" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
         <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56, marginBottom: 'clamp(48px,6vw,72px)' }}>
           <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>THE DEVELOPER CHALLENGE</Reveal>
           <Reveal delay={100}>
@@ -332,7 +332,7 @@ export default function Consulting() {
 
       {/* Sales ecosystem model */}
       <section id="model" style={{ ...sectionRule, background: 'var(--chip)', overflow: 'hidden' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,120px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
           <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56, marginBottom: 'clamp(56px,7vw,90px)' }}>
             <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>OUR CONSULTING FRAMEWORK</Reveal>
             <Reveal delay={100}>
@@ -348,7 +348,7 @@ export default function Consulting() {
       </section>
 
       {/* & More - additional strategic support services */}
-      <section id="support" className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,120px) 40px' }}>
+      <section id="support" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
         <SectionHead
           eyebrow="& MORE" tracking=".24em" titleWidth="12em"
           title="Strategic support, beyond the framework."
@@ -362,7 +362,7 @@ export default function Consulting() {
 
       {/* One engagement, anonymised - the case study, with its three numbers. */}
       <section id="engagement" style={{ ...sectionRule, background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <Reveal style={{ ...eyebrow, letterSpacing: '.24em', marginBottom: 14 }}>ONE ENGAGEMENT, ANONYMISED</Reveal>
           <Reveal as="h2" delay={80} style={{ ...sectionHeading, maxWidth: '16em' }}>
             A West Hyderabad launch, stalled at 22% sold.
@@ -397,9 +397,12 @@ export default function Consulting() {
         </div>
       </section>
 
+      {/* Investment Advisory: the projects map, linked from the header under Sales Consulting. */}
+      <ProjectsSection id="investment-advisory" />
+
       <RelatedReading service="consulting" title="Reading for sales leaders & teams." />
 
-      <ClosingCTA id="talk" chip title="If the inventory is right and the velocity is wrong, talk.">
+      <ClosingCTA id="talk" chip title="If inventory is right, & the velocity is Wrong ? Talk !!!">
         <CtaButton variant="outline" href="/form/consulting">TELL US ABOUT YOUR BUSINESS</CtaButton>
       </ClosingCTA>
 

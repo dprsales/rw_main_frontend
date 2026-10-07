@@ -13,30 +13,140 @@ img, svg, video, canvas { max-width: 100%; }
 /* `svh` is the small-viewport height, so a phone's address bar leaves no dead space. */
 .rw-app-shell { min-height: 100vh; min-height: 100svh; }
 
+/* SECTION RHYTHM - the vertical padding every page section uses. It follows the
+   viewport's height as well as its width, so a short 1366x768 laptop no longer gets
+   the full 110-130px band top and bottom (a third of the screen between sections),
+   while large desktops keep the same generous breathing room as before. */
+:root {
+  --rw-sy-lg: clamp(64px, min(9vw, 13vh), 120px);
+  --rw-sy: clamp(56px, min(8vw, 11.5vh), 104px);
+  --rw-sy-sm: clamp(48px, min(6.5vw, 9vh), 84px);
+}
+
 /* Initial-load brand cover. It mounts once with App and never runs on route changes. */
 .rw-site-loader {
   position: fixed;
-  z-index: 10000;
+  z-index: 2147483647; /* above the Kenyt chat widget (2147483646) until the cover lifts */
   inset: 0;
   display: grid;
   place-items: center;
+  padding: 24px 16px;
   overflow: hidden;
-  background: #0B0A09;
+  background:
+    radial-gradient(120% 80% at 50% 45%, transparent 40%, rgba(0,0,0,.55) 100%),
+    #0B0A09;
   opacity: 1;
   visibility: visible;
-  transition: opacity .42s ease, visibility 0s linear .42s;
+  clip-path: inset(0 0 0 0);
+  transition:
+    clip-path .75s cubic-bezier(.76,0,.24,1) .3s,
+    opacity .35s ease .7s,
+    visibility 0s linear 1.05s;
 }
 
+/* Exit: the content lifts away and the cover rises like a curtain to reveal the page. */
 .rw-site-loader.is-leaving {
+  clip-path: inset(0 0 100% 0);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
 
+.rw-site-loader-stage {
+  /* One size drives the mark, its halo and the progress track so they always stay in
+     proportion: ~64% of the width on phones, ~44% of the height on wider screens.
+     Breakpoint overrides at the end of the loader block. */
+  --rw-mark: clamp(200px, min(64vw, 44vh), 600px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform .7s cubic-bezier(.7,0,.3,1), opacity .5s ease, filter .5s ease;
+}
+
+.rw-site-loader.is-leaving .rw-site-loader-stage {
+  transform: translateY(-28px) scale(1.04);
+  opacity: 0;
+  filter: blur(6px);
+  /* Hold a beat so the progress line visibly completes before everything lifts. */
+  transition-delay: .22s;
+}
+
+/* A warm dawn rising from below, with gold embers drifting upward. */
+.rw-site-loader-ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.rw-site-loader-ambient::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -45vh;
+  width: 140vmax;
+  height: 90vh;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(195,155,83,.22), rgba(195,155,83,.06) 55%, transparent 75%);
+  transform: translateX(-50%);
+  animation: rw-loader-dawn 3.4s cubic-bezier(.2,.7,.2,1) both;
+}
+
+.rw-site-loader-ember {
+  position: absolute;
+  left: var(--x);
+  bottom: -12px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: #E8C97A;
+  box-shadow: 0 0 6px 1px rgba(232,201,122,.65);
+  opacity: 0;
+  animation: rw-loader-ember var(--duration) linear var(--delay) infinite;
+}
+
+.rw-site-loader-halo {
+  --rw-halo-size: calc(var(--rw-mark) * 2);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--rw-halo-size);
+  height: var(--rw-halo-size);
+  margin: calc(var(--rw-halo-size) / -2) 0 0 calc(var(--rw-halo-size) / -2);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(232,201,122,.16), rgba(195,155,83,.05) 55%, transparent 100%);
+  pointer-events: none;
+}
+
+/* A specular glint that crosses the filled mark at the ignite, clipped to the logo's alpha. */
+.rw-site-loader-glint {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: var(--rw-loader-logo);
+  mask-image: var(--rw-loader-logo);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.rw-site-loader-glint-band {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 45%;
+  background: linear-gradient(100deg, transparent 0%, rgba(255,246,220,.15) 30%, rgba(255,250,235,.95) 50%, rgba(255,246,220,.15) 70%, transparent 100%);
+  transform: translateX(-120%) skewX(-18deg);
+  mix-blend-mode: screen;
+}
+
 .rw-site-loader-logo {
   position: relative;
-  width: clamp(116px, 16vw, 176px);
-  filter: drop-shadow(0 16px 36px rgba(195,155,83,.18));
+  width: var(--rw-mark);
+  filter: drop-shadow(0 20px 48px rgba(195,155,83,.22));
 }
 
 .rw-site-loader-logo-base {
@@ -103,17 +213,123 @@ img, svg, video, canvas { max-width: 100%; }
   fill: #C39B53;
 }
 
-.rw-site-loader-logo.is-ready .rw-site-loader-liquid {
-  animation: rw-loader-fill 1.4s cubic-bezier(.3,.1,.35,1) .12s both;
-}
-
 .rw-site-loader-logo.is-ready .rw-site-loader-wave {
   animation: rw-loader-wave 1.15s linear infinite;
 }
 
-@keyframes rw-loader-fill {
-  from { transform: translateY(calc(100% + 18px)); }
-  to { transform: translateY(0); }
+/* A dim gold track under the mark; the bright fill inside it is the loading progress. */
+.rw-site-loader-rule {
+  position: relative;
+  width: calc(var(--rw-mark) * .8);
+  height: 2px;
+  margin: clamp(26px, 4.2vh, 44px) 0 clamp(16px, 2.4vh, 22px);
+  border-radius: 2px;
+  background: rgba(232,201,122,.16);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+
+.rw-site-loader-progress {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #A67C3D, #E8C97A 70%, #FFF1C9);
+  box-shadow: 0 0 10px rgba(232,201,122,.7);
+  transform-origin: left center;
+}
+
+.rw-site-loader-services {
+  position: relative;
+  font-size: clamp(13px, 1.9vw, 24px);
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rw-site-loader-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.05em;
+  letter-spacing: .4em;
+}
+
+.rw-site-loader-row--main { color: #D2B272; }
+
+/* Same markup overlaid in bright champagne, revealed only inside a moving band of light. */
+.rw-site-loader-row--shine {
+  --rw-shine-x: -20%;
+  position: absolute;
+  inset: 0;
+  color: #FFF4D6;
+  text-shadow: 0 0 14px rgba(232,201,122,.7);
+  opacity: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(100deg, transparent calc(var(--rw-shine-x) - 14%), #000 var(--rw-shine-x), transparent calc(var(--rw-shine-x) + 14%));
+  mask-image: linear-gradient(100deg, transparent calc(var(--rw-shine-x) - 14%), #000 var(--rw-shine-x), transparent calc(var(--rw-shine-x) + 14%));
+}
+
+.rw-site-loader-word {
+  display: inline-flex;
+  padding: .2em 0;
+  overflow: hidden;
+  perspective: 600px;
+}
+
+.rw-site-loader-letter {
+  display: inline-block;
+  backface-visibility: hidden;
+}
+
+/* letter-spacing trails the last glyph; dropping it keeps each word optically centred. */
+.rw-site-loader-letter:last-child { letter-spacing: 0; }
+
+.rw-site-loader-divider {
+  flex: none;
+  width: .38em;
+  height: .38em;
+  background: linear-gradient(135deg, #F3DC9C, #C39B53);
+  box-shadow: 0 0 10px rgba(232,201,122,.75);
+  transform: rotate(45deg);
+}
+
+/* Hidden start states only when motion is allowed; GSAP plays them in once the logo is ready. */
+@media (prefers-reduced-motion: no-preference) {
+  .rw-site-loader-ambient,
+  .rw-site-loader-halo,
+  .rw-site-loader-logo,
+  .rw-site-loader-row--main .rw-site-loader-letter,
+  .rw-site-loader-row--main .rw-site-loader-divider { opacity: 0; }
+  .rw-site-loader-rule { opacity: 0; transform: scaleX(0); }
+}
+
+@media (max-width: 480px) {
+  .rw-site-loader-services { font-size: 13px; }
+  .rw-site-loader-row { gap: .7em; letter-spacing: .2em; }
+}
+
+/* Very narrow phones (≤359px): tighten the words so the line never touches the edges. */
+@media (max-width: 359px) {
+  .rw-site-loader-services { font-size: 12px; }
+  .rw-site-loader-row { gap: .55em; letter-spacing: .14em; }
+}
+
+/* Portrait tablets: the height rule alone would make the mark overpower a tall iPad. */
+@media (min-width: 600px) and (max-width: 1100px) and (orientation: portrait) {
+  .rw-site-loader-stage { --rw-mark: min(400px, 50vw); }
+}
+
+/* Landscape phones: very little height, so keep the whole stack compact. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .rw-site-loader-stage { --rw-mark: clamp(150px, 42vh, 200px); }
+  .rw-site-loader-rule { margin: 16px 0 12px; }
+  .rw-site-loader-services { font-size: 12px; }
+}
+
+/* Large monitors (2K/4K): the words grow in step with the bigger mark. */
+@media (min-width: 2200px) and (min-height: 1200px) {
+  .rw-site-loader-services { font-size: 28px; }
 }
 
 @keyframes rw-loader-wave {
@@ -121,14 +337,32 @@ img, svg, video, canvas { max-width: 100%; }
   to { transform: translateX(-50%); }
 }
 
+@keyframes rw-loader-dawn {
+  from { opacity: 0; transform: translate(-50%, 18vh) scale(.8); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+@keyframes rw-loader-ember {
+  0% { opacity: 0; transform: translate3d(0, 0, 0); }
+  15% { opacity: .6; }
+  70% { opacity: .35; }
+  100% { opacity: 0; transform: translate3d(18px, -78vh, 0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rw-site-loader { transition: opacity .15s ease, visibility 0s linear .15s; }
+  .rw-site-loader.is-leaving { clip-path: inset(0 0 0 0); }
+  .rw-site-loader-stage { transition: none; }
+  .rw-site-loader.is-leaving .rw-site-loader-stage { transform: none; filter: none; }
   .rw-site-loader-logo.is-ready .rw-site-loader-liquid,
   .rw-site-loader-logo.is-ready .rw-site-loader-wave {
     animation: none;
     transform: none;
   }
-  .rw-site-loader-wave { display: none; }
+  .rw-site-loader-wave,
+  .rw-site-loader-ember,
+  .rw-site-loader-row--shine { display: none; }
+  .rw-site-loader-ambient::before { animation: none; }
   .rw-site-loader-glow { opacity: .3; }
   .rw-site-loader-glow-sweep { -webkit-mask-image: none; mask-image: none; }
 }
@@ -271,7 +505,9 @@ a:hover { color: var(--ink, #12100D); }
 @media (min-width: 1041px) { .rw-hero-sign { margin-block: -24px; transform: translateY(-6px); } }
 .rw-hero-sign .rw-realty-signature-reveal { width: 200px; }
 /* Brighter gold plus a soft glow so the signature reads clearly over the photo. */
-.rw-hero-sign .rw-realty-signature { filter: brightness(1.35) saturate(1.15) drop-shadow(0 0 6px rgba(232, 201, 122, .35)); }
+.rw-hero-sign .rw-realty-signature,
+.rw-portrait-sign .rw-realty-signature { filter: brightness(1.35) saturate(1.15) drop-shadow(0 0 6px rgba(232, 201, 122, .35)); }
+.rw-portrait-sign .rw-realty-signature-reveal { width: min(62%, 240px); }
 @media (max-width: 1040px) {
   .rw-hero-sign { margin-left: 0; margin-right: 0; }
   .rw-hero-sign .rw-realty-signature-reveal { width: 130px; }
@@ -376,7 +612,7 @@ a:hover { color: var(--ink, #12100D); }
   background: var(--chip);
   border: 1px solid var(--line);
   color: var(--copper);
-  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
   font-size: 15px; line-height: 1;
   transition: background .35s ease, border-color .35s ease, color .35s ease;
 }
@@ -483,7 +719,7 @@ a:hover { color: var(--ink, #12100D); }
   position: relative;
   display: flex; flex-direction: column;
   padding: clamp(24px, 2.4vw, 34px) clamp(20px, 1.9vw, 28px);
-  min-height: clamp(168px, 15vw, 220px);
+  min-height: clamp(150px, 13vw, 190px);
   background: var(--card);
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
@@ -497,8 +733,10 @@ a:hover { color: var(--ink, #12100D); }
 }
 .rw-matrix-cell:hover .rw-matrix-num { color: #111; }
 
+/* Titles hang a fixed distance under their number, so every card's text starts on the
+   same line whatever its length (bottom-aligning them staggered 2- and 3-line titles). */
 .rw-matrix-title {
-  margin-top: auto; padding-top: 20px;
+  padding-top: clamp(18px, 2vw, 28px);
   font-size: clamp(18px, 1.55vw, 22px); line-height: 1.24; letter-spacing: -.01em;
   color: var(--ink);
   transition: color .45s ease;
@@ -541,6 +779,16 @@ a:hover { color: var(--ink, #12100D); }
   transition: color .45s ease;
 }
 .rw-econ-cell:hover .rw-econ-body { color: #111; }
+
+/* Realty "Case for a mandate": the outcome cards run the full section width, with the
+   closing line and the CTA side by side underneath (stacked on small screens). */
+.rw-econ-grid--wide { margin-top: clamp(32px, 4vw, 48px); }
+.rw-econ-grid--wide .rw-econ-body { font-size: 15px; }
+.rw-mandate-close {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 20px 40px;
+  margin-top: clamp(28px, 3.4vw, 40px);
+}
 
 @media (max-width: 720px) {
   .rw-econ-grid { grid-template-columns: 1fr; }
@@ -1110,7 +1358,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 .rw-dnav-link {
   background: none; border: 0; padding: 6px 0; cursor: pointer;
-  font: inherit; font-family: 'Jost', system-ui, sans-serif; font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
+  font: inherit; font-family: 'Poppins', system-ui, sans-serif; font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
   color: color-mix(in srgb, var(--ink) 72%, transparent);
   border-bottom: 1px solid transparent;
   transition: color .2s ease, border-color .2s ease;
@@ -1120,7 +1368,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-dnav-caret { font-size: 10px; color: var(--copper); margin-left: 2px; }
 .rw-dnav-book {
   align-items: center; cursor: pointer;
-  font: inherit; font-family: 'Jost', system-ui, sans-serif; font-size: 12px; letter-spacing: .14em; color: var(--ink);
+  font: inherit; font-family: 'Poppins', system-ui, sans-serif; font-size: 12px; letter-spacing: .14em; color: var(--ink);
   background: none; border: 1px solid var(--copper); border-radius: 4px; padding: 10px 18px;
   transition: background .2s ease;
 }
@@ -1129,7 +1377,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 /* Legal lives in the footer as quiet text, so the header can stay one action plus a future login. */
 .rw-footer-legal {
   display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 16px;
-  font-family: 'Jost', system-ui, sans-serif; font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+  font-family: 'Poppins', system-ui, sans-serif; font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
 }
 .rw-footer-legal a { color: var(--faded); }
 .rw-footer-legal a:hover { color: var(--ink); }
@@ -1146,10 +1394,11 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 /* padding-top bridges the gap under the trigger so hover doesn't drop on the way down. */
 .rw-mega {
   position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-  width: min(960px, calc(100vw - 80px)); padding-top: 18px;
+  width: min(1120px, calc(100vw - 80px)); padding-top: 18px;
 }
 .rw-mega-panel {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* The first column carries the longest descriptions (and the expanding sub-item). */
+  display: grid; grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 1fr));
   border-radius: 12px;
   /* Frosted glass. The fade-in animation lives HERE, not on .rw-mega: an ancestor with an
      opacity animation becomes a backdrop root and silently switches the blur off. */
@@ -1160,30 +1409,75 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   box-shadow: 0 24px 60px rgba(0, 0, 0, .55), inset 0 1px 0 color-mix(in srgb, var(--ink) 10%, transparent);
 }
 @keyframes rw-mega-in { from { opacity: 0; translate: 0 -6px; } to { opacity: 1; translate: 0 0; } }
-.rw-mega-col { display: flex; flex-direction: column; gap: 4px; padding: 26px 14px 22px; }
-.rw-mega-head { font-family: 'Jost', system-ui, sans-serif; font-weight: 500; margin: 0 0 6px; padding: 0 14px; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--copper); }
+.rw-mega-col { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 26px 14px 22px; }
+/* Hairline between columns, inset from the panel's top and bottom edges. */
+.rw-mega-col + .rw-mega-col::before {
+  content: ""; position: absolute; left: 0; top: 26px; bottom: 22px; width: 1px;
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+}
+.rw-mega-head { font-family: 'Poppins', system-ui, sans-serif; font-weight: 500; margin: 0 0 8px; padding: 0 14px; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--copper); }
+/* Item: icon | title + description | chevron. */
 .rw-mega-item {
-  display: flex; flex-direction: column; gap: 4px;
-  padding: 12px 14px; border-radius: 6px; color: var(--ink);
+  display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; column-gap: 14px;
+  padding: 12px 14px; border-radius: 8px; color: var(--ink);
   transition: background .2s ease;
 }
 .rw-mega-item:hover, .rw-mega-item:focus-visible, .rw-mega-item.is-active { background: color-mix(in srgb, var(--copper) 14%, transparent); }
-.rw-mega-title { font-family: 'Jost', system-ui, sans-serif; font-size: 16px; font-weight: 500; letter-spacing: .02em; line-height: 1.3; }
-.rw-mega-desc { font-family: 'Jost', system-ui, sans-serif; font-size: 13px; line-height: 1.4; color: color-mix(in srgb, var(--ink) 68%, transparent); }
-.rw-mega-item.is-soon { cursor: default; opacity: .62; }
+.rw-mega-icon { color: var(--copper); }
+.rw-mega-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.rw-mega-title { font-family: 'Poppins', system-ui, sans-serif; font-size: 16px; font-weight: 500; letter-spacing: .02em; line-height: 1.3; }
+.rw-mega-desc { font-family: 'Poppins', system-ui, sans-serif; font-size: 13px; line-height: 1.4; color: color-mix(in srgb, var(--ink) 68%, transparent); }
+.rw-mega-go { color: color-mix(in srgb, var(--ink) 70%, transparent); transition: color .2s ease, translate .2s ease; }
+.rw-mega-item:hover .rw-mega-go, .rw-mega-item:focus-visible .rw-mega-go { color: var(--copper); translate: 2px 0; }
+
+/* Accordion parent (Sales Consulting > Investment Advisory): the chevron expands its
+   children in place, pushing the rows below down rather than covering them. */
+.rw-mega-row { position: relative; }
+/* No chevron column inside the link here (the chevron is its own button), so no empty gap. */
+.rw-mega-row > .rw-mega-item { grid-template-columns: 26px minmax(0, 1fr); padding-right: 50px; }
+.rw-mega-chevron {
+  position: absolute; top: 50%; right: 8px; translate: 0 -50%;
+  display: grid; place-items: center; width: 34px; height: 34px; border-radius: 6px;
+  border: 0; background: none; cursor: pointer; color: color-mix(in srgb, var(--ink) 70%, transparent);
+  transition: color .2s ease, background .2s ease;
+}
+.rw-mega-chevron:hover, .rw-mega-chevron:focus-visible { color: var(--copper); background: color-mix(in srgb, var(--copper) 12%, transparent); }
+.rw-mega-chevron > svg { transition: transform .22s ease; }
+.rw-mega-parent.is-open .rw-mega-chevron { color: var(--copper); }
+.rw-mega-parent.is-open .rw-mega-chevron > svg { transform: rotate(-90deg); }
+.rw-mega-parent.is-open .rw-mega-row > .rw-mega-item { background: color-mix(in srgb, var(--copper) 24%, transparent); }
+.rw-mega-children { padding: 6px 0 2px 44px; animation: rw-sub-in .2s ease both; }
+.rw-mega-child { position: relative; grid-template-columns: minmax(0, 1fr); background: color-mix(in srgb, var(--ink) 5%, transparent); }
+/* Tree connector: a line dropping from the parent icon to a dot beside the child. */
+.rw-mega-child::before {
+  content: ""; position: absolute; left: -17px; top: -6px; bottom: 50%; width: 1px;
+  background: color-mix(in srgb, var(--copper) 75%, transparent);
+}
+.rw-mega-child::after {
+  content: ""; position: absolute; left: -20px; top: 50%; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--copper); translate: 0 -50%;
+}
+@keyframes rw-sub-in { from { opacity: 0; translate: 0 -4px; } to { opacity: 1; translate: 0 0; } }
+
+.rw-mega-item.is-soon { cursor: default; grid-template-columns: 26px minmax(0, 1fr); }
+.rw-mega-item.is-soon .rw-mega-icon, .rw-mega-item.is-soon .rw-mega-text { opacity: .62; }
 .rw-mega-item.is-soon:hover { background: none; }
 .rw-mega-soon {
-  display: inline-block; margin-left: 8px; padding: 2px 8px; vertical-align: middle;
+  display: inline-block; margin-left: 10px; padding: 2px 9px; vertical-align: middle;
   font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
   color: var(--copper); border: 1px solid var(--copper); border-radius: 100px;
 }
 .rw-mega-book {
-  margin: 10px 14px 0; padding: 12px 16px; cursor: pointer;
-  font: inherit; font-family: 'Jost', system-ui, sans-serif; font-size: 12px; letter-spacing: .14em; color: var(--ink);
-  background: none; border: 1px solid var(--copper); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  margin: 18px 14px 0; padding: 15px 18px; cursor: pointer;
+  font: inherit; font-family: 'Poppins', system-ui, sans-serif; font-size: 13px; font-weight: 500; letter-spacing: .16em; color: var(--ink);
+  background: none; border: 1px solid var(--copper); border-radius: 6px;
+  transition: background .2s ease;
 }
+.rw-mega-book svg { color: var(--copper); transition: translate .2s ease; }
 .rw-mega-book:hover { background: color-mix(in srgb, var(--copper) 16%, transparent); }
-@media (prefers-reduced-motion: reduce) { .rw-mega-panel { animation: none; } }
+.rw-mega-book:hover svg { translate: 3px 0; }
+@media (prefers-reduced-motion: reduce) { .rw-mega-panel, .rw-mega-children { animation: none; } }
 
 /* Whole-site text-size control (the three A's in the header). Small is the default
    site size; Medium and Large are progressive increases. Keep them baseline-aligned. */
@@ -1841,12 +2135,12 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
       rgba(11,10,9,.55) 34%,
       rgba(11,10,9,.12) 58%,
       rgba(11,10,9,0) 100%),
-    url('./assets/site/sales-coaching-hero-wide.jpg') right center / cover no-repeat;
+    url('./assets/site/sales-coaching-hero-wide.jpg') 72% center / cover no-repeat;
   pointer-events: none;
 }
 /* Fades the photo into the page background so it does not end on a hard edge. */
 .rw-coaching-hero::after {
-  content: ''; position: absolute; inset: auto 0 0 0; height: 140px; z-index: 0;
+  content: ''; position: absolute; inset: auto 0 0 0; height: 28px; z-index: 0;
   background: linear-gradient(rgba(11,10,9,0), var(--bg));
   pointer-events: none;
 }
@@ -1855,77 +2149,85 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   z-index: 1;
   min-height: 0;
   margin: 0 auto;
-  padding: 80px 40px 30px;
+  padding: clamp(32px, 4vh, 48px) 40px 8px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
 }
+/* One rhythm between the blocks. Tighter under the headline, then the same step before the outcomes and the actions. */
+.rw-coaching-hero-copy > * + * { margin-top: 22px; }
+.rw-coaching-hero-copy > .rw-coaching-hero-title { margin-top: 16px; }
+.rw-coaching-hero-copy > .rw-coaching-hero-lede { margin-top: 12px; }
 .rw-coaching-hero-eyebrow {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0 16px;
-  max-width: 930px;
+  gap: 8px 12px;
+  max-width: 40rem;
+  margin: 0;
   color: var(--copper);
-  font-size: clamp(11px, 1vw, 15px);
+  font-size: calc(var(--rw-fs, 1) * 12px);
   font-weight: 400;
-  letter-spacing: .16em;
-  line-height: 1.8;
+  letter-spacing: .14em;
+  line-height: 1.4;
 }
-.rw-coaching-hero-arrow { color: var(--copper); font-size: 1.25em; }
+.rw-coaching-hero-break { display: none; }
+.rw-coaching-hero-arrow { color: var(--copper); font-size: 1em; line-height: 1; }
 .rw-coaching-hero-dot {
   display: inline-block;
   flex: none;
-  width: 9px;
-  height: 9px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: var(--copper);
 }
 .rw-coaching-hero-title {
-  max-width: 18em;
-  margin: 30px 0 0;
+  max-width: 16em;
+  margin: 0;
   color: #fff;
-  font-size: clamp(42px, 4.25vw, 74px);
+  font-size: calc(var(--rw-fs, 1) * clamp(32px, 2.6vw + 16px, 60px));
   font-style: italic;
   font-weight: 400;
-  letter-spacing: -.018em;
-  line-height: .96;
+  letter-spacing: -.015em;
+  line-height: 1.08;
 }
-.rw-coaching-hero-title span { display: block; }
+.rw-coaching-hero-title span { display: block; text-wrap: balance; }
 .rw-coaching-hero-title-gold {
   color: var(--copper);
 }
 .rw-coaching-hero-lede {
   max-width: 36em;
-  margin: 26px 0 0;
+  margin: 0;
   color: rgba(255,255,255,.9);
-  font-size: clamp(20px, 1.65vw, 26px);
+  font-size: calc(var(--rw-fs, 1) * clamp(16px, 0.35vw + 14px, 19px));
   font-weight: 400;
-  line-height: 1.28;
+  line-height: 1.5;
 }
 .rw-coaching-hero-outcomes {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  width: min(960px, 100%);
-  margin-top: clamp(30px, 3.2vw, 44px);
+  align-items: start;
+  width: min(46rem, 100%);
+  margin-bottom: 0;
 }
 .rw-coaching-hero-outcome {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   min-width: 0;
-  gap: 18px;
-  padding: 0 clamp(18px, 2vw, 30px);
+  gap: 10px;
+  padding: 2px 14px;
   border-left: 1px solid rgba(242,239,233,.22);
   color: rgba(255,255,255,.94);
-  font-size: clamp(18px, 1.45vw, 23px);
-  line-height: 1.1;
+  font-size: calc(var(--rw-fs, 1) * 15px);
+  line-height: 1.35;
 }
 .rw-coaching-hero-outcome:first-child { padding-left: 0; border-left: 0; }
 .rw-coaching-hero-outcome svg {
   flex: none;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
+  margin-top: 1px;
   padding: 8px;
   border: 1px solid rgba(195,155,83,.62);
   border-radius: 50%;
@@ -1941,8 +2243,9 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   flex-wrap: wrap;
   width: min(940px, 100%);
   gap: 18px 28px;
-  margin-top: 32px;
 }
+.rw-coaching-hero .rw-coaching-hero-actions { width: min(46rem, 100%); }
+.rw-hero-actions { margin-top: 32px; }
 .rw-hero-book,
 .rw-coaching-hero-book { width: auto; min-width: 0; }
 /* The global .rw-cta hover lifts 2px on an overshoot bezier and brightens the fill 8%.
@@ -1964,24 +2267,26 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 8px;
   width: auto;
   min-width: 0;
-  min-height: 48px;
-  padding: 0 28px;
+  height: 48px;
+  padding: 0 22px;
   border: 1px solid color-mix(in srgb, var(--copper) 72%, transparent);
   border-radius: 10px;
   background: rgba(11,10,9,.26);
   color: var(--ink);
   cursor: pointer;
-  font-family: 'Jost', system-ui, -apple-system, sans-serif;
-  font-size: 12px;
-  font-weight: 400;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
   letter-spacing: .1em;
+  line-height: 1;
+  white-space: nowrap;
   text-transform: uppercase;
-  transition: background .25s ease, border-color .25s ease, transform .18s cubic-bezier(.34,1.56,.64,1);
+  transition: background .25s ease, border-color .25s ease;
 }
-.rw-coaching-hero-explore:hover { background: rgba(195,155,83,.13); border-color: var(--copper); transform: translateY(-1px); }
+.rw-coaching-hero-explore:hover { background: rgba(195,155,83,.13); border-color: var(--copper); transform: none; }
 .rw-coaching-hero-explore:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .rw-cta-secondary.rw-hero-fit,
 .rw-cta-secondary.rw-coaching-hero-fit {
@@ -2004,6 +2309,12 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 .rw-cta-secondary.rw-hero-fit:hover,
 .rw-cta-secondary.rw-coaching-hero-fit:hover { background: none; color: var(--copper); transform: none; }
+/* The link sits in the hero's own rhythm. Its shared margin would stack on top of that. */
+.rw-coaching-hero .rw-coaching-hero-fit {
+  margin-top: 0;
+  font-size: calc(var(--rw-fs, 1) * 18px);
+  line-height: 1.2;
+}
 
 @media (max-width: 900px) {
   /* Copy goes near full-width here, so the left-weighted scrim no longer matches
@@ -2013,23 +2324,19 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
       linear-gradient(rgba(11,10,9,.88), rgba(11,10,9,.80)),
       url('./assets/site/sales-coaching-hero-wide.jpg') 78% center / cover no-repeat;
   }
-  .rw-coaching-hero-copy { padding-top: 80px; padding-bottom: 30px; }
-  .rw-coaching-hero-title { max-width: 14em; }
-  .rw-coaching-hero-outcomes { width: min(620px, 100%); }
-  .rw-coaching-hero-outcome { gap: 12px; padding: 0 14px; font-size: 17px; }
-  .rw-coaching-hero-outcome svg { width: 46px; height: 46px; }
-}
-@media (max-width: 620px) {
-  .rw-coaching-hero-copy { padding-top: 64px; padding-bottom: 30px; }
-  .rw-coaching-hero-eyebrow { gap: 0 10px; font-size: 10px; letter-spacing: .11em; }
-  .rw-coaching-hero-title { max-width: 12em; margin-top: 24px; font-size: clamp(40px, 11.4vw, 56px); line-height: 1; }
-  .rw-coaching-hero-lede { margin-top: 22px; font-size: 20px; }
-  .rw-coaching-hero-outcomes { grid-template-columns: 1fr; gap: 18px; margin-top: 30px; }
+  .rw-coaching-hero-break { display: block; flex-basis: 100%; height: 0; }
+  .rw-coaching-hero-break + .rw-coaching-hero-dot { display: none; }
+  .rw-coaching-hero-outcomes { grid-template-columns: 1fr; gap: 16px; }
   .rw-coaching-hero-outcome,
   .rw-coaching-hero-outcome:first-child { padding: 0; border-left: 0; }
-  .rw-coaching-hero-actions { width: 100%; margin-top: 34px; gap: 14px; }
-  .rw-hero-book,
-  .rw-hero-actions,
+}
+@media (max-width: 620px) {
+  .rw-coaching-hero-copy { padding-top: 28px; padding-bottom: 8px; }
+  .rw-coaching-hero-copy > * + * { margin-top: 18px; }
+  .rw-coaching-hero-copy > .rw-coaching-hero-title { margin-top: 14px; }
+  .rw-coaching-hero-copy > .rw-coaching-hero-lede { margin-top: 10px; }
+  .rw-hero-actions { width: 100%; }
+  .rw-coaching-hero-actions { width: 100%; gap: 12px; }
   .rw-coaching-hero-book,
   .rw-coaching-hero-explore { width: 100%; min-width: 0; }
 }
@@ -2138,14 +2445,14 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 
 /* SpecularButton has no font-family/letter-spacing props of its own; borrows this to match the site's other mono-set buttons. */
 .rw-specular-cta {
-  font-family: 'Jost', system-ui, -apple-system, sans-serif !important;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif !important;
   font-size: 13px !important;
   font-weight: 400 !important;
   letter-spacing: .1em !important;
   text-transform: uppercase;
 }
 
-/* The gold Coaching CTA needs a stronger Jost weight so its dark label stays
+/* The gold Coaching CTA needs a stronger Poppins weight so its dark label stays
    readable against the metallic gradient. */
 .rw-coaching-hero-book {
   font-weight: 500 !important;
@@ -2158,6 +2465,8 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 .rw-role-card-glow .border-glow-inner {
   height: 100%;
+  /* overflow:auto on the glow shell treats the first click as a scroll focus. */
+  overflow: visible;
 }
 
 /* A phone held sideways has no vertical room to spare - a viewport-tall hero
@@ -2201,7 +2510,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 
 .rw-career-modal-kicker {
   color: var(--copper);
-  font-family: var(--font-mono, 'Jost', sans-serif);
+  font-family: var(--font-mono, 'Poppins', sans-serif);
   font-size: 10px;
   letter-spacing: .22em;
   text-transform: uppercase;
@@ -2223,7 +2532,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   color: var(--faded);
   display: flex;
   flex-wrap: wrap;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 11px;
   gap: 8px;
   letter-spacing: .04em;
@@ -2268,7 +2577,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-career-form-section {
   border-bottom: 1px solid var(--line);
   color: var(--copper);
-  font-family: 'Jost', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 10px;
   grid-column: 1 / -1;
   letter-spacing: .18em;
@@ -2278,7 +2587,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-career-form-section span { color: var(--faded); letter-spacing: .08em; }
 .rw-career-reference-title {
   color: var(--ink);
-  font-family: 'Jost', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 10px;
   font-weight: 600;
   grid-column: 1 / -1;
@@ -2287,7 +2596,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 .rw-reference-disclaimer {
   color: #B89555;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 10px;
   grid-column: 1 / -1;
   line-height: 1.6;
@@ -2299,7 +2608,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   align-items: flex-start;
   color: var(--faded);
   display: flex;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 11px;
   gap: 9px;
   grid-column: 1 / -1;
@@ -2343,7 +2652,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 12px;
   gap: 7px;
   justify-content: center;
@@ -2696,7 +3005,6 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 .rw-role-row:hover {
   background: var(--card);
-  transform: translateY(-2px);
 }
 .rw-role-card-main {
   border-right: 1px solid var(--line);
@@ -2706,7 +3014,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-role-level {
   display: inline-block;
   color: var(--copper);
-  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
   font-size: 10px;
   letter-spacing: .14em;
   text-transform: uppercase;
@@ -2727,16 +3035,16 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   align-items: center;
   gap: 14px;
   color: var(--faded);
-  font-family: 'Jost', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 11px;
 }
 .rw-role-meta span { display: inline-flex; align-items: center; gap: 6px; }
 .rw-role-meta-icon { width: 16px; height: 16px; color: var(--copper); }
 .rw-role-summary p {
   color: var(--faded);
-  /* Body copy follows the brand sans (Jost), not the serif — matches every other
+  /* Body copy follows the brand sans (Poppins), not the serif — matches every other
      description block and reads cleaner at this size than Cormorant did. */
-  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
   font-weight: 400;
   font-size: 15px;
   line-height: 1.5;
@@ -2753,7 +3061,18 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   padding: 10px 13px !important;
   transition: background .3s, transform .3s;
 }
-.rw-role-row:hover .rw-role-apply { background: var(--gold-gradient) !important; transform: translateY(-1px); }
+.rw-role-row:hover .rw-role-apply { background: var(--gold-gradient) !important; }
+/* The specular lift moves the control out from under the pointer, so the first click misses. */
+.rw-role-apply.specular-button:hover,
+.rw-role-apply.specular-button:active { transform: none; filter: none; }
+.rw-role-apply:disabled,
+.rw-role-row:hover .rw-role-apply:disabled {
+  background: transparent !important;
+  color: var(--faded) !important;
+  border: 1px solid var(--line);
+  cursor: default;
+  opacity: 1;
+}
 
 .rw-load-more-wrap {
   align-items: center;
@@ -2770,7 +3089,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   color: var(--ink);
   cursor: pointer;
   display: inline-flex;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 11px;
   gap: 12px;
   letter-spacing: .16em;
@@ -2778,11 +3097,11 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   transition: background .3s, color .3s, transform .3s;
 }
 .rw-load-more svg { height: 15px; width: 15px; transition: transform .3s; }
-.rw-load-more:hover { background: var(--gold-gradient); color: #17130e; transform: translateY(-1px); }
+.rw-load-more:hover { background: var(--gold-gradient); color: #17130e; }
 .rw-load-more:hover svg { transform: translateY(2px); }
 .rw-load-more-count {
   color: var(--faded);
-  font-family: 'Jost', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 10px;
   letter-spacing: .08em;
 }
@@ -2791,14 +3110,24 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   .rw-role-row { grid-template-columns: minmax(180px, .8fr) 1.2fr; padding: 24px; }
   .rw-role-row .rw-role-apply { grid-column: 2; justify-self: start; }
 }
+/* The Kenyt window is a fixed box with no "kenyt" in its id, and it sits on Apply and Load more. Keep the chat on other pages. */
+body.rw-careers-page iframe[src*="kenyt"],
+body.rw-careers-page [id*="kenyt"],
+body.rw-careers-page [class*="kenyt"],
+body.rw-careers-page #chatbox-container,
+body.rw-careers-page #kenytBubbleContainer,
+body.rw-careers-page #messageWrapperBox,
+body.rw-templates-page iframe[src*="kenyt"],
+body.rw-templates-page [id*="kenyt"],
+body.rw-templates-page [class*="kenyt"],
+body.rw-templates-page #chatbox-container,
+body.rw-templates-page #kenytBubbleContainer,
+body.rw-templates-page #messageWrapperBox {
+  display: none !important;
+  pointer-events: none !important;
+}
+
 @media (max-width: 600px) {
-  /* The third-party Kenyt launcher floats over the narrow role rows. Keep it
-     available elsewhere, but remove the obstruction on the Careers mobile view. */
-  body.rw-careers-page iframe[src*="kenyt"],
-  body.rw-careers-page [id*="kenyt"],
-  body.rw-careers-page [class*="kenyt"] {
-    display: none !important;
-  }
   .rw-desktop-career-filters { display: none !important; }
   .rw-mobile-career-filters {
     display: grid;
@@ -2808,7 +3137,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   .rw-mobile-career-filters label { display: grid; gap: 7px; }
   .rw-mobile-career-filters span {
     color: var(--copper);
-    font-family: 'Jost', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 10px;
     letter-spacing: .16em;
   }
@@ -2818,7 +3147,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
     border: 1px solid var(--line);
     border-radius: 3px;
     color: var(--ink);
-    font-family: 'Jost', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 13px;
     min-height: 44px;
     padding: 0 14px;
@@ -3072,7 +3401,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 
 /* --- Secondary CTA ---------------------------------------------------------- */
-/* One step below the gold specular button: same 48px height, 10px radius and Jost
+/* One step below the gold specular button: same 48px height, 10px radius and Poppins
    caps so a pair sits flush, but a hairline rim and no fill, so it never competes.
    Used for "not sure?", back, skip and browse actions. The arrow slides on hover
    the way .rw-way-arrow does. */
@@ -3082,7 +3411,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   border: 1px solid color-mix(in srgb, var(--copper) 55%, transparent);
   border-radius: 10px; background: color-mix(in srgb, var(--copper) 6%, transparent);
   color: var(--ink); text-decoration: none; cursor: pointer; white-space: nowrap;
-  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
   font-size: 12px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase;
   transition: border-color .25s ease, background .25s ease, transform .18s cubic-bezier(.34, 1.56, .64, 1);
 }
@@ -3205,8 +3534,8 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-program-cta { margin-top: auto; }
 
 /* Legal pages. Same dark shell as About and Contact. Confirm markers stay visible.
-   Fonts follow the brand pack: Cormorant Garamond for titles, Jost Book for body,
-   Jost for counters (serif numerals collapse at this size). */
+   Fonts follow the brand pack: Cormorant Garamond for titles, Poppins Book for body,
+   Poppins for counters (serif numerals collapse at this size). */
 .rw-legal { max-width: 820px; }
 .rw-legal-p { margin: 0 0 16px; line-height: 1.65; color: var(--faded); max-width: 42em; }
 .rw-legal-h2,
@@ -3220,13 +3549,13 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 .rw-legal-h3 {
   margin: 22px 0 10px;
-  font-family: 'Jost', system-ui, sans-serif;
+  font-family: 'Poppins', system-ui, sans-serif;
   font-weight: 500; font-size: 15px; letter-spacing: .04em;
   color: var(--copper);
 }
 .rw-legal-num {
   flex: none;
-  font-family: 'Jost', system-ui, sans-serif;
+  font-family: 'Poppins', system-ui, sans-serif;
   font-weight: 500;
   font-variant-numeric: tabular-nums lining-nums;
   letter-spacing: .16em;
@@ -3273,7 +3602,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-legal-switch a {
   display: inline-flex; align-items: center; height: 44px; padding: 0 18px;
   border: 1px solid var(--copper); border-radius: 4px;
-  font-family: 'Jost', system-ui, sans-serif; font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+  font-family: 'Poppins', system-ui, sans-serif; font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
   color: var(--ink);
 }
 .rw-legal-switch a.is-active { background: var(--gold-gradient); color: #16110a; border-color: transparent; font-weight: 500; }
@@ -3281,7 +3610,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-legal-contents a {
   display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 6px 12px;
   border: 1px solid var(--line); border-radius: 100px;
-  font-family: 'Jost', system-ui, sans-serif; font-size: 12px; letter-spacing: .04em;
+  font-family: 'Poppins', system-ui, sans-serif; font-size: 12px; letter-spacing: .04em;
   color: var(--faded);
 }
 .rw-legal-contents .rw-legal-num { font-size: 11px; letter-spacing: .14em; }

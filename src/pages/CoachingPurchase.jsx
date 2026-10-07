@@ -399,7 +399,7 @@ export default function CoachingPurchase() {
       {/* Hero */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', position: 'relative', overflow: 'hidden' }}>
         <Reveal>
-          <div className="rw-pad" style={{ ...container, padding: 'clamp(56px,7vw,84px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+          <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-sm) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
             <div style={{ ...eyebrow, marginBottom: 18 }}>COACHING · SELECT &amp; PURCHASE</div>
             <div style={{ ...sectionHeading, fontSize: fs('clamp(30px,4.4vw,52px)'), lineHeight: 1.08 }}>
               Choose how you want to grow.

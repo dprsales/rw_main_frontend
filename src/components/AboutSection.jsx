@@ -15,7 +15,7 @@ export default function AboutSection() {
         </div>
         <div style={{ paddingTop: 'clamp(0px,3vw,44px)' }}>
           <Reveal as="p" delay={120} style={{ ...body, margin: 0, maxWidth: '37em' }}>
-            Over fifteen years of live deals, and still counting. Everything Rajiv shares was earned in the market first. That single fact decides everything on this page.
+            Over <span style={{ color: 'var(--copper)', fontWeight: 500 }}>16+</span> yrs of live deals, and still counting. Everything Rajiv shares was earned in the market first. That single fact decides everything on this page.
           </Reveal>
           <Reveal as="p" delay={200} style={{ ...body, marginTop: 20, maxWidth: '37em' }}>
             In a business built on trust, Rajiv Williams believes reputation is the only asset that compounds forever and every deal is judged against it.

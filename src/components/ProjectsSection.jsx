@@ -190,7 +190,7 @@ function ProjectSearch({ shown, slugs }) {
   )
 }
 
-export default function ProjectsSection() {
+export default function ProjectsSection({ id = 'projects' }) {
   const [active, setActive] = useState('Kokapet')
   const [quadrant, setQuadrant] = useState('All')
 
@@ -265,7 +265,7 @@ export default function ProjectsSection() {
   const visibleLocalityCount = quadrant === 'All' ? LOCALITIES.length : nodes.filter((n) => n.projects.length > 0).length
 
   return (
-    <section id="projects" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
+    <section id={id} style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
       {/* Tighter than the site's default section rhythm on purpose: this header carries
           controls, so the stock clamp(90px,11vw,120px) left it floating in dead space. */}
       <div className="rw-pad" style={{ ...container, padding: 'clamp(58px,6vw,80px) 40px' }}>

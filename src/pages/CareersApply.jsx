@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Seo from '../components/Seo'
@@ -7,7 +7,8 @@ import Reveal from '../components/Reveal'
 import PageIntro from '../components/PageIntro'
 import BorderGlow from '../components/BorderGlow'
 import { submitBooking, CAREERS_INTEREST, isValidPhone } from '../data/booking'
-import { fetchRoles } from '../data/jobs'
+import { CAREER_ROLES } from '../data/content'
+import { careerRolePath, careerRoleSlug, fetchRoles, findRoleBySlug } from '../data/jobs'
 import { track } from '../data/analytics'
 import {
   ANSWER_MAX, CHARACTER_QUESTIONS, LIKERT, likertLabel, HEXACO_TRAITS, HEXACO_STATEMENT_IDS,
@@ -190,10 +191,23 @@ function Stepper({ steps, current, reached, onJump }) {
 }
 
 export default function CareersApply() {
+  const { roleSlug } = useParams()
   const { search } = useLocation()
   const params = useMemo(() => new URLSearchParams(search), [search])
-  const presetRole = params.get('role') || ''
-  const presetJobId = params.get('jobId') || ''
+  const legacySlug = !roleSlug ? careerRoleSlug(params.get('role')) : ''
+  const slugKey = roleSlug || ''
+  const [slugState, setSlugState] = useState(() => {
+    const role = findRoleBySlug(CAREER_ROLES, slugKey)
+    return { slug: slugKey, role, checked: !slugKey || Boolean(role) }
+  })
+  if (slugState.slug !== slugKey) {
+    const role = findRoleBySlug(CAREER_ROLES, slugKey)
+    setSlugState({ slug: slugKey, role, checked: !slugKey || Boolean(role) })
+  }
+  const slugRole = slugState.slug === slugKey ? slugState.role : findRoleBySlug(CAREER_ROLES, slugKey)
+  const slugChecked = slugState.slug === slugKey ? slugState.checked : Boolean(slugRole)
+  const presetRole = slugRole?.title || (!roleSlug ? (params.get('role') || '') : '')
+  const presetJobId = slugRole?.id || (!roleSlug ? (params.get('jobId') || '') : '')
 
   // The text half of the draft is synchronous, so it can seed the lazy state
   // initialisers below and be on screen at first paint — no empty-then-populated
@@ -240,9 +254,16 @@ export default function CareersApply() {
 
   useEffect(() => {
     let live = true
-    fetchRoles().then((rows) => { if (live) setRoleOptions(rows.map((r) => r.title)) })
+    fetchRoles().then((rows) => {
+      if (!live) return
+      setRoleOptions(rows.map((r) => r.title))
+      if (roleSlug) {
+        const role = findRoleBySlug(rows, roleSlug) || findRoleBySlug(CAREER_ROLES, roleSlug)
+        setSlugState({ slug: roleSlug, role, checked: true })
+      }
+    })
     return () => { live = false }
-  }, [])
+  }, [roleSlug])
 
   useEffect(() => {
     if (presetRole) setValues((prev) => ({ ...prev, role: presetRole }))
@@ -426,10 +447,18 @@ export default function CareersApply() {
   }
 
   const roleList = roleOptions.length ? roleOptions : (presetRole ? [presetRole] : [])
+  const applyPath = slugRole ? careerRolePath(slugRole.title) : '/careers/apply'
+
+  if (legacySlug) return <Navigate to={`/careers/${legacySlug}`} replace />
+  if (roleSlug && slugChecked && !slugRole) return <Navigate to="/careers/apply" replace />
 
   return (
     <>
-      <Seo route="/careers/apply" />
+      <Seo
+        route={applyPath}
+        title={slugRole ? `Apply for ${slugRole.title} | Rajiv Williams` : undefined}
+        description={slugRole ? `Apply for the ${slugRole.title} role with Team Rajiv Williams in Hyderabad.` : undefined}
+      />
       <Header />
 
       <PageIntro

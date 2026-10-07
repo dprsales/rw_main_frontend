@@ -93,7 +93,7 @@ export default function CoachingResult() {
       {/* Result hero — where KRISAH's back button lands */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', position: 'relative', overflow: 'hidden' }}>
         <img src={goldWatermark} alt="" aria-hidden className="rw-watermark is-right" />
-        <div className="rw-pad" style={{ ...container, maxWidth: 880, padding: 'clamp(80px,10vw,110px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+        <div className="rw-pad" style={{ ...container, maxWidth: 880, padding: 'var(--rw-sy) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrow, marginBottom: 20 }}>YOUR COACHING ASSESSMENT RESULT</Reveal>
           <Reveal as="h1" delay={80} style={{ ...sectionHeading, fontSize: fs('clamp(32px,4.6vw,56px)'), lineHeight: 1.08 }}>
             Your next level starts here.
@@ -134,7 +134,7 @@ export default function CoachingResult() {
 
       {/* Score at a glance */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(56px,7vw,84px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-sm) 40px' }}>
           <SectionHead
             eyebrow="SCORE AT A GLANCE" titleWidth="16em"
             title="What your score means."
@@ -147,7 +147,7 @@ export default function CoachingResult() {
       </section>
 
       {/* Your development plan — every module appears exactly once */}
-      <section id="plan" className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,130px) 40px' }}>
+      <section id="plan" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
         <CenteredHead
           eyebrow={isComplete ? 'YOUR RECOMMENDED CURRICULUM' : 'YOUR RECOMMENDED STARTING POINTS'}
           title={isComplete ? 'Your recommended coaching curriculum.' : 'Your Recommended Starting Points'}
@@ -201,7 +201,7 @@ export default function CoachingResult() {
       {/* Buy coaching — recommended set or a custom selection, priced live */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)', position: 'relative', overflow: 'hidden' }}>
         <img src={goldWatermark} alt="" aria-hidden className="rw-watermark is-left" />
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px', position: 'relative', zIndex: 1 }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px', position: 'relative', zIndex: 1 }}>
           <SectionHead
             eyebrow="BUY YOUR COACHING" titleWidth="15em"
             title={<>Turn your result into <span style={{ color: 'var(--copper)' }}>a plan.</span></>}
