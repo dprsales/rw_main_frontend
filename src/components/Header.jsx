@@ -9,7 +9,7 @@ import { useBooking } from './BookingModal'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { mono } from '../theme'
 import {
-  ArrowRight, Building2, ChartNoAxesColumnIncreasing, ChevronRight, FileSignature, Handshake, KeyRound, LayoutGrid, ListPlus, Target, Users,
+  ArrowRight, Building2, ChartNoAxesColumnIncreasing, ChevronDown, ChevronRight, FileSignature, Handshake, KeyRound, LayoutGrid, ListPlus, Target, Users,
 } from 'lucide-react'
 
 // Same wheel menu on every page: only route links belong here, not per-page scroll anchors.
@@ -198,7 +198,7 @@ function DesktopNav({ pathname, onBook }) {
           aria-controls="rw-props-mega"
           onClick={() => toggle('props')}
         >
-          Properties <span className="rw-dnav-caret" aria-hidden="true">▾</span>
+          Properties <ChevronDown className="rw-dnav-caret" size={14} strokeWidth={1.75} aria-hidden="true" />
         </button>
 
         {open === 'props' && (
@@ -221,7 +221,7 @@ function DesktopNav({ pathname, onBook }) {
           aria-controls="rw-mega"
           onClick={() => toggle('work')}
         >
-          Work with RW <span className="rw-dnav-caret" aria-hidden="true">▾</span>
+          Work with RW <ChevronDown className="rw-dnav-caret" size={14} strokeWidth={1.75} aria-hidden="true" />
         </button>
 
         {open === 'work' && (

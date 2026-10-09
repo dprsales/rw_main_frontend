@@ -1357,6 +1357,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   .rw-menu-btn.rw-menu-btn { display: none !important; }
 }
 .rw-dnav-link {
+  display: inline-flex; align-items: center; gap: 5px;
   background: none; border: 0; padding: 6px 0; cursor: pointer;
   font: inherit; font-family: 'Poppins', system-ui, sans-serif; font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
   color: color-mix(in srgb, var(--ink) 72%, transparent);
@@ -1365,7 +1366,11 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 .rw-dnav-link:hover, .rw-dnav-link[aria-expanded="true"] { color: var(--ink); }
 .rw-dnav-link.is-active { color: var(--ink); border-bottom-color: var(--copper); }
-.rw-dnav-caret { font-size: 10px; color: var(--copper); margin-left: 2px; }
+.rw-dnav-caret {
+  flex-shrink: 0; color: var(--copper); transform-origin: center;
+  transition: transform .22s ease;
+}
+.rw-dnav-link[aria-expanded="true"] .rw-dnav-caret { transform: rotate(180deg); }
 .rw-dnav-book {
   align-items: center; cursor: pointer;
   font: inherit; font-family: 'Poppins', system-ui, sans-serif; font-size: 12px; letter-spacing: .14em; color: var(--ink);
