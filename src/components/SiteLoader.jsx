@@ -4,11 +4,9 @@ import { gsap } from 'gsap'
 import goldMark from '../assets/site/rw-mark-gold.svg'
 import { mono } from '../theme'
 
-// The first load of a visit plays the full sequence; reloads in the same visit replay the
-// identical choreography faster, so it still feels designed but never makes anyone wait twice.
+// Entrance only: Home, first arrival in this tab. Inner pages and later visits skip it.
 const SEEN_KEY = 'rw-loader-seen'
 const MIN_VISIBLE_MS = 3200
-const QUICK_SPEED = 1.8
 const EXIT_MS = 1100
 const FONT_WAIT_MS = 700
 const SERVICES = ['Coaching', 'Consulting', 'Realty']
@@ -36,7 +34,13 @@ function readSeen() {
 }
 
 function markSeen() {
-  try { window.sessionStorage.setItem(SEEN_KEY, '1') } catch { /* storage blocked: always play at full length */ }
+  try { window.sessionStorage.setItem(SEEN_KEY, '1') } catch { /* storage blocked: Home still plays once per mount */ }
+}
+
+function shouldPlay() {
+  if (typeof window === 'undefined') return false
+  if (window.location.pathname !== '/') return false
+  return !readSeen()
 }
 
 /** Letters are split so each one can rise on its own; the shine copy reuses the same markup to match kerning. */
@@ -55,7 +59,7 @@ function ServiceRow({ className, rowRef }) {
   )
 }
 
-/** A brief branded cover for the initial document load. Route changes stay instant. */
+/** Branded cover for the first Home arrival. Route changes and inner-page landings stay instant. */
 export default function SiteLoader() {
   const outlineId = `rw-loader-outline-${useId().replace(/:/g, '')}`
   const rootRef = useRef(null)
@@ -63,12 +67,13 @@ export default function SiteLoader() {
   const rowRef = useRef(null)
   const shineRef = useRef(null)
   const progressRef = useRef(null)
-  const [speed] = useState(() => (readSeen() ? QUICK_SPEED : 1))
   const [logoReady, setLogoReady] = useState(false)
   const [fontReady, setFontReady] = useState(false)
   const [leaving, setLeaving] = useState(false)
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(shouldPlay)
   const ready = logoReady && fontReady
+
+  useEffect(() => { markSeen() }, [])
 
   useEffect(() => {
     if (!visible || leaving) return
@@ -79,19 +84,19 @@ export default function SiteLoader() {
 
   // Don't animate the words in a fallback face and then swap; wait briefly for Poppins.
   useEffect(() => {
+    if (!visible) return
     let cancelled = false
     const fontLoad = document.fonts?.load ? document.fonts.load('400 16px Poppins') : Promise.resolve()
     const timeout = new Promise(resolve => window.setTimeout(resolve, FONT_WAIT_MS))
     Promise.race([fontLoad, timeout]).catch(() => {}).then(() => { if (!cancelled) setFontReady(true) })
     return () => { cancelled = true }
-  }, [])
+  }, [visible])
 
   useEffect(() => {
-    if (!ready) return
-    markSeen()
+    if (!visible || !ready) return
     const startedAt = performance.now()
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const minimumVisible = reducedMotion ? 0 : MIN_VISIBLE_MS / speed
+    const minimumVisible = reducedMotion ? 0 : MIN_VISIBLE_MS
     let exitTimer
     let removeTimer
     let hasStartedExit = false
@@ -115,7 +120,7 @@ export default function SiteLoader() {
       window.clearTimeout(exitTimer)
       window.clearTimeout(removeTimer)
     }
-  }, [ready, speed])
+  }, [visible, ready])
 
   // The page is ready: snap the progress line to 100% just before everything lifts away.
   useEffect(() => {
@@ -153,7 +158,7 @@ export default function SiteLoader() {
 
       gsap.fromTo(glowRef.current,
         { '--rw-loader-glow-angle': '-90deg' },
-        { '--rw-loader-glow-angle': '270deg', duration: 1.6 / speed, repeat: -1, ease: 'none' },
+        { '--rw-loader-glow-angle': '270deg', duration: 1.6, repeat: -1, ease: 'none' },
       )
 
       // Act 1: the mark arrives and fills with gold while its rim is traced with light.
@@ -198,12 +203,10 @@ export default function SiteLoader() {
           { '--rw-shine-x': '120%', duration: 1.3, ease: 'power2.inOut', repeat: -1, repeatDelay: .7 },
           IGNITE + 1,
         )
-      // Reloads replay the same choreography, just faster.
-      tl.timeScale(speed)
     })
     // Returning null doesn't unmount this component, so stop GSAP when it hides.
     return () => media.revert()
-  }, [ready, visible, speed])
+  }, [ready, visible])
 
   if (!visible) return null
 
