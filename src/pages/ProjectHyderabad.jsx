@@ -4,6 +4,7 @@ import PageIntro from '../components/PageIntro'
 import ProjectsSection from '../components/ProjectsSection'
 import Seo from '../components/Seo'
 import { FOOTER_LINKS } from '../theme'
+import { fs } from '../styles'
 
 const HEADLINE = [
   { text: 'Projects across ' },
@@ -19,7 +20,8 @@ export default function ProjectHyderabad() {
       <PageIntro
         eyebrow="PROPERTIES · HYDERABAD PROJECTS"
         headline={HEADLINE}
-        lede="The Hyderabad developments Team RW has represented, mentored, or held sales mandates for."
+        headlineStyle={{ fontSize: fs('clamp(32px,4vw,56px)'), lineHeight: 1.1, maxWidth: '11em' }}
+        lede="The Hyderabad developments that Team RW has represented, mentored, or held sales mandates for."
       />
 
       <ProjectsSection id="projects" />

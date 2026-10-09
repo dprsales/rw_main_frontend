@@ -275,15 +275,15 @@ export default function ProjectsSection({ id = 'projects' }) {
             no other section pairs its heading with controls like this. */}
         <div className="rw-influence-head">
           <div className="rw-influence-heading">
-            <div style={{ ...eyebrowFaded, marginBottom: 14 }}>INVESTMENT ADVISORY</div>
-            <h2 style={{ ...sectionHeadingLg, maxWidth: '13em' }}>Area&apos;s of influence.</h2>
+            <div style={{ ...eyebrowFaded, marginBottom: 14 }}>HYDERABAD</div>
+            <h2 style={{ ...sectionHeadingLg, maxWidth: '13em' }}>Areas of influence.</h2>
           </div>
 
           <div className="rw-influence-summary">
             {/* Fills the column rather than stopping short at 26em — a narrow measure
                 here left ~170px of dead space that read as an oversized column gap. */}
             <p style={{ ...note, maxWidth: '34em' }}>
-              A cross-section of the luxury and premium developments across Hyderabad that team RW has represented, mentored, or held sales mandates for.
+              Luxury and premium developments across the city. Open a locality to see the projects.
             </p>
 
             <div className="rw-influence-stats">
