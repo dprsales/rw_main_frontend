@@ -9,7 +9,7 @@ import { useBooking } from './BookingModal'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { mono } from '../theme'
 import {
-  ArrowRight, Building2, ChartNoAxesColumnIncreasing, ChevronRight, FileSignature, Handshake, ScrollText, Target, Users,
+  ArrowRight, Building2, ChartNoAxesColumnIncreasing, ChevronRight, FileSignature, Handshake, KeyRound, LayoutGrid, ListPlus, Target, Users,
 } from 'lucide-react'
 
 // Same wheel menu on every page: only route links belong here, not per-page scroll anchors.
@@ -17,7 +17,7 @@ const SITE_NAV = [
   { label: 'Home', to: '/' },
   { label: 'Sales Coaching', to: '/coaching' },
   { label: 'Sales Consulting', to: '/consulting' },
-  { label: 'Investment Advisory', to: '/consulting#investment-advisory' },
+  { label: 'Projects in Hyderabad', to: '/project-hyderabad' },
   { label: 'Sales Mandate', to: '/realty' },
   { label: 'Portfolio', to: '/portfolio' },
   { label: 'Careers', to: '/careers' },
@@ -36,11 +36,7 @@ const MEGA_COLUMNS = [
     heading: 'Grow your sales',
     items: [
       { label: 'Sales Coaching', to: '/coaching', desc: '1:1 and team sales coaching', icon: Users },
-      {
-        label: 'Sales Consulting', to: '/consulting', desc: 'Sales structure & strategy for developers', icon: ChartNoAxesColumnIncreasing,
-        // Expands in place from its chevron; jumps to the projects map on the Consulting page.
-        children: [{ label: 'Investment Advisory', to: '/consulting#investment-advisory', desc: 'Projects & localities across Hyderabad' }],
-      },
+      { label: 'Sales Consulting', to: '/consulting', desc: 'Sales structure & strategy for developers', icon: ChartNoAxesColumnIncreasing },
       { label: 'Sales Mandate', to: '/realty', desc: 'RW runs your project sales mandate', icon: FileSignature },
     ],
   },
@@ -48,8 +44,6 @@ const MEGA_COLUMNS = [
     heading: 'Partners',
     items: [
       { label: 'Channel Partners', to: '/partner', desc: 'Partner with RW', icon: Handshake },
-      // No page yet: rendered as a non-link with a "Coming soon" tag.
-      { label: 'Listing Properties', desc: 'Browse RW listed properties', soon: true, icon: ScrollText },
     ],
   },
   {
@@ -60,46 +54,129 @@ const MEGA_COLUMNS = [
     book: true,
   },
 ]
-const MEGA_PATHS = MEGA_COLUMNS.flatMap((col) => col.items.filter((item) => item.to).map((item) => item.to))
+const MEGA_PATHS = MEGA_COLUMNS.flatMap((col) => col.items.map((item) => item.to).filter(Boolean))
 const TOP_LINKS = [
   { label: 'Portfolio', to: '/portfolio' },
   { label: 'Careers', to: '/careers' },
 ]
+const PROPERTY_COLUMNS = [
+  {
+    heading: 'Builder',
+    items: [
+      { label: 'Projects in Hyderabad', to: '/project-hyderabad', desc: 'Developments Team RW has represented', icon: Building2 },
+    ],
+  },
+  {
+    heading: 'Resale',
+    soon: true,
+    items: [
+      { label: 'List a property', desc: 'List your property with Team RW', soon: true, icon: ListPlus },
+      { label: 'Listed properties', desc: 'See rates and send an enquiry', soon: true, icon: LayoutGrid },
+    ],
+  },
+  {
+    heading: 'Rent',
+    soon: true,
+    items: [
+      { label: 'Rentals', desc: 'Hyderabad rentals', soon: true, icon: KeyRound },
+    ],
+  },
+]
+
+function MegaPanel({ id, columns, pathname, onClose, onBook }) {
+  return (
+    <div id={id} className="rw-mega">
+      <div className="rw-mega-panel">
+        {columns.map((col) => (
+          <div key={col.heading} className="rw-mega-col">
+            <p className="rw-mega-head">
+              {col.heading}
+              {col.soon && <span className="rw-mega-soon">Coming soon</span>}
+            </p>
+            {col.items.map((item) => {
+              const Icon = item.icon
+              const body = (
+                <>
+                  {Icon && <Icon className="rw-mega-icon" size={24} strokeWidth={1.5} aria-hidden="true" />}
+                  <span className="rw-mega-text">
+                    <span className="rw-mega-title">{item.label}</span>
+                    <span className="rw-mega-desc">{item.desc}</span>
+                  </span>
+                  {item.to && !item.soon && <ChevronRight className="rw-mega-go" size={18} strokeWidth={1.75} aria-hidden="true" />}
+                </>
+              )
+              if (item.soon) {
+                return <div key={item.label} className="rw-mega-item is-soon" aria-disabled="true">{body}</div>
+              }
+              return (
+                <Link key={item.to} to={item.to} onClick={onClose} className={`rw-mega-item${pathname === item.to ? ' is-active' : ''}`}>
+                  {body}
+                </Link>
+              )
+            })}
+            {col.book && (
+              <button type="button" className="rw-mega-book" onClick={() => { onClose(); onBook() }}>
+                BOOK A STRATEGY CALL <ArrowRight size={18} strokeWidth={1.6} aria-hidden="true" />
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 function DesktopNav({ pathname, onBook }) {
-  const [megaOpen, setMegaOpen] = useState(false)
-  const [expanded, setExpanded] = useState(null)
-  const wrapRef = useRef(null)
-  const triggerRef = useRef(null)
+  const [open, setOpen] = useState(null)
+  const workRef = useRef(null)
+  const propsRef = useRef(null)
+  const workTriggerRef = useRef(null)
+  const propsTriggerRef = useRef(null)
   const hoverOpenedRef = useRef(false)
   const closeTimerRef = useRef(null)
   const openTimerRef = useRef(null)
-  const expandTimerRef = useRef(null)
+
   useEffect(() => () => {
-    clearTimeout(closeTimerRef.current); clearTimeout(openTimerRef.current); clearTimeout(expandTimerRef.current)
+    clearTimeout(closeTimerRef.current)
+    clearTimeout(openTimerRef.current)
   }, [])
+  useEffect(() => { setOpen(null) }, [pathname])
 
-  useEffect(() => { setMegaOpen(false) }, [pathname])
-  useEffect(() => { if (!megaOpen) setExpanded(null) }, [megaOpen])
-
-  // Esc or a click outside closes the mega menu.
   useEffect(() => {
-    if (!megaOpen) return
+    if (!open) return
+    const wraps = [workRef.current, propsRef.current].filter(Boolean)
     const onKey = (e) => {
       if (e.key !== 'Escape') return
-      // Hand focus back to the trigger, or it falls to <body> when the panel unmounts.
-      if (wrapRef.current?.contains(document.activeElement)) triggerRef.current?.focus()
-      setMegaOpen(false)
+      const trigger = open === 'work' ? workTriggerRef.current : propsTriggerRef.current
+      if (wraps.some((el) => el.contains(document.activeElement))) trigger?.focus()
+      setOpen(null)
     }
-    const onDown = (e) => { if (!wrapRef.current?.contains(e.target)) setMegaOpen(false) }
+    const onDown = (e) => { if (!wraps.some((el) => el.contains(e.target))) setOpen(null) }
     window.addEventListener('keydown', onKey)
     document.addEventListener('pointerdown', onDown)
     return () => {
       window.removeEventListener('keydown', onKey)
       document.removeEventListener('pointerdown', onDown)
     }
-  }, [megaOpen])
+  }, [open])
 
+  const enter = (id) => {
+    clearTimeout(closeTimerRef.current)
+    if (open === id) return
+    if (open) { hoverOpenedRef.current = true; setOpen(id); return }
+    openTimerRef.current = setTimeout(() => { hoverOpenedRef.current = true; setOpen(id) }, 120)
+  }
+  const leave = () => {
+    clearTimeout(openTimerRef.current)
+    hoverOpenedRef.current = false
+    closeTimerRef.current = setTimeout(() => setOpen(null), 180)
+  }
+  const toggle = (id) => {
+    clearTimeout(openTimerRef.current)
+    if (hoverOpenedRef.current && open === id) { hoverOpenedRef.current = false; return }
+    setOpen((was) => (was === id ? null : id))
+  }
+  const close = () => setOpen(null)
   const linkClass = (to) => `rw-dnav-link${pathname === to ? ' is-active' : ''}`
 
   return (
@@ -107,130 +184,48 @@ function DesktopNav({ pathname, onBook }) {
       <Link to="/" className={linkClass('/')}>Home</Link>
 
       <div
-        ref={wrapRef}
+        ref={propsRef}
         className="rw-dnav-mega-wrap"
-        /* Hover intent: open only once the pointer rests here briefly, so sweeping across the
-           nav (say Home to Portfolio) doesn't flash the panel open. A click opens at once. */
-        onMouseEnter={() => {
-          clearTimeout(closeTimerRef.current)
-          if (megaOpen) return
-          openTimerRef.current = setTimeout(() => { hoverOpenedRef.current = true; setMegaOpen(true) }, 120)
-        }}
-        /* Short grace period: the cursor crosses a strip of header between the trigger and the panel. */
-        onMouseLeave={() => {
-          clearTimeout(openTimerRef.current)
-          hoverOpenedRef.current = false
-          closeTimerRef.current = setTimeout(() => setMegaOpen(false), 180)
-        }}
-        /* Tabbing out of the menu closes it, so it never sits over the page behind the focus.
-           (Only when focus lands on another element: clicking blank panel space must not close it.) */
-        onBlur={(e) => { if (e.relatedTarget && !wrapRef.current?.contains(e.relatedTarget)) setMegaOpen(false) }}
+        onMouseEnter={() => enter('props')}
+        onMouseLeave={leave}
+        onBlur={(e) => { if (e.relatedTarget && !propsRef.current?.contains(e.relatedTarget) && !workRef.current?.contains(e.relatedTarget)) setOpen(null) }}
       >
         <button
-          ref={triggerRef}
+          ref={propsTriggerRef}
+          type="button"
+          className={`rw-dnav-link${pathname === '/project-hyderabad' ? ' is-active' : ''}`}
+          aria-expanded={open === 'props'}
+          aria-controls="rw-props-mega"
+          onClick={() => toggle('props')}
+        >
+          Properties <span className="rw-dnav-caret" aria-hidden="true">▾</span>
+        </button>
+
+        {open === 'props' && (
+          <MegaPanel id="rw-props-mega" columns={PROPERTY_COLUMNS} pathname={pathname} onClose={close} />
+        )}
+      </div>
+
+      <div
+        ref={workRef}
+        className="rw-dnav-mega-wrap"
+        onMouseEnter={() => enter('work')}
+        onMouseLeave={leave}
+        onBlur={(e) => { if (e.relatedTarget && !workRef.current?.contains(e.relatedTarget) && !propsRef.current?.contains(e.relatedTarget)) setOpen(null) }}
+      >
+        <button
+          ref={workTriggerRef}
           type="button"
           className={`rw-dnav-link${MEGA_PATHS.includes(pathname) ? ' is-active' : ''}`}
-          aria-expanded={megaOpen}
+          aria-expanded={open === 'work'}
           aria-controls="rw-mega"
-          onClick={() => {
-            // A mouse click right after hover-open keeps it open instead of toggling it shut.
-            clearTimeout(openTimerRef.current)
-            if (hoverOpenedRef.current) { hoverOpenedRef.current = false; setMegaOpen(true); return }
-            setMegaOpen((wasOpen) => !wasOpen)
-          }}
+          onClick={() => toggle('work')}
         >
           Work with RW <span className="rw-dnav-caret" aria-hidden="true">▾</span>
         </button>
 
-        {megaOpen && (
-          <div id="rw-mega" className="rw-mega">
-            <div className="rw-mega-panel">
-            {MEGA_COLUMNS.map((col) => (
-              <div key={col.heading} className="rw-mega-col">
-                <p className="rw-mega-head">{col.heading}</p>
-                {col.items.map((item) => {
-                  const Icon = item.icon
-                  const body = (
-                    <>
-                      {Icon && <Icon className="rw-mega-icon" size={24} strokeWidth={1.5} aria-hidden="true" />}
-                      <span className="rw-mega-text">
-                        <span className="rw-mega-title">
-                          {item.label}{item.soon && <span className="rw-mega-soon">Coming soon</span>}
-                        </span>
-                        <span className="rw-mega-desc">{item.desc}</span>
-                      </span>
-                    </>
-                  )
-                  if (item.soon) {
-                    return <div key={item.label} className="rw-mega-item is-soon" aria-disabled="true">{body}</div>
-                  }
-                  if (item.children) {
-                    const open = expanded === item.to
-                    const panelId = `rw-sub-${item.to.slice(1)}`
-                    return (
-                      /* Accordion parent: hovering the row (or the chevron, for touch/keyboard)
-                         expands its children in place, pushing the rows below down. It stays
-                         open until the menu closes, so the list never jumps under the pointer. */
-                      <div key={item.to} className={`rw-mega-parent${open ? ' is-open' : ''}`}>
-                        <div
-                          className="rw-mega-row"
-                          /* Expands only when the pointer rests on the row (~0.3s): just passing over it
-                             on the way to Sales Mandate must not push Sales Mandate out from under it. */
-                          onMouseEnter={() => {
-                            if (open) return
-                            expandTimerRef.current = setTimeout(() => setExpanded(item.to), 300)
-                          }}
-                          onMouseLeave={() => clearTimeout(expandTimerRef.current)}
-                        >
-                          <Link to={item.to} onClick={() => setMegaOpen(false)} className={`rw-mega-item${pathname === item.to ? ' is-active' : ''}`}>
-                            {body}
-                          </Link>
-                          <button
-                            type="button"
-                            className="rw-mega-chevron"
-                            aria-label={`${item.label}: ${open ? 'hide' : 'show'} sub-pages`}
-                            aria-expanded={open}
-                            aria-controls={panelId}
-                            onClick={() => {
-                              // A click (or tap) acts at once and cancels any pending hover-expand.
-                              clearTimeout(expandTimerRef.current)
-                              setExpanded(open ? null : item.to)
-                            }}
-                          >
-                            <ChevronRight size={18} strokeWidth={1.75} aria-hidden="true" />
-                          </button>
-                        </div>
-                        {open && (
-                          <div id={panelId} className="rw-mega-children">
-                            {item.children.map((child) => (
-                              <Link key={child.to} to={child.to} onClick={() => setMegaOpen(false)} className="rw-mega-item rw-mega-child">
-                                <span className="rw-mega-text">
-                                  <span className="rw-mega-title">{child.label}</span>
-                                  <span className="rw-mega-desc">{child.desc}</span>
-                                </span>
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    )
-                  }
-                  return (
-                    <Link key={item.to} to={item.to} onClick={() => setMegaOpen(false)} className={`rw-mega-item${pathname === item.to ? ' is-active' : ''}`}>
-                      {body}
-                      <ChevronRight className="rw-mega-go" size={18} strokeWidth={1.75} aria-hidden="true" />
-                    </Link>
-                  )
-                })}
-                {col.book && (
-                  <button type="button" className="rw-mega-book" onClick={() => { setMegaOpen(false); onBook() }}>
-                    BOOK A STRATEGY CALL <ArrowRight size={18} strokeWidth={1.6} aria-hidden="true" />
-                  </button>
-                )}
-              </div>
-            ))}
-            </div>
-          </div>
+        {open === 'work' && (
+          <MegaPanel id="rw-mega" columns={MEGA_COLUMNS} pathname={pathname} onClose={close} onBook={onBook} />
         )}
       </div>
 

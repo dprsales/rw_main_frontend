@@ -22,6 +22,11 @@ export const ROUTE_SEO = {
     description:
       'Twelve-week cohorts, team training for sales floors, and six-month 1:1 mentoring for realtors selling high-ticket property in Hyderabad.',
   },
+  '/project-hyderabad': {
+    title: 'Projects in Hyderabad | Rajiv Williams',
+    description:
+      'Luxury and premium developments across Hyderabad that Team RW has represented, mentored, or held sales mandates for.',
+  },
   '/consulting': {
     title: 'Real Estate Sales Consulting for Developers, senior sales leadership & top closers. | Rajiv Williams',
     description:

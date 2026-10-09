@@ -19,6 +19,7 @@ import Contact from './pages/Contact'
 import Form from './pages/Form'
 import Home from './pages/Home'
 import Portfolio from './pages/Portfolio'
+import ProjectHyderabad from './pages/ProjectHyderabad'
 import Project from './pages/Project'
 import Realty from './pages/Realty'
 import Start from './pages/Start'
@@ -33,7 +34,7 @@ if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
 }
 
 /** Every route change lands at the top before the page is painted - unless the link
- *  names a section (e.g. /consulting#investment-advisory), which lands on that section. */
+ *  names a section (e.g. /coaching#assessment), which lands on that section. */
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
   useLayoutEffect(() => {
@@ -82,6 +83,7 @@ export default function App() {
           {/* Checkout: selection → details → review → purchase request (UI only, no gateway wired). */}
           <Route path="/coaching/purchase" element={<CoachingPurchase />} />
           <Route path="/consulting" element={<Consulting />} />
+          <Route path="/project-hyderabad" element={<ProjectHyderabad />} />
           <Route path="/realty" element={<Realty />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/careers/apply" element={<CareersApply />} />

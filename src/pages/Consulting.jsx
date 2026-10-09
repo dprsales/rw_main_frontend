@@ -1,4 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react'
+import { Navigate, useLocation } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
 import sessionImage from '../assets/site/consulting-desk.webp'
@@ -14,7 +15,6 @@ import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import ClosingCTA from '../components/ClosingCTA'
 import RelatedReading from '../components/RelatedReading'
-import ProjectsSection from '../components/ProjectsSection'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { SectionAside } from '../components/SectionHead'
 import { DEVELOPER_SHIFTS, ECOSYSTEM, SUPPORT_SERVICES } from '../data/content'
@@ -239,6 +239,9 @@ function SupportCloud() {
 }
 
 export default function Consulting() {
+  const { hash } = useLocation()
+  if (hash === '#investment-advisory') return <Navigate to="/project-hyderabad" replace />
+
   return (
     <>
       <Seo route="/consulting" />
@@ -396,9 +399,6 @@ export default function Consulting() {
           </Reveal>
         </div>
       </section>
-
-      {/* Investment Advisory: the projects map, linked from the header under Sales Consulting. */}
-      <ProjectsSection id="investment-advisory" />
 
       <RelatedReading service="consulting" title="Reading for sales leaders & teams." />
 

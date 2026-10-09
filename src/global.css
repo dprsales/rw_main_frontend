@@ -1389,7 +1389,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
 }
 
-/* static: the panel positions against the sticky header, so it centres on the page. */
+/* static: both megas position against the sticky header, so they centre on the page. */
 .rw-dnav-mega-wrap { position: static; }
 /* padding-top bridges the gap under the trigger so hover doesn't drop on the way down. */
 .rw-mega {
@@ -1399,6 +1399,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-mega-panel {
   /* The first column carries the longest descriptions (and the expanding sub-item). */
   display: grid; grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 1fr));
+  max-height: min(78vh, 720px); overflow-y: auto;
   border-radius: 12px;
   /* Frosted glass. The fade-in animation lives HERE, not on .rw-mega: an ancestor with an
      opacity animation becomes a backdrop root and silently switches the blur off. */
@@ -1415,7 +1416,11 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   content: ""; position: absolute; left: 0; top: 26px; bottom: 22px; width: 1px;
   background: color-mix(in srgb, var(--ink) 12%, transparent);
 }
-.rw-mega-head { font-family: 'Poppins', system-ui, sans-serif; font-weight: 500; margin: 0 0 8px; padding: 0 14px; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--copper); }
+.rw-mega-head {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-family: 'Poppins', system-ui, sans-serif; font-weight: 500; margin: 0 0 8px; padding: 0 14px;
+  font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--copper);
+}
 /* Item: icon | title + description | chevron. */
 .rw-mega-item {
   display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; column-gap: 14px;
@@ -1430,8 +1435,10 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-mega-go { color: color-mix(in srgb, var(--ink) 70%, transparent); transition: color .2s ease, translate .2s ease; }
 .rw-mega-item:hover .rw-mega-go, .rw-mega-item:focus-visible .rw-mega-go { color: var(--copper); translate: 2px 0; }
 
-/* Accordion parent (Sales Consulting > Investment Advisory): the chevron expands its
-   children in place, pushing the rows below down rather than covering them. */
+/* Accordion parent: the chevron expands its children in place, pushing the rows below down. */
+button.rw-mega-item {
+  width: 100%; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+}
 .rw-mega-row { position: relative; }
 /* No chevron column inside the link here (the chevron is its own button), so no empty gap. */
 .rw-mega-row > .rw-mega-item { grid-template-columns: 26px minmax(0, 1fr); padding-right: 50px; }
@@ -1443,28 +1450,59 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 .rw-mega-chevron:hover, .rw-mega-chevron:focus-visible { color: var(--copper); background: color-mix(in srgb, var(--copper) 12%, transparent); }
 .rw-mega-chevron > svg { transition: transform .22s ease; }
-.rw-mega-parent.is-open .rw-mega-chevron { color: var(--copper); }
-.rw-mega-parent.is-open .rw-mega-chevron > svg { transform: rotate(-90deg); }
-.rw-mega-parent.is-open .rw-mega-row > .rw-mega-item { background: color-mix(in srgb, var(--copper) 24%, transparent); }
-.rw-mega-children { padding: 6px 0 2px 44px; animation: rw-sub-in .2s ease both; }
-.rw-mega-child { position: relative; grid-template-columns: minmax(0, 1fr); background: color-mix(in srgb, var(--ink) 5%, transparent); }
-/* Tree connector: a line dropping from the parent icon to a dot beside the child. */
-.rw-mega-child::before {
-  content: ""; position: absolute; left: -17px; top: -6px; bottom: 50%; width: 1px;
-  background: color-mix(in srgb, var(--copper) 75%, transparent);
+.rw-mega-parent.is-open > .rw-mega-row > .rw-mega-chevron,
+.rw-mega-nested.is-open > .rw-mega-row > .rw-mega-chevron { color: var(--copper); }
+.rw-mega-parent.is-open > .rw-mega-row > .rw-mega-chevron > svg,
+.rw-mega-nested.is-open > .rw-mega-row > .rw-mega-chevron > svg { transform: rotate(-90deg); }
+.rw-mega-parent.is-open > .rw-mega-row > .rw-mega-item { background: color-mix(in srgb, var(--copper) 24%, transparent); }
+/* Peers (Builder, Resell, Rent) are equal rows. A second level lives inside its parent, never on the same line. */
+.rw-mega-children {
+  display: flex; flex-direction: column; gap: 4px;
+  margin: 6px 8px 2px; padding: 0;
+  animation: rw-sub-in .2s ease both;
 }
-.rw-mega-child::after {
-  content: ""; position: absolute; left: -20px; top: 50%; width: 7px; height: 7px; border-radius: 50%;
-  background: var(--copper); translate: 0 -50%;
+.rw-mega-child {
+  position: relative; grid-template-columns: minmax(0, 1fr);
+  padding: 10px 12px; border-radius: 8px;
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
 }
+.rw-mega-child:has(.rw-mega-go) { grid-template-columns: minmax(0, 1fr) auto; }
+.rw-mega-children > .rw-mega-child:hover,
+.rw-mega-children > .rw-mega-child:focus-visible,
+.rw-mega-children > .rw-mega-child.is-active { background: color-mix(in srgb, var(--copper) 16%, transparent); }
+.rw-mega-item.rw-mega-child.is-soon { cursor: default; }
+.rw-mega-item.rw-mega-child.is-soon:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
+.rw-mega-nested {
+  border-radius: 8px; background: color-mix(in srgb, var(--ink) 6%, transparent);
+}
+.rw-mega-nested > .rw-mega-row > .rw-mega-item {
+  grid-template-columns: minmax(0, 1fr); padding: 10px 40px 10px 12px; background: none;
+}
+.rw-mega-nested.is-open { background: color-mix(in srgb, var(--copper) 14%, transparent); }
+.rw-mega-nested.is-open > .rw-mega-row > .rw-mega-item { background: none; }
+/* Grandchildren stay inside the open parent, so they cannot be read as the next choice. */
+.rw-mega-children-deep {
+  margin: 0 8px 8px 12px; padding: 2px 0 2px 10px;
+  border-left: 1px solid color-mix(in srgb, var(--copper) 45%, transparent);
+}
+.rw-mega-children-deep .rw-mega-child {
+  padding: 4px 2px; border-radius: 0; background: none;
+}
+.rw-mega-children-deep .rw-mega-child:hover { background: none; }
+.rw-mega-children-deep .rw-mega-desc { display: none; }
+.rw-mega-children-deep .rw-mega-title {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 13px; font-weight: 400; white-space: nowrap;
+}
+.rw-mega-children-deep .rw-mega-soon { margin-left: auto; padding: 1px 7px; flex-shrink: 0; }
 @keyframes rw-sub-in { from { opacity: 0; translate: 0 -4px; } to { opacity: 1; translate: 0 0; } }
 
 .rw-mega-item.is-soon { cursor: default; grid-template-columns: 26px minmax(0, 1fr); }
 .rw-mega-item.is-soon .rw-mega-icon, .rw-mega-item.is-soon .rw-mega-text { opacity: .62; }
 .rw-mega-item.is-soon:hover { background: none; }
 .rw-mega-soon {
-  display: inline-block; margin-left: 10px; padding: 2px 9px; vertical-align: middle;
-  font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+  display: inline-block; padding: 2px 9px; flex-shrink: 0;
+  font-family: 'Poppins', system-ui, sans-serif; font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
   color: var(--copper); border: 1px solid var(--copper); border-radius: 100px;
 }
 .rw-mega-book {
