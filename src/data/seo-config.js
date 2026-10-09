@@ -25,7 +25,7 @@ export const ROUTE_SEO = {
   '/project-hyderabad': {
     title: 'Projects in Hyderabad | Rajiv Williams',
     description:
-      'Luxury and premium developments across Hyderabad that Team RW has represented, mentored, or held sales mandates for.',
+      'Hyderabad developments Team RW associates with, works on, represents, and mentors. Looking for a home? Talk to an expert.',
   },
   '/consulting': {
     title: 'Real Estate Sales Consulting for Developers, senior sales leadership & top closers. | Rajiv Williams',

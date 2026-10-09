@@ -20,6 +20,7 @@ const LEAD_TYPE = {
   // A mandate enquiry is a developer lead, not a buyer's interest in a listing — `project` is for the latter.
   'Sales Mandates': 'contact',
   'RW Realty mandate': 'contact',
+  'Looking for a home': 'project',
   [CAREERS_INTEREST]: 'contact',
   'Something else': 'contact',
   'Brokerage form': 'contact',
@@ -55,6 +56,7 @@ const PAGE_AREAS = [
   [/^\/coaching/, 'Coaching'],
   [/^\/consulting/, 'Consulting'],
   [/^\/(realty|projects)/, 'Realty'],
+  [/^\/project-hyderabad/, 'Properties'],
   [/^\/careers/, 'Careers'],
   [/^\/partner/, 'Partner'],
   [/^\/templates/, 'Templates'],
