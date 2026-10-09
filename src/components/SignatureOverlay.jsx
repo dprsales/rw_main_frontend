@@ -1,4 +1,4 @@
-import signature from '../assets/site/gold21.png'
+import signature from '../assets/site/gold22.png'
 import { useInView } from '../hooks/useInView'
 
 /**

@@ -3,14 +3,14 @@
  * the checkout flow. No component hardcodes a price or a discount: change the
  * tier table here and the whole flow re-prices itself.
  *
- *   module price       ₹5,000 each
+ *   module price       ₹6,250 each, so four modules are exactly ₹25,000
  *   1–4 modules        0%  discount
  *   5–9 modules        5%  discount
  *   10–15 modules      10% discount
  *   16 modules         15% discount
  */
 
-export const MODULE_BASE_PRICE = 5000
+export const MODULE_BASE_PRICE = 6250
 export const CURRENCY = 'INR'
 
 /** Ordered discount tiers. The first tier whose [min,max] contains the count wins. */

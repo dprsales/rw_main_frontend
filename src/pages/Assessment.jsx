@@ -312,7 +312,7 @@ export default function Assessment() {
           <Reveal style={{ ...eyebrow, marginBottom: 24 }}>A NOTE FROM THE RW TEAM</Reveal>
           <Reveal delay={100}>
             <PullQuote size="clamp(21px,2.6vw,28px)" lineHeight={1.5}>
-              “Before we begin working together, we want to understand where you are today, what's already working and what's holding you back. This assessment is your baseline. Don't perform. Don't polish. Answer honestly, because we can only fix what you let us see.”
+              “Before we begin working together, we wish to understand where you stand today, what's already working and what's holding you back. This assessment is your baseline. Relax & give it your best. Answer honestly, because we can only fix what you let us see.”
             </PullQuote>
           </Reveal>
         </div>

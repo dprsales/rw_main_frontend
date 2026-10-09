@@ -1,4 +1,4 @@
-import portraitImage from '../assets/site/DSC08591.JPG'
+import portraitImage from '../assets/site/rw-realty-hero.png'
 import hydMark from '../assets/site/hyd-01.svg'
 import Seo from '../components/Seo'
 import hraLogo from '../assets/site/logo-hra.png'
