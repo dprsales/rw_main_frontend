@@ -3661,3 +3661,41 @@ body.rw-templates-page #messageWrapperBox {
 @media (prefers-reduced-motion: reduce) {
   .rw-program-included, .rw-program-numeral { transition: none !important; }
 }
+
+/* Quiet FAQ accordion. Questions stay visible; one answer opens at a time. */
+.rw-faq { border-top: 1px solid var(--line); }
+.rw-faq-wrap {
+  max-width: 880px; margin: 0 auto;
+  padding: clamp(80px, 10vw, 110px) 40px;
+}
+.rw-faq-list { border-top: 1px solid var(--line); }
+.rw-faq-item { border-bottom: 1px solid var(--line); }
+.rw-faq-q {
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  width: 100%; min-height: 64px; padding: 18px 0;
+  background: none; border: 0; cursor: pointer; text-align: left;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-weight: 500; font-size: 16px; line-height: 1.45; letter-spacing: .01em;
+  color: var(--ink);
+}
+.rw-faq-q:hover span { color: var(--copper); }
+.rw-faq-q:focus-visible { outline: 1px solid var(--copper); outline-offset: 4px; }
+.rw-faq-caret {
+  flex-shrink: 0; color: var(--copper); transform-origin: center;
+  transition: transform .22s ease;
+}
+.rw-faq-item.is-open .rw-faq-caret { transform: rotate(180deg); }
+.rw-faq-a {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows .32s ease;
+}
+.rw-faq-item.is-open .rw-faq-a { grid-template-rows: 1fr; }
+.rw-faq-a > div { overflow: hidden; }
+.rw-faq-a p {
+  margin: 0 0 20px; max-width: 62ch; padding-right: 42px;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 16px; line-height: 1.65; color: var(--faded);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rw-faq-caret, .rw-faq-a { transition: none; }
+}

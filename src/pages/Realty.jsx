@@ -19,6 +19,7 @@ import Reveal from '../components/Reveal'
 import RiseText from '../components/RiseText'
 import ClosingCTA from '../components/ClosingCTA'
 import RelatedReading from '../components/RelatedReading'
+import FaqSection from '../components/FaqSection'
 import SectionHead, { SectionAside } from '../components/SectionHead'
 import { useInView } from '../hooks/useInView'
 import { MANDATE_SCOPE } from '../data/content'
@@ -333,6 +334,17 @@ export default function Realty() {
       </section>
 
       <RelatedReading service="realty" title="On mandates & luxury positioning." />
+
+      <FaqSection
+        items={[
+          { q: 'You build, we sell. Is that the deal?', a: 'Yes. An exclusive mandate. Team RW owns the sale from strategy to closure.' },
+          { q: 'Does our own sales team stay?', a: 'Team RW puts its own trained team on site & owns the funnel. The mandate exists so the number is not split across brokers, an in-house team, & an agency. Where that split sits today is walked through when you discuss the mandate.' },
+          { q: 'Who runs it day to day?', a: 'Priyanka Panda, Director of Sales. Eight-plus years in luxury branding, positioning, & high-value closures.' },
+          { q: 'Will you discount to move stock?', a: 'No. Price is defended. The work is judged on absorption, the price realised, & sales on a construction schedule.' },
+          { q: 'How many projects do you take at once?', a: 'A handful. Limited on purpose.' },
+          { q: 'What does a mandate cost?', a: 'It is not listed. Tell us about the launch, & Team RW walks through whether a mandate fits.' },
+        ]}
+      />
 
       <ClosingCTA title="Mandates are limited to a handful of projects at a time.">
         <CtaButton variant="outline" href="/form/realty">TELL US ABOUT YOUR PROJECT</CtaButton>

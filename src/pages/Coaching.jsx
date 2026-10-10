@@ -15,6 +15,7 @@ import AchieveGrid from '../components/AchieveGrid'
 import Bullet from '../components/Bullet'
 import ClosingCTA from '../components/ClosingCTA'
 import RelatedReading from '../components/RelatedReading'
+import FaqSection from '../components/FaqSection'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
@@ -244,10 +245,10 @@ export default function Coaching() {
               I have partnered with KRISAH, an AI-powered assessment platform, to bring a scored sales assessment to real estate professionals across India.
             </p>
             <p style={{ ...note, marginTop: 16, fontSize: fs('16px'), lineHeight: 1.6 }}>
-              It is a live AI interview, asking the kinds of questions a serious employer or buyer would ask, and scoring your performance across six areas.
+              It is a live AI interview on KRISAH. Twenty questions, answered out loud, scored across six areas.
             </p>
             <p style={{ ...note, marginTop: 16, fontSize: fs('16px'), lineHeight: 1.6 }}>
-              You get a full scored report after your session. I review it before our first coaching call, so we start from what the data shows, not what I assume.
+              You get a scored report after the session, free and yours to keep. Your result then shows which coaching modules fit.
             </p>
             <div style={{ marginTop: 32 }}>
               <CtaButton href="/assesment" live onClick={() => track('assessment_page_click', { location: 'coaching-assessment-section' })}>
@@ -344,6 +345,17 @@ export default function Coaching() {
       </section>
 
       <RelatedReading service="coaching" title="Must Read." />
+
+      <FaqSection
+        items={[
+          { q: 'Is this for me, or for my whole sales team?', a: 'For the people who sell. Developers, senior sales leadership, & top closers. One-to-one mentoring is personal. If the whole sales operation needs rebuilding, that is Consulting. If you want Team RW to sell the project, that is a mandate.' },
+          { q: 'How long is a session?', a: 'Four hours, across four modules, with a 30-minute break. The work is drilled on your own pipeline, not taught as theory.' },
+          { q: 'Do I get a certificate?', a: 'No. The result is a higher ticket size, a stronger client base, & more credibility in the market.' },
+          { q: 'What is the free assessment?', a: 'A live AI interview on KRISAH. Twenty questions, about twenty-five minutes, answered out loud. You get a scored report across six areas, free & yours to keep. Then your result shows which coaching modules fit.' },
+          { q: 'What happens after I apply?', a: 'The application is the filter. If the fit is right, you hear back within two working days.' },
+          { q: 'What does coaching cost?', a: 'Each module is ₹6,250. Coaching is four modules over four hours, with a 30-minute break. Four modules is the minimum, ₹25,000. After the assessment, your result shows the modules for your score, & you buy from there.' },
+        ]}
+      />
 
       <ClosingCTA title="The application is the filter. Serious applications get serious answers." titleStyle={{ maxWidth: '15em' }}>
         <CtaButton variant="outline" href="/form/coaching">TELL US ABOUT YOUR COACHING NEEDS</CtaButton>
