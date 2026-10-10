@@ -13,7 +13,7 @@ export default function FaqSection({ items }) {
   return (
     <section className="rw-faq" aria-labelledby="rw-faq-title">
       <div className="rw-pad rw-faq-wrap">
-        <Reveal as="h2" id="rw-faq-title" style={{ ...sectionHeading, maxWidth: '16em', marginBottom: 36 }}>Frequently asked questions.</Reveal>
+        <Reveal as="h2" id="rw-faq-title" style={{ ...sectionHeading, color: 'var(--copper)', marginBottom: 36 }}>FAQs</Reveal>
         <div className="rw-faq-list">
           {items.map((item, i) => {
             const isOpen = open === i
