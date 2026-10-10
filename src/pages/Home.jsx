@@ -154,7 +154,7 @@ function HeroCinematic() {
 
         <Reveal delay={240} style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 'clamp(14px,2.4vw,24px)', flexWrap: 'wrap' }}>
           <BookButton specular>BOOK A STRATEGY CALL</BookButton>
-          <Link to="/portfolio" className="rw-inline-cta" style={{ ...ctaInline, color: '#F2EFE9' }}>
+          <Link to="/realty/portfolio" className="rw-inline-cta" style={{ ...ctaInline, color: '#F2EFE9' }}>
             The story →
           </Link>
         </Reveal>

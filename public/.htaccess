@@ -24,6 +24,11 @@
   RewriteRule ^assessment/?$ /index.html [L]
   RewriteRule ^assessment/result/?$ /index.html [L]
 
+  # A leftover /portfolio directory fights the slash: /portfolio 301s to
+  # /portfolio/ and that 301s straight back. Send both at the real page
+  # before Apache treats the folder as the destination.
+  RewriteRule ^portfolio/?$ /realty/portfolio [R=301,L]
+
   # Serve real files and directories as-is (assets, fonts, images, robots, etc.)
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d

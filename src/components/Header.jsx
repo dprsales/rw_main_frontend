@@ -19,7 +19,7 @@ const SITE_NAV = [
   { label: 'Sales Consulting', to: '/consulting' },
   { label: 'Projects in Hyderabad', to: '/project-hyderabad' },
   { label: 'Sales Mandate', to: '/realty' },
-  { label: 'Portfolio', to: '/portfolio' },
+  { label: 'Portfolio', to: '/realty/portfolio' },
   { label: 'Careers', to: '/careers' },
   { label: 'Channel Partners', to: '/partner' },
   { label: 'KRISAH Assessment', to: '/assessment' },
@@ -56,7 +56,7 @@ const MEGA_COLUMNS = [
 ]
 const MEGA_PATHS = MEGA_COLUMNS.flatMap((col) => col.items.map((item) => item.to).filter(Boolean))
 const TOP_LINKS = [
-  { label: 'Portfolio', to: '/portfolio' },
+  { label: 'Portfolio', to: '/realty/portfolio' },
   { label: 'Careers', to: '/careers' },
 ]
 const PROPERTY_COLUMNS = [
