@@ -9,7 +9,7 @@ export const PRIVACY_POLICY = {
     { k: 'p', t: 'This Privacy Policy explains how Team RW (operated by Rajiv Williams, Hyderabad) collects, uses, stores & shares personal information when you use our website, forms, chat & related services.' },
     { k: 'p', t: 'We serve real-estate developers, sales teams, channel partners, investors & candidates across four main lines: Sales Coaching, Sales Consulting, Sales Mandates (RW Realty) & Channel Partners. Careers applications are covered here too.' },
     { k: 'p', t: '**Legal entity name for the operator:** [to confirm]' },
-    { k: 'p', t: '**Registered / business address:** Shaikpet, Hyderabad, Telangana · PIN 500032 · [to confirm full address line]' },
+    { k: 'p', t: '**Registered / business address:** Hyderabad, Telangana, India' },
     { k: 'p', t: '**Contact for privacy requests:** connect@rajivwilliams.com · +91 95495 46568' },
 
     { k: 'h2', t: '1. What this policy covers' },
@@ -125,7 +125,7 @@ export const PRIVACY_POLICY = {
 
     { k: 'h2', t: '13. Contact' },
     { k: 'p', t: '**Team RW · Rajiv Williams**' },
-    { k: 'p', t: 'Shaikpet, Hyderabad, Telangana · 500032' },
+    { k: 'p', t: 'Hyderabad, Telangana, India' },
     { k: 'p', t: 'Email: connect@rajivwilliams.com' },
     { k: 'p', t: 'Phone: +91 95495 46568' },
     { k: 'p', t: 'Website: https://rajivwilliams.com' },

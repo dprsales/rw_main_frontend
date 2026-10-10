@@ -78,7 +78,7 @@ export default function Footer({ links, chip = false }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <Wordmark size={48} />
             <span style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.06em', color: 'var(--faded)' }}>
-              © 2026 Rajiv Williams · Hyderabad · 500032
+              © 2026 Rajiv Williams · Hyderabad, Telangana, India
             </span>
           </div>
 

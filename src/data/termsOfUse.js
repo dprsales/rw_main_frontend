@@ -85,7 +85,7 @@ export const TERMS_OF_USE = {
 
     { k: 'h2', t: '14. Contact' },
     { k: 'p', t: '**Team RW · Rajiv Williams**' },
-    { k: 'p', t: 'Shaikpet, Hyderabad, Telangana · 500032' },
+    { k: 'p', t: 'Hyderabad, Telangana, India' },
     { k: 'p', t: 'Email: connect@rajivwilliams.com' },
     { k: 'p', t: 'Phone: +91 95495 46568' },
     { k: 'p', t: 'Website: https://rajivwilliams.com' },

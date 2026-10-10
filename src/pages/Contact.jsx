@@ -18,7 +18,7 @@ const CONTACT_ROWS = [
   { label: 'EMAIL', value: 'connect@rajivwilliams.com', href: EMAIL },
   { label: 'PHONE', value: PHONE.label, href: PHONE.href },
   { label: 'WHATSAPP', value: 'Message on WhatsApp', href: WHATSAPP },
-  { label: 'LOCATION', value: 'Shaikpet, Hyderabad, Telangana' },
+  { label: 'LOCATION', value: 'Hyderabad, Telangana, India' },
 ]
 
 export default function Contact() {

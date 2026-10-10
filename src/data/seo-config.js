@@ -65,7 +65,7 @@ export const ROUTE_SEO = {
   '/contact': {
     title: 'Contact Rajiv Williams, Hyderabad',
     description:
-      'Speak to Rajiv Williams about coaching, developer consulting, or an exclusive sales mandate. Based in Shaikpet, Hyderabad.',
+      'Speak to Rajiv Williams about coaching, developer consulting, or an exclusive sales mandate. Based in Hyderabad, Telangana, India.',
   },
   '/privacy-policy': {
     title: 'Privacy Policy | Team RW · Rajiv Williams',
