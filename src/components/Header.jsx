@@ -63,7 +63,7 @@ const PROPERTY_COLUMNS = [
   {
     heading: 'Builder',
     items: [
-      { label: 'Projects in Hyderabad', to: '/project-hyderabad', desc: 'Projects that Team RW has represented', icon: Building2 },
+      { label: 'Projects in Hyderabad', to: '/project-hyderabad', desc: 'Projects that Team RW has associated with', icon: Building2 },
     ],
   },
   {
