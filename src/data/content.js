@@ -227,6 +227,7 @@ export const ORGANISATIONS_WORKED = [
   'Nesta Developers', 'Tejase Developers', 'Haneesh Constructions', 'Vibrant Developers', 'Anantha Projects',
   'Avani', 'Gangothri', 'Identity', 'Rohas Ventures', 'CSK Builders & Developers',
   'Mirai Infracon', 'e-Infra', 'Celestial', 'Navanaami', 'Promenade Villas',
+  'SkyMarq by DSR', 'Skyline by Candeur', 'Skyven', 'The Twins by DSR', 'Trump Tower', 'Vantage',
 ]
 
 /** The full testimonial wall - every brochure review, condensed. `highlight: true` marks the lines pulled out large. */

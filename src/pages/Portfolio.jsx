@@ -20,6 +20,12 @@ import navanaami from '../assets/site/LOGOS/navanaami.svg'
 import nesta from '../assets/site/LOGOS/nesta.svg'
 import promenadeVillas from '../assets/site/LOGOS/promenade-villas.svg'
 import radhaSpaces from '../assets/site/LOGOS/radha-spaces.svg'
+import skyMarq from '../assets/site/LOGOS/skyamarqdsr.png'
+import skyline from '../assets/site/LOGOS/skyline.png'
+import skyven from '../assets/site/LOGOS/skyven.png'
+import theTwins from '../assets/site/LOGOS/thetwinsdsr.png'
+import trumpTower from '../assets/site/LOGOS/trumptower.png'
+import vantage from '../assets/site/LOGOS/vantage.png'
 import rohas from '../assets/site/LOGOS/rohas.svg'
 import sriAditya from '../assets/site/LOGOS/sri-aditya.svg'
 import suchirindia from '../assets/site/LOGOS/suchirindia.svg'
@@ -93,6 +99,12 @@ const ORG_LOGOS = {
   'Navanaami': navanaami,
   'Promenade Villas': promenadeVillas,
   'Radha Spaces': radhaSpaces,
+  'SkyMarq by DSR': skyMarq,
+  'Skyline by Candeur': skyline,
+  'Skyven': skyven,
+  'The Twins by DSR': theTwins,
+  'Trump Tower': trumpTower,
+  'Vantage': vantage,
 }
 
 /* Optical-size correction for logos still on original bitmap canvases; tuned by eye. */
@@ -109,6 +121,7 @@ const LOGO_NEEDS_DARK = new Set([
   'Nesta Developers', 'Tejase Developers', 'Haneesh Constructions',
   'Vibrant Developers', 'Anantha Projects', 'Avani', 'Gangothri', 'Rohas Ventures', 'e-Infra',
   'Celestial', 'Navanaami', 'Promenade Villas', 'Radha Spaces',
+  'SkyMarq by DSR', 'Skyline by Candeur', 'Skyven', 'The Twins by DSR', 'Trump Tower', 'Vantage',
 ])
 
 /* Only organisations with a supplied logo are shown; rest appear once artwork arrives. */
