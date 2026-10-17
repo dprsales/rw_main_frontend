@@ -65,13 +65,26 @@ export async function fetchRoles() {
     return CAREER_ROLES
   }
 
-  const rows = (Array.isArray(jobs) ? jobs : jobs?.jobs)?.filter((job) => {
-    const title = (job?.jobTitle || job?.title || '').toLowerCase()
-    return !title.includes('channel partner')
-  })
+  const rows = Array.isArray(jobs) ? jobs : jobs?.jobs
   if (!Array.isArray(rows)) return CAREER_ROLES
 
   const mapped = rows.map(toRole).filter(Boolean)
   // Empty API result is ambiguous, so keep the curated list rather than showing nothing.
-  return mapped.length >= 10 ? mapped.slice(0, 10) : CAREER_ROLES
+  const listed = mapped.length >= 10 ? mapped.slice(0, 10) : CAREER_ROLES
+  return withCuratedSalesHeads(listed)
+}
+
+/** Seats that must stay on the careers page even when the live feed is a full set of other jobs. */
+const CURATED_SALES_HEADS = [
+  'Channel Partner Closing Sales Manager',
+  'Channel Partner Sourcing Head',
+  'Channel Partner Closing Sales Head',
+]
+
+function withCuratedSalesHeads(roles) {
+  const have = new Set((roles || []).map((role) => (role.title || '').toLowerCase()))
+  const extra = CAREER_ROLES.filter((role) =>
+    CURATED_SALES_HEADS.includes(role.title) && !have.has(role.title.toLowerCase()),
+  )
+  return extra.length ? [...roles, ...extra] : roles
 }
