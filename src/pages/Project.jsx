@@ -207,6 +207,31 @@ function ProjectHero({ hero, details, name }) {
               </div>
             )}
 
+            {details?.ocReceived && (
+              <div
+                className="rw-projx-in"
+                title="Occupancy Certificate"
+                style={{
+                  marginTop: 16,
+                  animationDelay: '.12s',
+                }}
+              >
+                <span
+                  style={{
+                    display: 'inline-block',
+                    fontFamily: mono,
+                    fontSize: fs('11px'),
+                    letterSpacing: '.16em',
+                    color: '#1a1408',
+                    background: 'var(--copper)',
+                    padding: '7px 12px',
+                  }}
+                >
+                  OC RECEIVED · OCCUPANCY CERTIFICATE
+                </span>
+              </div>
+            )}
+
             {/* Project Logo */}
             {logo ? (
               <div
