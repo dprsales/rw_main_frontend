@@ -79,6 +79,11 @@ const CURATED_SALES_HEADS = [
   'Channel Partner Closing Sales Manager',
   'Channel Partner Sourcing Head',
   'Channel Partner Closing Sales Head',
+  'Assistant General Manager',
+  'General Manager',
+  'Associate Vice President',
+  'Vice President',
+  'Senior Vice President',
 ]
 
 function withCuratedSalesHeads(roles) {

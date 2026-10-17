@@ -47,11 +47,16 @@ const CAREER_GLOW = {
 const ALL = 'All'
 const ROLES_PER_PAGE = 6
 
-/* Seniority order for the role list: Entry → Junior → Mid → Senior → Manager → Senior Manager → Head.
+/* Seniority order: Entry → Junior → Mid → Senior → Manager → Senior Manager → Head → AGM → GM → AVP → VP → Senior VP.
    Matched on keywords, not exact strings, because levels also arrive free-text from the jobs API
    (and use both '-' and '–'). Anything unrecognised ('Open role') sorts last. */
 function levelRank(level = '') {
   const l = level.toLowerCase()
+  if (l.includes('senior vice president')) return 13
+  if (l.includes('associate vice president')) return 11
+  if (l.includes('vice president')) return 12
+  if (l.includes('assistant general manager')) return 9
+  if (l.includes('general manager')) return 10
   if (l.includes('head')) return 8
   if (l.includes('senior manager')) return 7
   if (l.includes('manager')) return 6
