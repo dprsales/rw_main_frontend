@@ -207,31 +207,6 @@ function ProjectHero({ hero, details, name }) {
               </div>
             )}
 
-            {details?.ocReceived && (
-              <div
-                className="rw-projx-in"
-                title="Occupancy Certificate"
-                style={{
-                  marginTop: 16,
-                  animationDelay: '.12s',
-                }}
-              >
-                <span
-                  style={{
-                    display: 'inline-block',
-                    fontFamily: mono,
-                    fontSize: fs('11px'),
-                    letterSpacing: '.16em',
-                    color: '#1a1408',
-                    background: 'var(--copper)',
-                    padding: '7px 12px',
-                  }}
-                >
-                  OC RECEIVED · OCCUPANCY CERTIFICATE
-                </span>
-              </div>
-            )}
-
             {/* Project Logo */}
             {logo ? (
               <div
@@ -353,9 +328,9 @@ function ProjectHero({ hero, details, name }) {
               style={{
                 marginTop: 'clamp(28px, 3vw, 40px)',
                 display: 'flex',
-                gap: 18,
-                alignItems: 'center',
-                flexWrap: 'wrap',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: 14,
                 animationDelay: '.6s',
               }}
             >
@@ -366,17 +341,46 @@ function ProjectHero({ hero, details, name }) {
                 ENQUIRE ABOUT {(name || 'THIS PROJECT').toUpperCase()}
               </BookButton>
 
-              {hero?.rera && (
-                <span
+              {(hero?.rera || details?.ocReceived) && (
+                <div
                   style={{
-                    fontFamily: mono,
-                    fontSize: fs('11px'),
-                    letterSpacing: '.12em',
-                    color: 'rgba(234,241,249,.6)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 14,
+                    flexWrap: 'wrap',
                   }}
                 >
-                  RERA {hero.rera}
-                </span>
+                  {details?.ocReceived && (
+                    <span
+                      title="Occupancy certificate"
+                      style={{
+                        display: 'inline-block',
+                        fontFamily: mono,
+                        fontSize: fs('10px'),
+                        letterSpacing: '.14em',
+                        textTransform: 'uppercase',
+                        lineHeight: 1,
+                        color: '#1a1408',
+                        background: 'var(--copper)',
+                        padding: '6px 10px',
+                      }}
+                    >
+                      OC received
+                    </span>
+                  )}
+                  {hero?.rera && (
+                    <span
+                      style={{
+                        fontFamily: mono,
+                        fontSize: fs('11px'),
+                        letterSpacing: '.12em',
+                        color: 'rgba(234,241,249,.6)',
+                      }}
+                    >
+                      RERA {hero.rera}
+                    </span>
+                  )}
+                </div>
               )}
             </div>
 
