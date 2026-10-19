@@ -115,6 +115,69 @@ export const HEXACO_TRAITS = [
       { id: 'mind3', text: 'I avoid new challenges unless I already know how to do them well.', reverse: true },
     ],
   },
+  {
+    key: 'Honesty-Humility',
+    field: 'hexacoHonesty',
+    statements: [
+      { id: 'hh1', text: 'I would point out a mistake that costs me, if hiding it would be dishonest.' },
+      { id: 'hh2', text: 'I am uncomfortable taking credit I did not earn.' },
+      { id: 'hh3', text: 'I would flatter someone if it helped me get what I want.', reverse: true },
+    ],
+  },
+  {
+    key: 'Emotionality',
+    field: 'hexacoEmotionality',
+    statements: [
+      { id: 'em1', text: 'I worry about things going wrong more than the people around me.' },
+      { id: 'em2', text: 'I need reassurance when I am under pressure.' },
+      { id: 'em3', text: 'I stay detached even when a situation is tense.', reverse: true },
+    ],
+  },
+  {
+    key: 'Extraversion',
+    field: 'hexacoExtraversion',
+    statements: [
+      { id: 'ex1', text: 'Meeting new people gives me energy.' },
+      { id: 'ex2', text: 'I speak up easily when I am in a group.' },
+      { id: 'ex3', text: 'I prefer to keep to myself in social settings.', reverse: true },
+    ],
+  },
+  {
+    key: 'Agreeableness (versus Anger)',
+    field: 'hexacoAgreeableness',
+    statements: [
+      { id: 'ag1', text: 'I stay patient when someone is rude to me.' },
+      { id: 'ag2', text: 'I let an argument go once the point has been made.' },
+      { id: 'ag3', text: 'I get angry quickly when someone blocks me.', reverse: true },
+    ],
+  },
+  {
+    key: 'Conscientiousness',
+    field: 'hexacoConscientiousness',
+    statements: [
+      { id: 'co1', text: 'I plan my work before I start it.' },
+      { id: 'co2', text: 'I check the details again even when I am tired.' },
+      { id: 'co3', text: 'I leave things until the last minute.', reverse: true },
+    ],
+  },
+  {
+    key: 'Openness to Experience',
+    field: 'hexacoOpenness',
+    statements: [
+      { id: 'op1', text: 'I enjoy ideas that are new to me.' },
+      { id: 'op2', text: 'I like trying a different way of doing a familiar task.' },
+      { id: 'op3', text: 'I prefer to stick with what I already know.', reverse: true },
+    ],
+  },
+  {
+    key: 'Problem solving',
+    field: 'hexacoProblemSolving',
+    statements: [
+      { id: 'ps1', text: 'I break a messy problem into steps before I act.' },
+      { id: 'ps2', text: 'I look for the cause, not only the quickest fix.' },
+      { id: 'ps3', text: 'I wait for someone else to solve a hard problem.', reverse: true },
+    ],
+  },
 ]
 
 /** Flat list of every statement id, for "have all been answered" checks. */

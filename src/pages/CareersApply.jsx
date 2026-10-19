@@ -618,6 +618,7 @@ export default function CareersApply() {
                   <div className="rw-form-field-wrap rw-form-field-wrap--wide" style={{ display: 'block' }}>
                     {HEXACO_TRAITS.map((trait) => (
                       <div key={trait.key} style={{ marginBottom: 18 }}>
+                        <p style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--faded)', margin: '8px 0 12px' }}>{trait.key}</p>
                         {trait.statements.map((s) => (
                           <div key={s.id} className="rw-likert">
                             <p className="rw-likert-text" style={{ fontFamily: text }}>{s.text}</p>
