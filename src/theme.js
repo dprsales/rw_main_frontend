@@ -90,9 +90,9 @@ export const HOME_FOOTER_LINKS = [
   ...LEGAL_LINKS,
 ]
 
-/** A project detail page goes back up its own branch, not to the home page. */
+/** A project detail page goes back to the Hyderabad projects list. */
 export const PROJECT_FOOTER_LINKS = [
-  { label: '← RW Realty', to: '/realty' },
+  { label: '← Projects in Hyderabad', to: '/project-hyderabad' },
   { label: 'Portfolio', to: '/realty/portfolio' },
   ...FOOTER_CONTACT,
   ...LEGAL_LINKS,

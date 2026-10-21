@@ -159,6 +159,9 @@ function ProjectHero({ hero, details, name }) {
         </div>
       )}
 
+      {/* Sits above the render so a full scene cannot wash out the type. */}
+      <div aria-hidden className="rw-projx-scrim" />
+
       {/* Main content */}
       <div
         className="rw-pad rw-projx-content"
@@ -177,7 +180,7 @@ function ProjectHero({ hero, details, name }) {
           <div className="rw-projx-main">
 
             <Link
-              to="/realty"
+              to="/project-hyderabad"
               className="rw-nav-link rw-projx-in"
               style={{
                 fontFamily: mono,
@@ -186,7 +189,7 @@ function ProjectHero({ hero, details, name }) {
                 color: 'rgba(234,241,249,.72)',
               }}
             >
-              ← RW REALTY
+              ← PROJECTS IN HYDERABAD
             </Link>
 
             {(hero?.loc || details?.location) && (
@@ -300,7 +303,7 @@ function ProjectHero({ hero, details, name }) {
                         fontVariantNumeric: 'lining-nums',
                         color: '#F2EFE9',
                         lineHeight: 1.1,
-                        whiteSpace: 'nowrap',
+                        maxWidth: '16em',
                       }}
                     >
                       {value}

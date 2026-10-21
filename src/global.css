@@ -2887,15 +2887,26 @@ button.rw-mega-item {
   position: absolute; z-index: 1; pointer-events: none;
   right: max(40px, calc((100% - 1320px) / 2 + 40px));
   top: clamp(64px, 8vw, 96px); bottom: clamp(36px, 5vw, 72px);
-  width: min(90%, 1200px);
+  /* Right half only. A wide scene crops from the left instead of covering the type. */
+  width: min(58%, 860px);
+}
+.rw-projx-scrim {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(11,10,9,.92) 0%,
+    rgba(11,10,9,.78) 30%,
+    rgba(11,10,9,.28) 48%,
+    rgba(11,10,9,0) 64%
+  );
 }
 /* Cutouts fade on the left only; their bottom and right are raw canvas edges.
    Dissolve just those two edges so the ground line melts into the sky - the
    building itself is untouched. */
 .rw-projx-render img {
   display: block; width: 100%; height: 100%; object-fit: contain; object-position: right bottom;
-  -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 14%), linear-gradient(to left, transparent 0%, #000 7%);
-  mask-image: linear-gradient(to top, transparent 0%, #000 14%), linear-gradient(to left, transparent 0%, #000 7%);
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 14%), linear-gradient(to left, transparent 0%, #000 22%);
+  mask-image: linear-gradient(to top, transparent 0%, #000 14%), linear-gradient(to left, transparent 0%, #000 22%);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
@@ -2952,6 +2963,9 @@ button.rw-mega-item {
   .rw-projx-hero { min-height: 0; }
   /* Stacked: the render drops behind the copy at reduced opacity so the text stays legible. */
   .rw-projx-render { width: 100%; top: 40%; opacity: .42; }
+  .rw-projx-scrim {
+    background: linear-gradient(180deg, rgba(11,10,9,.35) 0%, rgba(11,10,9,.72) 70%, rgba(11,10,9,.88) 100%);
+  }
   .rw-projx-stats { grid-template-columns: repeat(2, 1fr); }
   .rw-projx-stat:nth-child(2n+1) { border-left: none; }
   .rw-projx-stat:nth-child(n+3) { border-top: 1px solid var(--line); }
