@@ -21,7 +21,7 @@ const SITE_NAV = [
   { label: 'Sales Mandate', to: '/realty' },
   { label: 'Portfolio', to: '/realty/portfolio' },
   { label: 'Careers', to: '/careers' },
-  { label: 'Articles', to: '/articles' },
+  // { label: 'Articles', to: '/articles' },
   { label: 'Channel Partners', to: '/partner' },
   { label: 'KRISAH Assessment', to: '/assessment' },
   // { label: 'Find your fit', to: '/start' },
