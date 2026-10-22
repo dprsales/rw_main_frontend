@@ -2072,7 +2072,16 @@ button.rw-mega-item {
 .rw-hero-photo {
   width: 100%;
   height: 100%;
-  filter: saturate(.82) contrast(.92) brightness(1.05);
+}
+
+.rw-hero-photo-stack { position: relative; width: 100%; height: 100%; }
+.rw-hero-photo-stack .rw-hero-img {
+  position: absolute; inset: 0;
+  opacity: 0; transition: opacity .7s ease;
+}
+.rw-hero-photo-stack .rw-hero-img.is-on { opacity: 1; }
+.rw-hero-photo-stack .rw-hero-img img {
+  display: block; width: 100%; height: 100%; object-fit: cover;
 }
 
 .rw-hero-img {
@@ -2084,6 +2093,94 @@ button.rw-mega-item {
      crop on wide screens falls on the jacket rather than the top of the head. */
   object-position: 72% 35%;
 }
+.rw-hero-img--lead,
+.rw-hero-img--lead img { object-position: 72% 35%; }
+.rw-hero-img--sky,
+.rw-hero-img--sky img { object-position: 78% 45%; }
+.rw-hero-img--coaching,
+.rw-hero-img--coaching img { object-position: 78% 48%; }
+.rw-hero-img--bridge,
+.rw-hero-img--bridge img,
+.rw-hero-photo-stack .rw-hero-img--bridge img {
+  object-fit: contain;
+  object-position: right center;
+  background: #061220;
+}
+
+.rw-hero-panel {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .55s ease, visibility .55s ease;
+}
+.rw-hero-panel.is-on {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.rw-hero-panel:not(.is-on) {
+  position: absolute;
+  inset: 0;
+}
+
+.rw-hero-slider {
+  position: absolute;
+  z-index: 3;
+  left: 0; right: 0; bottom: 22px;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+}
+.rw-hero-slider-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid rgba(242,239,233,.28);
+  background: rgba(11,10,9,.35);
+  color: #F2EFE9; font-size: 22px; line-height: 1; cursor: pointer;
+}
+.rw-hero-slider-btn:hover { border-color: var(--copper); color: var(--copper); }
+.rw-hero-slider-dots { display: flex; gap: 8px; }
+.rw-hero-slider-dot {
+  width: 7px; height: 7px; border-radius: 50%; padding: 0;
+  border: 0; background: rgba(242,239,233,.35); cursor: pointer;
+}
+.rw-hero-slider-dot.is-on { background: var(--copper); width: 22px; border-radius: 100px; }
+
+.rw-hero-actions {
+  margin-top: 36px;
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2.4vw, 24px);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 760px) {
+  .rw-hero-media { order: 1; }
+  .rw-hero-slider {
+    position: relative;
+    bottom: auto;
+    top: auto;
+    order: 2;
+    z-index: 2;
+    padding: 14px 18px 6px;
+    justify-content: flex-start;
+  }
+  .rw-hero-copy { order: 3; }
+  .rw-hero-panel:not(.is-on) { position: static; inset: auto; height: 0; overflow: hidden; }
+  .rw-hero .rw-hero-actions {
+    margin-top: 28px;
+    flex-direction: column;
+    align-items: stretch;
+    width: calc(100% - 8px);
+    max-width: 360px;
+    gap: 12px;
+  }
+  .rw-hero .rw-hero-actions .rw-cta,
+  .rw-hero .rw-hero-actions .rw-cta-secondary,
+  .rw-hero .rw-hero-actions .rw-inline-cta {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+    text-align: center;
+  }
+}
 
 .rw-hero-scrim,
 .rw-hero-fade {
@@ -2093,7 +2190,56 @@ button.rw-mega-item {
 }
 
 .rw-hero-scrim {
-  background: linear-gradient(90deg, rgba(11,10,9,.82) 0%, rgba(11,10,9,.62) 34%, rgba(11,10,9,.28) 55%, rgba(11,10,9,0) 74%);
+  background: linear-gradient(90deg, rgba(11,10,9,.74) 0%, rgba(11,10,9,.48) 32%, rgba(11,10,9,.18) 54%, rgba(11,10,9,0) 72%);
+}
+
+/* Night plates: a deeper left wash so white type and the ghost Explore
+   stay readable on cable lights and tower windows. Slide 1 stays as-is. */
+@media (min-width: 761px) {
+  .rw-hero--night .rw-hero-scrim {
+    background: linear-gradient(90deg,
+      rgba(11,10,9,.88) 0%,
+      rgba(11,10,9,.68) 28%,
+      rgba(11,10,9,.38) 50%,
+      rgba(11,10,9,.1) 68%,
+      rgba(11,10,9,0) 80%);
+  }
+}
+
+/* Keep service-slide actions and navigation inside short laptop viewports.
+   The lead slide is intentionally untouched. */
+@media (min-width: 761px) and (max-height: 700px) {
+  .rw-hero--night .rw-hero-copy {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+  .rw-hero--night .rw-hero-stroke-line {
+    --stroke-text-height: clamp(76px, 9vw, 96px) !important;
+  }
+  .rw-hero--night .rw-hero-eyebrow {
+    margin-bottom: 16px !important;
+  }
+  .rw-hero--night .rw-hero-panel.is-on > p:not(.rw-hero-eyebrow) {
+    margin-top: 18px !important;
+    line-height: 1.45 !important;
+  }
+  .rw-hero--night .rw-hero-actions {
+    margin-top: 20px;
+  }
+  .rw-hero--night .rw-hero-slider {
+    bottom: 12px;
+  }
+}
+
+.rw-hero .rw-hero-explore {
+  background: rgba(11,10,9,.62);
+  border-color: var(--copper);
+  color: var(--copper);
+  backdrop-filter: blur(8px);
+}
+.rw-hero .rw-hero-explore:hover {
+  background: color-mix(in srgb, var(--copper) 18%, rgba(11,10,9,.72));
+  color: var(--copper);
 }
 
 .rw-hero-fade {
@@ -2130,15 +2276,26 @@ button.rw-mega-item {
     inset: auto;
     /* `width: auto` is load-bearing - the overlay rule's `width: 100%` would resolve against the section and add margins on top. */
     width: auto;
-    height: 52svh;
+    height: 44svh;
     min-height: 280px;
     /* Full-bleed - no frame; the photograph runs edge to edge. */
     margin: 0;
     border: none;
   }
 
-  /* Only the horizontal term does anything at this box ratio; holds the subject right of centre, clear of the copy. */
-  .rw-hero-img { object-position: 66% center; }
+  .rw-hero-img,
+  .rw-hero-img img { object-position: 66% center; }
+  .rw-hero-img--sky,
+  .rw-hero-img--sky img { object-position: 82% 42%; }
+  .rw-hero-img--coaching,
+  .rw-hero-img--coaching img { object-position: 78% 50%; }
+  .rw-hero-img--bridge,
+  .rw-hero-img--bridge img,
+  .rw-hero-photo-stack .rw-hero-img--bridge img {
+    object-fit: contain;
+    object-position: right center;
+    background: #061220;
+  }
 
   /* The scrim turns vertical and lands on the page background, so the photo's
      foot dissolves into the copy instead of ending on a visible edge. */
@@ -2156,14 +2313,22 @@ button.rw-mega-item {
   .rw-hero-copy {
     min-height: 0;
     justify-content: flex-start;
-    /* Lifts the copy onto the photo's fade, where the scrim is solid - the eyebrow sits over picture, not under it. */
-    margin-top: -54px;
-    padding: 0 clamp(18px, 5vw, 24px) clamp(44px, 10vw, 64px);
+    margin-top: 0;
+    padding: 24px clamp(18px, 5vw, 24px) clamp(36px, 9vw, 56px);
+    padding-right: 72px;
   }
 
   .rw-hero-eyebrow {
     letter-spacing: .16em !important;
-    margin-bottom: 22px !important;
+    margin-bottom: 18px !important;
+  }
+
+  .rw-hero .rw-hero-panel.is-on > p:not(.rw-hero-eyebrow) {
+    margin-top: 24px !important;
+  }
+
+  .rw-hero .rw-hero-actions {
+    margin-top: 22px;
   }
 }
 
@@ -3191,6 +3356,12 @@ button.rw-mega-item {
   .rw-role-row { grid-template-columns: minmax(180px, .8fr) 1.2fr; padding: 24px; }
   .rw-role-row .rw-role-apply { grid-column: 2; justify-self: start; }
 }
+/* Kenyt pops a "Hello there / Chat now" card on load. That covers the hero
+   and feels cheap on a luxury site. Keep the bubble; open only on click. */
+#messageWrapperBox {
+  display: none !important;
+}
+
 /* The Kenyt window is a fixed box with no "kenyt" in its id, and it sits on Apply and Load more. Keep the chat on other pages. */
 body.rw-careers-page iframe[src*="kenyt"],
 body.rw-careers-page [id*="kenyt"],

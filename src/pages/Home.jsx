@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import heroImage from '../assets/site/hero-rajiv.webp'
+import heroCoaching from '../assets/site/hero-slider-coaching.jpg'
+import heroConsulting from '../assets/site/hero-slider-consulting.jpg'
+import heroRealty from '../assets/site/hero-slider-realty.jpg'
 import wayCoachingVideo from '../assets/site/way-coaching.mp4'
 import wayCoachingPoster from '../assets/site/way-coaching.jpg'
 import wayConsultingVideo from '../assets/site/way-consulting.mp4'
@@ -19,6 +22,7 @@ import Seo from '../components/Seo'
 import Header from '../components/Header'
 import { Skeleton } from 'boneyard-js/react'
 import { BookButton } from '../components/BookingModal'
+import CtaButton from '../components/CtaButton'
 import Marquee from '../components/Marquee'
 import Reveal from '../components/Reveal'
 import FoldText from '../components/FoldText'
@@ -32,7 +36,7 @@ import { BLOGS, HERO_COPY, HOME_TESTIMONIALS, MARQUEE_ITEMS, WAYS } from '../dat
 import { HOME_FEATURED, featureFirst, fetchBlogsOnce } from '../data/blogs'
 import { HOME_FOOTER_LINKS, jost, mono, serif, text } from '../theme'
 import { fs,
-  body, container, ctaInk, ctaInline,
+  body, container, ctaCopper, ctaInk, ctaInline,
   sectionHeading, sectionHeadingLg, sectionRule,
 } from '../styles'
 
@@ -132,109 +136,263 @@ function FounderSignature() {
   )
 }
 
+/* Service plates: coaching boardroom, consulting session, golden-hour towers. */
+const HERO_SLIDES = [
+  {
+    id: 'lead',
+    image: heroImage,
+    alt: 'Rajiv Williams',
+    imgClass: 'rw-hero-img--lead',
+  },
+  {
+    id: 'coaching',
+    image: heroCoaching,
+    alt: 'Coach presenting a sales-progress pipeline to a luxury boardroom',
+    imgClass: 'rw-hero-img--coaching',
+    eyebrow: 'FOR DEVELOPERS · SALES LEADERSHIP · TOP CLOSERS',
+    line1: 'Sales',
+    line2: 'Coaching',
+    lede: 'Value your team members as much as your customers—growth starts with both.',
+    to: '/coaching',
+    cta: 'Explore Sales Coaching',
+  },
+  {
+    id: 'consulting',
+    image: heroConsulting,
+    alt: 'Consultant presenting sales performance to a developer leadership pair',
+    imgClass: 'rw-hero-img--bridge',
+    eyebrow: 'FOR DEVELOPERS · SALES LEADERSHIP · TOP CLOSERS',
+    line1: 'Sales',
+    line2: 'Consulting',
+    lede: '₹2,700+ Cr sold, quietly. Built for absorption, not brochures.',
+    to: '/consulting',
+    cta: 'Explore Sales Consulting',
+  },
+  {
+    id: 'realty',
+    image: heroRealty,
+    alt: 'Young family receiving house keys from a salesperson at a luxury villa',
+    imgClass: 'rw-hero-img--sky',
+    eyebrow: 'END-TO-END SALES MANDATE',
+    line1: 'Sales',
+    line2: 'Mandates',
+    lede: 'We take ownership of the sale—from strategy to closure.',
+    to: '/realty',
+    cta: 'Explore Sales Mandate',
+  },
+]
+
 function HeroCinematic() {
   const { targetRef, targetStyle, container: parallax } = useParallax()
+  const [active, setActive] = useState(0)
+  const [reduced, setReduced] = useState(false)
+  const touchX = useRef(null)
+  const total = HERO_SLIDES.length
+  const slide = HERO_SLIDES[active]
+  const go = (n) => setActive((n + total) % total)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const sync = () => setReduced(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
+
+  useEffect(() => {
+    if (reduced) return
+    const timer = setInterval(() => go(active + 1), 5000)
+    return () => clearInterval(timer)
+  }, [active, reduced])
 
   return (
-    /* Layout lives in global.css: overlay on desktop, stack on phone, via `position`
-       swaps that an inline style can't override. */
-    <section id="home" className="rw-hero">
-
-      {/* Desktop: full-bleed banner behind the copy. Phone: framed portrait above it. */}
+    <section
+      id="home"
+      className={`rw-hero${active > 0 ? ' rw-hero--night' : ''}`}
+      aria-roledescription="carousel"
+      aria-label="Homepage hero"
+      onTouchStart={(e) => { touchX.current = e.changedTouches[0].clientX }}
+      onTouchEnd={(e) => {
+        const start = touchX.current
+        if (start == null) return
+        const dx = e.changedTouches[0].clientX - start
+        if (Math.abs(dx) > 48) go(active + (dx < 0 ? 1 : -1))
+        touchX.current = null
+      }}
+    >
       <div className="rw-hero-media" {...parallax}>
-        <div ref={targetRef} className="rw-hero-photo" style={targetStyle}>
-          <img className="rw-hero-img" src={heroImage} alt="Rajiv Williams" />
+        <div ref={targetRef} className="rw-hero-photo rw-hero-photo-stack" style={targetStyle}>
+          {HERO_SLIDES.map((item, i) => (
+            <picture
+              key={item.id}
+              className={`rw-hero-img ${item.imgClass} ${i === active ? 'is-on' : ''}`}
+            >
+              <img
+                src={item.image}
+                alt={item.alt}
+                width={item.id === 'lead' ? 1179 : 3840}
+                height={item.id === 'lead' ? 717 : 2160}
+                sizes="100vw"
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding={i === 0 ? 'sync' : 'async'}
+                fetchPriority={i === 0 ? 'high' : 'low'}
+              />
+            </picture>
+          ))}
         </div>
-        {/* Protects the copy over the photograph; only used in the overlay composition. */}
         <div aria-hidden className="rw-hero-scrim" />
-        {/* A soft bottom fade grounds the frame against the page. */}
         <div aria-hidden className="rw-hero-fade" />
       </div>
 
       <div className="rw-hero-copy">
-        {/* .3em tracking orphans "HYDERABAD" below ~500px; .rw-hero-eyebrow tightens it. */}
-        <FoldText
-          text="RAJIV WILLIAMS · HYDERABAD REAL ESTATE"
-          splitBy="word"
-          hinge="top"
-          trigger="mount"
-          duration={0.6}
-          stagger={0.06}
-          fontSize={15}
-          fontWeight={400}
-          color="var(--copper)"
-          className="rw-hero-eyebrow"
-          style={{ fontFamily: mono, letterSpacing: '.3em', marginBottom: 30 }}
-        />
-
-        <h1 style={{ fontFamily: serif, lineHeight: .98, letterSpacing: '-.01em' }}>
-          <StrokeText
-            text="The specialist who"
-            strokeColor="#F2EFE9"
-            fillColor="#F2EFE9"
-            strokeWidth={1.1}
-            drawDuration={1.4}
-            fillDelay={0.1}
-            stagger={0.02}
+        <div className={`rw-hero-panel ${active === 0 ? 'is-on' : ''}`}>
+          <FoldText
+            text="RAJIV WILLIAMS · HYDERABAD REAL ESTATE"
+            splitBy="word"
+            hinge="top"
             trigger="mount"
-            fillMode="wipe"
-            fontSize={90}
+            duration={0.6}
+            stagger={0.06}
+            fontSize={15}
             fontWeight={400}
-            letterSpacing={-1}
-            className="rw-hero-stroke-line"
+            color="var(--copper)"
+            className="rw-hero-eyebrow"
+            style={{ fontFamily: mono, letterSpacing: '.3em', marginBottom: 30 }}
           />
-          <StrokeText
-            text="moves markets."
-            strokeColor="#E8C97A"
-            fillColor="#C39B53"
-            strokeWidth={1.1}
-            drawDuration={1.4}
-            fillDelay={0.1}
-            stagger={0.02}
-            trigger="mount"
-            fillMode="wipe"
-            fontSize={90}
-            fontWeight={400}
-            letterSpacing={-1}
-            reverse
-            className="stroke-text--italic rw-hero-stroke-line"
-            style={{ marginTop: '.05em' }}
-          />
-        </h1>
 
-        <Reveal as="p" delay={140} style={{ ...body, margin: '32px 0 0', maxWidth: '34em', fontSize: fs('clamp(16px,1.6vw,19px)'), lineHeight: 1.6, color: 'rgba(234,241,249,.82)' }}>
-          {HERO_COPY}
-        </Reveal>
-
-        <Reveal delay={240} style={{ marginTop: 36, display: 'flex', alignItems: 'center', gap: 'clamp(14px,2.4vw,24px)', flexWrap: 'wrap' }}>
-          <BookButton specular>BOOK A STRATEGY CALL</BookButton>
-          <Link to="/realty/portfolio" className="rw-inline-cta" style={{ ...ctaInline, color: '#F2EFE9' }}>
-            The story →
-          </Link>
-        </Reveal>
-
-        {/* Separator rules only read correctly while the line holds; below the
-            breakpoint they're dropped and the list stacks (.rw-hero-meta). */}
-        <Reveal delay={400} className="rw-hero-meta" style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid rgba(234,241,249,.22)', display: 'flex', alignItems: 'center', gap: 20, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'rgba(234,241,249,.7)', flexWrap: 'wrap' }}>
-          <span>TGRERA LICENSED REALTOR</span>
-          <span className="rw-hero-meta-sep" style={{ opacity: 0.5 }}>|</span>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14 }}>
-            MEMBER
-            <img
-              src={hraLogo}
-              alt="Hyderabad Realtors' Association"
-              style={{ height: 26, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 1, alignSelf: 'center' }}
+          <h1 style={{ fontFamily: serif, lineHeight: .98, letterSpacing: '-.01em' }}>
+            <StrokeText
+              text="The specialist who"
+              strokeColor="#F2EFE9"
+              fillColor="#F2EFE9"
+              strokeWidth={1.1}
+              drawDuration={1.4}
+              fillDelay={0.1}
+              stagger={0.02}
+              trigger="mount"
+              fillMode="wipe"
+              fontSize={90}
+              fontWeight={400}
+              letterSpacing={-1}
+              className="rw-hero-stroke-line"
             />
-            <img
-              src={narLogo}
-              alt="National Association of Realtors"
-              style={{ height: 26, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 1, alignSelf: 'center' }}
+            <StrokeText
+              text="moves markets."
+              strokeColor="#E8C97A"
+              fillColor="#C39B53"
+              strokeWidth={1.1}
+              drawDuration={1.4}
+              fillDelay={0.1}
+              stagger={0.02}
+              trigger="mount"
+              fillMode="wipe"
+              fontSize={90}
+              fontWeight={400}
+              letterSpacing={-1}
+              reverse
+              className="stroke-text--italic rw-hero-stroke-line"
+              style={{ marginTop: '.05em' }}
             />
-          </span>
-          {/* <span>FOUNDER, RW REALTY</span> */}
-          {/* In the same row as the logos so it is visible without scrolling. */}
-          <FounderSignature />
-        </Reveal>
+          </h1>
+
+          <p style={{ ...body, margin: '32px 0 0', maxWidth: '34em', fontSize: fs('clamp(16px,1.6vw,19px)'), lineHeight: 1.6, color: 'rgba(234,241,249,.82)' }}>
+            {HERO_COPY}
+          </p>
+
+          <div className="rw-hero-actions">
+            <BookButton className="rw-cta" style={ctaCopper}>BOOK A STRATEGY CALL</BookButton>
+            <Link to="/realty/portfolio" className="rw-inline-cta" style={{ ...ctaInline, color: '#F2EFE9' }}>
+              The story →
+            </Link>
+          </div>
+
+          <div className="rw-hero-meta" style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid rgba(234,241,249,.22)', display: 'flex', alignItems: 'center', gap: 20, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'rgba(234,241,249,.7)', flexWrap: 'wrap' }}>
+            <span>TGRERA LICENSED REALTOR</span>
+            <span className="rw-hero-meta-sep" style={{ opacity: 0.5 }}>|</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14 }}>
+              MEMBER
+              <img
+                src={hraLogo}
+                alt="Hyderabad Realtors' Association"
+                style={{ height: 26, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 1, alignSelf: 'center' }}
+              />
+              <img
+                src={narLogo}
+                alt="National Association of Realtors"
+                style={{ height: 26, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 1, alignSelf: 'center' }}
+              />
+            </span>
+            <FounderSignature />
+          </div>
+        </div>
+
+        <div className={`rw-hero-panel ${active > 0 ? 'is-on' : ''}`}>
+          {active > 0 && (
+            <>
+              <p className="rw-hero-eyebrow" style={{ fontFamily: mono, letterSpacing: '.3em', marginBottom: 30, color: 'var(--copper)' }}>
+                {slide.eyebrow}
+              </p>
+              <h2 style={{ fontFamily: serif, lineHeight: .98, letterSpacing: '-.01em' }}>
+                <StrokeText
+                  text={slide.line1}
+                  strokeColor="#F2EFE9"
+                  fillColor="#F2EFE9"
+                  strokeWidth={1.1}
+                  drawDuration={1.4}
+                  fillDelay={0.1}
+                  stagger={0.02}
+                  trigger="mount"
+                  fillMode="wipe"
+                  fontSize={90}
+                  fontWeight={400}
+                  letterSpacing={-1}
+                  className="rw-hero-stroke-line"
+                />
+                <StrokeText
+                  text={slide.line2}
+                  strokeColor="#E8C97A"
+                  fillColor="#C39B53"
+                  strokeWidth={1.1}
+                  drawDuration={1.4}
+                  fillDelay={0.1}
+                  stagger={0.02}
+                  trigger="mount"
+                  fillMode="wipe"
+                  fontSize={90}
+                  fontWeight={400}
+                  letterSpacing={-1}
+                  reverse
+                  className="stroke-text--italic rw-hero-stroke-line"
+                  style={{ marginTop: '.05em' }}
+                />
+              </h2>
+              <p style={{ ...body, margin: '32px 0 0', maxWidth: '34em', fontSize: fs('clamp(16px,1.6vw,19px)'), lineHeight: 1.6, color: 'rgba(234,241,249,.82)' }}>
+                {slide.lede}
+              </p>
+              <div className="rw-hero-actions">
+                <BookButton className="rw-cta" style={ctaCopper}>BOOK A STRATEGY CALL</BookButton>
+                <CtaButton to={slide.to} variant="secondary" arrow="→" className="rw-hero-explore">{slide.cta}</CtaButton>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="rw-hero-slider" role="group" aria-label="Hero slides">
+        <button type="button" className="rw-hero-slider-btn" aria-label="Previous slide" onClick={() => go(active - 1)}>‹</button>
+        <div className="rw-hero-slider-dots">
+          {HERO_SLIDES.map((item, i) => (
+            <button
+              key={item.id}
+              type="button"
+              className={`rw-hero-slider-dot${i === active ? ' is-on' : ''}`}
+              aria-label={`Go to slide ${i + 1}`}
+              aria-current={i === active ? 'true' : undefined}
+              onClick={() => go(i)}
+            />
+          ))}
+        </div>
+        <button type="button" className="rw-hero-slider-btn" aria-label="Next slide" onClick={() => go(active + 1)}>›</button>
       </div>
     </section>
   )

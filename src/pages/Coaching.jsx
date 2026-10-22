@@ -195,8 +195,8 @@ export default function Coaching() {
           </Reveal>
 
           <Reveal as="h1" delay={80} className="rw-coaching-hero-title" style={{ fontFamily: serif }}>
-            <span className="rw-coaching-hero-title-gold">It’s time to value your team members</span>
-            <span>as much as you value your customers.</span>
+            <span className="rw-coaching-hero-title-gold">Your team members or your customers?</span>
+            <span>Why not value both?</span>
           </Reveal>
 
           <Reveal as="p" delay={150} className="rw-coaching-hero-lede" style={{ fontFamily: text }}>
