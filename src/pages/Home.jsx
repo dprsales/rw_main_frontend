@@ -1,9 +1,12 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import heroImage from '../assets/site/hero-rajiv.webp'
-import backdropImage from '../assets/site/sales-mandate.png'
-import consultingImage from '../assets/site/consulting.jpeg'
-import whiteboardImage from '../assets/site/coaching.png'
+import wayCoachingVideo from '../assets/site/way-coaching.mp4'
+import wayCoachingPoster from '../assets/site/way-coaching.jpg'
+import wayConsultingVideo from '../assets/site/way-consulting.mp4'
+import wayConsultingPoster from '../assets/site/way-consulting.jpg'
+import wayMandateVideo from '../assets/site/way-mandate.mp4'
+import wayMandatePoster from '../assets/site/way-mandate.jpg'
 import hraLogo from '../assets/site/logo-hra.png'
 import narLogo from '../assets/site/logo-nar.png'
 import signature from '../assets/site/gold2.png'
@@ -27,7 +30,7 @@ import { useInView } from '../hooks/useInView'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { BLOGS, HERO_COPY, HOME_TESTIMONIALS, MARQUEE_ITEMS, WAYS } from '../data/content'
 import { HOME_FEATURED, featureFirst, fetchBlogsOnce } from '../data/blogs'
-import { HOME_FOOTER_LINKS, mono, serif, text } from '../theme'
+import { HOME_FOOTER_LINKS, jost, mono, serif, text } from '../theme'
 import { fs,
   body, container, ctaInk, ctaInline,
   sectionHeading, sectionHeadingLg, sectionRule,
@@ -58,11 +61,62 @@ function BlogFeedSkeleton({ count = HOME_BLOG_COUNT }) {
   )
 }
 
+function WayMedia({ cover }) {
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+    video.muted = true
+    const play = () => { video.play().catch(() => {}) }
+    play()
+    const onReady = () => play()
+    video.addEventListener('canplay', onReady)
+    return () => video.removeEventListener('canplay', onReady)
+  }, [cover.video])
+
+  return (
+    <span className="rw-way-media">
+      {cover.video ? (
+        <>
+          <img src={cover.src} alt="" aria-hidden className="rw-way-poster" />
+          <video
+            ref={videoRef}
+            src={cover.video}
+            poster={cover.src}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-label={cover.alt}
+          />
+        </>
+      ) : (
+        <img src={cover.src} alt={cover.alt} loading="lazy" />
+      )}
+      {cover.overlay}
+    </span>
+  )
+}
+
 /** Covers for the three service cards, in WAYS order. */
 const WAY_COVERS = [
-  { src: whiteboardImage, alt: 'Rajiv coaching at the whiteboard' },
-  { src: consultingImage, alt: 'Reviewing sales structures at the desk' },
-  { src: backdropImage, alt: 'Rajiv beside the RW backdrop' },
+  {
+    src: wayCoachingPoster,
+    video: wayCoachingVideo,
+    alt: 'A male sales coach gives supportive feedback to a female salesperson',
+  },
+  {
+    src: wayConsultingPoster,
+    video: wayConsultingVideo,
+    alt: 'A male sales advisor gives strategic direction to a client executive',
+  },
+  {
+    src: wayMandatePoster,
+    video: wayMandateVideo,
+    alt: 'Two sales professionals close an executed agreement with a handshake',
+  },
 ]
 
 /** Rajiv's gold signature at the end of the hero meta row, beside the HRA/NAR
@@ -226,25 +280,24 @@ export default function Home() {
 
 
       {/* Philosophy */}
-      <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
+      {/* <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ maxWidth: 1000, margin: '0 auto', padding: 'clamp(80px,11vw,130px) 40px', textAlign: 'center' }}>
           <Reveal as="h2" style={{ ...sectionHeadingLg, fontSize: fs('clamp(30px,4.2vw,56px)'), lineHeight: 1.1 }}>
-He doesn&apos;t wait for the market to move.<br />
-            <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>He moves it every single day.</span>
+He helps developers and their sales teams<br />
+            <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>sell homes in Hyderabad.</span>
           </Reveal>
           <Reveal as="p" delay={160} style={{ ...body, margin: '34px auto 0', fontSize: fs('19px'), lineHeight: 1.65, maxWidth: '44em' }}>
-            Years spent solving the industry's toughest problems have shaped a singular mission, to define what real estate in
-            Hyderabad becomes next. It's the standard he carries into every client he works with.
+            That is the work. He has done it for years, and he gives each developer and each team the same attention.
           </Reveal>
         </div>
-      </section>
+      </section> */}
 
       {/* Guided finder sits at the decision point: right before the three service cards it chooses between.
           The same questions also open first inside the booking modal, so every lead is qualified either way. */}
       <GuidedFinder variant="inline" location="home" />
 
       {/* Three ways in */}
-      <section id="services" style={sectionRule}>
+      <section id="services" className="rw-ways-section" style={sectionRule}>
         <div className="rw-pad" style={container}>
           <Reveal style={{ padding: '54px 0 4px', fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.26em', color: 'var(--faded)' }}>
             THREE MOVES. ONE OUTCOME. MORE CLOSED.
@@ -265,18 +318,21 @@ He doesn&apos;t wait for the market to move.<br />
                   flexDirection: 'column', color: 'var(--ink)',
                 }}
               >
-                <span className="rw-way-media">
-                  <img src={WAY_COVERS[i].src} alt={WAY_COVERS[i].alt} loading="lazy" />
-                  <span className="rw-way-numeral" style={{ fontFamily: serif }} aria-hidden>{way.k}</span>
-                </span>
+                <WayMedia
+                  cover={{
+                    ...WAY_COVERS[i],
+                    overlay: (
+                      <span className="rw-way-overlay-title">
+                        <span className="rw-way-numeral" style={{ fontFamily: serif }} aria-hidden>{way.k}</span>
+                        <span className="rw-way-service-name">{way.kicker}</span>
+                      </span>
+                    ),
+                  }}
+                />
 
                 <span className="rw-way-body">
-                  <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.18em', color: 'var(--copper)' }}>{way.kicker}</span>
                   <span style={{ fontFamily: serif, fontSize: fs('clamp(24px,1.9vw,29px)'), lineHeight: 1.1, letterSpacing: '-.01em' }}>{way.title}</span>
                   <span style={{ fontFamily: text, fontWeight: 300, fontSize: fs('17px'), lineHeight: 1.5, color: 'var(--faded)' }}>{way.line}</span>
-                  <span className="rw-way-cta" style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.14em' }}>
-                    {way.ctaLabel}<i className="rw-way-arrow" aria-hidden>→</i>
-                  </span>
                 </span>
               </Reveal>
             ))}
@@ -284,14 +340,14 @@ He doesn&apos;t wait for the market to move.<br />
         </div>
       </section>
 
-      <Marquee items={MARQUEE_ITEMS} />
+      {/* <Marquee items={MARQUEE_ITEMS} /> */}
 
       {/* Glimpses - a teaser strip that links through to the portfolio */}
       {/* <GlimpsesSection /> */}
 
       {/* Cards link out to where each post already lives, so no article routes to maintain.
           Hidden once loading settles with nothing to show. */}
-      {(loadingBlogs || allBlogs.length > 0) && (
+      {/* {(loadingBlogs || allBlogs.length > 0) && (
       <section id="blogs" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
         <SectionHead
           eyebrow="WRITING" faded size="lg" titleWidth="13em" space={34}
@@ -316,17 +372,17 @@ He doesn&apos;t wait for the market to move.<br />
           </Reveal>
         )}
       </section>
-      )}
+      )} */}
 
       {/* Testimonials */}
-      <section id="testimonials" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
+      <section id="testimonials" className="rw-pad" style={{ ...container, padding: 'clamp(36px, 5vw, 56px) 40px var(--rw-sy-lg)' }}>
         <Reveal style={{ borderBottom: '1px solid var(--line)', paddingBottom: 22 }}>
           <h2 style={sectionHeading}>In their words</h2>
         </Reveal>
         <div className="rw-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', columnGap: 44 }}>
           {HOME_TESTIMONIALS.map((t, i) => (
             <Reveal key={t.name} delay={i * 90} style={{ borderTop: '1px solid var(--line)', padding: '34px 0 8px', display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <p style={{ fontFamily: serif, fontSize: fs('18px'), lineHeight: 1.55, color: 'var(--ink)' }}>“{t.text}”</p>
+              <p style={{ fontFamily: jost, fontWeight: 400, fontSize: fs('18px'), lineHeight: 1.55, color: 'var(--ink)' }}>“{t.text}”</p>
               <div style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.06em', color: 'var(--copper)' }}>{t.name}</div>
             </Reveal>
           ))}

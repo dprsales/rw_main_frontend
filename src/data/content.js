@@ -28,9 +28,9 @@ export const HERO_COPY =
 
 /** The three services. `title` carries the positioning line; the service name reads from `kicker` and the CTA. */
 export const WAYS = [
-  { k: 'I', kicker: 'Sales Coaching', title: 'Your ticket size is a ceiling you built. Break it.', line: 'For developers, senior sales leadership, and top sales closers done with volume games.', ctaLabel: 'Coaching', to: '/coaching' },
-  { k: 'II', kicker: 'Sales Consulting', title: 'Right product, wrong velocity. That is fixable.', line: 'Advisory on the part of the business the brochure never fixes.', ctaLabel: 'Consulting', to: '/consulting' },
-  { k: 'III', kicker: 'Sales Mandates', title: 'You build. We sell, end to end.', line: 'Full ownership of sales strategy, a dedicated onsite team, and end-to-end funnel management.', ctaLabel: 'Realty', to: '/realty' },
+  { k: 'I', kicker: 'Sales Coaching', title: 'Your ticket size is a ceiling you built. Break it.', line: 'For developers, senior sales leadership, and top sales closers done with volume games.', to: '/coaching' },
+  { k: 'II', kicker: 'Sales Consulting', title: 'Right product, wrong velocity. That is fixable.', line: 'Advisory on the part of the business the brochure never fixes.', to: '/consulting' },
+  { k: 'III', kicker: 'Sales Mandate', title: 'You build. We sell, end to end.', line: 'Full ownership of sales strategy, a dedicated onsite team, and end-to-end funnel management.', to: '/realty' },
 ]
 
 export const HOME_TESTIMONIALS = [

@@ -22,8 +22,8 @@ export default function ProjectHyderabad() {
         eyebrow="PROPERTIES · HYDERABAD PROJECTS"
         headline={HEADLINE}
         headlineStyle={{ fontSize: fs('clamp(32px,4vw,56px)'), lineHeight: 1.1, maxWidth: '11em' }}
-        lede="The Hyderabad developments that Team RW associates with, works on, represents, and mentors."
-        intro="We hold strong relationships in these places and these projects. If you are looking for a home, we can help."
+        lede="Homes across Hyderabad, in one place. Browse by area and open a project when you want a closer look."
+        intro="See what is in each locality. When a project feels right, talk to an expert and we will help you look."
         cta={<BookButton interest="Looking for a home" className="rw-cta" style={ctaCopper}>TALK TO AN EXPERT</BookButton>}
       />
 

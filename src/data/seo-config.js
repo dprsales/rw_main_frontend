@@ -25,7 +25,7 @@ export const ROUTE_SEO = {
   '/project-hyderabad': {
     title: 'Projects in Hyderabad | Rajiv Williams',
     description:
-      'Hyderabad developments Team RW associates with, works on, represents, and mentors. Looking for a home? Talk to an expert.',
+      'Browse luxury and premium homes across Hyderabad by area. Open a project for a closer look, or talk to an expert.',
   },
   '/consulting': {
     title: 'Real Estate Sales Consulting for Developers, senior sales leadership & top closers. | Rajiv Williams',
@@ -56,6 +56,11 @@ export const ROUTE_SEO = {
     title: 'Channel Partners, Sell Luxury Inventory | Rajiv Williams',
     description:
       'Exclusive RW Realty mandates, golden-rate commissions, in-house sales training and warm leads. Apply to become a channel partner with the Rajiv Williams team.',
+  },
+  '/articles': {
+    title: 'Articles on Luxury Real Estate Sales | Rajiv Williams',
+    description:
+      'Writing from Rajiv Williams on luxury sales, sales teams, and mandates in Hyderabad.',
   },
   '/about': {
     title: 'About Rajiv Williams | Luxury Sales Mentor, Hyderabad',

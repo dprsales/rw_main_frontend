@@ -26,30 +26,6 @@ export const HOME_FEATURED = [
   'why-most-developers-fail-at-luxury-positioning-and-how-the-winners-stand-apart', // Realty (luxury / mandates)
 ]
 
-/**
- * "Related reading" on each service page (order = display order). Each list matches what
- * that page sells: Coaching = an individual's selling skill; Consulting = the developer's
- * sales team, process and leadership; Realty = sales mandates and luxury positioning
- * (developer-facing, not home-buyer advice).
- */
-export const RELATED_READING = {
-  coaching: [
-    'what-billionaires-teach-us-about-negotiation-and-client-psychology',
-    'the-hidden-rules-of-luxury-sales-what-the-ultra-wealthy-won-t-tell-you',
-    'the-real-reason-buyers-compare-you-with-cheaper-projects',
-  ],
-  consulting: [
-    'why-real-estate-sales-teams-lose-deals-in-2025-and-how-to-win-smarter',
-    'if-your-sales-team-can-t-explain-value-price-will-always-be-the-problem',
-    'the-leader-s-blind-spot-how-bias-quietly-damages-sales-teams',
-  ],
-  realty: [
-    'why-most-developers-fail-at-luxury-positioning-and-how-the-winners-stand-apart',
-    'would-the-1-fall-for-a-billboard-then-why-should-you',
-    'why-high-end-residences-are-selling-like-hotcakes-despite-economic-uncertainty',
-  ],
-}
-
 /** Very long headlines (a full sentence) read badly on a card; the CMS's SEO title is the short form. */
 const LONG_TITLE = 90
 const cardTitle = (blog) => (blog.title?.length > LONG_TITLE && blog.metaTitle ? blog.metaTitle : blog.title)

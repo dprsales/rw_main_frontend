@@ -20,12 +20,13 @@ export const THEME = {
   '--logo-filter': 'grayscale(1) brightness(0) invert(1)',
 }
 
-/* Two faces, three roles. Both are loaded in fonts.css - never name a family
- * here the page doesn't fetch.
- * `serif` (Cormorant Garamond) - display headlines only.
+/* Faces loaded in fonts.css - never name a family here the page doesn't fetch.
+ * `serif` (Cormorant Garamond) - display headlines and featured pull-quotes.
+ * `jost` (Jost Book) - brand sans for reading copy (quotes, card body).
  * `mono` (Poppins) - eyebrows, nav, buttons, counters, tags.
- * `text` (Poppins) - body, cards, and lists. */
+ * `text` (Poppins) - site body, cards, and lists. */
 export const serif = "'Cormorant Garamond', 'Times New Roman', serif"
+export const jost = "'Jost', system-ui, -apple-system, sans-serif"
 export const text = "'Poppins', system-ui, -apple-system, sans-serif"
 export const mono = "'Poppins', system-ui, -apple-system, sans-serif"
 

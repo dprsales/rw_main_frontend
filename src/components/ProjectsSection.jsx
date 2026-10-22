@@ -276,7 +276,7 @@ export default function ProjectsSection({ id = 'projects' }) {
         <div className="rw-influence-head">
           <div className="rw-influence-heading">
             <div style={{ ...eyebrowFaded, marginBottom: 14 }}>HYDERABAD</div>
-            <h2 style={{ ...sectionHeadingLg, maxWidth: '13em' }}>Areas of influence.</h2>
+            <h2 style={{ ...sectionHeadingLg, maxWidth: '13em' }}>Browse by area.</h2>
           </div>
 
           <div className="rw-influence-summary">

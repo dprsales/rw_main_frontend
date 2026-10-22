@@ -548,7 +548,8 @@ a:hover { color: var(--ink, #12100D); }
 .rw-outline-btn:hover { background: var(--ink); color: var(--bg); }
 
 /* WHAT WE DELIVER - image-led chapter cards; the page's main forks get photography and a numeral instead of plain columns. */
-.rw-ways { padding-bottom: clamp(56px, 7vw, 92px); }
+.rw-ways { padding-bottom: clamp(28px, 3.6vw, 44px); }
+.rw-ways-section { border-bottom: 1px solid var(--copper); }
 /* Drop the middle card to break the grid's symmetry (as .rw-flow-stages does). */
 .rw-ways .rw-way:nth-child(2) { margin-top: clamp(0px, 3.4vw, 46px); }
 
@@ -571,8 +572,16 @@ a:hover { color: var(--ink, #12100D); }
   position: relative; display: block; overflow: hidden;
   aspect-ratio: 4 / 5; background: var(--chip);
 }
-.rw-way-media img {
+.rw-way-media img,
+.rw-way-media video {
   width: 100%; height: 100%; object-fit: cover; display: block;
+  pointer-events: none;
+}
+.rw-way-media video {
+  position: absolute; inset: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rw-way-media video { display: none; }
 }
 /* A scrim, or the numeral has no contrast of its own against the photo. */
 .rw-way-media::after {
@@ -580,15 +589,29 @@ a:hover { color: var(--ink, #12100D); }
   background: linear-gradient(to top, rgba(11,10,9,.82), rgba(11,10,9,.16) 42%, rgba(11,10,9,0) 68%);
 }
 
-/* Outlined until hover, when it fills - the same chapter mark as .rw-flow-numeral. */
+.rw-way-overlay-title {
+  position: absolute; left: 18px; right: 18px; bottom: 12px; z-index: 2;
+  display: flex; align-items: flex-end; gap: clamp(12px, 1.4vw, 20px);
+}
+
+/* Roman chapter mark on the left; the readable service title sits beside it. */
 .rw-way-numeral {
-  position: absolute; left: 18px; bottom: 6px; z-index: 2;
+  flex: 0 0 auto;
   font-style: italic; font-weight: 500;
   font-size: clamp(56px, 5.4vw, 86px); line-height: .78; letter-spacing: -.03em;
   color: transparent; -webkit-text-stroke: 1.5px #F2EFE9;
   transition: color .6s ease, -webkit-text-stroke-color .6s ease;
 }
+.rw-way-service-name {
+  padding-bottom: 2px;
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-size: clamp(22px, 2.15vw, 32px); font-weight: 600; line-height: 1;
+  letter-spacing: -.015em; color: #F2EFE9;
+  text-shadow: 0 2px 14px rgba(11,10,9,.9);
+  transition: color .4s ease;
+}
 .rw-way:hover .rw-way-numeral { color: var(--copper); -webkit-text-stroke-color: var(--copper); }
+.rw-way:hover .rw-way-service-name { color: var(--copper); }
 
 /* WHAT YOU'LL ACHIEVE - numbered outcome cards, matching the chapter marks used elsewhere (.rw-way / .rw-flow-numeral). */
 .rw-achieve-grid {
@@ -3003,7 +3026,8 @@ button.rw-mega-item {
 @media (hover: none) {
   .rw-way:hover, .rw-achieve:hover, .rw-voice-card:hover, .rw-figure:hover,
   .rw-assoc-card:hover, .rw-cred-pill:hover { transform: none; }
-  .rw-way:hover .rw-way-media img { transform: none; }
+  .rw-way:hover .rw-way-media img,
+  .rw-way:hover .rw-way-media video { transform: none; }
   .rw-assoc-card:hover .rw-assoc-logo { transform: none; }
 }
 
