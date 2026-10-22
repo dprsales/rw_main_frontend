@@ -343,8 +343,6 @@ export default function Coaching() {
         </div>
       </section>
 
-      <RelatedReading service="coaching" title="Must Read." />
-
       <FaqSection
         items={[
           { q: 'Is this for me, or for my whole sales team?', a: 'For the people who sell. Developers, senior sales leadership, & top closers. One-to-one mentoring is personal. If the whole sales operation needs rebuilding, that is Consulting. If you want Team RW to sell the project, that is a mandate.' },

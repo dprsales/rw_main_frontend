@@ -332,8 +332,6 @@ export default function Realty() {
         </div>
       </section>
 
-      <RelatedReading service="realty" title="On mandates & luxury positioning." />
-
       <FaqSection
         items={[
           { q: 'You build, we sell. Is that the deal?', a: 'Yes. An exclusive mandate. Team RW owns the sale from strategy to closure.' },

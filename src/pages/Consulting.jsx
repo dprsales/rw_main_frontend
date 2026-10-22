@@ -400,8 +400,6 @@ export default function Consulting() {
         </div>
       </section>
 
-      <RelatedReading service="consulting" title="Reading for sales leaders & teams." />
-
       <FaqSection
         items={[
           { q: 'Do you advise us, or do you sell the inventory?', a: 'Consulting advises. Team RW audits the sales machine, designs what is missing, puts it into daily use, & tunes it on live numbers. Selling the project is a mandate, on Realty.' },
