@@ -147,7 +147,9 @@ export default function Realty() {
               >
                 DISCUSS A MANDATE
               </BookButton>
-              <CtaButton variant="secondary" to="/start?who=developer" arrow="→">Not sure? Find your fit</CtaButton>
+              <CtaButton variant="secondary" to="/start?who=developer" arrow="→">
+                Find the right service
+              </CtaButton>
             </Reveal>
           </div>
 

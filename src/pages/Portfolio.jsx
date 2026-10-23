@@ -128,10 +128,9 @@ const LOGO_NEEDS_DARK = new Set([
 const ORGS_WITH_LOGO = ORGANISATIONS_WORKED.filter((org) => ORG_LOGOS[org])
 
 const TRACK_RECORD = [
-  // { value: <CountUp to={500} suffix="+" />, label: 'PROFESSIONALS MENTORED' },
-  // { value: <CountUp to={30} suffix="+" />, label: 'LUXURY PROJECTS REPRESENTED' },
-  // { value: <CountUp to={15} suffix="+" />, label: 'YEARS IN LUXURY REAL ESTATE' },
-  // { value: '4.9/5', label: 'CLIENT RATING' },
+  { value: <CountUp to={2700} prefix="₹" suffix=" Cr" />, label: 'REVENUE GENERATED' },
+  { value: <CountUp to={1200} />, label: 'PROFESSIONALS COACHED' },
+  { value: <CountUp to={16} suffix="+" />, label: 'YEARS IN LUXURY REAL ESTATE' },
 ]
 
 /* The first flagged voice leads the section at scale; the rest fill the wall beneath it. */
@@ -178,7 +177,7 @@ export default function Portfolio() {
         <img src={hydMark} alt="" aria-hidden className="rw-watermark is-left" />
         <div className="rw-pad" style={{ ...container, position: 'relative', zIndex: 1 }}>
           {/* Dividers drawn in CSS (.rw-stat) since only the stylesheet knows the wrap column count. */}
-          <div className="rw-grid-4 rw-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)' }}>
+          <div className="rw-grid-4 rw-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)' }}>
             {TRACK_RECORD.map((stat, i) => (
               <Reveal key={stat.label} delay={i * 80} className="rw-stat">
                 <div style={{ fontFamily: serif, fontSize: fs('clamp(36px,4.2vw,54px)'), lineHeight: 1, color: 'var(--ink)' }}>{stat.value}</div>

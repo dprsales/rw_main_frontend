@@ -201,7 +201,8 @@ function PhaseCard({ flow, index, delay, active, expanded, onToggle, onHover, on
   )
 }
 
-/** "& More" services as a chip cloud; one description revealed at a time avoids a wall of text. */
+/** "& More" services as a chip cloud. The first chip is on by default so the
+ *  caption is never empty; hover (or tap/focus) moves the active one. */
 function SupportCloud() {
   const [active, setActive] = useState(0)
   const service = SUPPORT_SERVICES[active]
@@ -215,6 +216,7 @@ function SupportCloud() {
             type="button"
             className={`rw-chip${i === active ? ' is-on' : ''}`}
             style={{ fontFamily: mono }}
+            onMouseEnter={() => setActive(i)}
             onFocus={() => setActive(i)}
             onClick={() => setActive(i)}
             aria-pressed={i === active}
@@ -277,14 +279,13 @@ export default function Consulting() {
             >
               REQUEST A SALES CONSULTATION
             </BookButton>
-            {/* Same row as the request button; align-items: center is vertical, not a centered hero. */}
             <CtaButton
               variant="secondary"
               to="/start?who=developer"
               arrow="→"
               className="rw-hero-fit"
             >
-              Not sure? Find your fit
+              Find the right service
             </CtaButton>
           </Reveal>
         </div>
@@ -315,7 +316,7 @@ export default function Consulting() {
       </section>
 
       {/* Developer challenge - a ledger of what each problem is replaced by. */}
-      <section id="challenge" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
+      {/* <section id="challenge" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
         <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56, marginBottom: 'clamp(48px,6vw,72px)' }}>
           <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>THE DEVELOPER CHALLENGE</Reveal>
           <Reveal delay={100}>
@@ -331,7 +332,7 @@ export default function Consulting() {
             <Shift key={shift.n} shift={shift} />
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* Sales ecosystem model */}
       <section id="model" style={{ ...sectionRule, background: 'var(--chip)', overflow: 'hidden' }}>
@@ -406,7 +407,7 @@ export default function Consulting() {
           { q: 'What do you actually change?', a: 'We replace random conversions, discount-led closing, dependence on one star, & a pipeline nobody can see.' },
           { q: 'Do you also handle marketing, hiring, & channel partners?', a: 'Yes, beyond the four phases. Brand & performance marketing, PR, channel-partner activation, sales hiring, & team structure.' },
           { q: 'Can you name that West Hyderabad developer?', a: 'No. The public result only. A launch stuck at 22% sold, channel partners rebuilt from 40 dormant to 260 active, absorption tripled in ninety days, & revenue up 5×.' },
-          { q: 'How do we start?', a: 'Request a sales consultation, or tell us about the business. If you are unsure which door fits, start with Find your fit.' },
+          { q: 'How do we start?', a: 'Request a sales consultation, or tell us about the business. If you are unsure which service fits, use Find the right service and we will recommend the next step.' },
           { q: 'What does consulting cost?', a: 'It is not listed. The number is discussed on the consultation.' },
         ]}
       />

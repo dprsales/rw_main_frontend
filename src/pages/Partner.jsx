@@ -7,7 +7,7 @@ import Reveal from '../components/Reveal'
 import PageIntro from '../components/PageIntro'
 import ClosingCTA from '../components/ClosingCTA'
 import { BookButton } from '../components/BookingModal'
-import saplingImage from '../assets/site/channel-partner-sapling-transparent.png'
+import partnerNetwork from '../assets/site/channel-partner-network.jpg'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { submitChannelPartner, getErrorMessage } from '../data/api'
 import { errorCategory, track } from '../data/analytics'
@@ -27,8 +27,8 @@ const VALUE = [
   {
     n: '01',
     tag: 'ACCESS',
-    title: 'Exclusive mandates, not open-market.',
-    body: 'A small roster of projects owned end to end. Mandate inventory is not pitched by every broker in the city, so your buyers are chasing a property only you can sell.',
+    title: 'Transparency at all levels, not open-market.',
+    body: 'A small roster of projects owned end to end. Transparency at all levels, not open-market. Your buyers are chasing a property only you can sell.',
   },
   {
     n: '02',
@@ -42,13 +42,14 @@ const VALUE = [
     title: 'Training, warm leads and Volume.',
     body: 'In-house sales training before the first site visit, leads kept warm by our funnel, and more inventory offered as your numbers come in.',
   },
+  {
+    n: '04',
+    tag: 'SUPPORT',
+    title: 'The funnel runs with you, not past you.',
+    body: 'Site visits, buyer handling, and payout support sit with the same team. Excellent customer service is the standard, not an extra.',
+  },
 ]
 
-const STEPS = [
-  { n: '1', title: 'Apply', body: 'The form below takes about two minutes. References matter more than a big deck.' },
-  { n: '2', title: 'Qualify', body: 'A call with the team and a short reference check, usually within the week.' },
-  { n: '3', title: 'Mandate in', body: 'Access to live inventory, sales training, and the deal room.' },
-]
 
 // Trimmed to what's needed to identify and route an applicant before the Step 2 call —
 // designation, operating cities, expected business, preferred inventory, social links,
@@ -315,8 +316,8 @@ export default function Partner() {
         headlineStyle={{ fontSize: fs('clamp(42px,4.4vw,64px)') }}
         lede="Exclusive mandates, golden-rate commissions, and a team that runs the funnel with you."
         intro="RW Realty carries a small number of projects at a time, on exclusive mandates. Partners inside those mandates get inventory worth carrying, leads we keep warm, and the training to close at the ticket size."
-        image={saplingImage}
-        imageAlt="RW Realty partnership tree showing trust, strong relationships, open communication, mutual respect, shared vision, consistent support and long-term growth."
+        image={partnerNetwork}
+        imageAlt="Partnership network: trust, people, communication, handshake, shared aim, care and growth."
         cta={<>
           <button type="button" onClick={() => scrollToId('apply')} className="rw-cta rw-cta--live" style={ctaCopper}>
             APPLY TO BECOME A CHANNEL PARTNER <span className="rw-cta-arrow" aria-hidden> →</span>
@@ -334,9 +335,9 @@ export default function Partner() {
           </Reveal>
 
           <div
-            className="rw-grid-3"
+            className="rw-grid-2"
             style={{
-              display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+              display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)',
               gap: 'clamp(16px, 2.2vw, 30px)', marginTop: 'clamp(40px,5vw,64px)',
             }}
           >
@@ -357,32 +358,14 @@ export default function Partner() {
       <section style={{ ...sectionRule, background: 'var(--card)', position: 'relative', overflow: 'hidden' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-sm) 40px', textAlign: 'center' }}>
           <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, maxWidth: '20em', margin: '0 auto' }}>
-            Serious inventory. Serious commissions.{' '}
-            <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>A partner who keeps score openly.</span>
+            Transparency at all levels.{' '}
+            <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>Excellent customer services.</span><br />
+            & Timely Payout support.
           </Reveal>
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="rw-pad" style={{ ...container, ...sectionRule, padding: 'var(--rw-sy) 40px' }}>
-        <Reveal style={{ ...eyebrow, marginBottom: 16 }}>HOW IT WORKS</Reveal>
-        <Reveal as="h2" delay={80} style={{ ...sectionHeading, maxWidth: '14em' }}>
-          Three steps, about two weeks.
-        </Reveal>
 
-        <div className="rw-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(28px,4vw,56px)', marginTop: 'clamp(44px,6vw,64px)' }}>
-          {STEPS.map((step, i) => (
-            <Reveal key={step.n} delay={i * 90}>
-              <div style={{ fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em', color: 'var(--copper)', borderBottom: '1px solid var(--line)', paddingBottom: 14 }}>STEP {step.n}</div>
-              {/* Sans, not the display serif: Cormorant Garamond's capital Q carries a long
-                  decorative swash that reads as italic/cursive next to "Apply"/"Mandate in" —
-                  the webfont has no alternate glyph (tested via font-feature-settings, no effect). */}
-              <div style={{ marginTop: 20, fontFamily: text, fontWeight: 500, fontSize: fs('clamp(19px,2.1vw,23px)'), color: 'var(--ink)' }}>{step.title}</div>
-              <p style={{ ...note, marginTop: 8, fontSize: fs('16px'), lineHeight: 1.55 }}>{step.body}</p>
-            </Reveal>
-          ))}
-        </div>
-      </section>
 
       {/* Application */}
       <section id="apply" style={{ ...sectionRule, background: 'var(--chip)', borderBottom: '1px solid var(--line)' }}>

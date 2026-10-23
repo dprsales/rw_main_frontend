@@ -830,7 +830,7 @@ a:hover { color: var(--ink, #12100D); }
 }
 .rw-chip:hover { color: var(--ink); border-color: var(--ink); }
 .rw-chip.is-on {
-  background: var(--copper); border-color: var(--copper); color: #fff;
+  background: var(--copper); border-color: var(--copper); color: #16110A;
   transform: translateY(-1px);
 }
 
@@ -2351,7 +2351,10 @@ button.rw-mega-item {
 .rw-coaching-hero {
   position: relative;
   isolation: isolate;
-  min-height: 0;
+  /* Tall enough for the staircase plate, short of a full-screen home hero. */
+  min-height: clamp(560px, 78svh, 720px);
+  display: flex;
+  align-items: center;
   overflow: hidden;
   background: var(--bg);
 }
@@ -2378,12 +2381,14 @@ button.rw-mega-item {
 .rw-coaching-hero-copy {
   position: relative;
   z-index: 1;
+  width: 100%;
+  max-width: 1320px;
   min-height: 0;
   margin: 0 auto;
-  padding: clamp(32px, 4vh, 48px) 40px 8px;
+  padding: clamp(40px, 6vh, 64px) 40px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-start;
 }
 /* One rhythm between the blocks. Tighter under the headline, then the same step before the outcomes and the actions. */
@@ -2414,52 +2419,58 @@ button.rw-mega-item {
   background: var(--copper);
 }
 .rw-coaching-hero-title {
-  max-width: 16em;
+  max-width: 12em;
   margin: 0;
   color: #fff;
   font-size: calc(var(--rw-fs, 1) * clamp(32px, 2.6vw + 16px, 60px));
   font-style: italic;
   font-weight: 400;
   letter-spacing: -.015em;
-  line-height: 1.08;
+  line-height: 1.12;
 }
 .rw-coaching-hero-title span { display: block; text-wrap: balance; }
 .rw-coaching-hero-title-gold {
   color: var(--copper);
 }
 .rw-coaching-hero-lede {
-  max-width: 36em;
+  max-width: 28em;
   margin: 0;
-  color: rgba(255,255,255,.9);
-  font-size: calc(var(--rw-fs, 1) * clamp(16px, 0.35vw + 14px, 19px));
+  color: rgba(255,255,255,.78);
+  font-size: calc(var(--rw-fs, 1) * clamp(16px, 0.35vw + 14px, 18px));
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.45;
 }
 .rw-coaching-hero-outcomes {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: start;
-  width: min(46rem, 100%);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: auto;
+  max-width: 40rem;
   margin-bottom: 0;
+  gap: 0;
 }
 .rw-coaching-hero-outcome {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   min-width: 0;
   gap: 10px;
-  padding: 2px 14px;
-  border-left: 1px solid rgba(242,239,233,.22);
+  padding: 0 22px 0 0;
+  margin-right: 22px;
+  border-right: 1px solid rgba(242,239,233,.22);
   color: rgba(255,255,255,.94);
   font-size: calc(var(--rw-fs, 1) * 15px);
-  line-height: 1.35;
+  line-height: 1.3;
 }
-.rw-coaching-hero-outcome:first-child { padding-left: 0; border-left: 0; }
+.rw-coaching-hero-outcome:last-child {
+  padding-right: 0;
+  margin-right: 0;
+  border-right: 0;
+}
 .rw-coaching-hero-outcome svg {
   flex: none;
-  width: 40px;
-  height: 40px;
-  margin-top: 1px;
-  padding: 8px;
+  width: 32px;
+  height: 32px;
+  padding: 6px;
   border: 1px solid rgba(195,155,83,.62);
   border-radius: 50%;
   color: var(--copper);
@@ -2472,10 +2483,22 @@ button.rw-mega-item {
 .rw-coaching-hero-actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   width: min(940px, 100%);
-  gap: 18px 28px;
+  gap: 14px 16px;
 }
-.rw-coaching-hero .rw-coaching-hero-actions { width: min(46rem, 100%); }
+.rw-coaching-hero .rw-coaching-hero-actions {
+  flex-wrap: nowrap;
+  width: auto;
+  max-width: 100%;
+}
+.rw-coaching-hero-actions .rw-cta,
+.rw-coaching-hero-actions .rw-coaching-hero-explore,
+.rw-coaching-hero-actions .rw-cta-secondary {
+  flex: 0 0 auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
 .rw-hero-actions { margin-top: 32px; }
 .rw-hero-book,
 .rw-coaching-hero-book { width: auto; min-width: 0; }
@@ -2491,9 +2514,6 @@ button.rw-mega-item {
   box-shadow: 0 0 0 1px rgba(232, 201, 122, .45), 0 10px 24px -12px rgba(195, 155, 83, .55);
 }
 .rw-cta.rw-hero-book:active { transform: none; }
-/* "Not sure? Find your fit" sits in the same row as the request button (Consulting). */
-.rw-hero-actions { align-items: center; }
-.rw-hero-actions .rw-cta-secondary.rw-hero-fit { margin-top: 0; }
 .rw-coaching-hero-explore {
   display: inline-flex;
   align-items: center;
@@ -2519,32 +2539,10 @@ button.rw-mega-item {
 }
 .rw-coaching-hero-explore:hover { background: rgba(195,155,83,.13); border-color: var(--copper); transform: none; }
 .rw-coaching-hero-explore:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-.rw-cta-secondary.rw-hero-fit,
-.rw-cta-secondary.rw-coaching-hero-fit {
-  display: inline-flex;
-  height: auto;
-  min-height: 0;
-  margin-top: 24px;
-  padding: 0 0 4px;
-  border: 0;
-  border-bottom: 1px solid rgba(195,155,83,.72);
-  border-radius: 0;
-  background: none;
-  color: var(--ink);
-  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
-  font-size: clamp(18px, 1.6vw, 22px);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: 0;
-  text-transform: none;
-}
-.rw-cta-secondary.rw-hero-fit:hover,
-.rw-cta-secondary.rw-coaching-hero-fit:hover { background: none; color: var(--copper); transform: none; }
-/* The link sits in the hero's own rhythm. Its shared margin would stack on top of that. */
-.rw-coaching-hero .rw-coaching-hero-fit {
+.rw-coaching-hero-actions .rw-cta-secondary,
+.rw-hero-actions .rw-cta-secondary,
+.rw-realty-hero-actions .rw-cta-secondary {
   margin-top: 0;
-  font-size: calc(var(--rw-fs, 1) * 18px);
-  line-height: 1.2;
 }
 
 @media (max-width: 900px) {
@@ -2557,19 +2555,26 @@ button.rw-mega-item {
   }
   .rw-coaching-hero-break { display: block; flex-basis: 100%; height: 0; }
   .rw-coaching-hero-break + .rw-coaching-hero-dot { display: none; }
-  .rw-coaching-hero-outcomes { grid-template-columns: 1fr; gap: 16px; }
+  .rw-coaching-hero { min-height: 0; }
+  .rw-coaching-hero .rw-coaching-hero-actions { flex-wrap: wrap; }
+  .rw-coaching-hero-outcomes { flex-direction: column; align-items: flex-start; gap: 14px; }
   .rw-coaching-hero-outcome,
-  .rw-coaching-hero-outcome:first-child { padding: 0; border-left: 0; }
+  .rw-coaching-hero-outcome:last-child {
+    padding: 0;
+    margin-right: 0;
+    border-right: 0;
+  }
 }
 @media (max-width: 620px) {
-  .rw-coaching-hero-copy { padding-top: 28px; padding-bottom: 8px; }
+  .rw-coaching-hero-copy { padding: 28px 40px 32px; }
   .rw-coaching-hero-copy > * + * { margin-top: 18px; }
   .rw-coaching-hero-copy > .rw-coaching-hero-title { margin-top: 14px; }
   .rw-coaching-hero-copy > .rw-coaching-hero-lede { margin-top: 10px; }
   .rw-hero-actions { width: 100%; }
-  .rw-coaching-hero-actions { width: 100%; gap: 12px; }
+  .rw-coaching-hero-actions { width: 100%; gap: 12px; flex-wrap: wrap; }
   .rw-coaching-hero-book,
-  .rw-coaching-hero-explore { width: 100%; min-width: 0; }
+  .rw-coaching-hero-explore,
+  .rw-coaching-hero-actions .rw-cta-secondary { width: 100%; min-width: 0; }
 }
 
 /* --- Consulting hero -------------------------------------------------------- */
@@ -2606,8 +2611,8 @@ button.rw-mega-item {
 .rw-consulting-hero-copy {
   position: relative;
   z-index: 1;
-  /* Left-aligned like Coaching. No 1320px cap — copy uses the page gutter so the
-     two service heroes sit on the same left edge. */
+  width: 100%;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 80px 40px 30px;
   display: flex;

@@ -24,7 +24,7 @@ export const ASSESSMENT_AREAS = [
 export const BLOGS = []
 
 export const HERO_COPY =
-  '₹2,700 Cr generated. 16+ years at the top of Hyderabad real estate.'
+  '₹2,700 Cr generated. 1,200 professionals coached. 16+ years at the top of Hyderabad real estate.'
 
 /** The three services. `title` carries the positioning line; the service name reads from `kicker` and the CTA. */
 export const WAYS = [
@@ -43,6 +43,7 @@ export const MARQUEE_ITEMS = [
   'TGRERA licensed realtor',
   "Member · HRA, NAR India",
   '₹2,700 Cr+ generated',
+  '1,200 professionals coached',
   '16+ years at the top',
 ]
 

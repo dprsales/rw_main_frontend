@@ -152,7 +152,7 @@ const HERO_SLIDES = [
     eyebrow: 'FOR DEVELOPERS · SALES LEADERSHIP · TOP CLOSERS',
     line1: 'Sales',
     line2: 'Coaching',
-    lede: 'Value your team members as much as your customers—growth starts with both.',
+    lede: '1,200 professionals coached. Value your team as much as your customers.',
     to: '/coaching',
     cta: 'Explore Sales Coaching',
   },

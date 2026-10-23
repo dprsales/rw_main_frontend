@@ -15,12 +15,12 @@ export const ROUTE_SEO = {
   '/': {
     title: 'Luxury Real Estate Sales Mentor in Hyderabad | Rajiv Williams',
     description:
-      '₹2,700 Cr generated across 16 years in Hyderabad luxury real estate. Coaching for realtors, consulting for developers, and exclusive sales mandates.',
+      '₹2,700 Cr generated, 1,200 professionals coached, 16 years in Hyderabad luxury real estate. Coaching, consulting, and exclusive sales mandates.',
   },
   '/coaching': {
     title: 'Luxury Real Estate Sales Coaching in Hyderabad | Rajiv Williams',
     description:
-      'Twelve-week cohorts, team training for sales floors, and six-month 1:1 mentoring for realtors selling high-ticket property in Hyderabad.',
+      '1,200 sales professionals coached across 16 years. Luxury real estate sales coaching in Hyderabad for developers, sales leadership, and top closers.',
   },
   '/project-hyderabad': {
     title: 'Projects in Hyderabad | Rajiv Williams',
@@ -65,7 +65,7 @@ export const ROUTE_SEO = {
   '/about': {
     title: 'About Rajiv Williams | Luxury Sales Mentor, Hyderabad',
     description:
-      '16+ yrs from Dell to developer sales leadership to an independent mentoring practice. TGRERA registered, NAR India and HRA member.',
+      '16+ years, ₹2,700 Cr generated, and 1,200 professionals coached. From Dell to developer sales leadership to an independent mentoring practice.',
   },
   '/contact': {
     title: 'Contact Rajiv Williams, Hyderabad',

@@ -115,7 +115,7 @@ export default function App() {
           <Route path="/services/luxury-sales-consulting" element={<Navigate to="/consulting" replace />} />
           <Route path="/services/branding" element={<Navigate to="/consulting" replace />} />
           <Route path="/portfolio" element={<Navigate to="/realty/portfolio" replace />} />
-          {/* <Route path="/blogs" element={<Navigate to="/articles" replace />} /> */}
+          <Route path="/blogs" element={<Navigate to="/articles" replace />} />
           <Route path="/faqs" element={<Navigate to="/" replace />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />

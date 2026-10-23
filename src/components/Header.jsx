@@ -21,7 +21,7 @@ const SITE_NAV = [
   { label: 'Sales Mandate', to: '/realty' },
   { label: 'Portfolio', to: '/realty/portfolio' },
   { label: 'Careers', to: '/careers' },
-  // { label: 'Articles', to: '/articles' },
+  { label: 'Articles', to: '/articles' },
   { label: 'Channel Partners', to: '/partner' },
   { label: 'KRISAH Assessment', to: '/assessment' },
   // { label: 'Find your fit', to: '/start' },
@@ -58,6 +58,7 @@ const MEGA_COLUMNS = [
 const MEGA_PATHS = MEGA_COLUMNS.flatMap((col) => col.items.map((item) => item.to).filter(Boolean))
 const TOP_LINKS = [
   { label: 'Portfolio', to: '/realty/portfolio' },
+  { label: 'Articles', to: '/articles' },
   { label: 'Careers', to: '/careers' },
 ]
 const PROPERTY_COLUMNS = [

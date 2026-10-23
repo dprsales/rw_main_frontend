@@ -120,7 +120,8 @@ function ProgramCard({ program, index }) {
   )
 }
 
-/** Syllabus categories stay selected until another category is clicked. */
+/** Syllabus categories. The first chip is on by default so the panel is never
+ *  empty; hover (or tap/focus) moves the active one. */
 function SyllabusCloud({ categories }) {
   const [active, setActive] = useState(0)
   const cat = categories[active]
@@ -136,6 +137,8 @@ function SyllabusCloud({ categories }) {
             style={{ fontFamily: mono }}
             aria-pressed={active === i}
             aria-controls="syllabus-panel"
+            onMouseEnter={() => setActive(i)}
+            onFocus={() => setActive(i)}
             onClick={() => setActive(i)}
           >
             {c.n} · {c.title}
@@ -195,12 +198,13 @@ export default function Coaching() {
           </Reveal>
 
           <Reveal as="h1" delay={80} className="rw-coaching-hero-title" style={{ fontFamily: serif }}>
-            <span className="rw-coaching-hero-title-gold">Your team members or your customers?</span>
-            <span>Why not value both?</span>
+            <span className="rw-coaching-hero-title-gold">Your team members.</span>
+            <span className="rw-coaching-hero-title-gold">Your customers.</span>
+            <span>Value both.</span>
           </Reveal>
 
           <Reveal as="p" delay={150} className="rw-coaching-hero-lede" style={{ fontFamily: text }}>
-            Build stronger sales professionals through sharper communication, buyer understanding, negotiation, follow-ups and closing.
+            1,200 professionals coached. One standard for the team and the customer.
           </Reveal>
 
           <Reveal delay={220} className="rw-coaching-hero-outcomes">
@@ -219,11 +223,8 @@ export default function Coaching() {
             <button type="button" onClick={() => scrollToId('premium-programs')} className="rw-coaching-hero-explore">
               EXPLORE COACHING PROGRAMS <span aria-hidden="true">→</span>
             </button>
-          </Reveal>
-
-          <Reveal delay={360}>
-            <CtaButton variant="secondary" to="/start?who=sales_pro" arrow="→" className="rw-coaching-hero-fit">
-              Not sure? Find your fit
+            <CtaButton variant="secondary" to="/start?who=sales_pro" arrow="→">
+              Find the right service
             </CtaButton>
           </Reveal>
         </div>
@@ -233,24 +234,18 @@ export default function Coaching() {
           Was a bare "START ASSESSMENT" button in the hero with no context; moved here
           with the content from the standalone assessment landing page so the CTA has
           a reason behind it. */}
-      <section id="assessment" className="rw-pad" style={{ ...container, padding: 'clamp(40px, 4vw, 56px) 40px clamp(72px, 8vw, 96px)' }}>
-        <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 56, alignItems: 'start' }}>
+      <section id="assessment" className="rw-pad" style={{ ...container, padding: 'clamp(64px, 8vw, 96px) 40px' }}>
+        <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 64, alignItems: 'center' }}>
           <Reveal>
             <div style={{ ...eyebrow, marginBottom: 18 }}>THE ASSESSMENT</div>
             <h2 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(28px,3.6vw,42px)'), lineHeight: 1.1, color: 'var(--ink)', maxWidth: '14em' }}>
               A live AI interview that measures what actually matters.
             </h2>
-            <p style={{ ...note, marginTop: 22, fontSize: fs('16px'), lineHeight: 1.6 }}>
-              I have partnered with KRISAH, an AI-powered assessment platform, to bring a scored sales assessment to real estate professionals across India.
-            </p>
-            <p style={{ ...note, marginTop: 16, fontSize: fs('16px'), lineHeight: 1.6 }}>
-              It is a live AI interview on KRISAH. Twenty questions, answered out loud, scored across six areas.
-            </p>
-            <p style={{ ...note, marginTop: 16, fontSize: fs('16px'), lineHeight: 1.6 }}>
-              You get a scored report after the session, free and yours to keep. Your result then shows which coaching modules fit.
+            <p style={{ ...note, marginTop: 22, fontSize: fs('16px'), lineHeight: 1.6, maxWidth: '34em' }}>
+              Twenty questions, answered out loud, scored across six areas. You keep the report. It then shows which coaching modules fit.
             </p>
             <div style={{ marginTop: 32 }}>
-              <CtaButton href="/assesment" live onClick={() => track('assessment_page_click', { location: 'coaching-assessment-section' })}>
+              <CtaButton to="/assessment" live onClick={() => track('assessment_page_click', { location: 'coaching-assessment-section' })}>
                 TAKE YOUR FREE ASSESSMENT <span className="rw-cta-arrow">→</span>
               </CtaButton>
             </div>
