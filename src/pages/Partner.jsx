@@ -343,8 +343,8 @@ export default function Partner() {
           >
             {VALUE.map((item, i) => (
               <Reveal key={item.n} delay={i * 90} style={{ border: '1px solid var(--line)', background: 'var(--card)', padding: 'clamp(26px,3.4vw,38px)' }}>
-                <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--copper)' }}>{item.tag}</div>
-                <h3 style={{ marginTop: 16, fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(21px,2.3vw,25px)'), lineHeight: 1.15, color: 'var(--ink)' }}>
+                <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--ink)' }}>{item.tag}</div>
+                <h3 className="rw-gold-text" style={{ marginTop: 16, fontFamily: serif, fontWeight: 700, fontSize: fs('clamp(21px,2.3vw,25px)'), lineHeight: 1.15 }}>
                   {item.title}
                 </h3>
                 <p style={{ ...note, marginTop: 12, fontSize: fs('16px'), lineHeight: 1.55 }}>{item.body}</p>
@@ -359,7 +359,7 @@ export default function Partner() {
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-sm) 40px', textAlign: 'center' }}>
           <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, maxWidth: '20em', margin: '0 auto' }}>
             Transparency at all levels.{' '}
-            <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>Excellent customer services.</span><br />
+            <span className="rw-gold-text" style={{ fontStyle: 'italic' }}>Excellent customer services.</span><br />
             & Timely Payout support.
           </Reveal>
         </div>

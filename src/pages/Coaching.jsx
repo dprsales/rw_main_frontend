@@ -252,6 +252,9 @@ export default function Coaching() {
           </Reveal>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <Reveal>
+              <div style={{ ...eyebrow, marginBottom: 4 }}>What this assessment measures</div>
+            </Reveal>
             {ASSESSMENT_AREAS.map((area, i) => (
               <Reveal key={area.n} delay={i * 70} style={{ display: 'flex', gap: 18, borderTop: '1px solid var(--line)', paddingTop: 12 }}>
                 <span style={{ fontFamily: serif, fontSize: fs('22px'), color: 'var(--copper)', lineHeight: 1, flexShrink: 0, width: 28 }}>{area.n}</span>
