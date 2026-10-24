@@ -518,6 +518,16 @@ export const CAREER_ROLES = [
     requirements: ['Experience in accounts or finance operations', 'Comfort with reconciliations, reporting, and documentation', 'Strong attention to detail and confidentiality'],
   },
   {
+    title: 'Finance & Account Manager',
+    type: 'FULL-TIME · HYDERABAD',
+    category: 'Operations',
+    level: 'Manager',
+    experience: '5–8 years',
+    location: 'Hyderabad',
+    description: 'Own the books end to end: GST and TDS, MIS, vendor and payout coordination, and the accounts desk that reports to leadership.',
+    requirements: ['5+ years in accounts or finance, with time owning the books', 'Working knowledge of GST, TDS, and monthly MIS', 'Can lead an executive and keep numbers audit-ready'],
+  },
+  {
     title: 'Management Trainee',
     type: 'FULL-TIME · HYDERABAD',
     category: 'Operations',
