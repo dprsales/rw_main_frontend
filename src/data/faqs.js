@@ -1,0 +1,61 @@
+/** Site FAQs, grouped the way the service pages used to carry them. */
+export const FAQ_SECTIONS = [
+  {
+    id: 'coaching',
+    nav: 'Sales Coaching',
+    title: 'Sales Coaching',
+    to: '/coaching',
+    more: 'Explore Sales Coaching',
+    items: [
+      { q: 'Is this for me, or for my whole sales team?', a: 'For the people who sell. Developers, senior sales leadership, and top closers. One-to-one mentoring is personal. If the whole sales operation needs rebuilding, that is Consulting. If you want Team RW to sell the project, that is a mandate.' },
+      { q: 'How long is a session?', a: 'Four hours, across four modules, with a 30-minute break. The work is drilled on your own pipeline, not taught as theory.' },
+      { q: 'Do I get a certificate?', a: 'No. The result is a higher ticket size, a stronger client base, and more credibility in the market.' },
+      { q: 'What is the free assessment?', a: 'A live AI interview on KRISAH, for people looking at coaching. Twenty questions, about twenty-five minutes, answered out loud. Inside KRISAH you get a report based on your answers.' },
+      { q: 'What happens after I apply?', a: 'The application is the filter. If the fit is right, you hear back within two working days.' },
+      { q: 'What does coaching cost?', a: 'Each module is ₹6,250. Coaching is four modules over four hours, with a 30-minute break. Four modules is the minimum, ₹25,000.' },
+    ],
+  },
+  {
+    id: 'consulting',
+    nav: 'Sales Consulting',
+    title: 'Sales Consulting',
+    to: '/consulting',
+    more: 'Explore Sales Consulting',
+    items: [
+      { q: 'Do you advise us, or do you sell the inventory?', a: 'Consulting advises. Team RW audits the sales machine, designs what is missing, puts it into daily use, and tunes it on live numbers. Selling the project is a mandate, on Realty.' },
+      { q: 'What do you actually change?', a: 'We replace random conversions, discount-led closing, dependence on one star, and a pipeline nobody can see.' },
+      { q: 'Do you also handle marketing, hiring, & channel partners?', a: 'Yes, beyond the four phases. Brand and performance marketing, PR, channel-partner activation, sales hiring, and team structure.' },
+      { q: 'Can you name a developer you have worked with?', a: 'No. The public result only. A launch stuck at 22% sold, channel partners rebuilt from 40 dormant to 260 active, absorption tripled in ninety days, and revenue up 5×.' },
+      { q: 'How do we start?', a: 'Request a sales consultation, or tell us about the business. If you are unsure which service fits, use Find the right service and we will recommend the next step.' },
+      { q: 'What does consulting cost?', a: 'It is not listed. The number is discussed on the consultation.' },
+    ],
+  },
+  {
+    id: 'realty',
+    nav: 'Sales Mandate',
+    title: 'Sales Mandate',
+    to: '/realty',
+    more: 'Explore Sales Mandate',
+    items: [
+      { q: 'You build, we sell. Is that the deal?', a: 'Yes. An exclusive mandate. Team RW owns the sale from strategy to closure.' },
+      { q: 'Does our own sales team stay?', a: 'Team RW puts its own trained team on site and owns the funnel. The mandate exists so the number is not split across brokers, an in-house team, and an agency. Where that split sits today is walked through when you discuss the mandate.' },
+      { q: 'Who runs it day to day?', a: 'Priyanka Panda, Director of Sales. 8+ years in luxury branding, positioning, and high-value closures.' },
+      { q: 'Will you discount to move stock?', a: 'No. Price is defended. The work is judged on absorption, the price realised, and sales on a construction schedule.' },
+      { q: 'How many projects do you take at once?', a: 'The team owns each sale, so it is not spread across too many launches. Whether yours fits is discussed on a call or face to face.' },
+      { q: 'What does a mandate cost?', a: 'The number is not on this page. It is discussed on a call or face to face, once we know the launch.' },
+    ],
+  },
+  {
+    id: 'assessment',
+    nav: 'KRISAH Assessment',
+    title: 'KRISAH Assessment',
+    to: '/assessment',
+    more: 'Explore KRISAH Assessment',
+    items: [
+      { q: 'Who is this for?', a: 'People looking at Sales Coaching or Sales Consulting with Team RW. It is not a general test for every role.' },
+      { q: 'How long does it take?', a: 'Twenty questions. Give yourself one uninterrupted sitting.' },
+      { q: 'Do I get a report?', a: 'Yes. Inside KRISAH, after you answer, you get a report based on those answers.' },
+      { q: 'Where does the interview run?', a: 'On KRISAH’s platform, in a new tab. Nothing is installed and yours to access.' },
+    ],
+  },
+]

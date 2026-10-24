@@ -10,8 +10,6 @@
  */
 import { cdn, getBlogs } from './api'
 
-const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
-
 /** Off-topic for a sales/real-estate site, or reads as tax advice. Remove a slug to show it again. */
 const HIDDEN_ON_SITE = new Set([
   'the-kurnool-tragedy-why-india-needs-a-zero-tolerance-policy-for-drunk-driving',
@@ -32,17 +30,12 @@ const cardTitle = (blog) => (blog.title?.length > LONG_TITLE && blog.metaTitle ?
 
 /** Map one API blog record onto the shape `Gallery` expects for a link-out card. */
 function toCard(blog) {
-  const created = new Date(blog.createdAt)
-  const dated = Number.isNaN(created.getTime())
-    ? null
-    : `${MONTHS[created.getMonth()]} ${created.getFullYear()}`
   const title = cardTitle(blog)
   return {
     slug: blog.slug,
     src: cdn(blog.imageurl),
     alt: title,
     title,
-    meta: dated,
     desc: blog.metaDescription,
     href: blog.posturl,
     createdAt: blog.createdAt,

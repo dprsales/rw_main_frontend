@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import CrawlableNav from './CrawlableNav'
+import HiringBanner from './HiringBanner'
 import OptionWheel from './OptionWheel'
 import Wordmark from './Wordmark'
 import FontSizeControl from './FontSizeControl'
@@ -22,6 +23,7 @@ const SITE_NAV = [
   { label: 'Portfolio', to: '/realty/portfolio' },
   { label: 'Careers', to: '/careers' },
   { label: 'Articles', to: '/articles' },
+  { label: 'FAQs', to: '/faqs' },
   { label: 'Channel Partners', to: '/partner' },
   { label: 'KRISAH Assessment', to: '/assessment' },
   // { label: 'Find your fit', to: '/start' },
@@ -59,6 +61,7 @@ const MEGA_PATHS = MEGA_COLUMNS.flatMap((col) => col.items.map((item) => item.to
 const TOP_LINKS = [
   { label: 'Portfolio', to: '/realty/portfolio' },
   { label: 'Articles', to: '/articles' },
+  { label: 'FAQs', to: '/faqs' },
   { label: 'Careers', to: '/careers' },
 ]
 const PROPERTY_COLUMNS = [
@@ -336,6 +339,7 @@ export default function Header() {
     // Glass background lives on .rw-header::before (global.css), not on the header itself:
     // a backdrop-filter on the header would stop the mega menu's own glass from blurring the page.
     <header ref={headerRef} className="rw-header" style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid var(--line)' }}>
+      <HiringBanner />
       <div
         className="rw-pad"
         style={{

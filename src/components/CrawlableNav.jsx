@@ -19,6 +19,7 @@ const CRAWLABLE_LINKS = [
   { label: 'Terms of Use', to: '/terms' },
   { label: 'Careers', to: '/careers' },
   { label: 'Articles', to: '/articles' },
+  { label: 'FAQs', to: '/faqs' },
   { label: 'Channel partner applications', to: '/partner' },
   { label: 'AI assessment', to: '/assessment' },
 ]

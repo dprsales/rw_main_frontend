@@ -1417,6 +1417,49 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
 }
 
+/* Time-bound hiring rail. Sits inside the sticky header so --rw-header-h tracks it. */
+.rw-hire-bar {
+  border-bottom: 1px solid color-mix(in srgb, var(--copper) 38%, transparent);
+  background: #0B0A09;
+}
+.rw-hire-bar-inner {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: 10px 16px;
+  max-width: 1320px; margin: 0 auto;
+  padding: 8px 40px;
+}
+.rw-hire-tag {
+  flex: none;
+  padding: 3px 9px; border-radius: 100px;
+  background: var(--gold-gradient);
+  color: #16110a;
+  font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  line-height: 1.4;
+}
+.rw-hire-copy {
+  margin: 0; min-width: 0;
+  font-size: 13px; line-height: 1.35; color: var(--ink);
+}
+.rw-hire-copy strong { font-weight: 600; }
+.rw-hire-meta { color: color-mix(in srgb, var(--ink) 62%, transparent); }
+.rw-hire-line { color: color-mix(in srgb, var(--ink) 72%, transparent); }
+.rw-hire-go {
+  flex: none;
+  font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--copper);
+}
+.rw-hire-go:hover { color: #E8C97A; }
+.rw-hire-dots { display: flex; align-items: center; gap: 6px; }
+.rw-hire-dot {
+  width: 6px; height: 6px; padding: 0; border: 0; border-radius: 50%;
+  background: rgba(242,239,233,.32); cursor: pointer;
+}
+.rw-hire-dot.is-on { background: var(--copper); width: 16px; border-radius: 100px; }
+@media (max-width: 720px) {
+  .rw-hire-bar-inner { padding: 8px 16px; justify-content: flex-start; }
+  .rw-hire-line { display: none; }
+}
+
 /* static: both megas position against the sticky header, so they centre on the page. */
 .rw-dnav-mega-wrap { position: static; }
 /* padding-top bridges the gap under the trigger so hover doesn't drop on the way down. */
@@ -3367,6 +3410,19 @@ button.rw-mega-item {
   display: none !important;
 }
 
+/* Hold the Kenyt window closed until the bubble is clicked (kenyt-delay.js).
+   Kenyt hides the bubble when it auto-opens the panel — keep the bubble on. */
+html.rw-kenyt-wait #chatbox-container {
+  display: none !important;
+}
+html.rw-kenyt-wait #kenytChatBubble,
+html.rw-kenyt-wait #kenytChatBubble.k-hide {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
 /* The Kenyt window is a fixed box with no "kenyt" in its id, and it sits on Apply and Load more. Keep the chat on other pages. */
 body.rw-careers-page iframe[src*="kenyt"],
 body.rw-careers-page [id*="kenyt"],
@@ -3379,7 +3435,15 @@ body.rw-templates-page [id*="kenyt"],
 body.rw-templates-page [class*="kenyt"],
 body.rw-templates-page #chatbox-container,
 body.rw-templates-page #kenytBubbleContainer,
-body.rw-templates-page #messageWrapperBox {
+body.rw-templates-page #messageWrapperBox,
+body.rw-faqs-page iframe[src*="kenyt"],
+body.rw-faqs-page [id*="kenyt"],
+body.rw-faqs-page [class*="kenyt"],
+body.rw-faqs-page #chatbox-container,
+body.rw-faqs-page #kenytBubbleContainer,
+body.rw-faqs-page #messageWrapperBox,
+body.rw-faqs-page iframe[src*="facebook"],
+body.rw-faqs-page [class*="fb_"] {
   display: none !important;
   pointer-events: none !important;
 }
@@ -3876,40 +3940,163 @@ body.rw-templates-page #messageWrapperBox {
   .rw-program-included, .rw-program-numeral { transition: none !important; }
 }
 
-/* Quiet FAQ accordion. Questions stay visible; one answer opens at a time. */
-.rw-faq { border-top: 1px solid var(--line); }
-.rw-faq-wrap {
-  max-width: 880px; margin: 0 auto;
-  padding: clamp(80px, 10vw, 110px) 40px;
+/* FAQ hub: one 1200px measure, sticky category rail, tighter accordion. */
+.rw-faqs {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 24px 72px;
 }
-.rw-faq-list { border-top: 1px solid var(--line); }
-.rw-faq-item { border-bottom: 1px solid var(--line); }
-.rw-faq-q {
+.rw-faqs-hero { max-width: 760px; padding-bottom: 48px; }
+.rw-faqs-lede { display: block; max-width: 640px; margin-top: 28px; }
+.rw-faqs-chips { display: none; }
+.rw-faqs-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 760px);
+  gap: 64px;
+  align-items: start;
+}
+.rw-faqs-side {
+  position: sticky;
+  top: 120px;
+}
+.rw-faqs-cat {
+  display: block; width: 100%;
+  padding: 11px 0 11px 14px;
+  border: 0; border-left: 2px solid transparent;
+  background: none; cursor: pointer; text-align: left;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 14px; line-height: 1.4; color: var(--faded);
+}
+.rw-faqs-cat:hover { color: var(--ink); }
+.rw-faqs-cat.is-active {
+  color: var(--copper);
+  border-left-color: var(--copper);
+}
+.rw-faqs-cat:focus-visible { outline: 1px solid var(--copper); outline-offset: 3px; }
+.rw-faqs-section { padding: 72px 0; scroll-margin-top: 120px; }
+.rw-faqs-section:first-child { padding-top: 8px; }
+.rw-faqs-title {
+  margin: 0 0 28px;
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-weight: 400; font-size: 36px; line-height: 1.1; color: var(--copper);
+}
+.rw-faqs-title::after {
+  content: '';
+  display: block;
+  width: 40px; height: 1px;
+  margin-top: 14px;
+  background: var(--copper);
+}
+.rw-faqs-item { border-bottom: 1px solid rgba(255,255,255,.08); }
+.rw-faqs-q {
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
-  width: 100%; min-height: 64px; padding: 18px 0;
+  width: 100%; padding: 22px 0;
   background: none; border: 0; cursor: pointer; text-align: left;
   font-family: 'Poppins', system-ui, sans-serif;
-  font-weight: 500; font-size: 16px; line-height: 1.45; letter-spacing: .01em;
-  color: var(--ink);
+  font-weight: 500; font-size: 17px; line-height: 1.45;
+  color: #f2ede4;
 }
-.rw-faq-q:hover span { color: var(--copper); }
-.rw-faq-q:focus-visible { outline: 1px solid var(--copper); outline-offset: 4px; }
-.rw-faq-caret {
-  flex-shrink: 0; color: var(--copper); transform-origin: center;
-  transition: transform .22s ease;
+.rw-faqs-q:hover { color: var(--copper); }
+.rw-faqs-item.is-open .rw-faqs-q { color: var(--copper); }
+.rw-faqs-q:focus-visible { outline: 1px solid var(--copper); outline-offset: 4px; }
+.rw-faqs-plus {
+  position: relative; flex-shrink: 0;
+  width: 18px; height: 18px;
 }
-.rw-faq-item.is-open .rw-faq-caret { transform: rotate(180deg); }
-.rw-faq-a {
+.rw-faqs-plus::before,
+.rw-faqs-plus::after {
+  content: '';
+  position: absolute; left: 50%; top: 50%;
+  background: var(--copper);
+  transition: transform .25s ease, opacity .25s ease;
+}
+.rw-faqs-plus::before { width: 18px; height: 1.5px; transform: translate(-50%, -50%); }
+.rw-faqs-plus::after { width: 1.5px; height: 18px; transform: translate(-50%, -50%); }
+.rw-faqs-item.is-open .rw-faqs-plus::after { transform: translate(-50%, -50%) rotate(90deg); opacity: 0; }
+.rw-faqs-a {
   display: grid; grid-template-rows: 0fr;
-  transition: grid-template-rows .32s ease;
+  transition: grid-template-rows .25s ease;
 }
-.rw-faq-item.is-open .rw-faq-a { grid-template-rows: 1fr; }
-.rw-faq-a > div { overflow: hidden; }
-.rw-faq-a p {
-  margin: 0 0 20px; max-width: 62ch; padding-right: 42px;
+.rw-faqs-item.is-open .rw-faqs-a { grid-template-rows: 1fr; }
+.rw-faqs-a > div { overflow: hidden; }
+.rw-faqs-a p {
+  margin: 0;
+  padding: 0 0 16px;
   font-family: 'Poppins', system-ui, sans-serif;
-  font-size: 16px; line-height: 1.65; color: var(--faded);
+  font-size: 16px; line-height: 1.7; color: #c9c4bb;
 }
+.rw-faqs-more {
+  display: inline-block; margin-top: 28px;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 14px; color: var(--copper); text-decoration: none;
+}
+.rw-faqs-more:hover { text-decoration: underline; }
+.rw-faqs-cta {
+  margin: 24px 0 0;
+  padding: 32px;
+  border: 1px solid color-mix(in srgb, var(--copper) 30%, transparent);
+  border-radius: 8px;
+}
+.rw-faqs-cta h2 {
+  margin: 0;
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-weight: 400; font-size: 28px; color: var(--ink);
+}
+.rw-faqs-cta p {
+  margin: 10px 0 24px;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 16px; color: #c9c4bb;
+}
+.rw-faqs-cta-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+.rw-faqs-wa-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 48px; padding: 0 24px;
+  border: 1px solid var(--copper); border-radius: 10px;
+  color: var(--copper); text-decoration: none;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 13px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+}
+.rw-faqs-wa-btn:hover { background: color-mix(in srgb, var(--copper) 12%, transparent); }
+.rw-faqs-float {
+  position: fixed; right: 24px; bottom: 24px; z-index: 20;
+  display: flex; align-items: center; justify-content: center;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: #128C7E; color: #fff;
+  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+}
+.rw-faqs-float:hover { filter: brightness(1.08); }
 @media (prefers-reduced-motion: reduce) {
-  .rw-faq-caret, .rw-faq-a { transition: none; }
+  .rw-faqs-plus::before, .rw-faqs-plus::after, .rw-faqs-a { transition: none; }
+}
+@media (max-width: 1023px) {
+  .rw-faqs-side { display: none; }
+  .rw-faqs-layout { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .rw-faqs-chips {
+    display: flex; gap: 8px;
+    position: sticky; top: var(--rw-header-h, 74px); z-index: 5;
+    margin: 0 -24px 8px; padding: 10px 24px;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    background: var(--bg);
+    scrollbar-width: none;
+  }
+  .rw-faqs-chips::-webkit-scrollbar { display: none; }
+  .rw-faqs-chip {
+    flex: 0 0 auto;
+    height: 36px; padding: 0 14px;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: none; cursor: pointer; white-space: nowrap;
+    font-family: 'Poppins', system-ui, sans-serif;
+    font-size: 12px; letter-spacing: .06em; color: var(--ink);
+  }
+  .rw-faqs-chip.is-active { border-color: var(--copper); color: var(--copper); }
+  .rw-faqs-title { font-size: 28px; }
+  .rw-faqs-section { padding: 56px 0; }
+  .rw-faqs-q { font-size: 17px; }
+}
+@media (max-width: 767px) {
+  .rw-faqs { padding: 64px 16px 56px; }
+  .rw-faqs-chips { margin: 0 -16px 8px; padding: 10px 16px; }
+  .rw-faqs-cta { padding: 24px; }
+  .rw-faqs-cta h2 { font-size: 24px; }
+  .rw-faqs-a p { font-size: 15px; }
 }

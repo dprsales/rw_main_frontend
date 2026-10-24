@@ -4,7 +4,7 @@ import { BookingProvider } from './components/BookingModal'
 import ScrollProgress from './components/ScrollProgress'
 import SiteLoader from './components/SiteLoader'
 import { ThemeProvider } from './components/ThemeProvider'
-import { HEADER_OFFSET } from './hooks/useSmoothScroll'
+import { headerOffset } from './hooks/useSmoothScroll'
 import { useSiteVisitTracker } from './hooks/useSiteVisitTracker'
 import About from './pages/About'
 import Articles from './pages/Articles'
@@ -27,6 +27,7 @@ import Start from './pages/Start'
 import Partner from './pages/Partner'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
+import Faqs from './pages/Faqs'
 
 // Stop the browser (Safari especially) restoring the old scroll position on reload,
 // which would land a refreshed homepage on the finder instead of the hero.
@@ -41,7 +42,7 @@ function ScrollToTop() {
   useLayoutEffect(() => {
     if (!hash) { window.scrollTo(0, 0); return }
     const id = decodeURIComponent(hash.slice(1))
-    const targetY = (el) => Math.max(0, el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET)
+    const targetY = (el) => Math.max(0, el.getBoundingClientRect().top + window.scrollY - headerOffset())
     let frame
     let settleTimer
     let tries = 0
@@ -94,6 +95,7 @@ export default function App() {
           <Route path="/assessment/result" element={<AssessmentResult />} />
           <Route path="/about" element={<About />} />
           <Route path="/articles" element={<Articles />} />
+          <Route path="/faqs" element={<Faqs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<Terms />} />
@@ -116,7 +118,6 @@ export default function App() {
           <Route path="/services/branding" element={<Navigate to="/consulting" replace />} />
           <Route path="/portfolio" element={<Navigate to="/realty/portfolio" replace />} />
           <Route path="/blogs" element={<Navigate to="/articles" replace />} />
-          <Route path="/faqs" element={<Navigate to="/" replace />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

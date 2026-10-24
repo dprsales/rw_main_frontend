@@ -59,13 +59,6 @@ const SAMPLE_BARS = [
   { label: 'Objections', val: 68 },
 ]
 
-const FAQS = [
-  { q: 'Who is this for?', a: 'Anyone interviewing, at any role and any level. It is a readiness read, not a pass/fail gate.' },
-  { q: 'How long does it take?', a: 'Twenty questions. Give yourself one uninterrupted sitting.' },
-  { q: 'Do I get a report?', a: 'Yes. After the session you receive a scored report across all six dimensions, complimentary and yours to keep. That is what makes the coaching follow-up specific instead of generic.' },
-  { q: 'Where does the interview run?', a: 'On KRISAH’s platform, in a new tab. Nothing is installed and yours to access.' },
-]
-
 export default function Assessment() {
   const heroCtaRef = useCtaEntrance({ delay: 0.4 })
   const [stepsRef, stepsInView] = useInView({ rootMargin: '0px 0px -18% 0px' })
@@ -87,7 +80,7 @@ export default function Assessment() {
           eyebrow="RAJIV WILLIAMS AI ASSESSMENT · POWERED BY KRISAH"
           headline={HEADLINE}
           lede="AI-led assessment to understand your starting point before the programme begins"
-          intro="Answer the way you would in a real room. You finish with a clearer read on yourself, and we get to see how you think under pressure. Any role, any stage of your career."
+          intro="Answer the way you would in a real room. You finish with a clearer read on yourself, and we get to see how you think under pressure. For people looking at coaching or consulting with Team RW."
           cta={<>
             <CtaButton ref={heroCtaRef} href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'hero' })}>
               START ASSESSMENT <span className="rw-cta-arrow">→</span>
@@ -277,20 +270,6 @@ export default function Assessment() {
           <CtaButton variant="outline" href="/assessment/result">What happens after the interview →</CtaButton>
           <CtaButton variant="outline" href="/coaching">Prefer to look at coaching first →</CtaButton>
         </Reveal>
-      </section>
-
-      {/* FAQ */}
-      <section style={{ ...sectionRule, background: 'var(--chip)', position: 'relative' }}>
-        <div className="rw-pad" style={{ maxWidth: 880, margin: '0 auto', padding: 'clamp(80px,10vw,110px) 40px' }}>
-          <Reveal style={{ ...eyebrow, marginBottom: 16 }}>QUESTIONS</Reveal>
-          <Reveal as="h2" delay={80} style={{ ...sectionHeading, marginBottom: 30 }}>Before you start.</Reveal>
-          {FAQS.map((faq, i) => (
-            <Reveal key={faq.q} delay={i * 70} style={{ borderTop: '1px solid var(--line)', padding: '24px 0' }}>
-              <div style={{ fontFamily: serif, fontSize: fs('clamp(18px,2vw,22px)'), color: 'var(--ink)' }}>{faq.q}</div>
-              <p style={{ ...note, marginTop: 8, lineHeight: 1.5 }}>{faq.a}</p>
-            </Reveal>
-          ))}
-        </div>
       </section>
 
       {/* A note from the team — reassurance, placed right before the ask so the last

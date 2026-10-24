@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import './fonts.css'
 import './global.css'
+import './kenyt-delay.js'
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>

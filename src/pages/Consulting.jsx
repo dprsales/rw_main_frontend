@@ -14,7 +14,6 @@ import { BookButton } from '../components/BookingModal'
 import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import ClosingCTA from '../components/ClosingCTA'
-import FaqSection from '../components/FaqSection'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { SectionAside } from '../components/SectionHead'
 import { DEVELOPER_SHIFTS, ECOSYSTEM, SUPPORT_SERVICES } from '../data/content'
@@ -400,17 +399,6 @@ export default function Consulting() {
           </Reveal>
         </div>
       </section>
-
-      <FaqSection
-        items={[
-          { q: 'Do you advise us, or do you sell the inventory?', a: 'Consulting advises. Team RW audits the sales machine, designs what is missing, puts it into daily use, & tunes it on live numbers. Selling the project is a mandate, on Realty.' },
-          { q: 'What do you actually change?', a: 'We replace random conversions, discount-led closing, dependence on one star, & a pipeline nobody can see.' },
-          { q: 'Do you also handle marketing, hiring, & channel partners?', a: 'Yes, beyond the four phases. Brand & performance marketing, PR, channel-partner activation, sales hiring, & team structure.' },
-          { q: 'Can you name that West Hyderabad developer?', a: 'No. The public result only. A launch stuck at 22% sold, channel partners rebuilt from 40 dormant to 260 active, absorption tripled in ninety days, & revenue up 5×.' },
-          { q: 'How do we start?', a: 'Request a sales consultation, or tell us about the business. If you are unsure which service fits, use Find the right service and we will recommend the next step.' },
-          { q: 'What does consulting cost?', a: 'It is not listed. The number is discussed on the consultation.' },
-        ]}
-      />
 
       <ClosingCTA id="talk" chip title="If inventory is right, & the velocity is Wrong ? Talk !!!">
         <CtaButton variant="outline" href="/form/consulting">TELL US ABOUT YOUR BUSINESS</CtaButton>

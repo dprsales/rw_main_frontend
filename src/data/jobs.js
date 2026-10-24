@@ -84,6 +84,7 @@ const CURATED_SALES_HEADS = [
   'Associate Vice President',
   'Vice President',
   'Senior Vice President',
+  'Finance & Account Manager',
 ]
 
 function withCuratedSalesHeads(roles) {

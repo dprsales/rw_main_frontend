@@ -62,6 +62,11 @@ export const ROUTE_SEO = {
     description:
       'Writing from Rajiv Williams on luxury sales, sales teams, and mandates in Hyderabad.',
   },
+  '/faqs': {
+    title: 'FAQs | Coaching, Consulting, Mandates | Rajiv Williams',
+    description:
+      'Questions on luxury sales coaching, developer consulting, exclusive mandates, and the KRISAH assessment — grouped by the work.',
+  },
   '/about': {
     title: 'About Rajiv Williams | Luxury Sales Mentor, Hyderabad',
     description:

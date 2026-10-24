@@ -75,6 +75,7 @@ const FOOTER_CONTACT = [{ ...EMAIL_LINK, muted: true }, PHONE_LINK, HH_LINK, ...
 
 /** Legal pages. Real routes, never hash placeholders. */
 const LEGAL_LINKS = [
+  { label: 'FAQs', to: '/faqs', muted: true },
   { label: 'Privacy Policy', to: '/privacy-policy', muted: true, legal: true },
   { label: 'Terms of Use', to: '/terms', muted: true, legal: true },
 ]

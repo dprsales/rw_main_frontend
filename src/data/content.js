@@ -47,6 +47,26 @@ export const MARQUEE_ITEMS = [
   '16+ years at the top',
 ]
 
+/* Site-wide urgent-hiring rail. Rows past `until` (inclusive, local date) hide themselves.
+   Add another object to rotate; empty the array to take the rail down immediately. */
+export const HIRING_CAMPAIGNS = [
+  {
+    title: 'Finance & Account Manager',
+    location: 'Hyderabad',
+    line: 'Billing, payroll, P&L, and the books.',
+    until: '2026-11-30',
+  },
+]
+
+export function activeHiringCampaigns(now = new Date()) {
+  return HIRING_CAMPAIGNS.filter((row) => {
+    if (!row?.title) return false
+    if (!row.until) return true
+    const end = new Date(`${row.until}T23:59:59`)
+    return !Number.isNaN(end.getTime()) && end >= now
+  })
+}
+
 /* Order is the display order - numbers and connector arrows both run 1→6 down the grid. */
 export const ACHIEVE = [
   { title: 'Increase Sales Revenue', body: 'Move from inconsistent wins to structured, repeatable conversions backed by a clear sales framework.' },
@@ -522,10 +542,10 @@ export const CAREER_ROLES = [
     type: 'FULL-TIME · HYDERABAD',
     category: 'Operations',
     level: 'Manager',
-    experience: '5–8 years',
+    experience: '3–6 years',
     location: 'Hyderabad',
-    description: 'Own the books end to end: GST and TDS, MIS, vendor and payout coordination, and the accounts desk that reports to leadership.',
-    requirements: ['5+ years in accounts or finance, with time owning the books', 'Working knowledge of GST, TDS, and monthly MIS', 'Can lead an executive and keep numbers audit-ready'],
+    description: 'Own billing and payment follow-ups, P&L and cashflow, payroll, vendor coordination, and the accounting records that leadership reads from.',
+    requirements: ['3+ years in accounts or finance', 'Tally and comfort with everyday finance tools', 'Hindi and Telugu, and flexibility to travel', 'Real estate experience preferred'],
   },
   {
     title: 'Management Trainee',
