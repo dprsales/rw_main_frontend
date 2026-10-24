@@ -1419,36 +1419,41 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 
 /* Time-bound hiring rail. Sits inside the sticky header so --rw-header-h tracks it. */
 .rw-hire-bar {
-  border-bottom: 1px solid color-mix(in srgb, var(--copper) 38%, transparent);
-  background: #0B0A09;
+  position: relative; z-index: 1;
+  isolation: isolate;
+  border-bottom: 1px solid #C39B53;
+  background: #16110A;
 }
 .rw-hire-bar-inner {
   display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
   gap: 10px 16px;
   max-width: 1320px; margin: 0 auto;
-  padding: 8px 40px;
+  padding: 9px 40px;
 }
 .rw-hire-tag {
   flex: none;
-  padding: 3px 9px; border-radius: 100px;
+  padding: 4px 10px; border-radius: 100px;
   background: var(--gold-gradient);
   color: #16110a;
-  font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
   line-height: 1.4;
 }
 .rw-hire-copy {
   margin: 0; min-width: 0;
-  font-size: 13px; line-height: 1.35; color: var(--ink);
+  border: 0; background: none; padding: 0; cursor: pointer; text-align: left;
+  font-size: 15px; line-height: 1.35; font-weight: 500; color: #F2EFE9;
 }
-.rw-hire-copy strong { font-weight: 600; }
-.rw-hire-meta { color: color-mix(in srgb, var(--ink) 62%, transparent); }
-.rw-hire-line { color: color-mix(in srgb, var(--ink) 72%, transparent); }
+.rw-hire-copy strong { font-weight: 700; color: #F2EFE9; }
+.rw-hire-meta { color: #E8C97A; }
+.rw-hire-line { color: #F2EFE9; }
 .rw-hire-go {
   flex: none;
-  font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--copper);
+  padding: 5px 14px; border-radius: 100px;
+  background: var(--gold-gradient);
+  font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: #16110a;
 }
-.rw-hire-go:hover { color: #E8C97A; }
+.rw-hire-go:hover { color: #16110a; filter: brightness(1.08); }
 .rw-hire-dots { display: flex; align-items: center; gap: 6px; }
 .rw-hire-dot {
   width: 6px; height: 6px; padding: 0; border: 0; border-radius: 50%;
@@ -1459,6 +1464,40 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   .rw-hire-bar-inner { padding: 8px 16px; justify-content: flex-start; }
   .rw-hire-line { display: none; }
 }
+
+.rw-hire-modal {
+  position: fixed; inset: 0; z-index: 80;
+  display: grid; place-items: center;
+  padding: 24px 16px;
+}
+.rw-hire-modal-back {
+  position: absolute; inset: 0;
+  border: 0; padding: 0; cursor: pointer;
+  background: rgba(11, 10, 9, .78);
+}
+.rw-hire-modal-card {
+  position: relative; z-index: 1;
+  width: min(420px, 100%);
+  background: #0B0A09;
+  border: 1px solid color-mix(in srgb, var(--copper) 45%, transparent);
+}
+.rw-hire-modal-x {
+  position: absolute; top: 8px; right: 8px; z-index: 2;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid color-mix(in srgb, #F2EFE9 28%, transparent);
+  background: rgba(11, 10, 9, .7);
+  color: #F2EFE9; font-size: 26px; line-height: 1; cursor: pointer;
+}
+.rw-hire-modal-poster { display: block; }
+.rw-hire-modal-poster img {
+  display: block; width: 100%; height: auto; max-width: none;
+}
+.rw-hire-modal-actions {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: 12px; padding: 16px 16px 18px;
+}
+.rw-hire-modal-actions .rw-cta,
+.rw-hire-modal-actions .rw-cta-secondary { min-width: 160px; }
 
 /* static: both megas position against the sticky header, so they centre on the page. */
 .rw-dnav-mega-wrap { position: static; }
@@ -2141,13 +2180,12 @@ button.rw-mega-item {
 .rw-hero-img--sky,
 .rw-hero-img--sky img { object-position: 78% 45%; }
 .rw-hero-img--coaching,
-.rw-hero-img--coaching img { object-position: 78% 48%; }
+.rw-hero-img--coaching img { object-position: 58% 42%; }
 .rw-hero-img--bridge,
 .rw-hero-img--bridge img,
 .rw-hero-photo-stack .rw-hero-img--bridge img {
-  object-fit: contain;
-  object-position: right center;
-  background: #061220;
+  object-fit: cover;
+  object-position: 78% 48%;
 }
 
 .rw-hero-panel {
@@ -2331,13 +2369,12 @@ button.rw-mega-item {
   .rw-hero-img--sky,
   .rw-hero-img--sky img { object-position: 82% 42%; }
   .rw-hero-img--coaching,
-  .rw-hero-img--coaching img { object-position: 78% 50%; }
+  .rw-hero-img--coaching img { object-position: 58% 42%; }
   .rw-hero-img--bridge,
   .rw-hero-img--bridge img,
   .rw-hero-photo-stack .rw-hero-img--bridge img {
-    object-fit: contain;
-    object-position: right center;
-    background: #061220;
+    object-fit: cover;
+    object-position: 78% 50%;
   }
 
   /* The scrim turns vertical and lands on the page background, so the photo's

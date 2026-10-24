@@ -36,7 +36,11 @@ const PLATFORM_NAMES = Object.keys(SOCIAL_ICONS)
  */
 function FooterSocialIcons() {
   const { pathname } = useLocation()
-  const items = PAGE_SOCIAL_LINKS[pathname] || SOCIAL_LINKS
+  const override = PAGE_SOCIAL_LINKS[pathname]
+  const items = (override || SOCIAL_LINKS).map((link) => {
+    if (link.href && link.href !== '#') return link
+    return SOCIAL_LINKS.find((fallback) => fallback.label === link.label) || link
+  })
 
   return (
     <div className="rw-footer-social" style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>

@@ -50,19 +50,12 @@ export const SOCIAL_LINKS = [
   { label: 'WhatsApp ↗', href: WHATSAPP, external: true, muted: true },
 ]
 
-const socialSet = (overrides = {}) =>
-  SOCIAL_LINKS.map((link) => ({ ...link, href: overrides[link.label.split(' ')[0]] ?? link.href }))
-
 /**
- * Each service runs its own social accounts - PLACEHOLDER hrefs ('#') until
- * real URLs are supplied. Footer.jsx picks the set matching the current route, falling back to SOCIAL_LINKS elsewhere.
+ * Optional per-route social accounts. Footer.jsx uses SOCIAL_LINKS unless a
+ * pathname is listed here with real profile URLs. Never put '#' here — that
+ * left inner-page footer icons as dead hash links.
  */
-export const PAGE_SOCIAL_LINKS = {
-  '/coaching': socialSet({ LinkedIn: '#', Instagram: '#', Facebook: '#', X: '#', WhatsApp: '#' }),
-  '/consulting': socialSet({ LinkedIn: '#', Instagram: '#', Facebook: '#', X: '#', WhatsApp: '#' }),
-  '/realty': socialSet({ LinkedIn: '#', Instagram: '#', Facebook: '#', X: '#', WhatsApp: '#' }),
-  '/realty/portfolio': socialSet({ LinkedIn: '#', Instagram: '#', Facebook: '#', X: '#', WhatsApp: '#' }),
-}
+export const PAGE_SOCIAL_LINKS = {}
 
 /* FOOTERS - the same contact block closes all seven pages; only the back-link
  * and trailing cross-links differ. Composed here so a changed number is one edit, not seven. */

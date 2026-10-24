@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { BookingProvider } from './components/BookingModal'
 import ScrollProgress from './components/ScrollProgress'
 import SiteLoader from './components/SiteLoader'
+import HiringModal from './components/HiringModal'
 import { ThemeProvider } from './components/ThemeProvider'
 import { headerOffset } from './hooks/useSmoothScroll'
 import { useSiteVisitTracker } from './hooks/useSiteVisitTracker'
@@ -76,6 +77,7 @@ export default function App() {
       <BookingProvider>
         <ScrollToTop />
         <ScrollProgress />
+        <HiringModal />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/coaching" element={<Coaching />} />
