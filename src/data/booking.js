@@ -129,6 +129,12 @@ async function submitApplication(form) {
     if (form[field] != null && String(form[field]).trim()) fd.append(field, String(form[field]).trim())
   })
   fd.append('privacyConsent', form.privacyConsent ? 'true' : 'false')
+  fd.append('socialMediaSavvy', form.socialMediaSavvy ? 'true' : 'false')
+  const aiTools = [
+    ...(Array.isArray(form.aiTools) ? form.aiTools : []),
+    form.aiToolsOther,
+  ].map((item) => String(item || '').trim()).filter((item) => item && item !== 'Other')
+  if (aiTools.length) fd.append('aiTools', JSON.stringify([...new Set(aiTools)]))
   if (form.linkedinUrl?.trim()) fd.append('linkedinUrl', form.linkedinUrl.trim())
   if (form.portfolioUrl?.trim()) fd.append('portfolioUrl', form.portfolioUrl.trim())
   if (form.resume) fd.append('resume', form.resume)

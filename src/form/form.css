@@ -423,6 +423,207 @@
 }
 .rw-form-field::placeholder { color: var(--faded); opacity: .6; }
 .rw-form-field:focus { outline: none; border-color: var(--copper); }
+.rw-form-field.is-invalid { border-color: var(--copper); }
+.rw-apply-disclaimer {
+  margin: 0 0 22px;
+  padding: 22px 22px 18px;
+  border: 1px solid rgba(195, 155, 83, .55);
+  border-radius: 8px;
+  background: #16130e;
+  font-family: var(--rw-sans);
+  color: var(--ink);
+}
+.rw-apply-disclaimer.is-invalid {
+  border-color: var(--copper);
+  box-shadow: 0 0 0 1px var(--copper);
+}
+.rw-apply-disclaimer-kicker {
+  margin: 0 0 8px;
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--copper);
+}
+.rw-apply-disclaimer-title {
+  margin: 0 0 12px;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.rw-apply-disclaimer ul {
+  margin: 0 0 16px;
+  padding: 0 0 0 1.15em;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.65;
+}
+.rw-apply-disclaimer li + li { margin-top: 6px; }
+.rw-apply-disclaimer-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(195, 155, 83, .22);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.rw-apply-disclaimer-check input {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  accent-color: var(--copper);
+}
+.rw-apply-disclaimer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 28px);
+  background: rgba(6, 5, 4, .32);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.rw-apply-disclaimer-modal {
+  width: min(520px, 100%);
+  padding: clamp(26px, 4vw, 36px);
+  overflow-y: auto;
+  border: 1px solid rgba(195, 155, 83, .4);
+  border-radius: 8px;
+  background: rgba(22, 19, 14, .62);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 18px 48px -20px rgba(0, 0, 0, .55);
+  font-family: var(--rw-sans);
+  color: var(--ink);
+}
+.rw-apply-disclaimer-modal .rw-apply-disclaimer-title {
+  font-size: clamp(24px, 4vw, 32px);
+}
+.rw-apply-disclaimer-modal ul {
+  margin: 0 0 16px;
+  padding: 0 0 0 1.15em;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.65;
+}
+.rw-apply-disclaimer-modal li + li { margin-top: 6px; }
+.rw-apply-disclaimer-error {
+  margin: 10px 0 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--copper);
+}
+.rw-apply-disclaimer-go {
+  width: 100%;
+  margin-top: 22px;
+  justify-content: center;
+}
+.rw-form-tip {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 0 clamp(22px, 2.6vw, 30px) 18px;
+  font-family: var(--rw-sans);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--faded);
+}
+.rw-form-tip-kicker {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--copper);
+}
+.rw-ai-tick {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.rw-ai-tick input {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  accent-color: var(--copper);
+}
+.rw-ai-drop-wrap { margin-top: 12px; }
+.rw-ai-drop-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+.rw-ai-drop-btn span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rw-ai-drop-caret { flex: 0 0 auto; color: var(--faded); }
+.rw-ai-drop {
+  position: fixed;
+  z-index: 400;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid rgba(195, 155, 83, .4);
+  border-radius: 8px;
+  background: #16130e;
+  box-shadow: 0 18px 48px -16px rgba(0, 0, 0, .65);
+  overflow-y: auto;
+}
+.rw-ai-drop .rw-form-check {
+  margin: 0;
+  min-width: 0;
+  align-items: flex-start;
+  padding: 11px 12px;
+}
+.rw-ai-drop .rw-form-check input {
+  margin-top: 2px;
+}
+.rw-ai-drop .rw-form-check span {
+  min-width: 0;
+  line-height: 1.35;
+}
+.rw-ai-drop .rw-form-check--wide { grid-column: 1 / -1; }
+@media (max-width: 560px) {
+  .rw-ai-drop { grid-template-columns: 1fr; }
+  .rw-ai-drop .rw-form-check--wide { grid-column: auto; }
+}
+.rw-na {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--faded);
+  font-family: var(--rw-sans);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.rw-na.is-on, .rw-na:hover { color: var(--copper); }
+.rw-likert.is-invalid { outline: 1px solid var(--copper); outline-offset: 6px; }
 
 /* Compact variant — same panel, tighter padding, for a form short enough that the
    default spacing reads as empty gaps (channel partner, 8 fields). Opt-in via an

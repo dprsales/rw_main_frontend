@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -61,6 +62,40 @@ const STEP_META = [
   { key: 'wrapup', label: 'Wrap up' },
 ]
 const LAST_STEP = STEP_META.length - 1
+const NOT_AVAILABLE = 'Not available'
+const PROFILE_TIP = 'A LinkedIn profile, a portfolio, and a reference help us process your application faster.'
+const DISCLAIMER_POINTS = [
+  'Team RW reviews every application in full.',
+  'Fill every field with genuine details. All fields are required.',
+]
+
+const AI_TOOL_OPTIONS = [
+  'Write an email',
+  'Write a letter or note',
+  'Create an image',
+  'Summarise a document',
+  'Research a topic',
+  'Draft a presentation',
+  'Edit or improve writing',
+  'Create a short video or reel',
+]
+
+function chosenAiTools(values) {
+  const picked = (Array.isArray(values?.aiTools) ? values.aiTools : [])
+    .map((v) => String(v || '').trim())
+    .filter((v) => v && v !== 'Other')
+  const other = String(values?.aiToolsOther || '').trim()
+  if (other && !picked.includes(other)) return [...picked, other]
+  return picked
+}
+
+function focusControl(field) {
+  if (!field || typeof document === 'undefined') return
+  const el = document.getElementById(field)
+  if (!el) return
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  if (typeof el.focus === 'function') el.focus({ preventScroll: true })
+}
 
 const INITIAL = {
   name: '', email: '', phone: '',
@@ -68,7 +103,8 @@ const INITIAL = {
   currentCtc: '', expectedCtc: '', currentLocation: '', noticePeriod: '', relocation: '', workMode: '', applicationSource: '',
   qImpact: '', qDuties: '', qMotivation: '', qIntegrity: '', qSetback: '', qLoyalty: '', qFlexibility: '',
   ref1Name: '', ref1Number: '', ref1Relationship: '', ref2Name: '', ref2Number: '', ref2Relationship: '',
-  message: '', privacyConsent: false,
+  message: '', privacyConsent: false, disclaimerRead: false,
+  socialMediaSavvy: false, aiTools: [], aiToolsOther: '',
 }
 
 /** Clamp a persisted step index into range, so a stale draft can't open on a step
@@ -97,20 +133,28 @@ function Section({ eyebrow: kicker, title, children, panel }) {
   )
 }
 
-function TextField({ label, id, values, set, setValues, required, type = 'text', placeholder, wide }) {
+function TextField({ label, id, values, set, setValues, required, type = 'text', placeholder, wide, invalid, allowMissing }) {
+  const na = values[id] === NOT_AVAILABLE
   const filled = String(values[id] || '').trim() !== ''
   return (
-    <label className={`rw-form-field-wrap${wide ? ' rw-form-field-wrap--wide' : ''}`} style={{ display: 'block' }}>
+    <div className={`rw-form-field-wrap${wide ? ' rw-form-field-wrap--wide' : ''}`} style={{ display: 'block' }}>
       <span className="rw-form-q-title">
         {label}
         {required ? <span className="rw-form-req"> *</span> : <span className="rw-form-optional"> (optional)</span>}
       </span>
       <span className="rw-clearable">
         <input
-          className="rw-form-field" type={type} style={{ marginTop: 10 }}
-          placeholder={placeholder} value={values[id] || ''} onChange={set(id)}
+          id={id}
+          className={`rw-form-field${invalid ? ' is-invalid' : ''}`}
+          type={na ? 'text' : type}
+          style={{ marginTop: 10 }}
+          placeholder={placeholder}
+          value={na ? NOT_AVAILABLE : (values[id] || '')}
+          onChange={set(id)}
+          disabled={na}
+          aria-invalid={invalid || undefined}
         />
-        {filled && (
+        {filled && !na && (
           <button
             type="button" className="rw-field-clear" tabIndex={-1}
             aria-label={`Clear ${label}`} title={`Clear ${label}`}
@@ -120,11 +164,21 @@ function TextField({ label, id, values, set, setValues, required, type = 'text',
           </button>
         )}
       </span>
-    </label>
+      {allowMissing && (
+        <button
+          type="button"
+          className={`rw-na${na ? ' is-on' : ''}`}
+          aria-pressed={na}
+          onClick={() => setValues((prev) => ({ ...prev, [id]: na ? '' : NOT_AVAILABLE }))}
+        >
+          {na ? 'Undo — I have this' : "I don't have this"}
+        </button>
+      )}
+    </div>
   )
 }
 
-function SelectField({ label, id, values, set, setValues, options, required, wide }) {
+function SelectField({ label, id, values, set, setValues, options, required, wide, invalid }) {
   const filled = String(values[id] || '').trim() !== ''
   return (
     <div className={`rw-form-field-wrap${wide ? ' rw-form-field-wrap--wide' : ''}`}>
@@ -134,8 +188,12 @@ function SelectField({ label, id, values, set, setValues, options, required, wid
       </span>
       <span className="rw-clearable">
         <select
-          className="rw-form-field" style={{ marginTop: 10, appearance: 'none' }}
-          value={values[id] || ''} onChange={set(id)}
+          id={id}
+          className={`rw-form-field${invalid ? ' is-invalid' : ''}`}
+          style={{ marginTop: 10, appearance: 'none' }}
+          value={values[id] || ''}
+          onChange={set(id)}
+          aria-invalid={invalid || undefined}
         >
           <option value="">Select…</option>
           {options.map((o) => <option key={o} value={o}>{o}</option>)}
@@ -150,6 +208,151 @@ function SelectField({ label, id, values, set, setValues, options, required, wid
           </button>
         )}
       </span>
+    </div>
+  )
+}
+
+function AiToolsField({ values, setValues, invalid }) {
+  const [open, setOpen] = useState(false)
+  const [pos, setPos] = useState(null)
+  const btn = useRef(null)
+  const menu = useRef(null)
+  const picked = Array.isArray(values.aiTools) ? values.aiTools : []
+  const otherOn = picked.includes('Other') || Boolean(String(values.aiToolsOther || '').trim())
+  const summary = chosenAiTools(values)
+  const label = summary.length ? summary.join(', ') : 'Select what you can do with AI…'
+
+  const place = () => {
+    const el = btn.current
+    if (!el) return
+    const r = el.getBoundingClientRect()
+    const gap = 6
+    const below = window.innerHeight - r.bottom - 16
+    const above = r.top - 16
+    const openUp = below < 280 && above > below
+    const maxHeight = Math.min(400, openUp ? above : below)
+    setPos({
+      left: Math.max(12, r.left),
+      width: r.width,
+      maxHeight,
+      ...(openUp
+        ? { bottom: window.innerHeight - r.top + gap, top: 'auto' }
+        : { top: r.bottom + gap, bottom: 'auto' }),
+    })
+  }
+
+  useLayoutEffect(() => {
+    if (!open) return undefined
+    place()
+    const on = () => place()
+    window.addEventListener('resize', on)
+    window.addEventListener('scroll', on, true)
+    return () => {
+      window.removeEventListener('resize', on)
+      window.removeEventListener('scroll', on, true)
+    }
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return undefined
+    const onDoc = (e) => {
+      if (btn.current?.contains(e.target) || menu.current?.contains(e.target)) return
+      setOpen(false)
+    }
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
+    document.addEventListener('mousedown', onDoc)
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onDoc)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  const toggle = (opt) => {
+    setValues((prev) => {
+      const cur = Array.isArray(prev.aiTools) ? prev.aiTools : []
+      const on = cur.includes(opt)
+      return {
+        ...prev,
+        aiTools: on ? cur.filter((x) => x !== opt) : [...cur, opt],
+        ...(on && opt === 'Other' ? { aiToolsOther: '' } : {}),
+      }
+    })
+  }
+
+  return (
+    <div className="rw-form-field-wrap rw-form-field-wrap--wide">
+      <span className="rw-form-q-title">Social media and AI <span className="rw-form-req"> *</span></span>
+      <label className="rw-ai-tick" htmlFor="socialMediaSavvy">
+        <input
+          id="socialMediaSavvy"
+          type="checkbox"
+          aria-required="true"
+          checked={Boolean(values.socialMediaSavvy)}
+          onChange={(e) => {
+            const on = e.target.checked
+            setValues((prev) => ({
+              ...prev,
+              socialMediaSavvy: on,
+              ...(on ? {} : { aiTools: [], aiToolsOther: '' }),
+            }))
+            if (!on) setOpen(false)
+          }}
+        />
+        <span>I am comfortable on social media and I know how to use AI tools.</span>
+      </label>
+      {values.socialMediaSavvy && (
+        <div className="rw-ai-drop-wrap">
+          <button
+            ref={btn}
+            type="button"
+            id="aiTools"
+            className={`rw-form-field rw-ai-drop-btn${invalid ? ' is-invalid' : ''}`}
+            aria-expanded={open}
+            aria-haspopup="listbox"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span>{label}</span>
+            <span className="rw-ai-drop-caret" aria-hidden>{open ? '▴' : '▾'}</span>
+          </button>
+          {open && pos && createPortal(
+            <div
+              ref={menu}
+              className="rw-ai-drop"
+              role="listbox"
+              aria-multiselectable="true"
+              style={pos}
+            >
+              {AI_TOOL_OPTIONS.map((opt) => (
+                <label key={opt} className={`rw-form-check${picked.includes(opt) ? ' is-on' : ''}`}>
+                  <input type="checkbox" checked={picked.includes(opt)} onChange={() => toggle(opt)} />
+                  <span>{opt}</span>
+                </label>
+              ))}
+              <label className={`rw-form-check rw-form-check--wide${otherOn ? ' is-on' : ''}`}>
+                <input type="checkbox" checked={otherOn} onChange={() => toggle('Other')} />
+                <span>Other — write your own</span>
+              </label>
+            </div>,
+            document.getElementById('rw-app-shell') || document.body,
+          )}
+          {otherOn && (
+            <input
+              className="rw-form-field"
+              style={{ marginTop: 8 }}
+              placeholder="e.g. Edit product photos, write WhatsApp replies"
+              value={values.aiToolsOther || ''}
+              onChange={(e) => setValues((prev) => ({
+                ...prev,
+                aiToolsOther: e.target.value,
+                aiTools: (Array.isArray(prev.aiTools) ? prev.aiTools : []).includes('Other')
+                  ? prev.aiTools
+                  : [...(Array.isArray(prev.aiTools) ? prev.aiTools : []), 'Other'],
+              }))}
+            />
+          )}
+        </div>
+      )}
     </div>
   )
 }
@@ -221,12 +424,14 @@ export default function CareersApply() {
     ...INITIAL,
     ...(draft ? draft.values : {}),
     role: presetRole || draft?.values?.role || '',
+    aiTools: Array.isArray(draft?.values?.aiTools) ? draft.values.aiTools : [],
   }))
   const [hex, setHex] = useState(() => draft?.hex || {})
   const [resume, setResume] = useState(null)
   const [roleOptions, setRoleOptions] = useState([])
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
+  const [invalidField, setInvalidField] = useState('')
   const [firstName, setFirstName] = useState('')
   const [step, setStep] = useState(() => safeStep(draft?.step))
   const [reached, setReached] = useState(() => safeStep(Math.max(draft?.reached || 0, draft?.step || 0)))
@@ -235,6 +440,8 @@ export default function CareersApply() {
   // Bumped only by "start over", so the scroll effect below can also re-anchor
   // when the form grows back under a candidate who was scrolled at the bottom.
   const [viewNonce, setViewNonce] = useState(0)
+  const [showDisclaimer, setShowDisclaimer] = useState(() => !draft?.values?.disclaimerRead)
+  const [disclaimerTick, setDisclaimerTick] = useState(false)
   const honeypot = useRef('')
   const formTopRef = useRef(null)
   const successTopRef = useRef(null)
@@ -250,7 +457,11 @@ export default function CareersApply() {
     return resumeQueue.current
   }
 
-  const set = (id) => (e) => setValues((prev) => ({ ...prev, [id]: e.target.value }))
+  const set = (id) => (e) => {
+    setValues((prev) => ({ ...prev, [id]: e.target.value }))
+    if (invalidField === id) { setInvalidField(''); setError('') }
+  }
+
 
   useEffect(() => {
     let live = true
@@ -322,6 +533,7 @@ export default function CareersApply() {
     if (!/\.(pdf|docx?|DOC|DOCX|PDF)$/.test(file.name)) { setError('Resume must be a PDF, DOC or DOCX.'); return }
     if (file.size > RESUME_MAX) { setError('That resume is over 5MB. Please attach a smaller file.'); return }
     setError('')
+    setInvalidField('')
     setResume(file)
     queueResumeWrite(() => saveResumeFile(file))
   }
@@ -339,6 +551,7 @@ export default function CareersApply() {
     setHex({})
     setResume(null)
     setError('')
+    setInvalidField('')
     setStatus('idle')
     setFirstName('')
     setStep(0)
@@ -346,21 +559,63 @@ export default function CareersApply() {
     setDir('back')
     setRestored(false)
     setViewNonce((n) => n + 1)
+    setShowDisclaimer(true)
+    setDisclaimerTick(false)
   }
+
+  function acceptDisclaimer() {
+    if (!disclaimerTick) {
+      setInvalidField('disclaimerRead')
+      setError('Please tick that you have read this before you start.')
+      focusControl('disclaimerRead')
+      return
+    }
+    setValues((prev) => ({ ...prev, disclaimerRead: true }))
+    setShowDisclaimer(false)
+    setInvalidField('')
+    setError('')
+  }
+
+  useEffect(() => {
+    if (!showDisclaimer || status === 'done') return undefined
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    document.getElementById('disclaimerRead')?.focus()
+    return () => { document.body.style.overflow = prev }
+  }, [showDisclaimer, status])
 
   // `!== undefined`, not truthiness: the neutral answer is 0, which is a valid choice.
   const hexComplete = HEXACO_STATEMENT_IDS.every((id) => hex[id] !== undefined)
 
-  /** Validate one step; returns a message to show, or '' when the step is complete. */
+  /** Validate one step; returns { message, field } or null when the step is complete. */
   function validateStep(i) {
+    const need = (id, label) => {
+      if (!String(values[id] || '').trim()) return { field: id, message: `Please provide ${label}.` }
+      return null
+    }
     if (i === 0) {
+      if (!values.disclaimerRead) {
+        return { field: 'disclaimerRead', message: 'Please read the note above and tick that you have read it.' }
+      }
       const req = [
         ['name', 'your name'], ['phone', 'your phone number'], ['email', 'your email'],
-        ['role', 'the role'], ['experience', 'your experience level'],
+        ['role', 'the role'], ['linkedinUrl', 'your LinkedIn profile, or choose Not available'],
+        ['portfolioUrl', 'your portfolio, or choose Not available'], ['experience', 'your experience level'],
       ]
-      for (const [f, l] of req) if (!String(values[f] || '').trim()) return `Please provide ${l}.`
-      if (!isValidPhone(values.phone)) return 'Please enter a valid 10-digit phone number.'
-      if (values.experience === 'Other' && !values.experienceCustom.trim()) return 'Please describe your experience.'
+      for (const [f, l] of req) {
+        const miss = need(f, l)
+        if (miss) return miss
+      }
+      if (!isValidPhone(values.phone)) return { field: 'phone', message: 'Please enter a valid 10-digit phone number.' }
+      if (values.experience === 'Other' && !values.experienceCustom.trim()) {
+        return { field: 'experienceCustom', message: 'Please describe your experience.' }
+      }
+      if (!values.socialMediaSavvy) {
+        return { field: 'socialMediaSavvy', message: 'Please confirm you are comfortable on social media and with AI tools.' }
+      }
+      if (!chosenAiTools(values).length) {
+        return { field: 'aiTools', message: 'Please select what you can do with AI, or write your own.' }
+      }
     }
     if (i === 1) {
       const req = [
@@ -368,33 +623,59 @@ export default function CareersApply() {
         ['noticePeriod', 'notice period'], ['relocation', 'relocation preference'],
         ['workMode', 'work mode'], ['applicationSource', 'how you heard about us'],
       ]
-      for (const [f, l] of req) if (!String(values[f] || '').trim()) return `Please provide ${l}.`
+      for (const [f, l] of req) {
+        const miss = need(f, l)
+        if (miss) return miss
+      }
     }
     if (i === 2) {
-      for (const q of CHARACTER_QUESTIONS) if (q.required && !values[q.id].trim()) return `Please answer: “${q.label}”.`
+      for (const q of CHARACTER_QUESTIONS) {
+        if (!String(values[q.id] || '').trim()) return { field: q.id, message: `Please answer: “${q.label}”.` }
+      }
     }
     if (i === 3) {
-      if (!hexComplete) return 'Please answer every statement in the assessment before continuing.'
+      const first = HEXACO_STATEMENT_IDS.find((id) => hex[id] === undefined)
+      if (first) return { field: `hex-${first}`, message: 'Please answer every statement in the assessment before continuing.' }
     }
     if (i === 4) {
-      if (!resume) return 'Please attach your resume.'
-      if (!values.privacyConsent) return 'Please give consent to proceed.'
+      const refs = [
+        ['ref1Name', 'reference 1 name, or choose Not available'],
+        ['ref1Number', 'reference 1 number, or choose Not available'],
+        ['ref1Relationship', 'reference 1 relationship, or choose Not available'],
+        ['ref2Name', 'reference 2 name, or choose Not available'],
+        ['ref2Number', 'reference 2 number, or choose Not available'],
+        ['ref2Relationship', 'reference 2 relationship, or choose Not available'],
+      ]
+      for (const [f, l] of refs) {
+        const miss = need(f, l)
+        if (miss) return miss
+      }
+      if (!resume) return { field: 'resume', message: 'Please attach your resume.' }
+      if (!String(values.message || '').trim()) return { field: 'message', message: 'Please add anything else we should know, even a short line.' }
+      if (!values.privacyConsent) return { field: 'privacyConsent', message: 'Please give consent to proceed.' }
     }
-    return ''
+    return null
   }
 
-  const goTo = (i) => {
-    setError('')
+  const showFieldError = (err, afterPaint = false) => {
+    setError(err.message)
+    setInvalidField(err.field || '')
+    setTimeout(() => focusControl(err.field), afterPaint ? 320 : 50)
+  }
+
+  const goTo = (i, keepError = false) => {
+    if (!keepError) { setError(''); setInvalidField('') }
     setDir(i > step ? 'fwd' : 'back')
     setStep(i)
     setReached((r) => Math.max(r, i))
-    // Let the new step paint, then bring the tracker to the top of the viewport.
-    requestAnimationFrame(() => formTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+    if (!keepError) {
+      requestAnimationFrame(() => formTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+    }
   }
 
   const next = () => {
     const err = validateStep(step)
-    if (err) { setError(err); return }
+    if (err) { showFieldError(err); return }
     if (step < LAST_STEP) goTo(step + 1)
   }
   const back = () => { if (step > 0) goTo(step - 1) }
@@ -409,7 +690,11 @@ export default function CareersApply() {
     // Final guard: re-check every step so a jump-back edit can't slip an invalid one through.
     for (let i = 0; i <= LAST_STEP; i++) {
       const err = validateStep(i)
-      if (err) { setError(err); goTo(i); return }
+      if (err) {
+        goTo(i, true)
+        showFieldError(err, i !== step)
+        return
+      }
     }
 
     setError('')
@@ -459,6 +744,44 @@ export default function CareersApply() {
         title={slugRole ? `Apply for ${slugRole.title} | Rajiv Williams` : undefined}
         description={slugRole ? `Apply for the ${slugRole.title} role with Team Rajiv Williams in Hyderabad.` : undefined}
       />
+      {showDisclaimer && status !== 'done' && createPortal(
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="rw-apply-disclaimer-title"
+          className="rw-apply-disclaimer-overlay"
+        >
+          <div className="rw-apply-disclaimer-modal rw-modal-card">
+            <p className="rw-apply-disclaimer-kicker">Please read before you start</p>
+            <h2 id="rw-apply-disclaimer-title" className="rw-apply-disclaimer-title">This form is reviewed in full.</h2>
+            <ul>
+              {DISCLAIMER_POINTS.map((line) => <li key={line}>{line}</li>)}
+            </ul>
+            <label className="rw-apply-disclaimer-check" htmlFor="disclaimerRead">
+              <input
+                id="disclaimerRead"
+                type="checkbox"
+                aria-required="true"
+                checked={disclaimerTick}
+                onChange={(e) => {
+                  setDisclaimerTick(e.target.checked)
+                  if (invalidField === 'disclaimerRead') { setInvalidField(''); setError('') }
+                }}
+              />
+              <span>I have read this. I will fill every field with genuine details.</span>
+            </label>
+            {error && invalidField === 'disclaimerRead' && (
+              <p role="alert" className="rw-apply-disclaimer-error">{error}</p>
+            )}
+            <button type="button" className="rw-cta rw-cta--live rw-apply-disclaimer-go" style={ctaCopper} onClick={acceptDisclaimer}>
+              START THE FORM <span className="rw-cta-arrow" aria-hidden>→</span>
+            </button>
+          </div>
+        </div>,
+        document.getElementById('rw-app-shell') || document.body,
+      )}
+
+      <div inert={showDisclaimer && status !== 'done' ? true : undefined}>
       <Header />
 
       <PageIntro
@@ -535,13 +858,13 @@ export default function CareersApply() {
 
               {step === 0 && (
                 <Section key="about" panel={dir} eyebrow="ABOUT YOU">
-                  <TextField label="Full name" id="name" values={values} set={set} setValues={setValues} required placeholder="Your name" />
-                  <TextField label="Phone" id="phone" values={values} set={set} setValues={setValues} required type="tel" placeholder="10-digit mobile" />
-                  <TextField label="Email" id="email" values={values} set={set} setValues={setValues} required type="email" placeholder="you@email.com" />
+                  <TextField label="Full name" id="name" values={values} set={set} setValues={setValues} required invalid={invalidField === 'name'} placeholder="Your name" />
+                  <TextField label="Phone" id="phone" values={values} set={set} setValues={setValues} required invalid={invalidField === 'phone'} type="tel" placeholder="10-digit mobile" />
+                  <TextField label="Email" id="email" values={values} set={set} setValues={setValues} required invalid={invalidField === 'email'} type="email" placeholder="you@email.com" />
                   <div className="rw-form-field-wrap">
                     <span className="rw-form-q-title">Role you are applying for <span className="rw-form-req"> *</span></span>
                     <span className="rw-clearable">
-                      <select className="rw-form-field" style={{ marginTop: 10, appearance: 'none' }} value={values.role} onChange={set('role')}>
+                      <select id="role" className={`rw-form-field${invalidField === 'role' ? ' is-invalid' : ''}`} style={{ marginTop: 10, appearance: 'none' }} value={values.role} onChange={set('role')} aria-invalid={invalidField === 'role' || undefined}>
                         <option value="">Select a role…</option>
                         {roleList.map((r) => <option key={r} value={r}>{r}</option>)}
                         {values.role && !roleList.includes(values.role) && <option value={values.role}>{values.role}</option>}
@@ -557,24 +880,29 @@ export default function CareersApply() {
                       )}
                     </span>
                   </div>
-                  <TextField label="LinkedIn profile" id="linkedinUrl" values={values} set={set} setValues={setValues} type="url" placeholder="https://linkedin.com/in/your-name" />
-                  <TextField label="Portfolio or website" id="portfolioUrl" values={values} set={set} setValues={setValues} type="url" placeholder="https://yourportfolio.com" />
-                  <SelectField label="Experience level" id="experience" values={values} set={set} setValues={setValues} options={EXPERIENCE_LEVELS} required wide />
+                  <TextField label="LinkedIn profile" id="linkedinUrl" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'linkedinUrl'} type="url" placeholder="https://linkedin.com/in/your-name" />
+                  <TextField label="Portfolio or website" id="portfolioUrl" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'portfolioUrl'} type="url" placeholder="https://yourportfolio.com" />
+                  <p className="rw-form-tip">
+                    <span className="rw-form-tip-kicker">Tip</span>
+                    {PROFILE_TIP}
+                  </p>
+                  <AiToolsField values={values} setValues={setValues} invalid={invalidField === 'aiTools' || invalidField === 'socialMediaSavvy'} />
+                  <SelectField label="Experience level" id="experience" values={values} set={set} setValues={setValues} options={EXPERIENCE_LEVELS} required wide invalid={invalidField === 'experience'} />
                   {values.experience === 'Other' && (
-                    <TextField label="Your experience" id="experienceCustom" values={values} set={set} setValues={setValues} required placeholder="e.g. 18 months in luxury retail" wide />
+                    <TextField label="Your experience" id="experienceCustom" values={values} set={set} setValues={setValues} required invalid={invalidField === 'experienceCustom'} placeholder="e.g. 18 months in luxury retail" wide />
                   )}
                 </Section>
               )}
 
               {step === 1 && (
                 <Section key="career" panel={dir} eyebrow="CAREER DETAILS">
-                  <SelectField label="Current CTC" id="currentCtc" values={values} set={set} setValues={setValues} options={CTC_OPTIONS} required />
-                  <SelectField label="Expected CTC" id="expectedCtc" values={values} set={set} setValues={setValues} options={CTC_OPTIONS} required />
-                  <TextField label="Current location" id="currentLocation" values={values} set={set} setValues={setValues} required placeholder="City, state" />
-                  <SelectField label="Notice period" id="noticePeriod" values={values} set={set} setValues={setValues} options={NOTICE_OPTIONS} required />
-                  <SelectField label="Open to relocate" id="relocation" values={values} set={set} setValues={setValues} options={RELOCATE_OPTIONS} required />
-                  <SelectField label="Preferred work mode" id="workMode" values={values} set={set} setValues={setValues} options={WORKMODE_OPTIONS} required />
-                  <SelectField label="How did you hear about us?" id="applicationSource" values={values} set={set} setValues={setValues} options={SOURCE_OPTIONS} required wide />
+                  <SelectField label="Current CTC" id="currentCtc" values={values} set={set} setValues={setValues} options={CTC_OPTIONS} required invalid={invalidField === 'currentCtc'} />
+                  <SelectField label="Expected CTC" id="expectedCtc" values={values} set={set} setValues={setValues} options={CTC_OPTIONS} required invalid={invalidField === 'expectedCtc'} />
+                  <TextField label="Current location" id="currentLocation" values={values} set={set} setValues={setValues} required invalid={invalidField === 'currentLocation'} placeholder="City, state" />
+                  <SelectField label="Notice period" id="noticePeriod" values={values} set={set} setValues={setValues} options={NOTICE_OPTIONS} required invalid={invalidField === 'noticePeriod'} />
+                  <SelectField label="Open to relocate" id="relocation" values={values} set={set} setValues={setValues} options={RELOCATE_OPTIONS} required invalid={invalidField === 'relocation'} />
+                  <SelectField label="Preferred work mode" id="workMode" values={values} set={set} setValues={setValues} options={WORKMODE_OPTIONS} required invalid={invalidField === 'workMode'} />
+                  <SelectField label="How did you hear about us?" id="applicationSource" values={values} set={set} setValues={setValues} options={SOURCE_OPTIONS} required wide invalid={invalidField === 'applicationSource'} />
                 </Section>
               )}
 
@@ -586,13 +914,16 @@ export default function CareersApply() {
                       <label key={q.id} className="rw-form-field-wrap rw-form-field-wrap--wide" style={{ display: 'block' }}>
                         <span className="rw-form-q-title">
                           {q.label}
-                          {q.required ? <span className="rw-form-req"> *</span> : <span className="rw-form-optional"> (optional)</span>}
+                          <span className="rw-form-req"> *</span>
                         </span>
                         <span className="rw-clearable">
                           <textarea
-                            className="rw-form-field" rows={3} maxLength={ANSWER_MAX}
+                            id={q.id}
+                            className={`rw-form-field${invalidField === q.id ? ' is-invalid' : ''}`}
+                            rows={3} maxLength={ANSWER_MAX}
                             style={{ marginTop: 10, resize: 'vertical' }}
                             placeholder={q.placeholder} value={val} onChange={set(q.id)}
+                            aria-invalid={invalidField === q.id || undefined}
                           />
                           {val.trim() !== '' && (
                             <button
@@ -620,7 +951,7 @@ export default function CareersApply() {
                       <div key={trait.key} style={{ marginBottom: 18 }}>
                         <p style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--faded)', margin: '8px 0 12px' }}>{trait.key}</p>
                         {trait.statements.map((s) => (
-                          <div key={s.id} className="rw-likert">
+                          <div key={s.id} id={`hex-${s.id}`} tabIndex={-1} className={`rw-likert${invalidField === `hex-${s.id}` ? ' is-invalid' : ''}`}>
                             <p className="rw-likert-text" style={{ fontFamily: text }}>{s.text}</p>
                             <div className="rw-likert-scale" role="group" aria-label={s.text}>
                               {LIKERT.map((opt) => {
@@ -630,15 +961,15 @@ export default function CareersApply() {
                                     key={opt.v} type="button" title={opt.label} aria-pressed={on}
                                     className={`rw-likert-dot${on ? ' is-on' : ''}`}
                                     style={{ fontFamily: mono }}
-                                    onClick={() => setHex((prev) => {
-                                      // Tapping the chosen point clears it, so a
-                                      // mis-click can be undone without hunting
-                                      // for a "reset" on every row.
-                                      const next = { ...prev }
-                                      if (on) delete next[s.id]
-                                      else next[s.id] = opt.v
-                                      return next
-                                    })}
+                                    onClick={() => {
+                                      if (invalidField === `hex-${s.id}`) { setInvalidField(''); setError('') }
+                                      setHex((prev) => {
+                                        const next = { ...prev }
+                                        if (on) delete next[s.id]
+                                        else next[s.id] = opt.v
+                                        return next
+                                      })
+                                    }}
                                   >
                                     {likertLabel(opt.v)}
                                   </button>
@@ -657,17 +988,21 @@ export default function CareersApply() {
               {step === 4 && (
                 // A div rather than a fragment so the transition class has something to sit on.
                 <div key="wrapup" className={`rw-step-panel rw-step-panel--${dir}`}>
-                  <Section eyebrow="REFERENCES" title="Optional. Please make sure anyone you list has agreed to be contacted.">
-                    <TextField label="Reference 1: name" id="ref1Name" values={values} set={set} setValues={setValues} placeholder="Full name" />
-                    <TextField label="Reference 1: number" id="ref1Number" values={values} set={set} setValues={setValues} type="tel" placeholder="Mobile number" />
-                    <TextField label="Reference 1: relationship" id="ref1Relationship" values={values} set={set} setValues={setValues} placeholder="Former manager, colleague…" />
-                    <TextField label="Reference 2: name" id="ref2Name" values={values} set={set} setValues={setValues} placeholder="Full name" />
-                    <TextField label="Reference 2: number" id="ref2Number" values={values} set={set} setValues={setValues} type="tel" placeholder="Mobile number" />
-                    <TextField label="Reference 2: relationship" id="ref2Relationship" values={values} set={set} setValues={setValues} placeholder="Former manager, colleague…" />
+                    <Section eyebrow="REFERENCES" title="Anyone you list must have agreed to be contacted.">
+                    <p className="rw-form-tip">
+                      <span className="rw-form-tip-kicker">Tip</span>
+                      {PROFILE_TIP}
+                    </p>
+                    <TextField label="Reference 1: name" id="ref1Name" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref1Name'} placeholder="Full name" />
+                    <TextField label="Reference 1: number" id="ref1Number" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref1Number'} type="tel" placeholder="Mobile number" />
+                    <TextField label="Reference 1: relationship" id="ref1Relationship" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref1Relationship'} placeholder="Former manager, colleague…" />
+                    <TextField label="Reference 2: name" id="ref2Name" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref2Name'} placeholder="Full name" />
+                    <TextField label="Reference 2: number" id="ref2Number" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref2Number'} type="tel" placeholder="Mobile number" />
+                    <TextField label="Reference 2: relationship" id="ref2Relationship" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref2Relationship'} placeholder="Former manager, colleague…" />
                   </Section>
 
                   <Section eyebrow="RESUME">
-                    <div className="rw-form-field-wrap rw-form-field-wrap--wide">
+                    <div id="resume" tabIndex={-1} className="rw-form-field-wrap rw-form-field-wrap--wide">
                       <span className="rw-form-q-title">Resume / CV <span className="rw-form-req"> *</span></span>
                       {resume ? (
                         <div className="rw-file-preview" style={{ marginTop: 10 }}>
@@ -694,11 +1029,12 @@ export default function CareersApply() {
                       )}
                     </div>
                     <label className="rw-form-field-wrap rw-form-field-wrap--wide" style={{ display: 'block' }}>
-                      <span className="rw-form-q-title">Anything else we should know? <span className="rw-form-optional"> (optional)</span></span>
+                      <span className="rw-form-q-title">Anything else we should know? <span className="rw-form-req"> *</span></span>
                       <span className="rw-clearable">
-                        <textarea className="rw-form-field" rows={3} style={{ marginTop: 10, resize: 'vertical' }}
+                        <textarea id="message" className={`rw-form-field${invalidField === 'message' ? ' is-invalid' : ''}`} rows={3} style={{ marginTop: 10, resize: 'vertical' }}
                           placeholder="Anything about your experience, skills or situation that helps us read your application."
-                          value={values.message} onChange={set('message')} />
+                          value={values.message} onChange={set('message')}
+                          aria-invalid={invalidField === 'message' || undefined} />
                         {String(values.message || '').trim() !== '' && (
                           <button
                             type="button" className="rw-field-clear" tabIndex={-1}
@@ -722,15 +1058,15 @@ export default function CareersApply() {
                   <div className="rw-consent" style={{ marginTop: 24 }}>
                     <span className="rw-consent-title">Consent to proceed <span className="rw-form-req">*</span></span>
                     <label className="rw-career-consent">
-                      <input type="checkbox" aria-required="true" checked={values.privacyConsent} onChange={(e) => setValues((p) => ({ ...p, privacyConsent: e.target.checked }))} />
-                      <span>I consent to Team Rajiv Williams using my information for recruitment and selection purposes.</span>
+                      <input id="privacyConsent" type="checkbox" aria-required="true" checked={values.privacyConsent} onChange={(e) => { setValues((p) => ({ ...p, privacyConsent: e.target.checked })); if (invalidField === 'privacyConsent') { setInvalidField(''); setError('') } }} />
+                      <span>I confirm that the details in this application are accurate, and I consent to Team Rajiv Williams using them for recruitment and selection.</span>
                     </label>
                   </div>
                 </div>
               )}
 
               {error && (
-                <p style={{ fontFamily: text, fontWeight: 300, fontSize: fs('14px'), color: 'var(--copper)', marginTop: 18 }}>{error}</p>
+                <p role="alert" style={{ fontFamily: text, fontWeight: 300, fontSize: fs('14px'), color: 'var(--copper)', marginTop: 18 }}>{error}</p>
               )}
 
               <div className="rw-step-nav">
@@ -756,6 +1092,7 @@ export default function CareersApply() {
       </section>
 
       <Footer links={FOOTER_LINKS} />
+      </div>
     </>
   )
 }

@@ -71,6 +71,7 @@ export function readDraft() {
   for (const [k, v] of Object.entries(values)) {
     if (isString(v)) cleanValues[k] = v
     else if (isBool(v)) cleanValues[k] = v
+    else if (Array.isArray(v)) cleanValues[k] = v.filter(isString)
   }
 
   const cleanHex = {}
@@ -92,7 +93,11 @@ export function readDraft() {
 export function hasDraftContent(draft) {
   if (!draft) return false
   const { values = {}, hex = {} } = draft
-  const anyValue = Object.values(values).some((v) => (typeof v === 'boolean' ? v : String(v ?? '').trim() !== ''))
+  const anyValue = Object.values(values).some((v) => {
+    if (typeof v === 'boolean') return v
+    if (Array.isArray(v)) return v.some((item) => String(item ?? '').trim() !== '')
+    return String(v ?? '').trim() !== ''
+  })
   const anyAnswer = Object.keys(hex).length > 0
   return anyValue || anyAnswer
 }

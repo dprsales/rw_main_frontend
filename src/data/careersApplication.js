@@ -42,19 +42,19 @@ export const CHARACTER_QUESTIONS = [
     id: 'qSetback',
     label: 'A target or deal you missed, and what you did differently afterwards',
     placeholder: 'What went wrong, how you responded, and the change you made. We read this for honesty and learning, not perfection.',
-    required: false,
+    required: true,
   },
   {
     id: 'qLoyalty',
     label: 'What keeps you with an employer long-term, and why you are moving on now',
     placeholder: 'Be honest about what makes you stay, what would make you leave, and your reason for the current move.',
-    required: false,
+    required: true,
   },
   {
     id: 'qFlexibility',
     label: 'A time your plans or team changed with little warning, and how you adapted',
     placeholder: 'What changed, how you responded, and the outcome.',
-    required: false,
+    required: true,
   },
 ]
 
