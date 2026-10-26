@@ -216,6 +216,13 @@ export const submitChannelPartner = (data) =>
     body: data,
   })
 
+export const submitVendorPartner = (data) =>
+  request('/vendor-partners', {
+    method: 'POST',
+    body: data,
+    timeoutMs: 40_000,
+  })
+
 // Site visit tracker — fire-and-forget ping on app load. Short timeout since nothing
 // in the UI waits on this; a slow/unreachable API must never delay or block the page.
 export const recordSiteVisit = (data) =>

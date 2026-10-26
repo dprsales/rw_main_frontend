@@ -26,6 +26,7 @@ import Project from './pages/Project'
 import Realty from './pages/Realty'
 import Start from './pages/Start'
 import Partner from './pages/Partner'
+import VendorPartner from './pages/VendorPartner'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
 import Faqs from './pages/Faqs'
@@ -108,6 +109,7 @@ export default function App() {
           <Route path="/form/:track" element={<Form />} />
           <Route path="/realty/portfolio" element={<Portfolio />} />
           <Route path="/partner" element={<Partner />} />
+          <Route path="/vendorpartner" element={<VendorPartner />} />
           {/* Project detail pages, keyed by API slug; both bare and realty-nested paths resolve here */}
           <Route path="/projects/:slug" element={<Project />} />
           <Route path="/realty/projects/:slug" element={<Project />} />

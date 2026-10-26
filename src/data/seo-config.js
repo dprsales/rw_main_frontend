@@ -52,6 +52,11 @@ export const ROUTE_SEO = {
     description:
       'Forms a Hyderabad channel partner or broker fills across the deal: lead intake, builder relations, inventory, closing, and compliance.',
   },
+  '/vendorpartner': {
+    title: 'Vendor Partner | Share Your Work | Rajiv Williams',
+    description:
+      'Vendors share a profile photo, what they offer, and links to their work. Team RW reviews every submission.',
+  },
   '/partner': {
     title: 'Channel Partners, Sell Luxury Inventory | Rajiv Williams',
     description:
