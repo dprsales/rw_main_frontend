@@ -73,8 +73,10 @@ const LEGAL_LINKS = [
   { label: 'Terms of Use', to: '/terms', muted: true, legal: true },
 ]
 
+const VENDOR_PARTNER_LINK = { label: 'Vendor Partner', to: '/vendorpartner', muted: true }
+
 /** The interior pages - Coaching, Consulting, Realty, Careers, Portfolio. */
-export const FOOTER_LINKS = [{ label: '← Back to home', to: '/' }, ...FOOTER_CONTACT, ...LEGAL_LINKS]
+export const FOOTER_LINKS = [{ label: '← Back to home', to: '/' }, ...FOOTER_CONTACT, VENDOR_PARTNER_LINK, ...LEGAL_LINKS]
 
 /** Home has no "back to home"; it leads on the email and points onward instead. */
 export const HOME_FOOTER_LINKS = [
@@ -82,6 +84,7 @@ export const HOME_FOOTER_LINKS = [
   { label: 'RW Realty →', to: '/realty', muted: true },
   { label: 'Careers →', to: '/careers', muted: true },
   { label: 'Channel Partners →', to: '/partner', muted: true },
+  { ...VENDOR_PARTNER_LINK, label: 'Vendor Partner →' },
   ...LEGAL_LINKS,
 ]
 
@@ -90,5 +93,6 @@ export const PROJECT_FOOTER_LINKS = [
   { label: '← Projects in Hyderabad', to: '/project-hyderabad' },
   { label: 'Portfolio', to: '/realty/portfolio' },
   ...FOOTER_CONTACT,
+  VENDOR_PARTNER_LINK,
   ...LEGAL_LINKS,
 ]
