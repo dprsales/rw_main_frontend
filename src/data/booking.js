@@ -87,7 +87,7 @@ function toLead(form) {
     phoneNumber: toPhoneDigits(form.phone),
     message: notes.join('\n'),
     // Structured copies of the same facts, for filtering in admin/CRM. All optional server-side.
-    source: form.source || (g.who ? 'guided_finder' : 'site_cta'),
+    source: form.source || (g.who ? 'guided_finder' : (typeof window !== 'undefined' && /^\/assessment/.test(window.location.pathname) ? 'assessment' : 'site_cta')),
     // Branded page name for the CRM Source, e.g. "RW Realty Page".
     pageSource: pageSourceLabel(),
     ...(form.company?.trim() && { company: form.company.trim() }),
@@ -140,4 +140,30 @@ async function submitApplication(form) {
   if (form.resume) fd.append('resume', form.resume)
 
   return (await createApplication(fd)) ?? { ok: true }
+}
+
+/** Start Assessment gate: save the person, then the page opens KRISAH. */
+export function submitAssessmentStart({ name, email, phone, website, location }) {
+  const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+  const utm = params
+    ? ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']
+      .map((key) => params.get(key) && `${key}=${params.get(key)}`)
+      .filter(Boolean)
+      .join(' ')
+    : ''
+  return submitLead({
+    type: 'coaching',
+    name: String(name || '').trim(),
+    email: String(email || '').trim(),
+    phoneNumber: toPhoneDigits(phone),
+    source: 'assessment',
+    pageSource: pageSourceLabel(),
+    recommendedService: 'coaching',
+    message: [
+      'Started KRISAH from the assessment page',
+      location && `Button: ${location}`,
+      utm && `UTM: ${utm}`,
+    ].filter(Boolean).join('\n'),
+    ...(website ? { website } : {}),
+  })
 }

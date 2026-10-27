@@ -226,7 +226,7 @@ function DesktopNav({ pathname, onBook }) {
           aria-controls="rw-mega"
           onClick={() => toggle('work')}
         >
-          Work with RW <ChevronDown className="rw-dnav-caret" size={14} strokeWidth={1.75} aria-hidden="true" />
+          Services <ChevronDown className="rw-dnav-caret" size={14} strokeWidth={1.75} aria-hidden="true" />
         </button>
 
         {open === 'work' && (

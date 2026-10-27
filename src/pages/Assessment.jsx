@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import skylineImage from '../assets/site/skyline.png'
 import goldWatermark from '../assets/site/rw-logo-ccr.png'
 import Footer from '../components/Footer'
@@ -11,8 +12,7 @@ import CtaButton from '../components/CtaButton'
 import ClosingCTA from '../components/ClosingCTA'
 import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
 import { BookButton } from '../components/BookingModal'
-import { KRISAH_ASSESSMENT_URL } from '../data/content'
-import { track } from '../data/analytics'
+import AssessmentStartModal from '../components/AssessmentStartModal'
 import useCtaEntrance from '../hooks/useCtaEntrance'
 import { useInView } from '../hooks/useInView'
 import { FOOTER_LINKS, mono, serif } from '../theme'
@@ -62,6 +62,7 @@ const SAMPLE_BARS = [
 export default function Assessment() {
   const heroCtaRef = useCtaEntrance({ delay: 0.4 })
   const [stepsRef, stepsInView] = useInView({ rootMargin: '0px 0px -18% 0px' })
+  const [startFrom, setStartFrom] = useState('')
 
   return (
     <>
@@ -82,7 +83,7 @@ export default function Assessment() {
           lede="AI-led assessment to understand your starting point before the programme begins"
           intro="Answer the way you would in a real room. You finish with a clearer read on yourself, and we get to see how you think under pressure. For people looking at coaching or consulting with Team RW."
           cta={<>
-            <CtaButton ref={heroCtaRef} href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'hero' })}>
+            <CtaButton ref={heroCtaRef} live onClick={() => setStartFrom('hero')}>
               START ASSESSMENT <span className="rw-cta-arrow">→</span>
             </CtaButton>
             <CtaButton variant="outline" onClick={() => document.getElementById('how')?.scrollIntoView({ behavior: 'smooth' })}>
@@ -301,9 +302,9 @@ export default function Assessment() {
       <ClosingCTA title="Your first assessment is complimentary." titleStyle={{ maxWidth: '15em' }}>
         <div>
           <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-<CtaButton href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'closing' })}>
-            START ASSESSMENT <span className="rw-cta-arrow">→</span>
-          </CtaButton>
+            <CtaButton live onClick={() => setStartFrom('closing')}>
+              START ASSESSMENT <span className="rw-cta-arrow">→</span>
+            </CtaButton>
             <BookButton interest="Coaching" specular>OR BOOK A CALL FIRST</BookButton>
           </div>
           <p style={{ ...note, marginTop: 22, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)' }}>
@@ -313,6 +314,7 @@ export default function Assessment() {
       </ClosingCTA>
 
       <Footer links={FOOTER_LINKS} />
+      {startFrom && <AssessmentStartModal location={startFrom} onClose={() => setStartFrom('')} />}
     </>
   )
 }
