@@ -25,6 +25,10 @@ const INDUSTRIES = [
   'Welcome Kits', 'WordPress',
 ]
 
+const GST_PATTERN = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/i
+const YEAR_PATTERN = /^(18|19|20)\d{2}$/
+const THIS_YEAR = new Date().getFullYear()
+
 const FORM_GLOW = {
   backgroundColor: 'var(--card)',
   glowColor: '41 82 71',
@@ -41,11 +45,14 @@ const FIELDS = [
   { title: 'Phone', id: 'phone', required: true, type: 'tel', placeholder: '+91 ·····' },
   { title: 'Email', id: 'email', required: false, type: 'email', placeholder: 'you@company.com' },
   { title: 'City', id: 'city', required: false, placeholder: 'Hyderabad' },
+  { title: 'GST number', id: 'gstNumber', required: false, placeholder: '15-character GSTIN', maxLength: 15 },
+  { title: 'Year of incorporation', id: 'yearOfIncorporation', required: false, placeholder: 'e.g. 2014', maxLength: 4 },
   { title: 'Website or portfolio', id: 'websiteUrl', required: false, placeholder: 'https://' },
   { title: 'Video link', id: 'videoUrl', required: false, placeholder: 'A demo, reel, or walkthrough' },
+  { title: 'Your office location', id: 'officeLocation', required: false, placeholder: 'Street, area, and city of your office', maxLength: 240 },
 ]
 
-function FileDrop({ title, hint, required, accept, file, onSelect, imageOnly }) {
+function FileDrop({ title, hint, required, accept, file, onSelect, imageOnly, wide }) {
   const [dragOver, setDragOver] = useState(false)
   const [previewUrl, setPreviewUrl] = useState('')
   const [localError, setLocalError] = useState('')
@@ -75,7 +82,7 @@ function FileDrop({ title, hint, required, accept, file, onSelect, imageOnly }) 
   }
 
   return (
-    <div className="rw-form-field-wrap">
+    <div className={`rw-form-field-wrap${wide ? ' rw-form-field-wrap--wide' : ''}`}>
       <span className="rw-form-q-title">
         {title}
         {required ? <span className="rw-form-req"> *</span> : <span className="rw-form-optional"> (optional)</span>}
@@ -137,10 +144,23 @@ export default function VendorPartner() {
       setError('Write a short note about the business.')
       return
     }
+    if (values.gstNumber?.trim() && !GST_PATTERN.test(values.gstNumber.trim())) {
+      setError('Enter a valid 15-character GST number.')
+      return
+    }
+    if (values.yearOfIncorporation?.trim()) {
+      const year = Number(values.yearOfIncorporation.trim())
+      if (!YEAR_PATTERN.test(values.yearOfIncorporation.trim()) || year > THIS_YEAR) {
+        setError('Enter a 4-digit year of incorporation.')
+        return
+      }
+    }
 
     const body = new FormData()
     Object.entries(values).forEach(([key, value]) => {
-      if (String(value || '').trim()) body.append(key, String(value).trim())
+      const text = String(value || '').trim()
+      if (!text) return
+      body.append(key, key === 'gstNumber' ? text.toUpperCase() : text)
     })
     body.append('profileImage', profileImage)
     if (brochure) body.append('brochure', brochure)
@@ -225,6 +245,7 @@ export default function VendorPartner() {
                         type={field.type || 'text'}
                         style={{ marginTop: 10 }}
                         required={field.required}
+                        maxLength={field.maxLength}
                         placeholder={field.placeholder}
                         value={values[field.id] || ''}
                         onChange={set(field.id)}
@@ -264,6 +285,7 @@ export default function VendorPartner() {
                     accept=".pdf,.jpg,.jpeg,.png,.webp"
                     file={brochure}
                     onSelect={setBrochure}
+                    wide
                   />
                   </div>
                 </BorderGlow>
