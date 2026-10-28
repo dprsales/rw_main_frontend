@@ -92,6 +92,11 @@ export const ROUTE_SEO = {
     description:
       'Terms of Use for the Team RW website, including forms, assessments, chat widgets and related online tools.',
   },
+  '/partner/terms': {
+    title: 'Channel Partner Terms | Team RW · Rajiv Williams',
+    description:
+      'Terms for Team RW channel partner applications: eligibility, documents, review, commissions and how a partnership starts.',
+  },
   '/start': {
     title: 'Find the Right Service | Rajiv Williams',
     description: 'Answer one to three quick questions and we point you to the right Rajiv Williams service, whether coaching, consulting or an RW Realty mandate.',

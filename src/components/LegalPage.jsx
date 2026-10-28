@@ -14,7 +14,14 @@ import { fs, container, sectionRule } from '../styles'
 const LEGAL_SWITCH = [
   { label: 'Privacy Policy', to: '/privacy-policy' },
   { label: 'Terms of Use', to: '/terms' },
+  { label: 'Channel Partner Terms', to: '/partner/terms' },
 ]
+
+const PAGE_LINKS = {
+  'Privacy Policy': '/privacy-policy',
+  'Terms of Use': '/terms',
+  'Channel Partner Terms': '/partner/terms',
+}
 
 function sectionId(title) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
@@ -27,9 +34,9 @@ function splitHeading(title) {
   return { num: match[1], rest: match[2] }
 }
 
-const INLINE = /(\*\*[^*]+\*\*|\[to confirm[^\]]*\]|https:\/\/rajivwilliams\.com|connect@rajivwilliams\.com|\+91 95495 46568|Privacy Policy)/g
+const INLINE = /(\*\*[^*]+\*\*|\[to confirm[^\]]*\]|https:\/\/rajivwilliams\.com|connect@rajivwilliams\.com|\+91 95495 46568|Channel Partner Terms|Privacy Policy|Terms of Use)/g
 
-function Inline({ text, linkPrivacy }) {
+function Inline({ text }) {
   const nodes = []
   let last = 0
   let key = 0
@@ -47,8 +54,8 @@ function Inline({ text, linkPrivacy }) {
       nodes.push(<a key={key} href={`mailto:${token}`}>{token}</a>)
     } else if (token.startsWith('+91')) {
       nodes.push(<a key={key} href="tel:+919549546568">{token}</a>)
-    } else if (linkPrivacy) {
-      nodes.push(<Link key={key} to="/privacy-policy">{token}</Link>)
+    } else if (PAGE_LINKS[token]) {
+      nodes.push(<Link key={key} to={PAGE_LINKS[token]}>{token}</Link>)
     } else {
       nodes.push(token)
     }
@@ -59,29 +66,29 @@ function Inline({ text, linkPrivacy }) {
   return nodes
 }
 
-function Heading({ as: Tag, className, title, linkPrivacy, id }) {
+function Heading({ as: Tag, className, title, id }) {
   const { num, rest } = splitHeading(title)
   return (
     <Tag id={id} className={className}>
       {num && <span className="rw-legal-num">{num}</span>}
-      <span className="rw-legal-h-title"><Inline text={num ? rest : title} linkPrivacy={linkPrivacy} /></span>
+      <span className="rw-legal-h-title"><Inline text={num ? rest : title} /></span>
     </Tag>
   )
 }
 
-function Block({ block, linkPrivacy }) {
+function Block({ block }) {
   if (block.k === 'h2') {
-    return <Heading as="h2" className="rw-legal-h2" id={sectionId(block.t)} title={block.t} linkPrivacy={linkPrivacy} />
+    return <Heading as="h2" className="rw-legal-h2" id={sectionId(block.t)} title={block.t} />
   }
   if (block.k === 'h3') {
-    return <Heading as="h3" className="rw-legal-h3" title={block.t} linkPrivacy={linkPrivacy} />
+    return <Heading as="h3" className="rw-legal-h3" title={block.t} />
   }
   if (block.k === 'ul') {
     return (
       <ul className="rw-legal-list">
         {block.items.map((item) => (
           <li key={item} style={{ fontFamily: text, fontSize: fs('clamp(16px,1.6vw,18px)') }}>
-            <Inline text={item} linkPrivacy={linkPrivacy} />
+            <Inline text={item} />
           </li>
         ))}
       </ul>
@@ -89,12 +96,12 @@ function Block({ block, linkPrivacy }) {
   }
   return (
     <p className="rw-legal-p" style={{ fontFamily: text, fontSize: fs('clamp(16px,1.6vw,18px)') }}>
-      <Inline text={block.t} linkPrivacy={linkPrivacy} />
+      <Inline text={block.t} />
     </p>
   )
 }
 
-export default function LegalPage({ route, eyebrow, title, lede, blocks, linkPrivacy = false }) {
+export default function LegalPage({ route, eyebrow, title, lede, blocks }) {
   const sections = blocks.filter((block) => block.k === 'h2')
 
   return (
@@ -133,7 +140,7 @@ export default function LegalPage({ route, eyebrow, title, lede, blocks, linkPri
                 })}
               </nav>
               {blocks.map((block, index) => (
-                <Block key={`${block.k}-${index}`} block={block} linkPrivacy={linkPrivacy} />
+                <Block key={`${block.k}-${index}`} block={block} />
               ))}
             </div>
           </article>

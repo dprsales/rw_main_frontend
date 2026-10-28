@@ -17,6 +17,7 @@ const CRAWLABLE_LINKS = [
   { label: 'Contact', to: '/contact' },
   { label: 'Privacy Policy', to: '/privacy-policy' },
   { label: 'Terms of Use', to: '/terms' },
+  { label: 'Channel Partner Terms', to: '/partner/terms' },
   { label: 'Careers', to: '/careers' },
   { label: 'Articles', to: '/articles' },
   { label: 'FAQs', to: '/faqs' },

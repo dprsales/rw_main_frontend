@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Seo from '../components/Seo'
@@ -210,6 +210,7 @@ export default function Partner() {
   const [files, setFiles] = useState({})
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
+  const [termsAccepted, setTermsAccepted] = useState(false)
   const honeypot = useRef('')
 
   const set = (id) => (e) => setValues((prev) => ({ ...prev, [id]: e.target.value }))
@@ -261,6 +262,10 @@ export default function Partner() {
       setError('Please upload a cancelled cheque.')
       return
     }
+    if (!termsAccepted) {
+      setError('Please read and accept the Channel Partner Terms to submit.')
+      return
+    }
     setError('')
     setStatus('sending')
 
@@ -285,6 +290,7 @@ export default function Partner() {
     })
     fd.append('panCard', files.panCard)
     fd.append('cancelledCheque', files.cancelledCheque)
+    fd.append('termsAccepted', 'true')
 
     try {
       await submitChannelPartner(fd)
@@ -536,8 +542,31 @@ export default function Partner() {
                   ))}
                 </div>
 
+                <div className="rw-consent" style={{ marginTop: 24 }}>
+                  <span className="rw-consent-title">Terms &amp; conditions <span className="rw-form-req">*</span></span>
+                  <label className="rw-career-consent">
+                    <input
+                      id="partnerTerms"
+                      type="checkbox"
+                      aria-required="true"
+                      checked={termsAccepted}
+                      onChange={(e) => {
+                        setTermsAccepted(e.target.checked)
+                        if (e.target.checked) setError('')
+                      }}
+                    />
+                    <span>
+                      I have read the{' '}
+                      <Link to="/partner/terms" target="_blank" rel="noreferrer">Channel Partner Terms</Link>
+                      {' '}and the{' '}
+                      <Link to="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</Link>.
+                      I confirm the details and documents in this application are accurate, and I agree Team RW may contact me about this application.
+                    </span>
+                  </label>
+                </div>
+
                 {error && (
-                  <p style={{ fontFamily: text, fontWeight: 300, fontSize: fs('14px'), color: 'var(--copper)', margin: 0 }}>{error}</p>
+                  <p role="alert" style={{ fontFamily: text, fontWeight: 300, fontSize: fs('14px'), color: 'var(--copper)', margin: 0 }}>{error}</p>
                 )}
 
                 <div className="rw-form-submit-bar">

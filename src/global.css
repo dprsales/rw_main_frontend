@@ -2935,6 +2935,11 @@ button.rw-mega-item {
   flex: 0 0 auto;
   margin: 2px 0 0;
 }
+.rw-career-consent a {
+  color: var(--copper);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 
 .rw-career-modal-form input,
 .rw-career-modal-form select,

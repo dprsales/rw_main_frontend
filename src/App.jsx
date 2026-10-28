@@ -26,6 +26,7 @@ import Project from './pages/Project'
 import Realty from './pages/Realty'
 import Start from './pages/Start'
 import Partner from './pages/Partner'
+import PartnerTerms from './pages/PartnerTerms'
 import VendorPartner from './pages/VendorPartner'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
@@ -102,6 +103,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/partner/terms" element={<PartnerTerms />} />
           {/* /start is the guided finder on its own page; service pages link here with ?who= */}
           <Route path="/start" element={<Start />} />
           {/* /form is the track picker; each questionnaire has its own URL (/form/coaching etc) for direct links */}

@@ -39,7 +39,7 @@ export const TERMS_OF_USE = {
     { k: 'p', t: 'We may decline or close an enquiry that is incomplete, spam, abusive or outside our service lines.' },
 
     { k: 'h2', t: '4. Channel partners & careers' },
-    { k: 'p', t: '**Channel Partners.** Submitting a partner application does not create a partnership. Acceptance, inventory access, incentives & obligations are set only in a separate partner agreement with Team RW. You must hold any licences required by law (including RERA where applicable) for the work you propose to do. [to confirm required partner documents]' },
+    { k: 'p', t: '**Channel Partners.** Submitting a partner application does not create a partnership. The Channel Partner Terms govern the application. Acceptance, inventory access, incentives & obligations are set only in a separate partner agreement with Team RW. You must hold any licences required by law (including RERA where applicable) for the work you propose to do. [to confirm required partner documents]' },
     { k: 'p', t: '**Careers.** Job posts & applications do not create an employment offer. Hiring decisions follow Team RW’s process. References you list must have agreed to be contacted. Do not upload documents you are not allowed to share.' },
 
     { k: 'h2', t: '5. Payments for coaching modules' },

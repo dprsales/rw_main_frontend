@@ -71,6 +71,7 @@ const LEGAL_LINKS = [
   { label: 'FAQs', to: '/faqs', muted: true },
   { label: 'Privacy Policy', to: '/privacy-policy', muted: true, legal: true },
   { label: 'Terms of Use', to: '/terms', muted: true, legal: true },
+  { label: 'Channel Partner Terms', to: '/partner/terms', muted: true, legal: true },
 ]
 
 const VENDOR_PARTNER_LINK = { label: 'Vendor Partner', to: '/vendorpartner', muted: true }
