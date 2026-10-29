@@ -272,8 +272,9 @@ export const PORTFOLIO_TESTIMONIALS = [
  * absent (empty title slots read as unfinished); add a `role` string and the card picks it up automatically.
  */
 export const TEAM = [
+    { name: 'Priyanka Panda', photo: teamPriyanka, linkedin: 'https://www.linkedin.com/in/priyanka-panda-238451259/', title: 'Director of Sales', for: ['Realty'], bio: '8+ yrs in luxury real estate sales & marketing sells by positioning, excels at high-value closures. Under her leadership, Team RW runs high-value sales mandates end to end, from go-to-market strategy to a client experience that keeps your cash flows smooth.' },
   { name: 'Sridevi Vinjimur', photo: teamSridevi, linkedin: 'https://www.linkedin.com/in/sridevi-vinjimur-147125270/', title: 'Director of Operations', for: ['Coaching', 'Consulting', 'Realty'], bio:'With 10+ yrs across industries, most of them in real estate, Ms. Sridevi leads back-end operations at Rajiv Williams: hiring, finance, administration and client management. She brings deep expertise in branding, marketing, sales, technology, AI and digital platforms, and is the steady hand who leads the team through every challenge.'},
-  { name: 'Priyanka Panda', photo: teamPriyanka, linkedin: 'https://www.linkedin.com/in/priyanka-panda-238451259/', title: 'Director of Sales', for: ['Realty'], bio: '8+ yrs in luxury real estate sales & marketing sells by positioning, excels at high-value closures. Under her leadership, Team RW runs high-value sales mandates end to end, from go-to-market strategy to a client experience that keeps your cash flows smooth.' },
+
 ]
 
 /* TEAM mapped to ChromaGrid's item shape. Every card uses the same gold
