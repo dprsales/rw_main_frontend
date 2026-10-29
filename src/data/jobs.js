@@ -77,10 +77,10 @@ export async function fetchRoles() {
 /** Seats that must stay on the careers page even when the live feed is a full set of other jobs. */
 const CURATED_SALES_HEADS = [
   'Channel Partner Closing Sales Manager',
-  'Asst. Channel Sales Manager — Commercial',
-  'Asst. Channel Sales Manager — Residential',
-  'Asst. Sourcing Manager — Commercial',
-  'Asst. Sourcing Manager — Residential',
+  'Asst. Channel Sales Manager - Commercial',
+  'Asst. Channel Sales Manager - Residential',
+  'Asst. Sourcing Manager - Commercial',
+  'Asst. Sourcing Manager - Residential',
   'Channel Partner Sourcing Head',
   'Channel Partner Closing Sales Head',
   'Assistant General Manager',
