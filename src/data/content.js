@@ -398,7 +398,7 @@ export const CAREER_ROLES = [
     requirements: ['Experience in channel or partner-led residential real estate sales', 'Comfort on site with brokers and home buyers', 'Clear follow-up through to close'],
   },
   {
-    title: 'Asst. Sourcing Manager — Commercial',
+    title: 'Asst. Sourcing Manager - Commercial',
     type: 'FULL-TIME · HYDERABAD',
     category: 'Sales',
     level: 'Manager',
@@ -408,7 +408,7 @@ export const CAREER_ROLES = [
     requirements: ['Experience sourcing a broker network for commercial real estate', 'Relationships with brokers who work commercial inventory', 'Ability to convert introductions into active partners'],
   },
   {
-    title: 'Asst. Sourcing Manager — Residential',
+    title: 'Asst. Sourcing Manager - Residential',
     type: 'FULL-TIME · HYDERABAD',
     category: 'Sales',
     level: 'Manager',
