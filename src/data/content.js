@@ -1,4 +1,4 @@
-import teamSridevi from '../assets/site/Sridevi.png'
+import teamSridevi from '../assets/site/Sridevi.jpeg'
 import teamPriyanka from '../assets/site/panda.png'
 
 /** The /assessment page tees off to KRISAH's platform. Production join link — anyone who clicks is auto-added as a Rajiv Williams company participant on the KRISAH side. */
@@ -711,6 +711,7 @@ export const LOCALITIES = [
   { name: 'Mamidipally', x: 76, y: 84 },
   { name: 'Tellapur', x: 25, y: 14 },
   { name: 'Gaganpahad', x: 48, y: 64 },
+  { name: 'Gopanpally', x: 42, y: 20 },
 ]
 
 /** Collapses sub-localities and alternate spellings to one node per real place. */
@@ -740,6 +741,9 @@ export const AREA_TO_LOCALITY = {
   'Tellapur': 'Tellapur',
   'Gaganpahad': 'Gaganpahad',
   'Gaganpahad, Rajendranagar Mandal': 'Gaganpahad',
+  'Gopanpally': 'Gopanpally',
+  'Velimela / Tellapur': 'Tellapur',
+  'Narsingi / Golconda': 'Narsingi',
 }
 
 /** Maps free-text `location` strings from the API onto the curated locality keys. */
@@ -771,6 +775,8 @@ const LOCATION_TO_LOCALITY = {
   'mamidipally': 'Mamidipally',
   'gaganpahad': 'Gaganpahad',
   'rajendranagar': 'Gaganpahad',
+  'gopanpally': 'Gopanpally',
+  'velimela': 'Tellapur',
 }
 
 /**
@@ -819,4 +825,14 @@ export const PROJECTS = [
   { name: 'Cascades', area: 'Neopolis', status: 'Mandate' },
   { name: 'Bliss in the Woods', area: 'Tukkuguda', status: 'Mandate' },
   { name: 'Mirai Mist', area: 'Gandipet', status: 'Mandate' },
+  { name: 'High9', area: 'Kollur', status: 'Under Construction' },
+  { name: 'SAS Crown', area: 'Golden Mile, Kokapet', status: 'Mandate' },
+  { name: 'Trump Tower', area: 'Neopolis, Kokapet', status: 'Mandate' },
+  { name: 'IWA', area: 'Puppalaguda', status: 'Mandate' },
+  { name: 'Prestige Clairmont', area: 'Neopolis, Kokapet', status: 'Mandate' },
+  { name: 'Alekhya Rise', area: 'Kokapet', status: 'Mandate' },
+  { name: 'DSR Ciel', area: 'Gopanpally', status: 'Mandate' },
+  { name: 'Vantage', area: 'Manchirevula', status: 'Mandate' },
+  { name: 'Amora', area: 'Narsingi', status: 'Mandate' },
+  { name: 'Prestige Golden Grove', area: 'Tellapur', status: 'Mandate' },
 ]

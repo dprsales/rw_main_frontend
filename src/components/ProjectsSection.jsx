@@ -51,6 +51,7 @@ const LOCALITY_QUADRANT = {
   'Mamidipally': 'South',
   'Gaganpahad': 'South',
   'Tellapur': 'North',
+  'Gopanpally': 'North',
 }
 const QUADRANTS = ['All', 'West', 'East', 'North', 'South']
 
@@ -218,7 +219,7 @@ export default function ProjectsSection({ id = 'projects' }) {
     const curatedBySlug = new Map(
       PROJECTS.map((p) => [PROJECT_SLUGS[p.name]?.toLowerCase(), p]).filter(([k]) => k),
     )
-    return liveProjects.map((row) => {
+    const liveMapped = liveProjects.map((row) => {
       const slug = (row.slug || '').trim().toLowerCase()
       const curated = curatedBySlug.get(slug)
       // The curated list is hand-authored copy (name/area/status), never an image —
@@ -232,6 +233,17 @@ export default function ProjectsSection({ id = 'projects' }) {
         image,
       }
     })
+    const usedSlugs = new Set(
+      liveProjects.map((row) => (row.slug || '').trim().toLowerCase()).filter(Boolean),
+    )
+    const usedNames = new Set(liveMapped.map((p) => p.name.toLowerCase()))
+    const extras = PROJECTS.filter((p) => {
+      const slug = PROJECT_SLUGS[p.name]?.toLowerCase()
+      if (slug && usedSlugs.has(slug)) return false
+      if (usedNames.has(p.name.toLowerCase())) return false
+      return true
+    })
+    return [...liveMapped, ...extras]
   }, [liveProjects])
 
   // Nodes with nothing after a filter stay on the map dimmed — it should re-weight, not reshape.
