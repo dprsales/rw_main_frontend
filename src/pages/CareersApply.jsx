@@ -8,8 +8,8 @@ import Reveal from '../components/Reveal'
 import PageIntro from '../components/PageIntro'
 import BorderGlow from '../components/BorderGlow'
 import { submitBooking, CAREERS_INTEREST, isValidPhone } from '../data/booking'
-import { CAREER_ROLES } from '../data/content'
-import { careerRolePath, careerRoleSlug, fetchRoles, findRoleBySlug } from '../data/jobs'
+import { CAREER_CATEGORIES, CAREER_ROLES } from '../data/content'
+import { careerRolePath, careerRoleSlug, fetchRoles, findRoleBySlug, roleWorkMode } from '../data/jobs'
 import { track } from '../data/analytics'
 import {
   ANSWER_MAX, CHARACTER_QUESTIONS, LIKERT, likertLabel, HEXACO_TRAITS, HEXACO_STATEMENT_IDS,
@@ -31,10 +31,9 @@ const EXPERIENCE_LEVELS = [
   'Fresher (0–1 years)', 'Junior (1–3 years)', 'Mid-Level (3–6 years)',
   'Senior (6–10 years)', 'Senior Manager (10+ years)', 'Other',
 ]
-const CTC_OPTIONS = ['Prefer not to disclose', 'Below 5 LPA', '5–10 LPA', '10–20 LPA', '20+ LPA']
 const NOTICE_OPTIONS = ['Immediate', '15 days', '30 days', '60 days', '90 days']
+const CTC_HINT = 'Type annual CTC in LPA. Example: 8 LPA. Freshers can enter 0.'
 const RELOCATE_OPTIONS = ['Yes', 'No', 'Maybe, depending on the role']
-const WORKMODE_OPTIONS = ['Onsite', 'Hybrid', 'Remote']
 const SOURCE_OPTIONS = ['LinkedIn', 'Company website', 'Employee referral', 'Job portal', 'Social media', 'Other']
 
 const RESUME_TYPES = '.pdf,.doc,.docx'
@@ -133,9 +132,10 @@ function Section({ eyebrow: kicker, title, children, panel }) {
   )
 }
 
-function TextField({ label, id, values, set, setValues, required, type = 'text', placeholder, wide, invalid, allowMissing }) {
+function TextField({ label, id, values, set, setValues, required, type = 'text', placeholder, wide, invalid, allowMissing, hint }) {
   const na = values[id] === NOT_AVAILABLE
   const filled = String(values[id] || '').trim() !== ''
+  const hintId = hint ? `${id}-hint` : undefined
   return (
     <div className={`rw-form-field-wrap${wide ? ' rw-form-field-wrap--wide' : ''}`} style={{ display: 'block' }}>
       <span className="rw-form-q-title">
@@ -153,6 +153,7 @@ function TextField({ label, id, values, set, setValues, required, type = 'text',
           onChange={set(id)}
           disabled={na}
           aria-invalid={invalid || undefined}
+          aria-describedby={hintId}
         />
         {filled && !na && (
           <button
@@ -164,6 +165,7 @@ function TextField({ label, id, values, set, setValues, required, type = 'text',
           </button>
         )}
       </span>
+      {hint && <span id={hintId} className="rw-form-help">{hint}</span>}
       {allowMissing && (
         <button
           type="button"
@@ -178,8 +180,10 @@ function TextField({ label, id, values, set, setValues, required, type = 'text',
   )
 }
 
-function SelectField({ label, id, values, set, setValues, options, required, wide, invalid }) {
+function SelectField({ label, id, values, set, setValues, options, required, wide, invalid, hint }) {
   const filled = String(values[id] || '').trim() !== ''
+  const current = values[id] || ''
+  const hintId = hint ? `${id}-hint` : undefined
   return (
     <div className={`rw-form-field-wrap${wide ? ' rw-form-field-wrap--wide' : ''}`}>
       <span className="rw-form-q-title">
@@ -191,12 +195,14 @@ function SelectField({ label, id, values, set, setValues, options, required, wid
           id={id}
           className={`rw-form-field${invalid ? ' is-invalid' : ''}`}
           style={{ marginTop: 10, appearance: 'none' }}
-          value={values[id] || ''}
+          value={current}
           onChange={set(id)}
           aria-invalid={invalid || undefined}
+          aria-describedby={hintId}
         >
           <option value="">Select…</option>
           {options.map((o) => <option key={o} value={o}>{o}</option>)}
+          {current && !options.includes(current) && <option value={current}>{current}</option>}
         </select>
         {filled && (
           <button
@@ -208,6 +214,204 @@ function SelectField({ label, id, values, set, setValues, options, required, wid
           </button>
         )}
       </span>
+      {hint && <span id={hintId} className="rw-form-help">{hint}</span>}
+    </div>
+  )
+}
+
+function uniqueRolesByTitle(roles, extraTitle) {
+  const seen = new Set()
+  const out = []
+  for (const role of roles || []) {
+    const title = String(role.title || '').trim()
+    if (!title) continue
+    const key = title.toLowerCase()
+    if (seen.has(key)) continue
+    seen.add(key)
+    out.push({ title, category: role.category || 'Other' })
+  }
+  if (extraTitle && !seen.has(String(extraTitle).toLowerCase())) {
+    out.push({ title: extraTitle, category: 'Other' })
+  }
+  return out
+}
+
+function RoleSearchField({ id, roles, value, invalid, onSelect, onClear }) {
+  const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const [active, setActive] = useState(0)
+  const [pos, setPos] = useState(null)
+  const input = useRef(null)
+  const menu = useRef(null)
+
+  const list = useMemo(() => uniqueRolesByTitle(roles, value), [roles, value])
+  const groups = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    const filtered = list.filter((role) => (
+      !q
+      || role.title.toLowerCase().includes(q)
+      || role.category.toLowerCase().includes(q)
+    ))
+    const grouped = []
+    for (const category of CAREER_CATEGORIES) {
+      const items = filtered.filter((role) => role.category === category)
+      if (items.length) grouped.push({ category, items })
+    }
+    const rest = filtered.filter((role) => !CAREER_CATEGORIES.includes(role.category))
+    if (rest.length) grouped.push({ category: 'Other', items: rest })
+    return grouped
+  }, [list, query])
+  const flat = groups.flatMap((group) => group.items)
+
+  const place = () => {
+    const el = input.current
+    if (!el) return
+    const r = el.getBoundingClientRect()
+    const gap = 6
+    const below = window.innerHeight - r.bottom - 16
+    const above = r.top - 16
+    const openUp = below < 280 && above > below
+    const maxHeight = Math.min(360, Math.max(160, openUp ? above : below))
+    setPos({
+      left: Math.max(12, r.left),
+      width: r.width,
+      maxHeight,
+      ...(openUp
+        ? { bottom: window.innerHeight - r.top + gap, top: 'auto' }
+        : { top: r.bottom + gap, bottom: 'auto' }),
+    })
+  }
+
+  useLayoutEffect(() => {
+    if (!open) return undefined
+    place()
+    const on = () => place()
+    window.addEventListener('resize', on)
+    window.addEventListener('scroll', on, true)
+    return () => {
+      window.removeEventListener('resize', on)
+      window.removeEventListener('scroll', on, true)
+    }
+  }, [open, query, groups.length])
+
+  useEffect(() => {
+    if (!open) return undefined
+    const onDoc = (e) => {
+      if (input.current?.contains(e.target) || menu.current?.contains(e.target)) return
+      setOpen(false)
+      setQuery('')
+    }
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return
+      setOpen(false)
+      setQuery('')
+    }
+    document.addEventListener('mousedown', onDoc)
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onDoc)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  useLayoutEffect(() => {
+    if (!open) return
+    menu.current?.querySelector('.rw-role-option.is-active')?.scrollIntoView({ block: 'nearest' })
+  }, [active, open])
+
+  const pick = (title) => {
+    onSelect(title)
+    setQuery('')
+    setOpen(false)
+  }
+
+  const onKeyDown = (e) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      if (!open) { setOpen(true); setActive(0); return }
+      setActive((i) => Math.min(i + 1, Math.max(flat.length - 1, 0)))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setActive((i) => Math.max(i - 1, 0))
+    } else if (e.key === 'Enter') {
+      if (open && flat[active]) {
+        e.preventDefault()
+        pick(flat[active].title)
+      }
+    }
+  }
+
+  return (
+    <div className="rw-form-field-wrap">
+      <span className="rw-form-q-title">Role you are applying for <span className="rw-form-req"> *</span></span>
+      <span className="rw-clearable">
+        <input
+          ref={input}
+          id={id}
+          className={`rw-form-field${invalid ? ' is-invalid' : ''}`}
+          style={{ marginTop: 10 }}
+          role="combobox"
+          aria-expanded={open}
+          aria-autocomplete="list"
+          aria-controls={`${id}-list`}
+          aria-activedescendant={open && flat[active] ? `${id}-opt-${active}` : undefined}
+          autoComplete="off"
+          placeholder={open ? 'Type to find a role…' : 'Select or search a role…'}
+          value={open ? query : (value || '')}
+          onChange={(e) => { setQuery(e.target.value); setOpen(true); setActive(0) }}
+          onFocus={() => { setQuery(''); setOpen(true); setActive(0) }}
+          onKeyDown={onKeyDown}
+          aria-invalid={invalid || undefined}
+        />
+        {value && !open && (
+          <button
+            type="button"
+            className="rw-field-clear"
+            tabIndex={-1}
+            aria-label="Clear the role"
+            title="Clear the role"
+            onClick={() => { onClear(); setQuery(''); input.current?.focus() }}
+          >
+            ×
+          </button>
+        )}
+      </span>
+      {open && pos && createPortal(
+        <div
+          ref={menu}
+          id={`${id}-list`}
+          className="rw-role-menu"
+          role="listbox"
+          style={pos}
+        >
+          {groups.length === 0 && (
+            <div className="rw-role-empty">No roles match that search.</div>
+          )}
+          {groups.map((group) => (
+            <div key={group.category} className="rw-role-group">
+              <div className="rw-role-group-label">{group.category}</div>
+              {group.items.map((role) => {
+                const index = flat.findIndex((item) => item.title === role.title)
+                return (
+                  <button
+                    key={role.title}
+                    type="button"
+                    id={`${id}-opt-${index}`}
+                    role="option"
+                    aria-selected={value === role.title}
+                    className={`rw-role-option${value === role.title ? ' is-on' : ''}${index === active ? ' is-active' : ''}`}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => pick(role.title)}
+                  >
+                    {role.title}
+                  </button>
+                )
+              })}
+            </div>
+          ))}
+        </div>,
+        document.getElementById('rw-app-shell') || document.body,
+      )}
     </div>
   )
 }
@@ -428,7 +632,7 @@ export default function CareersApply() {
   }))
   const [hex, setHex] = useState(() => draft?.hex || {})
   const [resume, setResume] = useState(null)
-  const [roleOptions, setRoleOptions] = useState([])
+  const [openRoles, setOpenRoles] = useState(CAREER_ROLES)
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
   const [invalidField, setInvalidField] = useState('')
@@ -467,7 +671,7 @@ export default function CareersApply() {
     let live = true
     fetchRoles().then((rows) => {
       if (!live) return
-      setRoleOptions(rows.map((r) => r.title))
+      setOpenRoles(rows)
       if (roleSlug) {
         const role = findRoleBySlug(rows, roleSlug) || findRoleBySlug(CAREER_ROLES, roleSlug)
         setSlugState({ slug: roleSlug, role, checked: true })
@@ -479,6 +683,12 @@ export default function CareersApply() {
   useEffect(() => {
     if (presetRole) setValues((prev) => ({ ...prev, role: presetRole }))
   }, [presetRole])
+
+  const workMode = roleWorkMode(values.role, openRoles)
+  useEffect(() => {
+    if (!values.role || values.workMode === workMode.value) return
+    setValues((prev) => ({ ...prev, workMode: workMode.value }))
+  }, [values.role, values.workMode, workMode.value])
 
   useEffect(() => { track('careers_apply_view') }, [])
 
@@ -731,7 +941,6 @@ export default function CareersApply() {
     }
   }
 
-  const roleList = roleOptions.length ? roleOptions : (presetRole ? [presetRole] : [])
   const applyPath = slugRole ? careerRolePath(slugRole.title) : '/careers/apply'
 
   if (legacySlug) return <Navigate to={`/careers/${legacySlug}`} replace />
@@ -861,25 +1070,17 @@ export default function CareersApply() {
                   <TextField label="Full name" id="name" values={values} set={set} setValues={setValues} required invalid={invalidField === 'name'} placeholder="Your name" />
                   <TextField label="Phone" id="phone" values={values} set={set} setValues={setValues} required invalid={invalidField === 'phone'} type="tel" placeholder="10-digit mobile" />
                   <TextField label="Email" id="email" values={values} set={set} setValues={setValues} required invalid={invalidField === 'email'} type="email" placeholder="you@email.com" />
-                  <div className="rw-form-field-wrap">
-                    <span className="rw-form-q-title">Role you are applying for <span className="rw-form-req"> *</span></span>
-                    <span className="rw-clearable">
-                      <select id="role" className={`rw-form-field${invalidField === 'role' ? ' is-invalid' : ''}`} style={{ marginTop: 10, appearance: 'none' }} value={values.role} onChange={set('role')} aria-invalid={invalidField === 'role' || undefined}>
-                        <option value="">Select a role…</option>
-                        {roleList.map((r) => <option key={r} value={r}>{r}</option>)}
-                        {values.role && !roleList.includes(values.role) && <option value={values.role}>{values.role}</option>}
-                      </select>
-                      {values.role && (
-                        <button
-                          type="button" className="rw-field-clear" tabIndex={-1}
-                          aria-label="Clear the role" title="Clear the role"
-                          onClick={() => setValues((prev) => ({ ...prev, role: '' }))}
-                        >
-                          ×
-                        </button>
-                      )}
-                    </span>
-                  </div>
+                  <RoleSearchField
+                    id="role"
+                    roles={openRoles}
+                    value={values.role}
+                    invalid={invalidField === 'role'}
+                    onSelect={(title) => {
+                      setValues((prev) => ({ ...prev, role: title }))
+                      if (invalidField === 'role') { setInvalidField(''); setError('') }
+                    }}
+                    onClear={() => setValues((prev) => ({ ...prev, role: '' }))}
+                  />
                   <TextField label="LinkedIn profile" id="linkedinUrl" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'linkedinUrl'} type="url" placeholder="https://linkedin.com/in/your-name" />
                   <TextField label="Portfolio or website" id="portfolioUrl" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'portfolioUrl'} type="url" placeholder="https://yourportfolio.com" />
                   <p className="rw-form-tip">
@@ -896,12 +1097,12 @@ export default function CareersApply() {
 
               {step === 1 && (
                 <Section key="career" panel={dir} eyebrow="CAREER DETAILS">
-                  <SelectField label="Current CTC" id="currentCtc" values={values} set={set} setValues={setValues} options={CTC_OPTIONS} required invalid={invalidField === 'currentCtc'} />
-                  <SelectField label="Expected CTC" id="expectedCtc" values={values} set={set} setValues={setValues} options={CTC_OPTIONS} required invalid={invalidField === 'expectedCtc'} />
+                  <TextField label="Current CTC" id="currentCtc" values={values} set={set} setValues={setValues} required invalid={invalidField === 'currentCtc'} placeholder="e.g. 8 LPA" hint={CTC_HINT} />
+                  <TextField label="Expected CTC" id="expectedCtc" values={values} set={set} setValues={setValues} required invalid={invalidField === 'expectedCtc'} placeholder="e.g. 10 LPA" hint={CTC_HINT} />
                   <TextField label="Current location" id="currentLocation" values={values} set={set} setValues={setValues} required invalid={invalidField === 'currentLocation'} placeholder="City, state" />
                   <SelectField label="Notice period" id="noticePeriod" values={values} set={set} setValues={setValues} options={NOTICE_OPTIONS} required invalid={invalidField === 'noticePeriod'} />
                   <SelectField label="Open to relocate" id="relocation" values={values} set={set} setValues={setValues} options={RELOCATE_OPTIONS} required invalid={invalidField === 'relocation'} />
-                  <SelectField label="Preferred work mode" id="workMode" values={values} set={set} setValues={setValues} options={WORKMODE_OPTIONS} required invalid={invalidField === 'workMode'} />
+                  <SelectField label="Preferred work mode" id="workMode" values={values} set={set} setValues={setValues} options={workMode.options} required invalid={invalidField === 'workMode'} hint={workMode.hint} />
                   <SelectField label="How did you hear about us?" id="applicationSource" values={values} set={set} setValues={setValues} options={SOURCE_OPTIONS} required wide invalid={invalidField === 'applicationSource'} />
                 </Section>
               )}

@@ -317,7 +317,7 @@ export const CAREER_CULTURE = {
 }
 
 // Role filters; `All` is prepended by the page. Values must match a role's `category` below.
-export const CAREER_CATEGORIES = ['Sales', 'Marketing', 'Operations']
+export const CAREER_CATEGORIES = ['Sales', 'Marketing', 'Operations', 'Freelancer']
 
 // Open roles; an empty array renders the "no openings" state.
 export const CAREER_ROLES = [
@@ -619,13 +619,23 @@ export const CAREER_ROLES = [
     requirements: ['Strong portfolio across digital and print design', 'Confidence with common design tools', 'An eye for premium visual craft'],
   },
   {
+    title: 'AI Video Editor',
+    type: 'FREELANCE · REMOTE',
+    category: 'Freelancer',
+    level: 'Junior – Mid',
+    experience: '1–4 years',
+    location: 'Remote',
+    description: 'Cut project films, reels, and launch clips with AI-assisted editing. Remote freelance, brief to delivery.',
+    requirements: ['Portfolio of edited or AI-assisted video work', 'Comfort with editing tools and current AI video workflows', 'Good sense of pacing, sound, and a brief'],
+  },
+  {
     title: 'Motion Graphic Designer',
-    type: 'FULL-TIME · HYDERABAD',
-    category: 'Marketing',
+    type: 'FREELANCE · REMOTE',
+    category: 'Freelancer',
     level: 'Junior – Mid',
     experience: '2–5 years',
-    location: 'Hyderabad',
-    description: 'Turn project stories and brand campaigns into polished motion content for digital channels and launches.',
+    location: 'Remote',
+    description: 'Turn project stories and brand campaigns into polished motion content. Remote freelance, brief to delivery.',
     requirements: ['Portfolio of motion or video work', 'Strong command of animation and editing tools', 'Good sense of timing, composition, and sound'],
   },
   {

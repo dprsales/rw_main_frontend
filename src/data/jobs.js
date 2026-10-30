@@ -14,6 +14,8 @@ const CATEGORY_LABELS = {
   mgd: 'Operations',
   hr: 'Operations',
   developer: 'Marketing',
+  freelancer: 'Freelancer',
+  freelance: 'Freelancer',
 }
 
 /** Map one API job record onto the card shape the careers grid renders. */
@@ -21,16 +23,18 @@ function toRole(job) {
   const title = job?.jobTitle?.trim() || job?.title?.trim()
   if (!title) return null
 
-  const location = job.location?.trim() || 'Hyderabad'
   const rawCategory = job.category?.trim() || ''
+  const category = CATEGORY_LABELS[rawCategory.toLowerCase()] || rawCategory || 'Sales'
+  const freelance = category === 'Freelancer'
+  const location = job.location?.trim() || (freelance ? 'Remote' : 'Hyderabad')
   const responsibilities = job.roleResponsibilities || job.responsibilities || []
 
   return {
     id: job._id,
     title,
     // Composed since the API has no field for the engagement line.
-    type: `FULL-TIME · ${location.toUpperCase()}`,
-    category: CATEGORY_LABELS[rawCategory.toLowerCase()] || rawCategory || 'Sales',
+    type: freelance ? `FREELANCE · ${location.toUpperCase()}` : `FULL-TIME · ${location.toUpperCase()}`,
+    category,
     level: job.level?.trim() || 'Open role',
     experience: job.experience?.trim() || 'Experience varies',
     location,
@@ -54,6 +58,24 @@ export function findRoleBySlug(roles, slug) {
   const key = String(slug || '').toLowerCase()
   if (!key) return null
   return (roles || []).find((role) => careerRoleSlug(role.title) === key) || null
+}
+
+/** Work mode follows the role: freelancer seats are remote; Sales, Marketing, and Operations are onsite. */
+export function roleWorkMode(title, roles = CAREER_ROLES) {
+  const list = Array.isArray(roles) && roles.length ? roles : CAREER_ROLES
+  const role = list.find((item) => item.title === title) || CAREER_ROLES.find((item) => item.title === title)
+  if ((role?.category || '').toLowerCase() === 'freelancer') {
+    return {
+      options: ['Remote'],
+      value: 'Remote',
+      hint: 'This role is completely remote.',
+    }
+  }
+  return {
+    options: ['Onsite (in office)'],
+    value: 'Onsite (in office)',
+    hint: 'This role is completely onsite.',
+  }
 }
 
 /** Live open roles, falling back to the curated list; never rejects. */
@@ -91,10 +113,15 @@ const CURATED_SALES_HEADS = [
   'Finance & Account Manager',
 ]
 
+function roleIdentity(role) {
+  return `${(role.title || '').toLowerCase()}|${(role.category || '').toLowerCase()}`
+}
+
 function withCuratedSalesHeads(roles) {
-  const have = new Set((roles || []).map((role) => (role.title || '').toLowerCase()))
-  const extra = CAREER_ROLES.filter((role) =>
-    CURATED_SALES_HEADS.includes(role.title) && !have.has(role.title.toLowerCase()),
-  )
+  const have = new Set((roles || []).map(roleIdentity))
+  const extra = CAREER_ROLES.filter((role) => {
+    const keep = CURATED_SALES_HEADS.includes(role.title) || role.category === 'Freelancer'
+    return keep && !have.has(roleIdentity(role))
+  })
   return extra.length ? [...roles, ...extra] : roles
 }

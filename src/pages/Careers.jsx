@@ -79,7 +79,7 @@ const roleKey = (role) => {
     .replace(/\bjr\b\.?/g, 'junior')
     .replace(/[^a-z0-9]+/g, ' ')
     .trim()
-  return `${title}|${(role.location || '').trim().toLowerCase()}`
+  return `${title}|${(role.location || '').trim().toLowerCase()}|${(role.category || '').trim().toLowerCase()}`
 }
 const uniqueRoles = (roles) => {
   const seen = new Set()
@@ -309,7 +309,7 @@ export default function Careers() {
           <CenteredHead
             eyebrow="OPEN ROLES"
             title="Where we are hiring right now"
-            intro="Every role is Hyderabad-based and on the floor. The band on each card is what we are looking for. If you are close, or simply belong here, apply anyway and say why."
+            intro="Sales, marketing, and operations sit on the Hyderabad floor. Freelance creative roles are remote. The band on each card is what we are looking for. If you are close, or simply belong here, apply anyway and say why."
           />
 
           {openRoles.length > 0 && (
@@ -369,8 +369,8 @@ export default function Careers() {
                       </div>
                       <div className="rw-role-summary">
                         <div className="rw-role-meta">
-                          <span><RoleIcon type="briefcase" /> Full-time</span>
-                          <span><RoleIcon type="location" /> {role.location || 'Hyderabad'}</span>
+                          <span><RoleIcon type="briefcase" /> {role.category === 'Freelancer' ? 'Freelance' : 'Full-time'}</span>
+                          <span><RoleIcon type="location" /> {role.location || (role.category === 'Freelancer' ? 'Remote' : 'Hyderabad')}</span>
                         </div>
                         <p>{role.description}</p>
                       </div>

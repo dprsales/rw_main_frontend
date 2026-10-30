@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import SpecularButton from './SpecularButton'
 import { mono, serif, text } from '../theme'
 import { CAREERS_INTEREST, INTERESTS, isValidPhone, submitBooking } from '../data/booking'
+import { roleWorkMode } from '../data/jobs'
 import { labelFor } from '../data/guidance'
 import { crmDeliveryOf, errorCategory, newId, track } from '../data/analytics'
 import { useFinder } from '../hooks/useFinder'
@@ -171,6 +172,11 @@ function BookingModal({ preset, onClose }) {
   }, [onClose])
 
   const isApplying = form.interest === CAREERS_INTEREST
+  const workMode = roleWorkMode(form.role)
+  useEffect(() => {
+    if (!isApplying || !form.role || form.workMode === workMode.value) return
+    setForm((current) => ({ ...current, workMode: workMode.value }))
+  }, [isApplying, form.role, form.workMode, workMode.value])
 
   // Safe, categorical context for lead_* events (never name/phone/email/message).
   const leadContext = () => ({
@@ -437,25 +443,11 @@ function BookingModal({ preset, onClose }) {
               {isApplying && (
                 <>
                   <div className="rw-career-form-section">CAREER DETAILS</div>
-                  <Field label="Current CTC" required>
-                    <select required value={form.currentCtc} onChange={set('currentCtc')} style={{ ...inputStyle, appearance: 'none' }}>
-                      <option value="">Select current CTC...</option>
-                      <option value="Prefer not to disclose">Prefer not to disclose</option>
-                      <option value="Below 5 LPA">Below 5 LPA</option>
-                      <option value="5–10 LPA">5–10 LPA</option>
-                      <option value="10–20 LPA">10–20 LPA</option>
-                      <option value="20+ LPA">20+ LPA</option>
-                    </select>
+                  <Field label="Current CTC" required hint="Type annual CTC in LPA. Example: 8 LPA. Freshers can enter 0.">
+                    <input required value={form.currentCtc} onChange={set('currentCtc')} style={inputStyle} placeholder="e.g. 8 LPA" />
                   </Field>
-                  <Field label="Expected CTC" required>
-                    <select required value={form.expectedCtc} onChange={set('expectedCtc')} style={{ ...inputStyle, appearance: 'none' }}>
-                      <option value="">Select expected CTC...</option>
-                      <option value="Prefer not to disclose">Prefer not to disclose</option>
-                      <option value="Below 5 LPA">Below 5 LPA</option>
-                      <option value="5–10 LPA">5–10 LPA</option>
-                      <option value="10–20 LPA">10–20 LPA</option>
-                      <option value="20+ LPA">20+ LPA</option>
-                    </select>
+                  <Field label="Expected CTC" required hint="Type annual CTC in LPA. Example: 8 LPA. Freshers can enter 0.">
+                    <input required value={form.expectedCtc} onChange={set('expectedCtc')} style={inputStyle} placeholder="e.g. 10 LPA" />
                   </Field>
                   <Field label="Current location" required>
                     <input required value={form.currentLocation} onChange={set('currentLocation')} style={inputStyle} placeholder="City, state" />
@@ -478,12 +470,11 @@ function BookingModal({ preset, onClose }) {
                       <option value="Maybe">Maybe, depending on the role</option>
                     </select>
                   </Field>
-                  <Field label="Preferred work mode" required>
+                  <Field label="Preferred work mode" required hint={workMode.hint}>
                     <select required value={form.workMode} onChange={set('workMode')} style={{ ...inputStyle, appearance: 'none' }}>
-                      <option value="">Select work mode...</option>
-                      <option value="Onsite">Onsite</option>
-                      <option value="Hybrid">Hybrid</option>
-                      <option value="Remote">Remote</option>
+                      {workMode.options.map((option) => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
                     </select>
                   </Field>
                   <Field label="How did you hear about us?" required>
@@ -575,12 +566,17 @@ function MetaIcon({ type }) {
   return <svg className="rw-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>{paths[type]}</svg>
 }
 
-function Field({ label, required, children }) {
+function Field({ label, required, hint, children }) {
   return (
     <label style={{ display: 'grid', gap: 7 }}>
       <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.12em', color: 'var(--faded)' }}>
         {label.toUpperCase()}{required && <span style={{ color: 'var(--copper)' }}> *</span>}
       </span>
+      {hint && (
+        <span style={{ fontFamily: text, fontSize: fs('12px'), letterSpacing: 0, lineHeight: 1.4, color: 'var(--faded)', textTransform: 'none' }}>
+          {hint}
+        </span>
+      )}
       {children}
     </label>
   )
