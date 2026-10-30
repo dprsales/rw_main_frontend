@@ -8,6 +8,7 @@ import { ThemeProvider } from './components/ThemeProvider'
 import { headerOffset } from './hooks/useSmoothScroll'
 import { useSiteVisitTracker } from './hooks/useSiteVisitTracker'
 import About from './pages/About'
+import Article from './pages/Article'
 import Articles from './pages/Articles'
 import Assessment from './pages/Assessment'
 import AssessmentResult from './pages/AssessmentResult'
@@ -99,6 +100,7 @@ export default function App() {
           <Route path="/assessment/result" element={<AssessmentResult />} />
           <Route path="/about" element={<About />} />
           <Route path="/articles" element={<Articles />} />
+          <Route path="/articles/:slug" element={<Article />} />
           <Route path="/faqs" element={<Faqs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />

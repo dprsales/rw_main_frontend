@@ -7,8 +7,6 @@
 # 200 = route works. 404 = not implemented. 000 = host unreachable.
 
 API="${VITE_API_BASE_URL:-https://api.rajivwilliams.com}"
-BLOG="${VITE_BLOG_BASE_URL:-https://blog.dprprop.com}"
-CLIENT="${VITE_BLOG_CLIENT_ID:-6814779c33c366561f26aec9}"
 CDN="${VITE_STORAGE_DN_URL:-https://dprstorage.b-cdn.net}"
 
 probe() {
@@ -38,7 +36,7 @@ probe "GET /projects"      "$API/projects"
 probe "GET /projects/:slug" "$API/projects/amaris"
 probe "GET /projects?page"  "$API/projects?page=1&limit=2"
 probe "GET /jobs"           "$API/jobs"
-probe "GET blogs"           "$BLOG/clients/$CLIENT/blogs"
+probe "GET /blogs"          "$API/blogs"
 
 echo
 echo "CDN"

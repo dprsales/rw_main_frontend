@@ -1,12 +1,7 @@
 /**
- * Live blog feed. Posts are authored on the DPR platform; each card links out
- * to where the post already lives (`posturl` - LinkedIn Pulse), so there are
- * no on-site article routes. Images are root-relative Bunny CDN paths, served
- * from the CDN origin (not the API host) - `cdn()` handles that.
- *
- * Curation below only affects this website — nothing is changed in the CMS or on
- * LinkedIn. Everything is matched by the post's stable `slug`, never by title.
- * (T19, see ARTICLE_TO_SERVICE_AUDIT.md.)
+ * Live blog feed from our API. A post with body sections opens on /articles/:slug.
+ * A post that only has a LinkedIn URL still links out. Images are Bunny CDN paths
+ * — `cdn()` handles that. Hidden slugs stay off this website only.
  */
 import { cdn, getBlogs } from './api'
 
@@ -29,6 +24,10 @@ const LONG_TITLE = 90
 const cardTitle = (blog) => (blog.title?.length > LONG_TITLE && blog.metaTitle ? blog.metaTitle : blog.title)
 
 /** Map one API blog record onto the shape `Gallery` expects for a link-out card. */
+function hasBody(blog) {
+  return Array.isArray(blog.sections) && blog.sections.some((section) => section?.title || section?.description)
+}
+
 function toCard(blog) {
   const title = cardTitle(blog)
   return {
@@ -37,7 +36,7 @@ function toCard(blog) {
     alt: title,
     title,
     desc: blog.metaDescription,
-    href: blog.posturl,
+    href: hasBody(blog) ? `/articles/${blog.slug}` : blog.posturl,
     createdAt: blog.createdAt,
   }
 }

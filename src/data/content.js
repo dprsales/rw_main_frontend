@@ -836,4 +836,6 @@ export const PROJECTS = [
   { name: 'Vantage', area: 'Manchirevula', status: 'Mandate' },
   { name: 'Amora', area: 'Narsingi', status: 'Mandate' },
   { name: 'Prestige Golden Grove', area: 'Tellapur', status: 'Mandate' },
+  { name: 'Amaracasa', area: 'Mokila', status: 'Mandate' },
+  { name: 'Srivari Meadows', area: 'Mokila', status: 'Mandate' },
 ]

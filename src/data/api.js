@@ -7,8 +7,6 @@
 const viteEnv = import.meta.env || {}
 
 export const API_BASE = viteEnv.VITE_API_BASE_URL || 'https://api.rajivwilliams.com'
-export const BLOG_BASE = viteEnv.VITE_BLOG_BASE_URL || 'https://blog.dprprop.com'
-export const BLOG_CLIENT_ID = viteEnv.VITE_BLOG_CLIENT_ID || '6814779c33c366561f26aec9'
 export const CDN_BASE = viteEnv.VITE_STORAGE_DN_URL || 'https://dprstorage.b-cdn.net'
 
 // Prefixes a CDN-relative image path; absolute URLs pass through, 'NA' becomes undefined.
@@ -121,15 +119,12 @@ export const getProjectsPaginated = (page = 1, limit = 12, opts) =>
 export const getProjectBySlug = (slug, opts) =>
   request(`/projects/${encodeURIComponent(slug)}`, { timeoutMs: READ_TIMEOUT_MS, ...opts })
 
-// 4. BLOG — external DPR CMS, different host
-
-// Blog feed hits BLOG_BASE, not API_BASE. Image paths need `cdn()`.
+// 4. BLOGS — same API as the rest of the site. Image paths need `cdn()`.
 export const getBlogs = (opts) =>
-  request(`/clients/${BLOG_CLIENT_ID}/blogs`, {
-    base: BLOG_BASE,
-    timeoutMs: READ_TIMEOUT_MS,
-    ...opts,
-  }).then((r) => r?.blogs ?? [])
+  request('/blogs', { timeoutMs: READ_TIMEOUT_MS, ...opts }).then((r) => r?.blogs ?? [])
+
+export const getBlogBySlug = (slug, opts) =>
+  request(`/blogs/${encodeURIComponent(slug)}`, { timeoutMs: READ_TIMEOUT_MS, ...opts })
 
 // 5. LEADS & FORMS
 // `/leads` is the generic, most-used route. There is no `/booking` route — use this instead.

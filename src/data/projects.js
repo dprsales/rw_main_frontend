@@ -37,6 +37,8 @@ export const PROJECT_SLUGS = {
   'Bliss in the Woods': 'blissinthewoods',
   'Mirai Mist': 'mirai-mist',
   'High9': 'high9',
+  'Amaracasa': 'amaracasa',
+  'Srivari Meadows': 'srivari-meadows',
 }
 
 /** Resolve a CDN path (or absolute URL) from the API to a loadable image URL. */

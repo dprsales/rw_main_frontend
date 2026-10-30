@@ -43,7 +43,13 @@ export default function Gallery({ items }) {
             delay={(i % 3) * 80}
             className={`rw-figure${item.wide ? ' rw-figure-wide' : ''}`}
             {...(item.href
-              ? { as: 'a', href: item.href, target: '_blank', rel: 'noopener noreferrer' }
+              ? {
+                  as: 'a',
+                  href: item.href,
+                  ...(item.href.startsWith('/')
+                    ? {}
+                    : { target: '_blank', rel: 'noopener noreferrer' }),
+                }
               : { as: 'button', type: 'button', onClick: () => setOpen(i) })}
             style={{
               display: 'block', textAlign: 'left', border: '1px solid var(--line)',
