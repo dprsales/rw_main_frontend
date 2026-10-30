@@ -35,6 +35,9 @@ const NOTICE_OPTIONS = ['Immediate', '15 days', '30 days', '60 days', '90 days']
 const CTC_HINT = 'Type annual CTC in LPA. Example: 8 LPA. Freshers can enter 0.'
 const RELOCATE_OPTIONS = ['Yes', 'No', 'Maybe, depending on the role']
 const SOURCE_OPTIONS = ['LinkedIn', 'Company website', 'Employee referral', 'Job portal', 'Social media', 'Other']
+const SOURCE_HINT = 'If someone at Team RW told you about this role, choose Employee referral.'
+const REFERRAL_HINT = 'Type the Team RW name. This is not a professional reference - those come later.'
+const SOURCE_OTHER_HINT = 'A short line is enough. Example: Naukri, a friend outside the team.'
 
 const RESUME_TYPES = '.pdf,.doc,.docx'
 const RESUME_MAX = 5 * 1024 * 1024
@@ -62,7 +65,8 @@ const STEP_META = [
 ]
 const LAST_STEP = STEP_META.length - 1
 const NOT_AVAILABLE = 'Not available'
-const PROFILE_TIP = 'A LinkedIn profile, a portfolio, and a reference help us process your application faster.'
+const PROFILE_TIP = 'A LinkedIn profile & a portfolio help us process your application faster.'
+const REFERENCE_HINT = 'Not the Team RW person who referred you.'
 const DISCLAIMER_POINTS = [
   'Team RW reviews every application in full.',
   'Fill every field with genuine details. All fields are required.',
@@ -99,7 +103,8 @@ function focusControl(field) {
 const INITIAL = {
   name: '', email: '', phone: '',
   role: '', experience: '', experienceCustom: '', linkedinUrl: '', portfolioUrl: '',
-  currentCtc: '', expectedCtc: '', currentLocation: '', noticePeriod: '', relocation: '', workMode: '', applicationSource: '',
+  currentCtc: '', expectedCtc: '', currentLocation: '', noticePeriod: '', relocation: '', workMode: '',
+  applicationSource: '', referredBy: '', applicationSourceOther: '',
   qImpact: '', qDuties: '', qMotivation: '', qIntegrity: '', qSetback: '', qLoyalty: '', qFlexibility: '',
   ref1Name: '', ref1Number: '', ref1Relationship: '', ref2Name: '', ref2Number: '', ref2Relationship: '',
   message: '', privacyConsent: false, disclaimerRead: false,
@@ -690,6 +695,16 @@ export default function CareersApply() {
     setValues((prev) => ({ ...prev, workMode: workMode.value }))
   }, [values.role, values.workMode, workMode.value])
 
+  useEffect(() => {
+    const source = values.applicationSource
+    setValues((prev) => {
+      const referredBy = source === 'Employee referral' ? prev.referredBy : ''
+      const applicationSourceOther = source === 'Other' ? prev.applicationSourceOther : ''
+      if (referredBy === prev.referredBy && applicationSourceOther === prev.applicationSourceOther) return prev
+      return { ...prev, referredBy, applicationSourceOther }
+    })
+  }, [values.applicationSource])
+
   useEffect(() => { track('careers_apply_view') }, [])
 
   // The resume is stored as a blob and rebuilt into a File, so it can only arrive
@@ -836,6 +851,12 @@ export default function CareersApply() {
       for (const [f, l] of req) {
         const miss = need(f, l)
         if (miss) return miss
+      }
+      if (values.applicationSource === 'Employee referral' && !String(values.referredBy || '').trim()) {
+        return { field: 'referredBy', message: 'Please type who on Team RW referred you.' }
+      }
+      if (values.applicationSource === 'Other' && !String(values.applicationSourceOther || '').trim()) {
+        return { field: 'applicationSourceOther', message: 'Please tell us how you heard about us.' }
       }
     }
     if (i === 2) {
@@ -1103,7 +1124,13 @@ export default function CareersApply() {
                   <SelectField label="Notice period" id="noticePeriod" values={values} set={set} setValues={setValues} options={NOTICE_OPTIONS} required invalid={invalidField === 'noticePeriod'} />
                   <SelectField label="Open to relocate" id="relocation" values={values} set={set} setValues={setValues} options={RELOCATE_OPTIONS} required invalid={invalidField === 'relocation'} />
                   <SelectField label="Preferred work mode" id="workMode" values={values} set={set} setValues={setValues} options={workMode.options} required invalid={invalidField === 'workMode'} hint={workMode.hint} />
-                  <SelectField label="How did you hear about us?" id="applicationSource" values={values} set={set} setValues={setValues} options={SOURCE_OPTIONS} required wide invalid={invalidField === 'applicationSource'} />
+                  <SelectField label="How did you hear about us?" id="applicationSource" values={values} set={set} setValues={setValues} options={SOURCE_OPTIONS} required invalid={invalidField === 'applicationSource'} hint={SOURCE_HINT} />
+                  {values.applicationSource === 'Employee referral' && (
+                    <TextField label="Who referred you?" id="referredBy" values={values} set={set} setValues={setValues} required invalid={invalidField === 'referredBy'} placeholder="Team RW name" hint={REFERRAL_HINT} />
+                  )}
+                  {values.applicationSource === 'Other' && (
+                    <TextField label="Please specify" id="applicationSourceOther" values={values} set={set} setValues={setValues} required invalid={invalidField === 'applicationSourceOther'} placeholder="e.g. Naukri, a friend outside the team" hint={SOURCE_OTHER_HINT} />
+                  )}
                 </Section>
               )}
 
@@ -1189,17 +1216,13 @@ export default function CareersApply() {
               {step === 4 && (
                 // A div rather than a fragment so the transition class has something to sit on.
                 <div key="wrapup" className={`rw-step-panel rw-step-panel--${dir}`}>
-                    <Section eyebrow="REFERENCES" title="Anyone you list must have agreed to be contacted.">
-                    <p className="rw-form-tip">
-                      <span className="rw-form-tip-kicker">Tip</span>
-                      {PROFILE_TIP}
-                    </p>
-                    <TextField label="Reference 1: name" id="ref1Name" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref1Name'} placeholder="Full name" />
-                    <TextField label="Reference 1: number" id="ref1Number" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref1Number'} type="tel" placeholder="Mobile number" />
-                    <TextField label="Reference 1: relationship" id="ref1Relationship" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref1Relationship'} placeholder="Former manager, colleague…" />
-                    <TextField label="Reference 2: name" id="ref2Name" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref2Name'} placeholder="Full name" />
-                    <TextField label="Reference 2: number" id="ref2Number" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref2Number'} type="tel" placeholder="Mobile number" />
-                    <TextField label="Reference 2: relationship" id="ref2Relationship" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref2Relationship'} placeholder="Former manager, colleague…" />
+                    <Section eyebrow="REFERENCES" title="A former manager or colleague. They must have agreed to be contacted.">
+                    <TextField label="Reference 1 name" id="ref1Name" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref1Name'} placeholder="Full name" />
+                    <TextField label="Reference 1 number" id="ref1Number" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref1Number'} type="tel" placeholder="Mobile number" />
+                    <TextField label="Reference 1 relationship" id="ref1Relationship" values={values} set={set} setValues={setValues} required allowMissing wide invalid={invalidField === 'ref1Relationship'} placeholder="Former manager, colleague…" hint={REFERENCE_HINT} />
+                    <TextField label="Reference 2 name" id="ref2Name" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref2Name'} placeholder="Full name" />
+                    <TextField label="Reference 2 number" id="ref2Number" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref2Number'} type="tel" placeholder="Mobile number" />
+                    <TextField label="Reference 2 relationship" id="ref2Relationship" values={values} set={set} setValues={setValues} required allowMissing wide invalid={invalidField === 'ref2Relationship'} placeholder="Former manager, colleague…" hint={REFERENCE_HINT} />
                   </Section>
 
                   <Section eyebrow="RESUME">

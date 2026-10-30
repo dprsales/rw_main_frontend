@@ -78,7 +78,7 @@ const normaliseInterest = (value) => INTEREST_ALIASES[value] || value || ''
 const EMPTY = {
   name: '', email: '', phone: '', company: '', website: '', interest: '', role: '', jobId: '', experience: '', experienceCustom: '',
   currentCtc: '', expectedCtc: '', currentLocation: '', noticePeriod: '', relocation: '', workMode: '',
-  applicationSource: '',
+  applicationSource: '', referredBy: '', applicationSourceOther: '',
   ref1Name: '', ref1Number: '', ref1Relationship: '', ref2Name: '', ref2Number: '', ref2Relationship: '',
   privacyConsent: false, linkedinUrl: '', portfolioUrl: '', message: '', resume: null,
 }
@@ -477,8 +477,22 @@ function BookingModal({ preset, onClose }) {
                       ))}
                     </select>
                   </Field>
-                  <Field label="How did you hear about us?" required>
-                    <select required value={form.applicationSource} onChange={set('applicationSource')} style={{ ...inputStyle, appearance: 'none' }}>
+                  <Field label="How did you hear about us?" required hint="If someone at Team RW told you about this role, choose Employee referral.">
+                    <select
+                      required
+                      value={form.applicationSource}
+                      onChange={(e) => {
+                        const next = e.target.value
+                        markStarted()
+                        setForm((f) => ({
+                          ...f,
+                          applicationSource: next,
+                          referredBy: next === 'Employee referral' ? f.referredBy : '',
+                          applicationSourceOther: next === 'Other' ? f.applicationSourceOther : '',
+                        }))
+                      }}
+                      style={{ ...inputStyle, appearance: 'none' }}
+                    >
                       <option value="">Select a source...</option>
                       <option value="LinkedIn">LinkedIn</option>
                       <option value="Website">Company website</option>
@@ -488,9 +502,19 @@ function BookingModal({ preset, onClose }) {
                       <option value="Other">Other</option>
                     </select>
                   </Field>
+                  {form.applicationSource === 'Employee referral' && (
+                    <Field label="Who referred you?" required hint="Type the Team RW name. This is not a professional reference.">
+                      <input required value={form.referredBy} onChange={set('referredBy')} style={inputStyle} placeholder="Team RW name" />
+                    </Field>
+                  )}
+                  {form.applicationSource === 'Other' && (
+                    <Field label="Please specify" required hint="A short line is enough. Example: Naukri, a friend outside the team.">
+                      <input required value={form.applicationSourceOther} onChange={set('applicationSourceOther')} style={inputStyle} placeholder="e.g. Naukri, a friend outside the team" />
+                    </Field>
+                  )}
                   <div className="rw-career-form-section">PROFESSIONAL REFERENCES <span>(OPTIONAL)</span></div>
                   <p className="rw-reference-disclaimer">
-                    Please provide accurate reference details and ensure the individuals listed have consented to being contacted.
+                    Former manager or colleague who can speak to your work — not the Team RW person who referred you. Anyone you list must have agreed to be contacted.
                   </p>
                   <div className="rw-career-reference-title">REFERENCE 1</div>
                   <Field label="Name">
