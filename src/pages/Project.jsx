@@ -503,9 +503,18 @@ function ProjectBody({ data, name }) {
   const aboutStats = about?.highlights || []
   const interior = flattenGallery(gallery?.interior).map(projectImage).filter(Boolean)
   const exterior = flattenGallery(gallery?.exterior).map(projectImage).filter(Boolean)
+  const exteriorLabels = gallery?.exteriorLabels || []
+  const interiorLabels = gallery?.interiorLabels || []
   const galleryItems = [
-    ...exterior.map((src, i) => ({ src, title: `Exterior ${String(i + 1).padStart(2, '0')}`, wide: i % 5 === 0 })),
-    ...interior.map((src, i) => ({ src, title: `Interior ${String(i + 1).padStart(2, '0')}` })),
+    ...exterior.map((src, i) => ({
+      src,
+      title: exteriorLabels[i] || 'The grounds',
+      wide: i === 0,
+    })),
+    ...interior.map((src, i) => ({
+      src,
+      title: interiorLabels[i] || 'Inside the home',
+    })),
   ]
   const layoutImg = projectImage(layout?.img)
   const amenityItems = amenities?.data || []

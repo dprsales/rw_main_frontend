@@ -93,10 +93,10 @@ export async function fetchProjectSlugs() {
   return merged
 }
 
+const GALLERY_CELLS = ['c0r0', 'c0r1', 'c1r0', 'c2r0', 'c2r1']
+
 /** Flatten the gallery's column/row buckets ({c0r0:[...], c0r1:[...]}) to a list. */
 export function flattenGallery(bucket) {
   if (!bucket) return []
-  return Object.values(bucket)
-    .flat()
-    .filter(Boolean)
+  return GALLERY_CELLS.flatMap((k) => (Array.isArray(bucket[k]) ? bucket[k] : [])).filter(Boolean)
 }
