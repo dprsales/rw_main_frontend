@@ -43,7 +43,7 @@ function applyDocumentScale(level) {
     // Keep the selector buttons and wheel navigation at their designed UI sizes.
     // The wheel has its own viewport-aware typography and should not be treated as
     // ordinary page copy (especially on desktop/laptop screens).
-    if (element.closest('.rw-fs-control, .rw-wheel-menu')) {
+    if (element.closest('.rw-fs-control, .rw-lang-switch, .rw-wheel-menu')) {
       const record = scaledElements.get(element)
       if (record) {
         element.style.fontSize = record.inlineFontSize

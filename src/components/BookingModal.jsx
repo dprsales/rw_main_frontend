@@ -9,6 +9,7 @@ import { roleWorkMode } from '../data/jobs'
 import { labelFor } from '../data/guidance'
 import { crmDeliveryOf, errorCategory, newId, track } from '../data/analytics'
 import { useFinder } from '../hooks/useFinder'
+import { useLang } from '../i18n/LangProvider'
 import FinderSteps from './FinderSteps'
 import CtaButton from './CtaButton'
 
@@ -110,6 +111,7 @@ export function BookingProvider({ children }) {
 const KNOWN_INTERESTS = ['Sales Coaching', 'Sales Consulting', 'Sales Mandates', CAREERS_INTEREST]
 
 function BookingModal({ preset, onClose }) {
+  const { t } = useLang()
   const presetInterest = normaliseInterest(preset.interest)
   // The questions run first unless the opener already knows who the visitor is
   // (finder card, a service page, careers) or asked to skip them.
@@ -276,7 +278,7 @@ function BookingModal({ preset, onClose }) {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Book a strategy call"
+      aria-label={t('book.aria')}
       onClick={onClose}
       style={{
         position: 'fixed', inset: 0, zIndex: 300,
@@ -296,7 +298,7 @@ function BookingModal({ preset, onClose }) {
         }}
       >
         <button
-          type="button" onClick={onClose} aria-label="Close"
+          type="button" onClick={onClose} aria-label={t('cta.close')}
           style={{
             position: 'absolute', top: 16, right: 16, width: 38, height: 38, borderRadius: '50%',
             border: '1px solid var(--line)', background: 'transparent', color: 'var(--ink)',
@@ -306,23 +308,23 @@ function BookingModal({ preset, onClose }) {
 
         {phase === 'questions' ? (
           <>
-            <div style={{ ...eyebrow, marginBottom: 12, paddingRight: 44 }}>{preset.eyebrow || 'BOOK A STRATEGY CALL'}</div>
+            <div className="rw-modal-eyebrow" style={{ ...eyebrow, marginBottom: 12, paddingRight: 44 }}>{preset.eyebrow || t('book.eyebrow')}</div>
             <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: fs('clamp(24px,3.2vw,32px)'), color: 'var(--ink)', lineHeight: 1.15, marginBottom: 8 }}>
-              First, a little about you.
+              {t('book.firstAbout')}
             </h2>
             <p style={{ fontFamily: text, fontWeight: 300, fontSize: fs('14px'), lineHeight: 1.6, color: 'var(--faded)', marginBottom: 22 }}>
-              One to three taps, so the call starts on the right subject. Then your details.
+              {t('book.tapsHint')}
             </p>
             <FinderSteps finder={finder} compact>
               <div className="rw-finder-links" style={{ marginTop: 18 }}>
-                {finder.stepIndex > 0 && <CtaButton variant="secondary" arrow="←" onClick={finder.back}>Back</CtaButton>}
-                <CtaButton variant="secondary" onClick={skipQuestions}>Skip &amp; fill in your details</CtaButton>
+                {finder.stepIndex > 0 && <CtaButton variant="secondary" arrow="←" onClick={finder.back}>{t('cta.back')}</CtaButton>}
+                <CtaButton variant="secondary" onClick={skipQuestions}>{t('cta.skipDetails')}</CtaButton>
               </div>
             </FinderSteps>
           </>
         ) : status === 'sent' ? (
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
-            <div style={{ ...eyebrow, marginBottom: 14 }}>{isApplying ? 'APPLICATION RECEIVED' : 'REQUEST RECEIVED'}</div>
+            <div className="rw-modal-eyebrow" style={{ ...eyebrow, marginBottom: 14 }}>{isApplying ? 'APPLICATION RECEIVED' : 'REQUEST RECEIVED'}</div>
             <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: fs('clamp(24px,3.2vw,32px)'), color: 'var(--ink)', lineHeight: 1.15, marginBottom: 14 }}>
               Thank you. We’ll be in touch.
             </h2>
@@ -333,7 +335,7 @@ function BookingModal({ preset, onClose }) {
                   ? 'You’re already with us. We’ve added this request to your existing enquiry and the team has been notified.'
                   : 'Your request has reached the team. Expect a reply within one business day to arrange your strategy call.'}
             </p>
-            <button type="button" onClick={onClose} style={{ ...ctaBtn }}>Close</button>
+            <button type="button" onClick={onClose} style={{ ...ctaBtn }}>{t('cta.close')}</button>
           </div>
         ) : (
           <>
@@ -349,21 +351,21 @@ function BookingModal({ preset, onClose }) {
               </>
             ) : (
               <>
-                <div style={{ ...eyebrow, marginBottom: 12, paddingRight: 44 }}>{preset.eyebrow || 'BOOK A STRATEGY CALL'}</div>
+                <div className="rw-modal-eyebrow" style={{ ...eyebrow, marginBottom: 12, paddingRight: 44 }}>{preset.eyebrow || t('book.eyebrow')}</div>
                 <h2 style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: fs('clamp(24px,3.2vw,32px)'), color: 'var(--ink)', lineHeight: 1.15, marginBottom: 8 }}>
-                  {preset.title || 'Let’s start the conversation.'}
+                  {preset.title || t('book.startConvo')}
                 </h2>
                 <p style={{ fontFamily: text, fontWeight: 300, fontSize: fs('14px'), lineHeight: 1.6, color: 'var(--faded)', marginBottom: guidance ? 14 : 24 }}>
-                  {preset.subtitle || 'Share a few details and the team will reach out to schedule a call.'}
+                  {preset.subtitle || t('book.shareDetails')}
                 </p>
                 {guidance && (
-                  <div className="rw-guidance-chips" aria-label="Your answers" style={{ marginBottom: 22 }}>
+                  <div className="rw-guidance-chips" aria-label={t('book.yourAnswers')} style={{ marginBottom: 22 }}>
                     {guidance.who && <span className="rw-guidance-chip">{labelFor('who', guidance.who)}</span>}
                     {guidance.challenge && <span className="rw-guidance-chip">{labelFor('challenge', guidance.challenge, guidance.who)}</span>}
                     {guidance.goal && <span className="rw-guidance-chip">{labelFor('goal', guidance.goal)}</span>}
                     {guidance.recommended && <span className="rw-guidance-chip is-result">→ {guidance.recommended}</span>}
                     {guidance.onEdit && (
-                      <button type="button" className="rw-guidance-chip is-edit" onClick={editAnswers}>edit</button>
+                      <button type="button" className="rw-guidance-chip is-edit" onClick={editAnswers}>{t('book.edit')}</button>
                     )}
                   </div>
                 )}
@@ -371,28 +373,28 @@ function BookingModal({ preset, onClose }) {
             )}
 
             <form onSubmit={onSubmit} className={isApplying ? 'rw-career-modal-form' : ''} style={{ display: 'grid', gap: 14 }}>
-              <Field label="Name" required>
-                <input required value={form.name} onChange={set('name')} style={inputStyle} placeholder="Your full name" autoFocus />
+              <Field label={t('field.name')} required>
+                <input required value={form.name} onChange={set('name')} style={inputStyle} placeholder={t('ph.fullName')} autoFocus />
               </Field>
-              <Field label="Email" required>
+              <Field label={t('field.email')} required>
                 <input required type="email" value={form.email} onChange={set('email')} style={inputStyle} placeholder="you@company.com" />
               </Field>
               {/* Required: leads endpoint rejects any phone that isn't exactly ten digits */}
-              <Field label="Phone" required>
+              <Field label={t('field.phone')} required>
                 <input
                   required type="tel" inputMode="numeric" autoComplete="tel"
                   value={form.phone} onChange={set('phone')} style={inputStyle}
-                  placeholder="10-digit mobile number"
+                  placeholder={t('ph.phone')}
                 />
               </Field>
               {!isApplying && (
-                <Field label="Company / organisation">
-                  <input value={form.company} onChange={set('company')} style={inputStyle} placeholder="Optional" autoComplete="organization" />
+                <Field label={t('field.company')}>
+                  <input value={form.company} onChange={set('company')} style={inputStyle} placeholder={t('ph.optional')} autoComplete="organization" />
                 </Field>
               )}
-              {!isApplying && <Field label="I’m interested in">
+              {!isApplying && <Field label={t('field.interest')}>
                 <select value={form.interest} onChange={set('interest')} style={{ ...inputStyle, appearance: 'none' }}>
-                  <option value="">Select one…</option>
+                  <option value="">{t('ph.selectOne')}</option>
                   {interestOptions.map((i) => <option key={i} value={i}>{i}</option>)}
                 </select>
               </Field>}
@@ -553,8 +555,8 @@ function BookingModal({ preset, onClose }) {
                 </>
               )}
 
-              <Field label={isApplying ? 'Additional information (optional)' : 'Message'}>
-                <textarea value={form.message} onChange={set('message')} rows={isApplying ? 3 : 3} style={{ ...inputStyle, resize: 'vertical' }} placeholder={isApplying ? 'Tell us about your experience, skills or anything else we should know...' : 'What would you like to discuss? (optional)'} />
+              <Field label={isApplying ? 'Additional information (optional)' : t('field.message')}>
+                <textarea value={form.message} onChange={set('message')} rows={isApplying ? 3 : 3} style={{ ...inputStyle, resize: 'vertical' }} placeholder={isApplying ? 'Tell us about your experience, skills or anything else we should know...' : t('ph.message')} />
               </Field>
 
               {isApplying && (
@@ -569,7 +571,7 @@ function BookingModal({ preset, onClose }) {
               )}
 
               <button type="submit" disabled={status === 'sending'} className={`rw-cta ${isApplying ? 'rw-career-submit' : ''}`.trim()} style={{ ...ctaBtn, marginTop: 6, opacity: status === 'sending' ? 0.6 : 1, cursor: status === 'sending' ? 'default' : 'pointer' }}>
-                {status === 'sending' ? 'Sending...' : isApplying ? 'Submit Application →' : 'Request my call'}
+                {status === 'sending' ? t('cta.sending') : isApplying ? 'Submit Application →' : t('cta.requestCall')}
               </button>
             </form>
           </>
@@ -593,7 +595,7 @@ function MetaIcon({ type }) {
 function Field({ label, required, hint, children }) {
   return (
     <label style={{ display: 'grid', gap: 7 }}>
-      <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.12em', color: 'var(--faded)' }}>
+      <span className="rw-field-label" style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.12em', color: 'var(--faded)' }}>
         {label.toUpperCase()}{required && <span style={{ color: 'var(--copper)' }}> *</span>}
       </span>
       {hint && (

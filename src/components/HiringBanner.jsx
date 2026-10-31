@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { activeHiringCampaigns, showHiringRail } from '../data/content'
 import { careerRolePath } from '../data/jobs'
+import { useLang } from '../i18n/LangProvider'
 import { openHiringModal } from './HiringModal'
 
 const ROTATE_MS = 6000
 
 /** Time-bound hiring rail. Hidden when every campaign in `HIRING_CAMPAIGNS` has expired. */
 export default function HiringBanner() {
+  const { t } = useLang()
   const { pathname } = useLocation()
   const campaigns = activeHiringCampaigns()
   const [index, setIndex] = useState(0)
@@ -35,7 +37,7 @@ export default function HiringBanner() {
           {row.location ? <span className="rw-hire-meta"> · {row.location}</span> : null}
           {row.line ? <span className="rw-hire-line"> — {row.line}</span> : null}
         </button>
-        <Link className="rw-hire-go" to={href}>Apply now</Link>
+        <Link className="rw-hire-go" to={href}>{t('cta.applyNow')}</Link>
         {campaigns.length > 1 && (
           <div className="rw-hire-dots" role="group" aria-label="Hiring slides">
             {campaigns.map((item, i) => (

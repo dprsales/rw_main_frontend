@@ -5,6 +5,7 @@ import ScrollProgress from './components/ScrollProgress'
 import SiteLoader from './components/SiteLoader'
 import HiringModal from './components/HiringModal'
 import { ThemeProvider } from './components/ThemeProvider'
+import { LangProvider } from './i18n/LangProvider'
 import { headerOffset } from './hooks/useSmoothScroll'
 import { useSiteVisitTracker } from './hooks/useSiteVisitTracker'
 import About from './pages/About'
@@ -76,12 +77,13 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <SiteLoader />
-      <BookingProvider>
-        <ScrollToTop />
-        <ScrollProgress />
-        <HiringModal />
-        <Routes>
+      <LangProvider>
+        <SiteLoader />
+        <BookingProvider>
+          <ScrollToTop />
+          <ScrollProgress />
+          <HiringModal />
+          <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/coaching" element={<Coaching />} />
           {/* KRISAH returns here after the assessment — the route maps to a score scenario. */}
@@ -128,8 +130,9 @@ export default function App() {
           <Route path="/blogs" element={<Navigate to="/articles" replace />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BookingProvider>
+          </Routes>
+        </BookingProvider>
+      </LangProvider>
     </ThemeProvider>
   )
 }

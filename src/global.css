@@ -1644,6 +1644,51 @@ button.rw-mega-item {
    used middle option is not worth it — instead tighten the gap so all three fit. */
 @media (max-width: 400px) { .rw-fs-control { gap: 1px; } .rw-fs-btn { padding: 2px 3px; } }
 
+/* Header language switch: EN | తెలుగు. Active side is gold. */
+.rw-lang-switch {
+  display: inline-flex; align-items: center; gap: 6px;
+  flex: none;
+}
+.rw-lang-btn {
+  background: none; border: 0; padding: 2px 0; cursor: pointer;
+  font-size: 11px; letter-spacing: .1em; line-height: 1;
+  color: var(--faded);
+  transition: color .2s ease;
+}
+.rw-lang-te { letter-spacing: .02em; font-family: 'Nirmala UI', 'Noto Sans Telugu', 'Gautami', sans-serif; }
+.rw-lang-btn:hover { color: var(--ink); }
+.rw-lang-btn.is-on { color: var(--copper); cursor: default; }
+.rw-lang-sep { color: var(--faded); opacity: .45; font-size: 11px; line-height: 1; }
+.rw-lang-btn:focus-visible { outline: 1px solid var(--copper); outline-offset: 2px; }
+@media (max-width: 400px) { .rw-lang-switch { gap: 4px; } .rw-lang-btn { font-size: 10px; } }
+
+/* Telugu chrome: Poppins has no Telugu glyphs; drop the wide English tracking. */
+html[lang="te"] .rw-dnav-link,
+html[lang="te"] .rw-dnav-book,
+html[lang="te"] .rw-mega-head,
+html[lang="te"] .rw-mega-title,
+html[lang="te"] .rw-mega-desc,
+html[lang="te"] .rw-mega-soon,
+html[lang="te"] .rw-mega-book,
+html[lang="te"] .rw-footer-links,
+html[lang="te"] .rw-footer-legal,
+html[lang="te"] .rw-hire-go,
+html[lang="te"] .rw-wheel-hint {
+  font-family: 'Poppins', 'Nirmala UI', 'Noto Sans Telugu', 'Gautami', system-ui, sans-serif;
+  letter-spacing: .04em;
+  text-transform: none;
+}
+html[lang="te"] .rw-dnav { gap: clamp(14px, 1.8vw, 28px); }
+html[lang="te"] .rw-dnav-book { letter-spacing: .03em; white-space: nowrap; font-size: 11px; padding: 10px 12px; }
+html[lang="te"] .rw-mega-book { font-size: 12px; letter-spacing: .02em; white-space: normal; }
+html[lang="te"] .rw-modal-card h2,
+html[lang="te"] .rw-modal-card p,
+html[lang="te"] .rw-modal-eyebrow,
+html[lang="te"] .rw-field-label {
+  font-family: 'Nirmala UI', 'Noto Sans Telugu', 'Gautami', 'Poppins', system-ui, sans-serif !important;
+  letter-spacing: .02em !important;
+}
+
 /* Fullscreen wheel navigation. */
 .rw-wheel-menu {
   position: fixed;

@@ -6,7 +6,9 @@ import HiringBanner from './HiringBanner'
 import OptionWheel from './OptionWheel'
 import Wordmark from './Wordmark'
 import FontSizeControl from './FontSizeControl'
+import LangSwitch from './LangSwitch'
 import { useBooking } from './BookingModal'
+import { useLang } from '../i18n/LangProvider'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { mono } from '../theme'
 import {
@@ -15,19 +17,19 @@ import {
 
 // Same wheel menu on every page: only route links belong here, not per-page scroll anchors.
 const SITE_NAV = [
-  { label: 'Home', to: '/' },
-  { label: 'Sales Coaching', to: '/coaching' },
-  { label: 'Sales Consulting', to: '/consulting' },
-  { label: 'Projects in Hyderabad', to: '/project-hyderabad' },
-  { label: 'Sales Mandate', to: '/realty' },
-  { label: 'Portfolio', to: '/realty/portfolio' },
-  { label: 'Careers', to: '/careers' },
-  { label: 'Articles', to: '/articles' },
-  { label: 'FAQs', to: '/faqs' },
-  { label: 'Channel Partners', to: '/partner' },
-  { label: 'KRISAH Assessment', to: '/assessment' },
+  { key: 'nav.home', label: 'Home', to: '/' },
+  { key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching' },
+  { key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting' },
+  { key: 'nav.projects', label: 'Projects in Hyderabad', to: '/project-hyderabad' },
+  { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty' },
+  { key: 'nav.portfolio', label: 'Portfolio', to: '/realty/portfolio' },
+  { key: 'nav.careers', label: 'Careers', to: '/careers' },
+  { key: 'nav.articles', label: 'Articles', to: '/articles' },
+  { key: 'nav.faqs', label: 'FAQs', to: '/faqs' },
+  { key: 'nav.partners', label: 'Channel Partners', to: '/partner' },
+  { key: 'nav.krisah', label: 'KRISAH Assessment', to: '/assessment' },
   // { label: 'Find your fit', to: '/start' },
-  { label: 'Book a call', book: true },
+  { key: 'nav.bookCall', label: 'Book a call', book: true },
 ]
 
 /**
@@ -36,67 +38,74 @@ const SITE_NAV = [
  */
 const MEGA_COLUMNS = [
   {
+    headingKey: 'mega.grow',
     heading: 'Grow your sales',
     items: [
-      { label: 'Sales Coaching', to: '/coaching', desc: '1:1 and team sales coaching', icon: Users },
-      { label: 'Sales Consulting', to: '/consulting', desc: 'Sales structure & strategy for developers', icon: ChartNoAxesColumnIncreasing },
-      { label: 'Sales Mandate', to: '/realty', desc: 'RW runs your project sales mandate', icon: FileSignature },
+      { key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching', descKey: 'mega.coachingDesc', desc: '1:1 and team sales coaching', icon: Users },
+      { key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting', descKey: 'mega.consultingDesc', desc: 'Sales structure & strategy for developers', icon: ChartNoAxesColumnIncreasing },
+      { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty', descKey: 'mega.mandateDesc', desc: 'RW runs your project sales mandate', icon: FileSignature },
     ],
   },
   {
+    headingKey: 'mega.partners',
     heading: 'Partners',
     items: [
-      { label: 'Channel Partners', to: '/partner', desc: 'Partner with RW', icon: Handshake },
+      { key: 'nav.partners', label: 'Channel Partners', to: '/partner', descKey: 'mega.partnerDesc', desc: 'Partner with RW', icon: Handshake },
     ],
   },
   {
+    headingKey: 'mega.startHere',
     heading: 'Start here',
     items: [
-      { label: 'KRISAH Assessment', to: '/assessment', desc: 'Find your sales strengths', icon: Target },
+      { key: 'nav.krisah', label: 'KRISAH Assessment', to: '/assessment', descKey: 'mega.krisahDesc', desc: 'Find your sales strengths', icon: Target },
     ],
     book: true,
   },
 ]
 const MEGA_PATHS = MEGA_COLUMNS.flatMap((col) => col.items.map((item) => item.to).filter(Boolean))
 const TOP_LINKS = [
-  { label: 'Portfolio', to: '/realty/portfolio' },
-  { label: 'Articles', to: '/articles' },
-  { label: 'FAQs', to: '/faqs' },
-  { label: 'Careers', to: '/careers' },
+  { key: 'nav.portfolio', label: 'Portfolio', to: '/realty/portfolio' },
+  { key: 'nav.articles', label: 'Articles', to: '/articles' },
+  { key: 'nav.faqs', label: 'FAQs', to: '/faqs' },
+  { key: 'nav.careers', label: 'Careers', to: '/careers' },
 ]
 const PROPERTY_COLUMNS = [
   {
+    headingKey: 'mega.builder',
     heading: 'Builder',
     items: [
-      { label: 'Projects in Hyderabad', to: '/project-hyderabad', desc: 'Projects that Team RW has associated with', icon: Building2 },
+      { key: 'nav.projects', label: 'Projects in Hyderabad', to: '/project-hyderabad', descKey: 'mega.projectsDesc', desc: 'Projects that Team RW has associated with', icon: Building2 },
     ],
   },
   {
+    headingKey: 'mega.resale',
     heading: 'Resale',
     soon: true,
     items: [
-      { label: 'List a property', desc: 'List your property with Team RW', soon: true, icon: ListPlus },
-      { label: 'Listed properties', desc: 'See rates and send an enquiry', soon: true, icon: LayoutGrid },
+      { key: 'mega.listProperty', label: 'List a property', descKey: 'mega.listDesc', desc: 'List your property with Team RW', soon: true, icon: ListPlus },
+      { key: 'mega.listed', label: 'Listed properties', descKey: 'mega.listedDesc', desc: 'See rates and send an enquiry', soon: true, icon: LayoutGrid },
     ],
   },
   {
+    headingKey: 'mega.rent',
     heading: 'Rent',
     soon: true,
     items: [
-      { label: 'Rentals', desc: 'Hyderabad rentals', soon: true, icon: KeyRound },
+      { key: 'mega.rentals', label: 'Rentals', descKey: 'mega.rentalsDesc', desc: 'Hyderabad rentals', soon: true, icon: KeyRound },
     ],
   },
 ]
 
 function MegaPanel({ id, columns, pathname, onClose, onBook }) {
+  const { t } = useLang()
   return (
     <div id={id} className="rw-mega">
       <div className="rw-mega-panel">
         {columns.map((col) => (
           <div key={col.heading} className="rw-mega-col">
             <p className="rw-mega-head">
-              {col.heading}
-              {col.soon && <span className="rw-mega-soon">Coming soon</span>}
+              {t(col.headingKey)}
+              {col.soon && <span className="rw-mega-soon">{t('mega.soon')}</span>}
             </p>
             {col.items.map((item) => {
               const Icon = item.icon
@@ -104,8 +113,8 @@ function MegaPanel({ id, columns, pathname, onClose, onBook }) {
                 <>
                   {Icon && <Icon className="rw-mega-icon" size={24} strokeWidth={1.5} aria-hidden="true" />}
                   <span className="rw-mega-text">
-                    <span className="rw-mega-title">{item.label}</span>
-                    <span className="rw-mega-desc">{item.desc}</span>
+                    <span className="rw-mega-title">{t(item.key)}</span>
+                    <span className="rw-mega-desc">{t(item.descKey)}</span>
                   </span>
                   {item.to && !item.soon && <ChevronRight className="rw-mega-go" size={18} strokeWidth={1.75} aria-hidden="true" />}
                 </>
@@ -121,7 +130,7 @@ function MegaPanel({ id, columns, pathname, onClose, onBook }) {
             })}
             {col.book && (
               <button type="button" className="rw-mega-book" onClick={() => { onClose(); onBook() }}>
-                BOOK A STRATEGY CALL <ArrowRight size={18} strokeWidth={1.6} aria-hidden="true" />
+                {t('mega.bookStrategy')} <ArrowRight size={18} strokeWidth={1.6} aria-hidden="true" />
               </button>
             )}
           </div>
@@ -132,6 +141,7 @@ function MegaPanel({ id, columns, pathname, onClose, onBook }) {
 }
 
 function DesktopNav({ pathname, onBook }) {
+  const { t } = useLang()
   const [open, setOpen] = useState(null)
   const workRef = useRef(null)
   const propsRef = useRef(null)
@@ -185,8 +195,8 @@ function DesktopNav({ pathname, onBook }) {
   const linkClass = (to) => `rw-dnav-link${pathname === to ? ' is-active' : ''}`
 
   return (
-    <nav className="rw-dnav" aria-label="Main">
-      <Link to="/" className={linkClass('/')}>Home</Link>
+    <nav className="rw-dnav" aria-label={t('ui.main')}>
+      <Link to="/" className={linkClass('/')}>{t('nav.home')}</Link>
 
       <div
         ref={propsRef}
@@ -203,7 +213,7 @@ function DesktopNav({ pathname, onBook }) {
           aria-controls="rw-props-mega"
           onClick={() => toggle('props')}
         >
-          Properties <ChevronDown className="rw-dnav-caret" size={14} strokeWidth={1.75} aria-hidden="true" />
+          {t('nav.properties')} <ChevronDown className="rw-dnav-caret" size={14} strokeWidth={1.75} aria-hidden="true" />
         </button>
 
         {open === 'props' && (
@@ -226,7 +236,7 @@ function DesktopNav({ pathname, onBook }) {
           aria-controls="rw-mega"
           onClick={() => toggle('work')}
         >
-          Services <ChevronDown className="rw-dnav-caret" size={14} strokeWidth={1.75} aria-hidden="true" />
+          {t('nav.services')} <ChevronDown className="rw-dnav-caret" size={14} strokeWidth={1.75} aria-hidden="true" />
         </button>
 
         {open === 'work' && (
@@ -235,7 +245,7 @@ function DesktopNav({ pathname, onBook }) {
       </div>
 
       {TOP_LINKS.map((item) => (
-        <Link key={item.to} to={item.to} className={linkClass(item.to)}>{item.label}</Link>
+        <Link key={item.to} to={item.to} className={linkClass(item.to)}>{t(item.key)}</Link>
       ))}
     </nav>
   )
@@ -267,6 +277,7 @@ function MenuIcon({ open }) {
 
 /** Wordmark + menu button; nav lives in the wheel menu (SITE_NAV). Takes no props. */
 export default function Header() {
+  const { t } = useLang()
   const scrollToId = useSmoothScroll()
   const openBooking = useBooking()
   const [open, setOpen] = useState(false)
@@ -355,10 +366,11 @@ export default function Header() {
         <DesktopNav pathname={pathname} onBook={openBooking} />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px,1.6vw,20px)' }}>
+          <LangSwitch />
           {/* Whole-site text-size control (Small/default, Medium, Large). */}
           <FontSizeControl />
 
-          <button type="button" className="rw-dnav-book" onClick={() => openBooking()}>BOOK A CALL</button>
+          <button type="button" className="rw-dnav-book" onClick={() => openBooking()}>{t('cta.bookCall')}</button>
 
           {/* Tablet/phone: nav lives in the wheel menu behind this button. */}
           <button
@@ -366,7 +378,7 @@ export default function Header() {
             className="rw-menu-btn"
             onClick={() => setOpen((wasOpen) => !wasOpen)}
             aria-expanded={open}
-            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-label={open ? t('ui.closeMenu') : t('ui.openMenu')}
             style={{
               display: 'none', alignItems: 'center', justifyContent: 'center',
               width: 40, height: 40, background: 'none', cursor: 'pointer',
@@ -381,19 +393,19 @@ export default function Header() {
       {/* Portalled past the header (backdrop-filter would clip fixed descendants) but into
           the theme shell, not <body>, so the overlay keeps the shell's palette var(--…) scope. */}
       {open && createPortal(
-        <div className="rw-wheel-menu" role="dialog" aria-modal="true" aria-label="Navigation">
+        <div className="rw-wheel-menu" role="dialog" aria-modal="true" aria-label={t('ui.nav')}>
           <button
             type="button"
             className="rw-wheel-close"
             onClick={() => setOpen(false)}
-            aria-label="Close menu"
+            aria-label={t('ui.closeMenu')}
           >
             <MenuIcon open />
           </button>
 
           <div className="rw-wheel-stage">
             <OptionWheel
-              items={SITE_NAV.map((item) => item.label)}
+              items={SITE_NAV.map((item) => t(item.key))}
               defaultSelected={currentIndex}
               onActivate={(index) => goTo(SITE_NAV[index])}
               textColor="rgba(242,239,233,0.28)"
@@ -410,7 +422,7 @@ export default function Header() {
             />
           </div>
 
-          <p className="rw-wheel-hint" style={{ fontFamily: mono }}>Scroll, drag or use ↑ ↓ · click to go</p>
+          <p className="rw-wheel-hint" style={{ fontFamily: mono }}>{t('ui.wheelHint')}</p>
         </div>,
         document.getElementById('rw-app-shell') || document.body,
       )}

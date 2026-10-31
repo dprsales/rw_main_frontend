@@ -1,6 +1,8 @@
 import { Link, useLocation } from 'react-router-dom'
 import { fs } from '../styles'
 import Wordmark from './Wordmark'
+import { useLang } from '../i18n/LangProvider'
+import { FOOTER_LABEL_KEYS } from '../i18n/chrome'
 import { mono, PAGE_SOCIAL_LINKS, SOCIAL_LINKS } from '../theme'
 
 /** One glyph per platform, matched by label's first word. Simplified marks, not brand logos. */
@@ -64,6 +66,8 @@ function FooterSocialIcons() {
 
 /** `links` items: { label, href } for external/mail, { label, to } for routes. */
 export default function Footer({ links, chip = false }) {
+  const { t } = useLang()
+  const labelOf = (label) => (FOOTER_LABEL_KEYS[label] ? t(FOOTER_LABEL_KEYS[label]) : label)
   // Excluded by platform name, not href — PAGE_SOCIAL_LINKS overrides href per page.
   const restLinks = links.filter((link) => !PLATFORM_NAMES.includes(link.label.split(' ')[0]))
   const legalLinks = restLinks.filter((link) => link.legal)
@@ -101,7 +105,7 @@ export default function Footer({ links, chip = false }) {
             {mainLinks.map((link) =>
               link.to ? (
                 <Link key={link.label} to={link.to} style={{ color: link.muted ? 'var(--faded)' : undefined }}>
-                  {link.label}
+                  {labelOf(link.label)}
                 </Link>
               ) : (
                 <a
@@ -111,15 +115,15 @@ export default function Footer({ links, chip = false }) {
                   rel={link.external ? 'noreferrer' : undefined}
                   style={{ color: link.muted ? 'var(--faded)' : undefined }}
                 >
-                  {link.label}
+                  {labelOf(link.label)}
                 </a>
               ),
             )}
           </div>
           {legalLinks.length > 0 && (
-            <nav className="rw-footer-legal" aria-label="Legal">
+            <nav className="rw-footer-legal" aria-label={t('ui.legal')}>
               {legalLinks.map((link) => (
-                <Link key={link.label} to={link.to}>{link.label}</Link>
+                <Link key={link.label} to={link.to}>{labelOf(link.label)}</Link>
               ))}
             </nav>
           )}

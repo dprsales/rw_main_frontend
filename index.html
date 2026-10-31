@@ -117,6 +117,11 @@
     var lvl = parseInt(localStorage.getItem('rw-fs-level'), 10);
     var s = [1, 1.12, 1.24][lvl] || 1;
     document.documentElement.style.setProperty('--rw-fs', s);
+    var lang = localStorage.getItem('rw-lang');
+    if (lang === 'te') {
+      document.documentElement.lang = 'te';
+      document.documentElement.setAttribute('data-lang', 'te');
+    }
   } catch (e) {}
 </script>
 <div id="root"></div>
