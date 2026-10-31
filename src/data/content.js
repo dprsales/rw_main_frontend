@@ -47,8 +47,8 @@ export const MARQUEE_ITEMS = [
   '16+ years at the top',
 ]
 
-/* Site-wide urgent-hiring rail. Rows past `until` (inclusive, local date) hide themselves.
-   Add another object to rotate; empty the array to take the rail down immediately. */
+/* Urgent-hiring rail on `/` and `/careers` only. Rows past `until` (inclusive, local date)
+   hide themselves. Add another object to rotate; empty the array to take the rail down. */
 export const HIRING_CAMPAIGNS = [
   {
     title: 'Finance & Account Manager',
@@ -57,6 +57,11 @@ export const HIRING_CAMPAIGNS = [
     until: '2026-11-30',
   },
 ]
+
+export function showHiringRail(pathname) {
+  const path = String(pathname || '').replace(/\/+$/, '') || '/'
+  return path === '/' || path === '/careers'
+}
 
 export function activeHiringCampaigns(now = new Date()) {
   return HIRING_CAMPAIGNS.filter((row) => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { activeHiringCampaigns } from '../data/content'
+import { Link, useLocation } from 'react-router-dom'
+import { activeHiringCampaigns, showHiringRail } from '../data/content'
 import { careerRolePath } from '../data/jobs'
 import { openHiringModal } from './HiringModal'
 
@@ -8,18 +8,20 @@ const ROTATE_MS = 6000
 
 /** Time-bound hiring rail. Hidden when every campaign in `HIRING_CAMPAIGNS` has expired. */
 export default function HiringBanner() {
+  const { pathname } = useLocation()
   const campaigns = activeHiringCampaigns()
   const [index, setIndex] = useState(0)
+  const onRail = showHiringRail(pathname)
 
   useEffect(() => {
-    if (campaigns.length < 2) return
+    if (!onRail || campaigns.length < 2) return
     const id = window.setInterval(() => {
       setIndex((n) => (n + 1) % campaigns.length)
     }, ROTATE_MS)
     return () => window.clearInterval(id)
-  }, [campaigns.length])
+  }, [onRail, campaigns.length])
 
-  if (!campaigns.length) return null
+  if (!onRail || !campaigns.length) return null
 
   const row = campaigns[index % campaigns.length]
   const href = careerRolePath(row.title)

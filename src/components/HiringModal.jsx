@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { Link, useLocation } from 'react-router-dom'
 import hireFinanceBanner from '../assets/site/hiring-finance-account-manager.jpg'
 import CtaButton from './CtaButton'
-import { activeHiringCampaigns } from '../data/content'
+import { activeHiringCampaigns, showHiringRail } from '../data/content'
 import { careerRolePath } from '../data/jobs'
 
 export const HIRE_OPEN = 'rw-open-hire'
@@ -49,7 +49,7 @@ export default function HiringModal() {
   }, [])
 
   useEffect(() => {
-    if (!row || pathname.startsWith('/careers/')) return
+    if (!row || !showHiringRail(pathname)) return
     if (wasSeen(row)) return
 
     let interval
