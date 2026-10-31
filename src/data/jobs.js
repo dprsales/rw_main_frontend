@@ -111,6 +111,13 @@ const CURATED_SALES_HEADS = [
   'Vice President',
   'Senior Vice President',
   'Finance & Account Manager',
+  'Head of CRM Operations',
+  'GM - CRM',
+  'DGM - CRM',
+  'Head of CRM & Customer Experience',
+  'VP - Customer Experience & Post-Sales Operations',
+  'Head - Customer Experience & Post-Sales Operations',
+  'Head - Revenue Operations & Collections',
 ]
 
 function roleIdentity(role) {

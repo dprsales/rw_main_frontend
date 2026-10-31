@@ -52,11 +52,12 @@ const ROLES_PER_PAGE = 6
    (and use both '-' and '–'). Anything unrecognised ('Open role') sorts last. */
 function levelRank(level = '') {
   const l = level.toLowerCase()
-  if (l.includes('senior vice president') || l === 'svp') return 13
-  if (l.includes('associate vice president') || l === 'avp') return 11
-  if (l.includes('vice president') || l === 'vp') return 12
+  if (l.includes('senior vice president') || l === 'svp') return 14
+  if (l.includes('associate vice president') || l === 'avp') return 12
+  if (l.includes('vice president') || l === 'vp') return 13
   if (l.includes('assistant general manager') || l === 'agm') return 9
-  if (l.includes('general manager') || l === 'gm') return 10
+  if (l === 'dgm' || l.includes('deputy general')) return 10
+  if (l.includes('general manager') || l === 'gm') return 11
   if (l.includes('head')) return 8
   if (l.includes('senior manager')) return 7
   if (l.includes('manager')) return 6
