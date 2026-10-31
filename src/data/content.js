@@ -923,4 +923,6 @@ export const PROJECTS = [
   { name: 'Prestige Golden Grove', area: 'Tellapur', status: 'Mandate' },
   { name: 'Amaracasa', area: 'Mokila', status: 'Mandate' },
   { name: 'Srivari Meadows', area: 'Mokila', status: 'Mandate' },
+  { name: 'Alora', area: 'Mokila', status: 'Mandate' },
+  { name: 'Aika', area: 'Kokapet', status: 'Mandate' },
 ]

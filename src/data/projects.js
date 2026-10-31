@@ -39,6 +39,8 @@ export const PROJECT_SLUGS = {
   'High9': 'high9',
   'Amaracasa': 'amaracasa',
   'Srivari Meadows': 'srivari-meadows',
+  'Alora': 'alora',
+  'Aika': 'aika',
 }
 
 /** Resolve a CDN path (or absolute URL) from the API to a loadable image URL. */
