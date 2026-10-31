@@ -19,7 +19,7 @@ import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { useInView } from '../hooks/useInView'
 import { CAREER_CATEGORIES, CAREER_CULTURE, CAREER_HOOK, CAREER_PROCESS, CAREER_REASONS, CAREER_ROLES } from '../data/content'
 import { CAREERS_INTEREST } from '../data/booking'
-import { careerRolePath, fetchRoles } from '../data/jobs'
+import { CRM_PRIORITY_TITLES, careerRolePath, fetchRoles } from '../data/jobs'
 import { FOOTER_LINKS, mono, serif } from '../theme'
 import { fs,
   container, ctaInline, eyebrow,
@@ -68,8 +68,12 @@ function levelRank(level = '') {
   if (l.includes('senior')) return 5
   return 99
 }
-// Array.prototype.sort is stable, so roles at the same level keep their curated order.
-const bySeniority = (roles) => [...roles].sort((a, b) => levelRank(a.level) - levelRank(b.level))
+function roleOrder(role) {
+  const pinned = CRM_PRIORITY_TITLES.indexOf(role.title)
+  if (pinned !== -1) return pinned
+  return 100 + levelRank(role.level)
+}
+const bySeniority = (roles) => [...roles].sort((a, b) => roleOrder(a) - roleOrder(b))
 
 /* One card per job: 'Sr. Sales Executive' and 'Sr Sales Executive' (or 'Senior Sales
    Executive') in the same city are the same opening, whether the repeat comes from the

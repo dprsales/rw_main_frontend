@@ -111,13 +111,18 @@ const CURATED_SALES_HEADS = [
   'Vice President',
   'Senior Vice President',
   'Finance & Account Manager',
-  'Head of CRM Operations',
   'GM - CRM',
-  'DGM - CRM',
-  'Head of CRM & Customer Experience',
   'VP - Customer Experience & Post-Sales Operations',
-  'Head - Customer Experience & Post-Sales Operations',
-  'Head - Revenue Operations & Collections',
+  'Head of CRM & Customer Experience',
+  'CRM, Customer Experience and Business Operations Leader',
+]
+
+/** Rajiv’s priority order for the CRM / CX seats. Careers shows these first, in this sequence. */
+export const CRM_PRIORITY_TITLES = [
+  'GM - CRM',
+  'VP - Customer Experience & Post-Sales Operations',
+  'Head of CRM & Customer Experience',
+  'CRM, Customer Experience and Business Operations Leader',
 ]
 
 function roleIdentity(role) {

@@ -210,9 +210,8 @@ export default function ProjectsSection({ id = 'projects' }) {
     return () => { live = false }
   }, [])
 
-  /* Live rows override the curated list — the portfolio should track everything the
-     admin panel has published, not the hand-maintained snapshot in content.js. Rows
-     are bridged by slug so curated titles keep their polished casing and status. */
+  /* Live rows are the source of truth — the count and the map must match the DB.
+     Curated titles keep their polished casing and status when the slug matches. */
   const shown = useMemo(() => {
     if (!liveProjects.length) return PROJECTS
 
@@ -233,17 +232,7 @@ export default function ProjectsSection({ id = 'projects' }) {
         image,
       }
     })
-    const usedSlugs = new Set(
-      liveProjects.map((row) => (row.slug || '').trim().toLowerCase()).filter(Boolean),
-    )
-    const usedNames = new Set(liveMapped.map((p) => p.name.toLowerCase()))
-    const extras = PROJECTS.filter((p) => {
-      const slug = PROJECT_SLUGS[p.name]?.toLowerCase()
-      if (slug && usedSlugs.has(slug)) return false
-      if (usedNames.has(p.name.toLowerCase())) return false
-      return true
-    })
-    return [...liveMapped, ...extras]
+    return liveMapped
   }, [liveProjects])
 
   // Nodes with nothing after a filter stay on the map dimmed — it should re-weight, not reshape.
@@ -271,10 +260,10 @@ export default function ProjectsSection({ id = 'projects' }) {
     nodes.find((n) => n.name === active && n.projects.length) ||
     [...nodes].sort((a, b) => b.projects.length - a.projects.length)[0]
 
-  // "All" keeps the original static totals (every project, every named locality);
-  // a quadrant filter switches to a live count of what's actually visible now.
+  // Same source as the map: live DB rows when they loaded, otherwise the
+  // curated fallback. A quadrant filter only counts what is on screen.
   const visibleProjectCount = quadrant === 'All' ? shown.length : nodes.reduce((sum, n) => sum + n.projects.length, 0)
-  const visibleLocalityCount = quadrant === 'All' ? LOCALITIES.length : nodes.filter((n) => n.projects.length > 0).length
+  const visibleLocalityCount = nodes.filter((n) => n.projects.length > 0).length
 
   return (
     <section id={id} style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
