@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import heroImage from '../assets/site/hero-rajiv.webp'
-import heroCoaching from '../assets/site/hero-slider-coaching.jpg'
+import heroCoaching from '../assets/site/hero-slider-coaching.png'
 import heroConsulting from '../assets/site/hero-slider-consulting.jpg'
 import heroRealty from '../assets/site/hero-slider-realty.jpg'
 import wayCoachingVideo from '../assets/site/way-coaching.mp4'
