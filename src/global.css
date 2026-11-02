@@ -839,14 +839,26 @@ a:hover { color: var(--ink, #12100D); }
   margin-top: clamp(28px, 3vw, 42px);
   padding-top: clamp(24px, 2.6vw, 32px);
   border-top: 1px solid var(--line);
-  min-height: 108px;
 }
 .rw-chip-caption-num {
   flex-shrink: 0; font-size: 12px; letter-spacing: .18em; color: var(--copper);
 }
+/* Stack every caption in one cell so the tallest description sets the height
+   and hovering a shorter chip does not shove the footer. */
+.rw-chip-caption-stack {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
 .rw-chip-caption-text {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  margin: 0;
   font-size: clamp(19px, 2vw, 26px); line-height: 1.4; letter-spacing: -.01em;
-  color: var(--ink); max-width: 26em;
+  color: var(--ink);
+}
+.rw-chip-caption-text.is-on {
+  visibility: visible;
   animation: rw-fade .4s ease both;
 }
 .rw-chip-caption-label {

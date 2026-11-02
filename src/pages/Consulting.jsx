@@ -15,8 +15,7 @@ import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import ClosingCTA from '../components/ClosingCTA'
 import PullQuote from '../components/PullQuote'
-import SectionHead, { SectionAside } from '../components/SectionHead'
-import { DEVELOPER_SHIFTS, ECOSYSTEM, SUPPORT_SERVICES } from '../data/content'
+import { DEVELOPER_SHIFTS, ECOSYSTEM } from '../data/content'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import { fs, ctaCopper, ctaInline,
   container, eyebrow,
@@ -200,45 +199,6 @@ function PhaseCard({ flow, index, delay, active, expanded, onToggle, onHover, on
   )
 }
 
-/** "& More" services as a chip cloud. The first chip is on by default so the
- *  caption is never empty; hover (or tap/focus) moves the active one. */
-function SupportCloud() {
-  const [active, setActive] = useState(0)
-  const service = SUPPORT_SERVICES[active]
-
-  return (
-    <div>
-      <div className="rw-chips">
-        {SUPPORT_SERVICES.map((svc, i) => (
-          <button
-            key={svc.title}
-            type="button"
-            className={`rw-chip${i === active ? ' is-on' : ''}`}
-            style={{ fontFamily: mono }}
-            onMouseEnter={() => setActive(i)}
-            onFocus={() => setActive(i)}
-            onClick={() => setActive(i)}
-            aria-pressed={i === active}
-          >
-            {svc.title}
-          </button>
-        ))}
-      </div>
-
-      <div className="rw-chip-caption">
-        <span className="rw-chip-caption-num" style={{ fontFamily: mono }}>
-          {String(active + 1).padStart(2, '0')} / {String(SUPPORT_SERVICES.length).padStart(2, '0')}
-        </span>
-        {/* Re-keyed so each change re-runs the fade-in. */}
-        <p key={active} className="rw-chip-caption-text" style={{ fontFamily: serif }}>
-          <span className="rw-chip-caption-label" style={{ fontFamily: mono }}>{service.title}</span>
-          {service.desc}
-        </p>
-      </div>
-    </div>
-  )
-}
-
 export default function Consulting() {
   const { hash } = useLocation()
   if (hash === '#investment-advisory') return <Navigate to="/project-hyderabad" replace />
@@ -348,19 +308,6 @@ export default function Consulting() {
 
           <PhaseGrid items={ECOSYSTEM} />
         </div>
-      </section>
-
-      {/* & More - additional strategic support services */}
-      <section id="support" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
-        <SectionHead
-          eyebrow="& MORE" tracking=".24em" titleWidth="12em"
-          title="Strategic support, beyond the framework."
-          aside={<SectionAside width="24em">Additional services designed to strengthen visibility, accelerate sales movement, and improve operational efficiency.</SectionAside>}
-        />
-
-        <Reveal delay={80}>
-          <SupportCloud />
-        </Reveal>
       </section>
 
       {/* One engagement, anonymised - the case study, with its three numbers. */}

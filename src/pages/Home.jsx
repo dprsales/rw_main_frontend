@@ -12,7 +12,6 @@ import wayMandateVideo from '../assets/site/way-mandate.mp4'
 import wayMandatePoster from '../assets/site/way-mandate.jpg'
 import hraLogo from '../assets/site/logo-hra.png'
 import narLogo from '../assets/site/logo-nar.png'
-import signature from '../assets/site/gold2.png'
 import founderSignature from '../assets/site/founder-sign.png'
 import Footer from '../components/Footer'
 import Gallery from '../components/Gallery'
@@ -27,8 +26,8 @@ import Marquee from '../components/Marquee'
 import Reveal from '../components/Reveal'
 import FoldText from '../components/FoldText'
 import StrokeText from '../components/StrokeText'
-import PullQuote from '../components/PullQuote'
-import SectionHead, { SectionCount } from '../components/SectionHead'
+import SectionHead, { SectionAside, SectionCount } from '../components/SectionHead'
+import SupportCloud from '../components/SupportCloud'
 import { useParallax } from '../hooks/useParallax'
 import { useInView } from '../hooks/useInView'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
@@ -543,27 +542,16 @@ He helps developers and their sales teams<br />
         </div>
       </section>
 
-      {/* Quote / apply */}
-      <section id="apply" style={{ ...sectionRule, background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ maxWidth: 1000, margin: '0 auto', padding: 'clamp(90px,12vw,140px) 40px', textAlign: 'center' }}>
-          <Reveal>
-            <PullQuote
-              size="clamp(28px,3.8vw,48px)" lineHeight={1.24} space={30}
-              name={
-                <img
-                  src={signature}
-                  alt="Rajiv Williams"
-                  style={{ display: 'block', width: 'min(220px, 70%)', height: 'auto', margin: '0 auto' }}
-                />
-              }
-            >
-              &ldquo;{t('home.quote')}&rdquo;
-            </PullQuote>
-          </Reveal>
-          <Reveal delay={220} style={{ marginTop: 46 }}>
-            <BookButton specular>{t('mega.bookStrategy')}</BookButton>
-          </Reveal>
-        </div>
+      <section id="support" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
+        <SectionHead
+          eyebrow={t('home.more.eyebrow')} tracking=".24em" titleWidth="12em"
+          title={t('home.more.title')}
+          aside={<SectionAside width="24em">{t('home.more.aside')}</SectionAside>}
+        />
+
+        <Reveal delay={80}>
+          <SupportCloud />
+        </Reveal>
       </section>
 
       <Footer links={HOME_FOOTER_LINKS} />
