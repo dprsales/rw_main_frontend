@@ -3,8 +3,9 @@
  * recommendation table. Pure data plus one lookup; no React, no fetch.
  *
  * Flow: Q1 (who) → Q2 (what's in the way; options depend on Q1; skipped for
- * investor / not sure) → Q3 (what would help; a tie-breaker asked only when two
- * or more services still fit) → one of five outcomes.
+ * investor / not sure; builders and sales heads can pick more than one) → Q3
+ * (what would help; a tie-breaker asked only when two or more services still
+ * fit) → one of five outcomes.
  *
  * Every reachable answer combination has exactly one row in RULES; anything
  * missing falls back to the strategy call with rule 'fallback' so a gap is
@@ -20,33 +21,37 @@
 
 export const WHO = [
   { key: 'developer', label: 'Developer / Builder' },
-  { key: 'sales_leader', label: 'Sales head / manager' },
-  { key: 'sales_pro', label: 'Sales professional' },
-  { key: 'investor', label: 'Investor / Buyer' },
+  { key: 'sales_leader', label: 'I lead a sales team' },
+  { key: 'sales_pro', label: 'I sell homes' },
+  { key: 'investor', label: 'I want to buy a home' },
 ]
 
 // Q2 — options depend on Q1. Personas not listed here skip the question.
+// Builders and sales heads can pick more than one (they often have several
+// problems at once). Sales people pick one.
 
 export const CHALLENGES = {
   developer: [
-    { key: 'unsold_inventory', label: "Inventory isn't moving" },
-    { key: 'slow_sales', label: 'Sales are slower than they should be' },
-    { key: 'team_performance', label: 'My sales team underperforms' },
-    { key: 'no_sales_setup', label: 'No sales team or process yet' },
-    { key: 'positioning', label: 'Wrong buyers, wrong price perception' },
+    { key: 'unsold_inventory', label: 'Homes are not selling' },
+    { key: 'slow_sales', label: 'Sales are slow' },
+    { key: 'team_performance', label: 'My sales team is not doing well' },
+    { key: 'no_sales_setup', label: 'No sales team yet' },
+    { key: 'positioning', label: "Buyers don't see why our project is special" },
+    { key: 'all_of_above', label: 'All of these' },
     { key: 'other', label: 'Something else' },
   ],
   sales_leader: [
-    { key: 'team_performance', label: 'Team underperforms' },
-    { key: 'low_closing', label: "Leads don't convert" },
-    { key: 'process_crm', label: 'No process or CRM discipline' },
-    { key: 'positioning', label: 'Project positioning' },
+    { key: 'team_performance', label: 'Team is not hitting numbers' },
+    { key: 'low_closing', label: "People enquire, but they don't buy" },
+    { key: 'process_crm', label: 'No clear sales process' },
+    { key: 'positioning', label: 'Hard to explain the project / price' },
+    { key: 'all_of_above', label: 'All of these' },
     { key: 'other', label: 'Something else' },
   ],
   sales_pro: [
-    { key: 'low_closing', label: "I don't close enough" },
-    { key: 'luxury_skills', label: 'I want to move into luxury' },
-    { key: 'career_growth', label: 'I want to grow faster' },
+    { key: 'low_closing', label: "I don't close enough deals" },
+    { key: 'luxury_skills', label: 'I want to sell bigger homes' },
+    { key: 'career_growth', label: 'I want to grow in my job' },
     { key: 'other', label: 'Something else' },
   ],
 }
@@ -55,23 +60,42 @@ export const CHALLENGES = {
 // and `train_team` is hidden when there is no team to train.
 
 export const GOALS = [
-  { key: 'train_team', label: 'Train the team we have' },
-  { key: 'fix_process', label: 'Rebuild how sales is run, from process and structure to CRM' },
-  { key: 'hand_over', label: 'Hand sales to a dedicated external team', only: ['developer'] },
+  { key: 'train_team', label: 'Train my team' },
+  { key: 'fix_process', label: 'Fix my sales pipeline' },
+  { key: 'hand_over', label: 'Let RW sell for me', only: ['developer'] },
 ]
+
+export const challengeList = (value) => {
+  if (!value) return []
+  return Array.isArray(value) ? value.filter(Boolean) : [value]
+}
+
+/** One key for the rules table. Several picks (or "all of these") collapse to `many`. */
+export function challengeKey(value) {
+  const list = challengeList(value)
+  if (list.includes('all_of_above') || list.length > 1) return 'many'
+  return list[0] || null
+}
+
+export const allowsManyChallenges = (who) => who === 'developer' || who === 'sales_leader'
 
 /** Q3 is asked only for these (who, challenge) combinations. */
 export function needsGoal(who, challenge) {
   if (who === 'developer') return true
-  if (who === 'sales_leader') return challenge === 'team_performance' || challenge === 'other'
+  if (who === 'sales_leader') {
+    if (challengeKey(challenge) === 'many') return false
+    const one = challengeKey(challenge)
+    return one === 'team_performance' || one === 'other'
+  }
   return false
 }
 
 /** Q3 options for a given (who, challenge). */
 export function goalOptions(who, challenge) {
+  const one = challengeKey(challenge)
   return GOALS.filter((g) => {
     if (g.only && !g.only.includes(who)) return false
-    if (g.key === 'train_team' && challenge === 'no_sales_setup') return false
+    if (g.key === 'train_team' && one === 'no_sales_setup') return false
     return true
   })
 }
@@ -134,45 +158,47 @@ export const OUTCOMES = {
 
 export const RULES = [
   { id: 'R1', who: 'investor', challenge: '*', goal: '*', outcome: 'realty_portfolio',
-    reason: "You're on the buying side. RW Realty's mandated projects are the place to start." },
+    reason: 'You want to buy. Start with the RW Realty projects we sell.' },
   { id: 'R2', who: 'unsure', challenge: '*', goal: '*', outcome: 'strategy_call',
-    reason: "Let's work out the right fit on a short call." },
+    reason: "A short call will help us pick the right fit together." },
 
   { id: 'R3', who: 'sales_pro', challenge: 'low_closing', goal: '*', outcome: 'coaching',
-    reason: 'Coaching is a practical starting point for reviewing and strengthening how you handle and close opportunities.' },
+    reason: 'Coaching helps you close more deals, one person at a time.' },
   { id: 'R4', who: 'sales_pro', challenge: '*', goal: '*', outcome: 'coaching',
-    reason: 'Coaching is the individual track. The assessment can help identify where to begin.',
+    reason: 'Coaching is for you. A short form helps us see where to start.',
     secondary: { label: 'Take the assessment first', to: '/assessment' } },
 
   { id: 'R5', who: 'sales_leader', challenge: 'low_closing', goal: '*', outcome: 'coaching',
-    reason: 'Coaching is a practical starting point for reviewing and strengthening how the team handles and closes opportunities.' },
+    reason: 'Coaching helps your team turn more enquiries into sales.' },
   { id: 'R6', who: 'sales_leader', challenge: 'process_crm', goal: '*', outcome: 'consulting',
-    reason: 'Consulting is the relevant starting point for reviewing pipeline discipline, sales process and CRM structure.' },
+    reason: 'This is about how sales is run, not one person. Consulting looks at the whole setup.' },
   { id: 'R7', who: 'sales_leader', challenge: 'positioning', goal: '*', outcome: 'consulting',
-    reason: 'Project positioning often needs changes beyond the sales floor. Consulting can examine the wider sales operation.' },
+    reason: 'This is bigger than selling skill. Consulting looks at the whole sales plan.' },
+  { id: 'R15', who: 'sales_leader', challenge: 'many', goal: '*', outcome: 'consulting',
+    reason: 'You have more than one problem. Consulting looks at the whole picture, not just one skill.' },
   { id: 'R8', who: 'sales_leader', challenge: '*', goal: 'train_team', outcome: 'coaching',
-    reason: "You want the existing team performing. That's coaching." },
+    reason: 'You want your team to sell better. That is coaching.' },
   { id: 'R9', who: 'sales_leader', challenge: '*', goal: 'fix_process', outcome: 'consulting',
-    reason: "You want the operation rebuilt around the team. That's consulting." },
+    reason: 'You want the whole sales system fixed. That is consulting.' },
   { id: 'R10', who: 'sales_leader', challenge: '*', goal: 'unsure', outcome: 'strategy_call',
-    reason: 'Coaching or consulting. A short strategy call can help clarify the right fit.',
+    reason: 'Coaching or consulting - a short call will make it clear.',
     candidates: ['coaching', 'consulting'] },
 
   { id: 'R11', who: 'developer', challenge: '*', goal: 'train_team', outcome: 'coaching',
-    reason: 'You want to keep the existing team and strengthen its closing skills. Coaching is the relevant starting point.' },
+    reason: 'Keep your team. We will help them sell better. That is coaching.' },
   { id: 'R12', who: 'developer', challenge: '*', goal: 'fix_process', outcome: 'consulting',
-    reason: 'You want to review how sales is run across process, structure and CRM. Consulting is the relevant starting point.' },
+    reason: 'Let us look at how sales is run - team, process, and tools. That is consulting.' },
   { id: 'R13', who: 'developer', challenge: '*', goal: 'hand_over', outcome: 'realty',
-    reason: 'You build, RW Realty sells. Strategy, onsite team and funnel, end to end.' },
+    reason: 'You build. We sell. That is a sales mandate.' },
   { id: 'R14', who: 'developer', challenge: '*', goal: 'unsure', outcome: 'strategy_call',
-    reason: 'Consulting or a mandate, depending on how much you want to keep in-house.',
+    reason: 'Consulting, or we sell for you - a short call will make it clear.',
     candidates: ['consulting', 'realty'] },
 ]
 
 const FALLBACK = {
   id: 'fallback',
   outcome: 'strategy_call',
-  reason: "Let's work out the right fit on a short call.",
+  reason: 'A short call will help us pick the right fit together.',
 }
 
 const matches = (ruleValue, value) => ruleValue === '*' || ruleValue === (value ?? null)
@@ -182,7 +208,8 @@ const matches = (ruleValue, value) => ruleValue === '*' || ruleValue === (value 
  * Never throws; unknown or missing answers resolve to the strategy call.
  */
 export function recommend(answers = {}) {
-  const { who, challenge, goal } = answers
+  const { who, goal } = answers
+  const challenge = challengeKey(answers.challenge)
   const rule = RULES.find((r) => r.who === who && matches(r.challenge, challenge) && matches(r.goal, goal)) || FALLBACK
   return {
     rule: rule.id,
@@ -198,13 +225,20 @@ export function labelFor(key, value, who) {
   if (!value) return ''
   if (key === 'who') return WHO.find((w) => w.key === value)?.label || value
   if (key === 'challenge') {
-    const personaMatch = who && CHALLENGES[who]?.find((c) => c.key === value)
+    const list = challengeList(value)
+    if (list.length > 1 || list[0] === 'all_of_above') {
+      const all = who && CHALLENGES[who]?.find((c) => c.key === 'all_of_above')
+      if (list.includes('all_of_above') && all) return all.label
+      return list.map((item) => labelFor('challenge', item, who)).filter(Boolean).join(', ')
+    }
+    const one = list[0]
+    const personaMatch = who && CHALLENGES[who]?.find((c) => c.key === one)
     if (personaMatch) return personaMatch.label
-    for (const list of Object.values(CHALLENGES)) {
-      const hit = list.find((c) => c.key === value)
+    for (const options of Object.values(CHALLENGES)) {
+      const hit = options.find((c) => c.key === one)
       if (hit) return hit.label
     }
-    return value
+    return one
   }
   if (key === 'goal') return GOALS.find((g) => g.key === value)?.label || value
   return value
@@ -217,8 +251,14 @@ export function reachableCombinations() {
     const challenges = CHALLENGES[w.key]
     if (!challenges) { out.push({ who: w.key }); continue }
     for (const c of challenges) {
+      if (c.key === 'all_of_above') continue
       if (!needsGoal(w.key, c.key)) { out.push({ who: w.key, challenge: c.key }); continue }
       for (const g of goalOptions(w.key, c.key)) out.push({ who: w.key, challenge: c.key, goal: g.key })
+    }
+    if (allowsManyChallenges(w.key)) {
+      const many = ['all_of_above']
+      if (!needsGoal(w.key, many)) out.push({ who: w.key, challenge: many })
+      else for (const g of goalOptions(w.key, many)) out.push({ who: w.key, challenge: many, goal: g.key })
     }
   }
   return out

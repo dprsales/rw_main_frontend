@@ -71,8 +71,20 @@ test('hand_over is developer-only', () => {
 })
 
 test('shared challenge keys keep the wording selected by each persona', () => {
-  assert.equal(labelFor('challenge', 'low_closing', 'sales_leader'), "Leads don't convert")
-  assert.equal(labelFor('challenge', 'low_closing', 'sales_pro'), "I don't close enough")
+  assert.equal(labelFor('challenge', 'low_closing', 'sales_leader'), "People enquire, but they don't buy")
+  assert.equal(labelFor('challenge', 'low_closing', 'sales_pro'), "I don't close enough deals")
+})
+
+test('several issues (or all of these) send a sales head to consulting', () => {
+  assert.equal(recommend({ who: 'sales_leader', challenge: ['all_of_above'] }).outcome.key, 'consulting')
+  assert.equal(recommend({ who: 'sales_leader', challenge: ['team_performance', 'process_crm'] }).outcome.key, 'consulting')
+  assert.equal(needsGoal('sales_leader', ['all_of_above']), false)
+})
+
+test('a builder who picks all issues still chooses what would help', () => {
+  assert.equal(needsGoal('developer', ['all_of_above']), true)
+  assert.equal(recommend({ who: 'developer', challenge: ['all_of_above'], goal: 'fix_process' }).outcome.key, 'consulting')
+  assert.equal(recommend({ who: 'developer', challenge: ['all_of_above'], goal: 'hand_over' }).outcome.key, 'realty')
 })
 
 test('garbage input falls back safely', () => {

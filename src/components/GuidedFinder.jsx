@@ -9,7 +9,7 @@ import { track } from '../data/analytics'
 import { useFinder } from '../hooks/useFinder'
 import { useLang } from '../i18n/LangProvider'
 import { finderOutcomeName } from '../i18n/pages'
-import { fs, eyebrow, sectionHeadingLg, body } from '../styles'
+import { fs, eyebrow, sectionHeadingLg, body, ctaCopper } from '../styles'
 import './GuidedFinder.css'
 
 /** Same cursor-tracked gold edge the careers cards use (CAREER_GLOW in Careers.jsx). */
@@ -36,7 +36,7 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
   const { t } = useLang()
   const navigate = useNavigate()
   const finder = useFinder({ seed, location })
-  const { answers, stepIndex, done, result, guidance, back, restart } = finder
+  const { answers, done, result, guidance, restart } = finder
   const cardRef = useRef(null)
   const rootRef = useRef(null)
   const openedRef = useRef(false)
@@ -109,11 +109,7 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
 
         <div className="rw-finder-stage" aria-live="polite">
           <FinderSteps finder={finder} onStartOver={startOver}>
-            <div className="rw-finder-links">
-              {stepIndex > 0 && <CtaButton variant="secondary" arrow="←" onClick={back}>{t('cta.back')}</CtaButton>}
-              <BookButton specular source="finder_skip" skipQuestions> {t('cta.bookCall')}</BookButton>
-              <CtaButton variant="secondary" arrow="→" onClick={browseServices}>{t('finder.browse')}</CtaButton>
-            </div>
+            <BookButton specular source="finder_skip" skipQuestions>{t('cta.bookCall')}</BookButton>
           </FinderSteps>
 
           {done && result && (
@@ -157,14 +153,18 @@ const ResultCard = forwardRef(function ResultCard({ result, guidance, onDeepPath
       <p className="rw-finder-card-reason">{t(`finder.reason.${rule}`)}</p>
 
       <div className="rw-finder-card-actions">
-        <BookButton specular {...bookPreset}>{t('mega.bookStrategy')}</BookButton>
+        {isBrowse ? (
+          <CtaButton to={outcome.to} onClick={() => track('finder_service_click', { recommendedService: outcome.key, target: 'browse', location, attemptId: guidance?.attemptId })}>
+            {t('finder.browseProjects')}
+          </CtaButton>
+        ) : (
+          <BookButton className="rw-cta" style={ctaCopper} {...bookPreset}>{t('mega.bookStrategy')}</BookButton>
+        )}
         {outcome.formTrack && (
           <CtaButton variant="outline" onClick={onDeepPath}>{t(`finder.form.${outcome.formTrack}`)}</CtaButton>
         )}
         {isBrowse && (
-          <CtaButton variant="outline" href={outcome.to} onClick={() => track('finder_service_click', { recommendedService: outcome.key, target: 'browse', location, attemptId: guidance?.attemptId })}>
-            {t('finder.browseProjects')}
-          </CtaButton>
+          <BookButton specular {...bookPreset}>{t('mega.bookStrategy')}</BookButton>
         )}
       </div>
 

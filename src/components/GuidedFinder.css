@@ -20,38 +20,73 @@
 .rw-finder-stage .rw-finder-steps:empty { display: none; }
 
 .rw-finder-rail {
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  display: grid; gap: 10px;
   font-family: 'Poppins', system-ui, -apple-system, sans-serif;
   font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--faded);
 }
-.rw-finder-segments { display: flex; gap: 6px; flex: 1; max-width: 220px; }
+.rw-finder-segments { display: flex; gap: 6px; width: 100%; }
 .rw-finder-segment { flex: 1; height: 2px; background: var(--line); }
 .rw-finder-segment.is-done { background: var(--copper); }
 
-/* A <legend> ignores the fieldset's grid gap, so the space below it is set here. */
+/* Legend shrink-wraps its text unless floated — that was the gold box hugging
+   the title instead of sitting on the same edge as the options. */
 .rw-finder-legend {
-  display: block; width: 100%;
+  float: left; width: 100%;
   font-family: 'Cormorant Garamond', 'Times New Roman', serif;
-  font-weight: 400; font-size: clamp(26px, 2.6vw, 34px); line-height: 1.15; letter-spacing: -.01em;
-  color: var(--ink); padding: 0 0 4px; margin: 0 0 20px; outline: none;
+  font-weight: 400; font-size: clamp(26px, 2.6vw, 34px); line-height: 1.2; letter-spacing: -.01em;
+  color: var(--ink); padding: 0; margin: 0 0 10px; outline: none;
 }
-.rw-finder-legend:focus-visible { outline: 2px solid var(--copper); outline-offset: 6px; }
-
 .rw-finder-steps fieldset { border: 0; padding: 0; margin: 0; min-width: 0; display: block; }
+.rw-finder-steps fieldset::after { content: ''; display: table; clear: both; }
 
+.rw-finder-help {
+  clear: both;
+  margin: 0 0 16px;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-weight: 300; font-size: 14px; line-height: 1.45;
+  color: var(--faded);
+}
+.rw-finder-other {
+  clear: both;
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+.rw-finder-other-label {
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-weight: 300; font-size: 13px; letter-spacing: .02em; line-height: 1.4;
+  color: var(--faded);
+}
+.rw-finder-other-field {
+  width: 100%; min-height: 88px; padding: 12px 14px;
+  background: none; border: 1px solid var(--line); border-radius: 2px;
+  color: var(--ink);
+  font-family: 'Poppins', system-ui, sans-serif; font-weight: 300; font-size: 15px; line-height: 1.45;
+  resize: vertical;
+  transition: border-color .3s;
+}
+.rw-finder-other-field::placeholder { color: var(--faded); opacity: .6; }
+.rw-finder-other-field:focus { outline: none; border-color: var(--copper); }
+
+.rw-finder-steps .rw-cta:disabled {
+  opacity: .38;
+  cursor: not-allowed;
+}
 .rw-finder-pills {
-  display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); gap: 12px 10px;
-  justify-items: start; align-items: start;
-  width: fit-content; max-width: 100%;
+  clear: both;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
 }
 .rw-finder-pill {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  width: fit-content; max-width: 100%; min-width: 0; min-height: 44px; padding: 10px 20px;
-  text-align: center; white-space: normal; overflow-wrap: anywhere;
-  background: none; border: 1px solid var(--line); border-radius: 999px;
-  font-family: 'Poppins', system-ui, sans-serif; font-weight: 300; font-size: 15px; letter-spacing: .02em;
+  display: flex; align-items: center; justify-content: flex-start; gap: 8px;
+  width: 100%; min-width: 0; min-height: 48px; padding: 10px 16px;
+  text-align: left; white-space: normal; overflow-wrap: anywhere;
+  background: none; border: 1px solid var(--line); border-radius: 2px;
+  font-family: 'Poppins', system-ui, sans-serif; font-weight: 300; font-size: 15px; letter-spacing: .02em; line-height: 1.35;
   color: var(--ink); cursor: pointer;
-  transition: color .3s, border-color .3s, background .3s, transform .3s;
+  transition: color .3s, border-color .3s, background .3s;
 }
 .rw-finder-pill:hover { border-color: var(--copper); }
 .rw-finder-pill:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
@@ -60,7 +95,10 @@
 }
 .rw-finder-pill[aria-pressed="true"]::before { content: '✓'; font-size: 12px; }
 
-.rw-finder-links { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: center; }
+.rw-finder-links {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+  margin: 0; padding-top: 18px; border-top: 1px solid var(--line);
+}
 .rw-finder-link {
   background: none; border: 0; padding: 0; cursor: pointer;
   font-family: 'Poppins', system-ui, sans-serif; font-weight: 300; font-size: 14px;
@@ -112,16 +150,17 @@
 .rw-finder-ghost:hover { background: rgba(195,155,83,.12); }
 /* Secondary actions under the question: same gold rim as the booking button, one size down. */
 .rw-finder-ghost--sm { height: 42px; padding: 0 20px; font-size: 11px; }
-.rw-finder-links { margin-top: 10px; gap: 12px 16px; }
 .rw-finder-ghost:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
 
 /* Inside the booking modal: same parts, one size down. */
 .rw-finder-steps { display: grid; gap: 22px; }
 .rw-finder-steps.is-compact { gap: 16px; }
-.rw-finder-steps.is-compact .rw-finder-legend { font-size: clamp(22px, 2.4vw, 26px); margin-bottom: 14px; }
-.rw-finder-steps.is-compact .rw-finder-pill { min-height: 40px; padding: 8px 16px; font-size: 14px; }
-.rw-finder-steps.is-compact .rw-finder-pills { gap: 10px 8px; }
-.rw-finder-steps.is-compact .rw-finder-segments { max-width: 160px; }
+.rw-finder-steps.is-compact .rw-finder-legend { font-size: clamp(22px, 2.4vw, 26px); margin-bottom: 8px; }
+.rw-finder-steps.is-compact .rw-finder-help { margin: 0 0 12px; font-size: 13px; }
+.rw-finder-steps.is-compact .rw-finder-pill { min-height: 44px; padding: 8px 14px; font-size: 14px; }
+.rw-finder-steps.is-compact .rw-finder-pills { gap: 8px; }
+.rw-finder-steps.is-compact .rw-finder-other { margin-top: 12px; }
+.rw-finder-steps.is-compact .rw-finder-other-field { min-height: 72px; font-size: 14px; padding: 10px 12px; }
 .rw-finder-steps.is-compact .rw-cta-secondary { height: 42px; padding: 0 18px; font-size: 11px; }
 
 @media (max-width: 900px) {
@@ -129,6 +168,9 @@
   .rw-finder-lead { max-width: none; }
   .rw-finder-stage { min-height: 260px; }
   .rw-finder-card-actions > * { flex: 1 1 100%; }
+}
+@media (max-width: 560px) {
+  .rw-finder-pills { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

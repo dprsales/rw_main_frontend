@@ -65,7 +65,7 @@ export const pages = {
     'finder.eyebrow': 'FIND THE RIGHT FIT',
     'finder.title1': 'Tell us who you are. ',
     'finder.title2': 'We’ll point you in the right direction.',
-    'finder.lede': 'One to three taps, no typing. You can change an answer at any point, or skip this and book a call directly.',
+    'finder.lede': 'A few taps. Change an answer any time, or skip and book a call.',
     'finder.browse': 'BROWSE SERVICES ',
     'finder.based': 'BASED ON YOUR ANSWERS',
     'finder.recommend': 'Our recommendation',
@@ -73,32 +73,41 @@ export const pages = {
     'finder.startOver': 'start over',
     'finder.step': 'STEP',
     'finder.or': ' or ',
-    'finder.q.who': 'Choose what best describes you',
-    'finder.q.challenge': 'What’s the biggest challenge right now?',
+    'finder.q.who': 'What fits you best?',
+    'finder.q.challenge': 'What is the problem right now?',
+    'finder.q.challenge.developer': 'What is going on with sales?',
+    'finder.q.challenge.sales_leader': 'What is the problem right now?',
+    'finder.q.challenge.sales_pro': 'What do you want to get better at?',
     'finder.q.goal': 'What would help most?',
+    'finder.help.many': 'Pick every one that is true. Then tap Continue.',
+    'finder.continue': 'CONTINUE',
+    'finder.other.prompt': 'Tell us in a few words',
+    'finder.other.placeholder': 'Write it here',
     'finder.change': 'Change answer: {label}',
     'finder.who.developer': 'Developer / Builder',
-    'finder.who.sales_leader': 'Sales head / manager',
-    'finder.who.sales_pro': 'Sales professional',
-    'finder.who.investor': 'Investor / Buyer',
-    'finder.ch.developer.unsold_inventory': "Inventory isn't moving",
-    'finder.ch.developer.slow_sales': 'Sales are slower than they should be',
-    'finder.ch.developer.team_performance': 'My sales team underperforms',
-    'finder.ch.developer.no_sales_setup': 'No sales team or process yet',
-    'finder.ch.developer.positioning': 'Wrong buyers, wrong price perception',
+    'finder.who.sales_leader': 'I lead a sales team',
+    'finder.who.sales_pro': 'I sell homes',
+    'finder.who.investor': 'I want to buy a home',
+    'finder.ch.developer.unsold_inventory': 'Homes are not selling',
+    'finder.ch.developer.slow_sales': 'Sales are slow',
+    'finder.ch.developer.team_performance': 'My sales team is not doing well',
+    'finder.ch.developer.no_sales_setup': 'No sales team yet',
+    'finder.ch.developer.positioning': "Buyers don't see why our project is special",
+    'finder.ch.developer.all_of_above': 'All of these',
     'finder.ch.developer.other': 'Something else',
-    'finder.ch.sales_leader.team_performance': 'Team underperforms',
-    'finder.ch.sales_leader.low_closing': "Leads don't convert",
-    'finder.ch.sales_leader.process_crm': 'No process or CRM discipline',
-    'finder.ch.sales_leader.positioning': 'Project positioning',
+    'finder.ch.sales_leader.team_performance': 'Team is not hitting numbers',
+    'finder.ch.sales_leader.low_closing': "People enquire, but they don't buy",
+    'finder.ch.sales_leader.process_crm': 'No clear sales process',
+    'finder.ch.sales_leader.positioning': 'Hard to explain the project / price',
+    'finder.ch.sales_leader.all_of_above': 'All of these',
     'finder.ch.sales_leader.other': 'Something else',
-    'finder.ch.sales_pro.low_closing': "I don't close enough",
-    'finder.ch.sales_pro.luxury_skills': 'I want to move into luxury',
-    'finder.ch.sales_pro.career_growth': 'I want to grow faster',
+    'finder.ch.sales_pro.low_closing': "I don't close enough deals",
+    'finder.ch.sales_pro.luxury_skills': 'I want to sell bigger homes',
+    'finder.ch.sales_pro.career_growth': 'I want to grow in my job',
     'finder.ch.sales_pro.other': 'Something else',
-    'finder.goal.train_team': 'Train the team we have',
-    'finder.goal.fix_process': 'Rebuild how sales is run, from process and structure to CRM',
-    'finder.goal.hand_over': 'Hand sales to a dedicated external team',
+    'finder.goal.train_team': 'Train my team',
+    'finder.goal.fix_process': 'Fix my sales pipeline',
+    'finder.goal.hand_over': 'Let RW sell for me',
     'finder.out.coaching': 'Sales Coaching',
     'finder.out.consulting': 'Sales Consulting',
     'finder.out.realty': 'Sales Mandate · RW Realty',
@@ -112,21 +121,22 @@ export const pages = {
     'finder.form.consulting': 'SHARE YOUR BUSINESS DETAILS',
     'finder.form.realty': 'SHARE YOUR PROJECT DETAILS',
     'finder.secondary.assessment': 'Take the assessment first',
-    'finder.reason.R1': "You're on the buying side. RW Realty's mandated projects are the place to start.",
-    'finder.reason.R2': "Let's work out the right fit on a short call.",
-    'finder.reason.R3': 'Coaching is a practical starting point for reviewing and strengthening how you handle and close opportunities.',
-    'finder.reason.R4': 'Coaching is the individual track. The assessment can help identify where to begin.',
-    'finder.reason.R5': 'Coaching is a practical starting point for reviewing and strengthening how the team handles and closes opportunities.',
-    'finder.reason.R6': 'Consulting is the relevant starting point for reviewing pipeline discipline, sales process and CRM structure.',
-    'finder.reason.R7': 'Project positioning often needs changes beyond the sales floor. Consulting can examine the wider sales operation.',
-    'finder.reason.R8': "You want the existing team performing. That's coaching.",
-    'finder.reason.R9': "You want the operation rebuilt around the team. That's consulting.",
-    'finder.reason.R10': 'Coaching or consulting. A short strategy call can help clarify the right fit.',
-    'finder.reason.R11': 'You want to keep the existing team and strengthen its closing skills. Coaching is the relevant starting point.',
-    'finder.reason.R12': 'You want to review how sales is run across process, structure and CRM. Consulting is the relevant starting point.',
-    'finder.reason.R13': 'You build, RW Realty sells. Strategy, onsite team and funnel, end to end.',
-    'finder.reason.R14': 'Consulting or a mandate, depending on how much you want to keep in-house.',
-    'finder.reason.fallback': "Let's work out the right fit on a short call.",
+    'finder.reason.R1': 'You want to buy. Start with the RW Realty projects we sell.',
+    'finder.reason.R2': 'A short call will help us pick the right fit together.',
+    'finder.reason.R3': 'Coaching helps you close more deals, one person at a time.',
+    'finder.reason.R4': 'Coaching is for you. A short form helps us see where to start.',
+    'finder.reason.R5': 'Coaching helps your team turn more enquiries into sales.',
+    'finder.reason.R6': 'This is about how sales is run, not one person. Consulting looks at the whole setup.',
+    'finder.reason.R7': 'This is bigger than selling skill. Consulting looks at the whole sales plan.',
+    'finder.reason.R8': 'You want your team to sell better. That is coaching.',
+    'finder.reason.R9': 'You want the whole sales system fixed. That is consulting.',
+    'finder.reason.R10': 'Coaching or consulting — a short call will make it clear.',
+    'finder.reason.R11': 'Keep your team. We will help them sell better. That is coaching.',
+    'finder.reason.R12': 'Let us look at how sales is run — team, process, and tools. That is consulting.',
+    'finder.reason.R13': 'You build. We sell. That is a sales mandate.',
+    'finder.reason.R14': 'Consulting, or we sell for you — a short call will make it clear.',
+    'finder.reason.R15': 'You have more than one problem. Consulting looks at the whole picture, not just one skill.',
+    'finder.reason.fallback': 'A short call will help us pick the right fit together.',
 
     'about.eyebrow': 'ABOUT · RAJIV WILLIAMS',
     'about.h1': 'Practitioner first. ',
@@ -242,16 +252,31 @@ export function seoRouteKey(route) {
   return SEO_ROUTES[route]
 }
 
-export function finderLabel(t, key, value, who) {
+export function finderLabel(t, key, value, who, note) {
   if (!value) return ''
   if (key === 'who') return t(`finder.who.${value}`)
   if (key === 'challenge') {
-    if (who) return t(`finder.ch.${who}.${value}`)
-    for (const persona of ['developer', 'sales_leader', 'sales_pro']) {
-      const hit = t(`finder.ch.${persona}.${value}`)
-      if (hit !== `finder.ch.${persona}.${value}`) return hit
+    const list = Array.isArray(value) ? value : [value]
+    const clip = (text) => {
+      const clean = String(text || '').trim()
+      return clean.length > 56 ? `${clean.slice(0, 55)}…` : clean
     }
-    return value
+    const name = (item) => {
+      if (item === 'other' && note) return clip(note)
+      if (who) return t(`finder.ch.${who}.${item}`)
+      for (const persona of ['developer', 'sales_leader', 'sales_pro']) {
+        const hit = t(`finder.ch.${persona}.${item}`)
+        if (hit !== `finder.ch.${persona}.${item}`) return hit
+      }
+      return item
+    }
+    if (list.includes('all_of_above') && !list.includes('other')) return t(`finder.ch.${who || 'developer'}.all_of_above`)
+    if (list.includes('all_of_above') && list.includes('other')) {
+      const extra = note ? clip(note) : t(`finder.ch.${who || 'developer'}.other`)
+      return `${t(`finder.ch.${who || 'developer'}.all_of_above`)}, ${extra}`
+    }
+    if (list.length > 1) return list.map(name).join(', ')
+    return name(list[0])
   }
   if (key === 'goal') return t(`finder.goal.${value}`)
   return value

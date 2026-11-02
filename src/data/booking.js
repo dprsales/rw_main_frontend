@@ -43,6 +43,7 @@ export function guidanceSummary(g) {
   const parts = [
     g.who && `Visitor: ${labelFor('who', g.who)}`,
     g.challenge && `Challenge: ${labelFor('challenge', g.challenge, g.who)}`,
+    g.challengeNote && `In their words: ${String(g.challengeNote).trim()}`,
     g.goal && `Wants: ${labelFor('goal', g.goal)}`,
     g.recommended && `Recommended: ${g.recommended}`,
   ].filter(Boolean)
@@ -92,7 +93,8 @@ function toLead(form) {
     pageSource: pageSourceLabel(),
     ...(form.company?.trim() && { company: form.company.trim() }),
     ...(g.who && { visitorType: g.who }),
-    ...(g.challenge && { challenge: g.challenge }),
+    ...(g.challenge && { challenge: Array.isArray(g.challenge) ? g.challenge.join(',') : g.challenge }),
+    ...(g.challengeNote?.trim() && { challengeNote: g.challengeNote.trim() }),
     ...(g.goal && { goal: g.goal }),
     ...(g.recommendedKey && { recommendedService: g.recommendedKey }),
     // Honeypot: real visitors never see this field; bots fill it and the server drops the request.

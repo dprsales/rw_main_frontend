@@ -316,10 +316,7 @@ function BookingModal({ preset, onClose }) {
               {t('book.tapsHint')}
             </p>
             <FinderSteps finder={finder} compact>
-              <div className="rw-finder-links" style={{ marginTop: 18 }}>
-                {finder.stepIndex > 0 && <CtaButton variant="secondary" arrow="←" onClick={finder.back}>{t('cta.back')}</CtaButton>}
-                <CtaButton variant="secondary" onClick={skipQuestions}>{t('cta.skipDetails')}</CtaButton>
-              </div>
+              <CtaButton variant="secondary" onClick={skipQuestions}>{t('cta.skipDetails')}</CtaButton>
             </FinderSteps>
           </>
         ) : status === 'sent' ? (
@@ -361,7 +358,7 @@ function BookingModal({ preset, onClose }) {
                 {guidance && (
                   <div className="rw-guidance-chips" aria-label={t('book.yourAnswers')} style={{ marginBottom: 22 }}>
                     {guidance.who && <span className="rw-guidance-chip">{finderLabel(t, 'who', guidance.who)}</span>}
-                    {guidance.challenge && <span className="rw-guidance-chip">{finderLabel(t, 'challenge', guidance.challenge, guidance.who)}</span>}
+                    {guidance.challenge && <span className="rw-guidance-chip">{finderLabel(t, 'challenge', guidance.challenge, guidance.who, guidance.challengeNote)}</span>}
                     {guidance.goal && <span className="rw-guidance-chip">{finderLabel(t, 'goal', guidance.goal)}</span>}
                     {guidance.recommended && <span className="rw-guidance-chip is-result">→ {finderOutcomeName(t, guidance.recommendedKey, guidance.recommended)}</span>}
                     {guidance.onEdit && (

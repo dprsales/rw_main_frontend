@@ -37,8 +37,9 @@ export function useFinder({ seed = {}, location = 'home' } = {}) {
     // Once per attempt; an edit after completion counts again only if the recommendation changes.
     if (completedRuleRef.current === result.rule) return
     completedRuleRef.current = result.rule
-    track('finder_completed', { visitorType: answers.who, challenge: answers.challenge, goal: answers.goal, steps: steps.length, location, attemptId })
-    track('finder_recommendation', { visitorType: answers.who, challenge: answers.challenge, goal: answers.goal, recommendedService: result.outcome.key, rule: result.rule, location, attemptId })
+    const challenge = Array.isArray(answers.challenge) ? answers.challenge.join(',') : answers.challenge
+    track('finder_completed', { visitorType: answers.who, challenge, goal: answers.goal, steps: steps.length, location, attemptId })
+    track('finder_recommendation', { visitorType: answers.who, challenge, goal: answers.goal, recommendedService: result.outcome.key, rule: result.rule, location, attemptId })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result])
 
@@ -59,17 +60,23 @@ export function useFinder({ seed = {}, location = 'home' } = {}) {
     return () => { document.removeEventListener('visibilitychange', onHide); abandon() }
   }, [location])
 
-  const answer = useCallback((key, value) => {
+  const answer = useCallback((key, value, extra = {}) => {
     if (!startedRef.current) {
       startedRef.current = true
       track('finder_started', { location, visitorType: key === 'who' ? value : answersRef.current.who, attemptId: attemptRef.current })
     }
-    track('finder_step', { step: ['who', 'challenge', 'goal'].indexOf(key) + 1, key, value, location, attemptId: attemptRef.current })
+    const note = typeof extra.note === 'string' ? extra.note.trim() : ''
+    track('finder_step', { step: ['who', 'challenge', 'goal'].indexOf(key) + 1, key, value, note: note || undefined, location, attemptId: attemptRef.current })
     setAnswers((prev) => {
       const next = { ...prev, [key]: value }
       // Changing an earlier answer invalidates the later ones.
-      if (key === 'who') { delete next.challenge; delete next.goal }
-      if (key === 'challenge') delete next.goal
+      if (key === 'who') { delete next.challenge; delete next.goal; delete next.challengeNote }
+      if (key === 'challenge') {
+        delete next.goal
+        const list = Array.isArray(value) ? value : [value]
+        if (list.includes('other') && note) next.challengeNote = note
+        else delete next.challengeNote
+      }
       return next
     })
   }, [location])
@@ -79,6 +86,7 @@ export function useFinder({ seed = {}, location = 'home' } = {}) {
     const order = ['who', 'challenge', 'goal']
     const next = { ...prev }
     for (const s of order.slice(order.indexOf(key))) delete next[s]
+    if (key === 'who') delete next.challengeNote
     return next
   }), [])
 
@@ -97,6 +105,7 @@ export function useFinder({ seed = {}, location = 'home' } = {}) {
   /** What the booking modal / lead payload carries. */
   const guidance = result ? {
     who: answers.who, challenge: answers.challenge, goal: answers.goal,
+    challengeNote: answers.challengeNote,
     recommended: result.outcome.key === 'strategy_call' ? undefined : result.outcome.name,
     recommendedKey: result.outcome.key,
     attemptId,

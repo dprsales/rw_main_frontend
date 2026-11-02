@@ -528,7 +528,7 @@ He helps developers and their sales teams<br />
       )} */}
 
       {/* Testimonials */}
-      <section id="testimonials" className="rw-pad" style={{ ...container, padding: 'clamp(36px, 5vw, 56px) 40px var(--rw-sy-lg)' }}>
+      <section id="testimonials" className="rw-pad" style={{ ...container, padding: 'clamp(36px, 5vw, 56px) 40px clamp(20px, 2.5vw, 32px)' }}>
         <Reveal style={{ borderBottom: '1px solid var(--line)', paddingBottom: 22 }}>
           <h2 style={sectionHeading}>{t('home.words')}</h2>
         </Reveal>
@@ -542,7 +542,7 @@ He helps developers and their sales teams<br />
         </div>
       </section>
 
-      <section id="support" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
+      <section id="support" className="rw-pad" style={{ ...container, padding: 'clamp(20px, 2.5vw, 32px) 40px var(--rw-sy-lg)' }}>
         <SectionHead
           eyebrow={t('home.more.eyebrow')} tracking=".24em" titleWidth="12em"
           title={t('home.more.title')}
