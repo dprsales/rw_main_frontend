@@ -340,28 +340,251 @@
   .rw-form-panel { grid-template-columns: 1fr; }
 }
 
-/* Questionnaire variant (/form): same joined two-column panel, but the questions
-   are full sentences, so they keep a readable sentence-case title instead of the
-   small uppercase label. The body widens so two columns have room. */
-.rw-form-body:has(.rw-form-panel--questions) { max-width: 1080px; }
-.rw-form-panel--questions .rw-form-q-title {
-  font-size: 16px;
-  letter-spacing: 0;
-  text-transform: none;
+/* Questionnaire: one control per field. Dropdowns and inputs share a row;
+   multi-select chip groups span it. Breathing room is restored — density comes
+   from the right control, not from shrinking padding until chips look cheap. */
+.rw-form-body:has(.rw-form-panel--questions) {
+  max-width: 1040px;
+  padding: clamp(28px, 3.4vw, 48px) 0 clamp(48px, 6vw, 72px);
+}
+.rw-form-body:has(.rw-form-panel--questions) .rw-form-preamble {
+  padding-bottom: 22px;
+}
+.rw-form-body:has(.rw-form-panel--questions) .rw-form-h2 {
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.18;
+}
+.rw-form-body:has(.rw-form-panel--questions) .rw-form-thanks {
+  font-size: clamp(16px, 1.6vw, 18px);
+  margin-top: 8px;
+}
+.rw-form-body:has(.rw-form-panel--questions) .rw-form-preamble .rw-form-note {
+  font-size: 15px;
   line-height: 1.45;
 }
-.rw-form-panel--questions .rw-form-optional { font-size: 13px; letter-spacing: 0; }
-.rw-form-panel--questions .rw-form-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.rw-form-panel--questions .rw-form-checks--single { grid-template-columns: 1fr 1fr; }
-/* Pills use the same 2-column grid as the checks here, so every option sits in a
-   column instead of flex-wrapping by text width (which left odd trailing chips —
-   "4 then 1", "3 then 1"). Each pill stretches to fill its cell so the two columns
-   stay perfectly aligned; text is centred inside the widened pill. */
-.rw-form-panel--questions .rw-form-pills { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.rw-form-panel--questions .rw-form-pill { text-align: center; }
-@media (max-width: 900px) {
-  .rw-form-panel--questions .rw-form-checks,
-  .rw-form-panel--questions .rw-form-pills { grid-template-columns: 1fr; }
+.rw-form-body:has(.rw-form-panel--questions) .rw-form-time {
+  margin-top: 14px;
+  padding: 6px 14px;
+}
+.rw-form-body:has(.rw-form-panel--questions) .rw-form-questions {
+  margin-top: 22px;
+  overflow: visible;
+}
+.rw-form-body:has(.rw-form-panel--questions) .rw-form-submit-bar {
+  margin-top: 22px;
+}
+.rw-form-panel--questions > .rw-form-field-wrap {
+  position: relative;
+  z-index: 0;
+  padding: 16px 18px;
+}
+.rw-form-panel--questions > .rw-form-field-wrap:has(.rw-form-select.is-open) {
+  z-index: 6;
+}
+.rw-form-panel--questions .rw-form-q-title {
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.35;
+}
+.rw-form-panel--questions .rw-form-optional { font-size: 12px; letter-spacing: 0; }
+.rw-form-panel--questions .rw-form-help { margin-top: 4px; }
+.rw-form-panel--questions .rw-form-controls { margin-top: 10px; }
+.rw-form-panel--questions .rw-form-field { padding: 12px 14px; }
+
+/* 2–4 exclusive options: one connected bar, same geometry as the text field. */
+.rw-form-segment {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--chip);
+}
+.rw-form-segment button {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  padding: 11px 10px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-radius: 0;
+  background: none;
+  color: var(--faded);
+  font-family: var(--rw-sans);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: 0;
+  text-align: center;
+  cursor: pointer;
+  transition: color .35s, background .35s;
+}
+.rw-form-segment button:last-child { border-right: 0; }
+.rw-form-segment button:hover { color: var(--ink); }
+.rw-form-segment button.is-on {
+  background: var(--gold-gradient);
+  color: #16110A;
+  font-weight: 500;
+}
+
+/* 5+ exclusive options: branded listbox. Same field chrome as the text inputs,
+   gold open state, rotating chevron, check on the chosen row. Portaled so the
+   menu is never clipped by the panel grid. */
+.rw-form-select { position: relative; }
+.rw-form-select-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  text-align: left;
+  color: var(--faded);
+  cursor: pointer;
+}
+.rw-form-select.is-picked .rw-form-select-btn { color: var(--ink); }
+.rw-form-select.is-open .rw-form-select-btn,
+.rw-form-select-btn:focus {
+  border-color: var(--copper);
+}
+.rw-form-select-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rw-form-select-caret {
+  flex: 0 0 auto;
+  color: var(--copper);
+  transition: transform .28s var(--rw-ease);
+}
+.rw-form-select.is-open .rw-form-select-caret { transform: rotate(180deg); }
+.rw-form-select-menu {
+  --ink: #F2EFE9;
+  --faded: #9A9289;
+  --copper: #C39B53;
+  --rw-sans: 'Poppins', system-ui, -apple-system, sans-serif;
+  z-index: 400;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  border: 1px solid rgba(195, 155, 83, .45);
+  border-radius: 2px;
+  background: #16130e;
+  color: var(--ink);
+  box-shadow:
+    0 0 0 1px rgba(11, 10, 9, .4),
+    0 22px 56px -18px rgba(0, 0, 0, .72);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  animation: rw-select-in .2s var(--rw-ease) both;
+}
+.rw-form-select-menu.is-up { animation-name: rw-select-in-up; }
+@keyframes rw-select-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes rw-select-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.rw-form-select-menu::-webkit-scrollbar { width: 8px; }
+.rw-form-select-menu::-webkit-scrollbar-track { background: transparent; }
+.rw-form-select-menu::-webkit-scrollbar-thumb {
+  background: rgba(195, 155, 83, .35);
+  border-radius: 8px;
+}
+.rw-form-select-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 11px 16px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-family: var(--rw-sans);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  transition: background .18s, color .18s;
+}
+.rw-form-select-option span {
+  min-width: 0;
+}
+.rw-form-select-option.is-active {
+  background: rgba(195, 155, 83, .12);
+}
+.rw-form-select-option.is-on {
+  color: var(--copper);
+  font-weight: 400;
+}
+.rw-form-select-check {
+  flex: 0 0 auto;
+  color: var(--copper);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rw-form-select-menu,
+  .rw-form-select-menu.is-up { animation: none; }
+  .rw-form-select-caret { transition: none; }
+}
+
+/* Multi-select only — quieter than a filled CTA so a row of picks does not
+   compete with the gold submit. Native checkbox stays for AT. */
+.rw-form-panel--questions .rw-form-checks,
+.rw-form-panel--questions .rw-form-checks--single {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.rw-form-panel--questions .rw-form-check {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: none;
+  font-size: 13px;
+  letter-spacing: 0;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.rw-form-panel--questions .rw-form-check input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+.rw-form-panel--questions .rw-form-check.is-on {
+  background: var(--gold-gradient);
+  border-color: transparent;
+  color: #16110A;
+  font-weight: 500;
+}
+@media (max-width: 560px) {
+  .rw-form-segment { flex-wrap: wrap; }
+  .rw-form-segment button {
+    flex: 1 1 50%;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .rw-form-segment button:nth-child(2n) { border-right: 0; }
+  .rw-form-panel--questions .rw-form-check { white-space: normal; text-align: center; }
+}
+@media (pointer: coarse) {
+  .rw-form-segment button,
+  .rw-form-panel--questions .rw-form-check,
+  .rw-form-select-option {
+    min-height: 44px;
+  }
 }
 .rw-form-q-title { font-family: var(--rw-sans); font-weight: 400; font-size: 17px; line-height: 1.45; color: var(--ink); }
 .rw-form-req { color: var(--copper); }
