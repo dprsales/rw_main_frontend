@@ -1,12 +1,8 @@
 import { useEffect, useRef } from 'react'
-import { CHALLENGES, WHO, goalOptions, labelFor } from '../data/guidance'
+import { CHALLENGES, WHO, goalOptions } from '../data/guidance'
+import { useLang } from '../i18n/LangProvider'
+import { finderLabel } from '../i18n/pages'
 import './GuidedFinder.css'
-
-const TITLES = {
-  who: 'Choose what best describes you',
-  challenge: 'What’s the biggest challenge right now?',
-  goal: 'What would help most?',
-}
 
 /**
  * The question stepper: answered chips, step rail, one question at a time.
@@ -18,6 +14,7 @@ const TITLES = {
  *   children  rendered under the question (Back / skip / secondary actions)
  */
 export default function FinderSteps({ finder, compact = false, onStartOver, children }) {
+  const { t } = useLang()
   const { answers, steps, current, stepIndex, done, answer, editStep } = finder
   const legendRef = useRef(null)
   const mountedRef = useRef(false)
@@ -43,18 +40,18 @@ export default function FinderSteps({ finder, compact = false, onStartOver, chil
       {answers.who && (
         <div className="rw-guidance-chips">
           {steps.filter((s) => answers[s]).map((s) => (
-            <button key={s} type="button" className="rw-guidance-chip is-step" onClick={() => editStep(s)} aria-label={`Change answer: ${labelFor(s, answers[s], answers.who)}`}>
-              {labelFor(s, answers[s], answers.who)}
+            <button key={s} type="button" className="rw-guidance-chip is-step" onClick={() => editStep(s)} aria-label={t('finder.change', { label: finderLabel(t, s, answers[s], answers.who) })}>
+              {finderLabel(t, s, answers[s], answers.who)}
             </button>
           ))}
-          {done && onStartOver && <button type="button" className="rw-guidance-chip is-edit" onClick={onStartOver}>start over</button>}
+          {done && onStartOver && <button type="button" className="rw-guidance-chip is-edit" onClick={onStartOver}>{t('finder.startOver')}</button>}
         </div>
       )}
 
       {!done && (
         <>
           <div className="rw-finder-rail">
-            <span>STEP {totalLabel}</span>
+            <span>{t('finder.step')} {totalLabel}</span>
             <span className="rw-finder-segments" aria-hidden="true">
               {steps.map((s, i) => <span key={s} className={`rw-finder-segment${i < stepIndex ? ' is-done' : ''}`} />)}
               {!answers.who && <><span className="rw-finder-segment" /><span className="rw-finder-segment" /></>}
@@ -62,11 +59,11 @@ export default function FinderSteps({ finder, compact = false, onStartOver, chil
           </div>
 
           <fieldset>
-            <legend ref={legendRef} tabIndex={-1} className="rw-finder-legend">{TITLES[current]}</legend>
+            <legend ref={legendRef} tabIndex={-1} className="rw-finder-legend">{t(`finder.q.${current}`)}</legend>
             <div className="rw-finder-pills">
               {options.map((o) => (
                 <button key={o.key} type="button" className="rw-finder-pill" aria-pressed="false" onClick={() => answer(current, o.key)}>
-                  {o.label}
+                  {finderLabel(t, current, o.key, answers.who)}
                 </button>
               ))}
             </div>

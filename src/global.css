@@ -1689,6 +1689,114 @@ html[lang="te"] .rw-field-label {
   letter-spacing: .02em !important;
 }
 
+.rw-hero-te-line {
+  display: block;
+  font-family: 'Nirmala UI', 'Noto Sans Telugu', 'Gautami', Georgia, serif;
+  font-size: clamp(32px, 5.6vw, 76px);
+  line-height: 1.32;
+  letter-spacing: 0;
+  color: #F2EFE9;
+  padding: 0.04em 0 0.14em;
+}
+.rw-hero-te-line + .rw-hero-te-line { margin-top: 0.06em; }
+.rw-hero-te-line.is-accent {
+  color: #C39B53;
+  font-style: italic;
+}
+
+html[lang="te"] .rw-hero-eyebrow,
+html[lang="te"] .rw-hero-meta,
+html[lang="te"] .rw-hero-copy p,
+html[lang="te"] .rw-finder,
+html[lang="te"] .rw-finder-legend,
+html[lang="te"] .rw-finder-pill,
+html[lang="te"] .rw-finder-card-eyebrow,
+html[lang="te"] .rw-way-body,
+html[lang="te"] .rw-way-service-name,
+html[lang="te"] .rw-hire-tag,
+html[lang="te"] .rw-hire-line {
+  font-family: 'Nirmala UI', 'Noto Sans Telugu', 'Gautami', 'Poppins', system-ui, sans-serif;
+  letter-spacing: .04em;
+  text-transform: none;
+}
+
+/* Telugu conjuncts sit outside an English 1.0–1.1 line box. Inline heading
+   styles lose here on purpose so stacked titles do not paint through each other. */
+html[lang="te"] h1,
+html[lang="te"] h2,
+html[lang="te"] h3 {
+  line-height: 1.32 !important;
+}
+html[lang="te"] .rw-rise-mask {
+  padding-bottom: .62em !important;
+  margin-bottom: -.12em !important;
+}
+html[lang="te"] #top p {
+  line-height: 1.55;
+}
+html[lang="te"] .rw-finder-legend {
+  line-height: 1.35;
+  margin-bottom: 24px;
+}
+html[lang="te"] .rw-finder-card-title {
+  line-height: 1.32 !important;
+}
+html[lang="te"] .rw-finder-pill {
+  line-height: 1.45;
+  padding: 10px 16px;
+}
+html[lang="te"] .rw-hero-eyebrow,
+html[lang="te"] .rw-hero-copy p {
+  line-height: 1.55;
+}
+html[lang="te"] .rw-hero-actions { gap: 12px 16px; }
+html[lang="te"] .rw-way-body { gap: 20px; }
+html[lang="te"] .rw-way-body > span:first-child {
+  line-height: 1.35 !important;
+}
+html[lang="te"] .rw-way-overlay-title {
+  align-items: flex-end;
+  left: 14px;
+  right: 14px;
+  gap: clamp(10px, 1.2vw, 16px);
+}
+html[lang="te"] .rw-way-overlay-title .rw-way-service-name {
+  white-space: nowrap;
+  font-size: clamp(22px, 2.15vw, 32px);
+  line-height: 1.15;
+  padding-bottom: 2px;
+  letter-spacing: 0;
+}
+html[lang="te"] .rw-hire-tag,
+html[lang="te"] .rw-hire-go {
+  letter-spacing: .03em;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+html[lang="te"] .rw-contact-label {
+  letter-spacing: .04em !important;
+  width: 132px !important;
+  line-height: 1.45;
+  white-space: normal;
+}
+html[lang="te"] .rw-contact-row {
+  align-items: flex-start;
+  gap: 16px 24px;
+}
+@media (min-width: 1100px) and (max-width: 1280px) {
+  html[lang="te"] .rw-dnav { gap: clamp(10px, 1.15vw, 16px); }
+  html[lang="te"] .rw-dnav-link { font-size: 12px; }
+}
+@media (max-width: 760px) {
+  .rw-hero-te-line {
+    font-size: clamp(28px, 8.4vw, 44px);
+    line-height: 1.34;
+  }
+  html[lang="te"] .rw-hire-tag { font-size: 10px; }
+  html[lang="te"] .rw-contact-row { flex-wrap: wrap; }
+  html[lang="te"] .rw-contact-label { width: 100% !important; }
+}
+
 /* Fullscreen wheel navigation. */
 .rw-wheel-menu {
   position: fixed;
@@ -1997,6 +2105,11 @@ html[lang="te"] .rw-field-label {
     overflow: visible !important;
     padding-bottom: 0 !important;
     margin-bottom: 0 !important;
+  }
+  html[lang="te"] .rw-rise-mask {
+    overflow: visible !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0.18em !important;
   }
   .rw-rise-line { animation: none !important; transform: none !important; }
 

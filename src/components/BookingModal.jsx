@@ -6,10 +6,10 @@ import SpecularButton from './SpecularButton'
 import { mono, serif, text } from '../theme'
 import { CAREERS_INTEREST, INTERESTS, isValidPhone, submitBooking } from '../data/booking'
 import { roleWorkMode } from '../data/jobs'
-import { labelFor } from '../data/guidance'
 import { crmDeliveryOf, errorCategory, newId, track } from '../data/analytics'
 import { useFinder } from '../hooks/useFinder'
 import { useLang } from '../i18n/LangProvider'
+import { finderLabel, finderOutcomeName } from '../i18n/pages'
 import FinderSteps from './FinderSteps'
 import CtaButton from './CtaButton'
 
@@ -360,10 +360,10 @@ function BookingModal({ preset, onClose }) {
                 </p>
                 {guidance && (
                   <div className="rw-guidance-chips" aria-label={t('book.yourAnswers')} style={{ marginBottom: 22 }}>
-                    {guidance.who && <span className="rw-guidance-chip">{labelFor('who', guidance.who)}</span>}
-                    {guidance.challenge && <span className="rw-guidance-chip">{labelFor('challenge', guidance.challenge, guidance.who)}</span>}
-                    {guidance.goal && <span className="rw-guidance-chip">{labelFor('goal', guidance.goal)}</span>}
-                    {guidance.recommended && <span className="rw-guidance-chip is-result">→ {guidance.recommended}</span>}
+                    {guidance.who && <span className="rw-guidance-chip">{finderLabel(t, 'who', guidance.who)}</span>}
+                    {guidance.challenge && <span className="rw-guidance-chip">{finderLabel(t, 'challenge', guidance.challenge, guidance.who)}</span>}
+                    {guidance.goal && <span className="rw-guidance-chip">{finderLabel(t, 'goal', guidance.goal)}</span>}
+                    {guidance.recommended && <span className="rw-guidance-chip is-result">→ {finderOutcomeName(t, guidance.recommendedKey, guidance.recommended)}</span>}
                     {guidance.onEdit && (
                       <button type="button" className="rw-guidance-chip is-edit" onClick={editAnswers}>{t('book.edit')}</button>
                     )}

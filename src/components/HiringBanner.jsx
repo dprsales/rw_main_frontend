@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { activeHiringCampaigns, showHiringRail } from '../data/content'
 import { careerRolePath } from '../data/jobs'
 import { useLang } from '../i18n/LangProvider'
+import { hireLineKey } from '../i18n/pages'
 import { openHiringModal } from './HiringModal'
 
 const ROTATE_MS = 6000
@@ -29,23 +30,23 @@ export default function HiringBanner() {
   const href = careerRolePath(row.title)
 
   return (
-    <div className="rw-hire-bar" role="region" aria-label="Urgent hiring">
+    <div className="rw-hire-bar" role="region" aria-label={t('hire.urgent')}>
       <div className="rw-hire-bar-inner">
-        <span className="rw-hire-tag">Urgent hiring</span>
+        <span className="rw-hire-tag">{t('hire.urgent')}</span>
         <button type="button" className="rw-hire-copy" key={row.title} onClick={openHiringModal}>
           <strong>{row.title}</strong>
           {row.location ? <span className="rw-hire-meta"> · {row.location}</span> : null}
-          {row.line ? <span className="rw-hire-line"> — {row.line}</span> : null}
+          {row.line ? <span className="rw-hire-line"> — {hireLineKey(row.title) ? t(hireLineKey(row.title)) : row.line}</span> : null}
         </button>
         <Link className="rw-hire-go" to={href}>{t('cta.applyNow')}</Link>
         {campaigns.length > 1 && (
-          <div className="rw-hire-dots" role="group" aria-label="Hiring slides">
+          <div className="rw-hire-dots" role="group" aria-label={t('hire.slides')}>
             {campaigns.map((item, i) => (
               <button
                 key={item.title}
                 type="button"
                 className={`rw-hire-dot${i === index ? ' is-on' : ''}`}
-                aria-label={`Show ${item.title}`}
+                aria-label={t('hire.show', { title: item.title })}
                 aria-current={i === index ? 'true' : undefined}
                 onClick={() => setIndex(i)}
               />

@@ -1,12 +1,23 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { chrome } from './chrome'
+import { pages } from './pages'
 
 export const LANG_STORAGE = 'rw-lang'
+
+const strings = {
+  en: { ...chrome.en, ...pages.en },
+  te: { ...chrome.te, ...pages.te },
+}
+
+function format(str, vars) {
+  if (!vars) return str
+  return String(str).replace(/\{(\w+)\}/g, (_, k) => (vars[k] == null ? `{${k}}` : String(vars[k])))
+}
 
 const LangContext = createContext({
   lang: 'en',
   setLang: () => {},
-  t: (key) => chrome.en[key] ?? key,
+  t: (key, vars) => format(strings.en[key] ?? key, vars),
 })
 
 function readLang() {
@@ -31,7 +42,7 @@ export function LangProvider({ children }) {
     try { localStorage.setItem(LANG_STORAGE, lang) } catch { /* storage blocked */ }
   }, [lang])
 
-  const t = useCallback((key) => chrome[lang]?.[key] ?? chrome.en[key] ?? key, [lang])
+  const t = useCallback((key, vars) => format(strings[lang]?.[key] ?? strings.en[key] ?? key, vars), [lang])
   const setLang = useCallback((next) => setLangState(next === 'te' ? 'te' : 'en'), [])
   const value = useMemo(() => ({ lang, setLang, t }), [lang, setLang, t])
 

@@ -5,6 +5,8 @@
  */
 import { useEffect } from 'react'
 import { DEFAULT_SEO, ROUTE_SEO, SITE } from '../data/seo-config'
+import { useLang } from '../i18n/LangProvider'
+import { seoRouteKey } from '../i18n/pages'
 
 function setMeta(selector, attrs, content) {
   if (content == null) return
@@ -29,12 +31,15 @@ function setLink(rel, href) {
 }
 
 export default function Seo({ route, title, description, image, noindex, jsonLd }) {
+  const { lang, t } = useLang()
   const config = route ? ROUTE_SEO[route] : null
-  const resolvedTitle = title || config?.title || DEFAULT_SEO.title
-  const resolvedDesc = description || config?.description || DEFAULT_SEO.description
+  const seoKey = seoRouteKey(route)
+  const resolvedTitle = title || (seoKey && lang === 'te' ? t(`seo.${seoKey}.title`) : null) || config?.title || DEFAULT_SEO.title
+  const resolvedDesc = description || (seoKey && lang === 'te' ? t(`seo.${seoKey}.desc`) : null) || config?.description || DEFAULT_SEO.description
   const resolvedImage = image || config?.ogImage || SITE.ogImage
   const resolvedNoindex = noindex ?? config?.noindex ?? false
   const canonical = SITE.url + (route || (typeof window !== 'undefined' ? window.location.pathname : '/'))
+  const locale = lang === 'te' ? 'te_IN' : SITE.locale
 
   useEffect(() => {
     document.title = resolvedTitle
@@ -51,7 +56,7 @@ export default function Seo({ route, title, description, image, noindex, jsonLd 
     setMeta('meta[property="og:type"]', { property: 'og:type' }, 'website')
     setMeta('meta[property="og:url"]', { property: 'og:url' }, canonical)
     setMeta('meta[property="og:site_name"]', { property: 'og:site_name' }, SITE.name)
-    setMeta('meta[property="og:locale"]', { property: 'og:locale' }, SITE.locale)
+    setMeta('meta[property="og:locale"]', { property: 'og:locale' }, locale)
     setMeta(
       'meta[property="og:image"]',
       { property: 'og:image' },
@@ -63,7 +68,7 @@ export default function Seo({ route, title, description, image, noindex, jsonLd 
     setMeta('meta[name="twitter:description"]', { name: 'twitter:description' }, resolvedDesc)
 
     setLink('canonical', canonical)
-  }, [resolvedTitle, resolvedDesc, resolvedImage, resolvedNoindex, canonical])
+  }, [resolvedTitle, resolvedDesc, resolvedImage, resolvedNoindex, canonical, locale])
 
   useEffect(() => {
     if (!jsonLd) return

@@ -32,7 +32,8 @@ import SectionHead, { SectionCount } from '../components/SectionHead'
 import { useParallax } from '../hooks/useParallax'
 import { useInView } from '../hooks/useInView'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
-import { BLOGS, HERO_COPY, HOME_TESTIMONIALS, MARQUEE_ITEMS, WAYS } from '../data/content'
+import { BLOGS, HOME_TESTIMONIALS, MARQUEE_ITEMS, WAYS } from '../data/content'
+import { useLang } from '../i18n/LangProvider'
 import { HOME_FEATURED, featureFirst, fetchBlogsOnce } from '../data/blogs'
 import { HOME_FOOTER_LINKS, jost, mono, serif, text } from '../theme'
 import { fs,
@@ -62,6 +63,59 @@ function BlogFeedSkeleton({ count = HOME_BLOG_COUNT }) {
         </div>
       ))}
     </div>
+  )
+}
+
+const TESTIMONIAL_KEYS = ['home.t1', 'home.t2', 'home.t3']
+
+function HeroTitle({ lang, t, slide }) {
+  const line1 = slide ? t(`home.slide.${slide.id}.line1`) : t('home.line1')
+  const line2 = slide ? t(`home.slide.${slide.id}.line2`) : t('home.line2')
+  if (lang === 'te') {
+    return (
+      <>
+        <span className="rw-hero-te-line">{line1}</span>
+        <span className="rw-hero-te-line is-accent">{line2}</span>
+      </>
+    )
+  }
+  return (
+    <>
+      <StrokeText
+        key={`${slide?.id || 'lead'}-1`}
+        text={line1}
+        strokeColor="#F2EFE9"
+        fillColor="#F2EFE9"
+        strokeWidth={1.1}
+        drawDuration={1.4}
+        fillDelay={0.1}
+        stagger={0.02}
+        trigger="mount"
+        fillMode="wipe"
+        fontSize={90}
+        fontWeight={400}
+        letterSpacing={-1}
+        className="rw-hero-stroke-line"
+      />
+      <StrokeText
+        key={`${slide?.id || 'lead'}-2`}
+        text={line2}
+        strokeColor="#E8C97A"
+        fillColor="#C39B53"
+        strokeWidth={1.1}
+        drawDuration={1.4}
+        fillDelay={0.1}
+        stagger={0.02}
+        trigger="mount"
+        fillMode="wipe"
+        fontSize={90}
+        fontWeight={400}
+        letterSpacing={-1}
+        reverse
+        className="stroke-text--italic rw-hero-stroke-line"
+        style={{ marginTop: '.05em' }}
+      />
+    </>
   )
 }
 
@@ -183,6 +237,7 @@ const HERO_SLIDES = [
 ]
 
 function HeroCinematic() {
+  const { lang, t } = useLang()
   const { targetRef, targetStyle, container: parallax } = useParallax()
   const [active, setActive] = useState(0)
   const [reduced, setReduced] = useState(false)
@@ -210,7 +265,7 @@ function HeroCinematic() {
       id="home"
       className={`rw-hero${active > 0 ? ' rw-hero--night' : ''}`}
       aria-roledescription="carousel"
-      aria-label="Homepage hero"
+      aria-label={t('home.heroAria')}
       onTouchStart={(e) => { touchX.current = e.changedTouches[0].clientX }}
       onTouchEnd={(e) => {
         const start = touchX.current
@@ -229,7 +284,7 @@ function HeroCinematic() {
             >
               <img
                 src={item.image}
-                alt={item.alt}
+                alt={t(`home.alt.${item.id}`)}
                 width={item.id === 'lead' ? 1179 : 3840}
                 height={item.id === 'lead' ? 717 : 2160}
                 sizes="100vw"
@@ -247,7 +302,8 @@ function HeroCinematic() {
       <div className="rw-hero-copy">
         <div className={`rw-hero-panel ${active === 0 ? 'is-on' : ''}`}>
           <FoldText
-            text="RAJIV WILLIAMS · HYDERABAD REAL ESTATE"
+            key={lang}
+            text={t('home.eyebrow')}
             splitBy="word"
             hinge="top"
             trigger="mount"
@@ -261,64 +317,33 @@ function HeroCinematic() {
           />
 
           <h1 style={{ fontFamily: serif, lineHeight: .98, letterSpacing: '-.01em' }}>
-            <StrokeText
-              text="The specialist who"
-              strokeColor="#F2EFE9"
-              fillColor="#F2EFE9"
-              strokeWidth={1.1}
-              drawDuration={1.4}
-              fillDelay={0.1}
-              stagger={0.02}
-              trigger="mount"
-              fillMode="wipe"
-              fontSize={90}
-              fontWeight={400}
-              letterSpacing={-1}
-              className="rw-hero-stroke-line"
-            />
-            <StrokeText
-              text="moves markets."
-              strokeColor="#E8C97A"
-              fillColor="#C39B53"
-              strokeWidth={1.1}
-              drawDuration={1.4}
-              fillDelay={0.1}
-              stagger={0.02}
-              trigger="mount"
-              fillMode="wipe"
-              fontSize={90}
-              fontWeight={400}
-              letterSpacing={-1}
-              reverse
-              className="stroke-text--italic rw-hero-stroke-line"
-              style={{ marginTop: '.05em' }}
-            />
+            <HeroTitle lang={lang} t={t} />
           </h1>
 
           <p style={{ ...body, margin: '32px 0 0', maxWidth: '34em', fontSize: fs('clamp(16px,1.6vw,19px)'), lineHeight: 1.6, color: 'rgba(234,241,249,.82)' }}>
-            {HERO_COPY}
+            {t('home.lede')}
           </p>
 
           <div className="rw-hero-actions">
-            <BookButton className="rw-cta" style={ctaCopper}>BOOK A STRATEGY CALL</BookButton>
+            <BookButton className="rw-cta" style={ctaCopper}>{t('mega.bookStrategy')}</BookButton>
             <Link to="/realty/portfolio" className="rw-inline-cta" style={{ ...ctaInline, color: '#F2EFE9' }}>
-              The story →
+              {t('home.story')}
             </Link>
           </div>
 
           <div className="rw-hero-meta" style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid rgba(234,241,249,.22)', display: 'flex', alignItems: 'center', gap: 20, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'rgba(234,241,249,.7)', flexWrap: 'wrap' }}>
-            <span>TGRERA LICENSED REALTOR</span>
+            <span>{t('home.tgrera')}</span>
             <span className="rw-hero-meta-sep" style={{ opacity: 0.5 }}>|</span>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14 }}>
-              MEMBER
+              {t('home.member')}
               <img
                 src={hraLogo}
-                alt="Hyderabad Realtors' Association"
+                alt={t('home.alt.hra')}
                 style={{ height: 26, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 1, alignSelf: 'center' }}
               />
               <img
                 src={narLogo}
-                alt="National Association of Realtors"
+                alt={t('home.alt.nar')}
                 style={{ height: 26, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 1, alignSelf: 'center' }}
               />
             </span>
@@ -330,75 +355,45 @@ function HeroCinematic() {
           {active > 0 && (
             <>
               <p className="rw-hero-eyebrow" style={{ fontFamily: mono, letterSpacing: '.3em', marginBottom: 30, color: 'var(--copper)' }}>
-                {slide.eyebrow}
+                {t(`home.slide.${slide.id}.eyebrow`)}
               </p>
               <h2 style={{ fontFamily: serif, lineHeight: .98, letterSpacing: '-.01em' }}>
-                <StrokeText
-                  text={slide.line1}
-                  strokeColor="#F2EFE9"
-                  fillColor="#F2EFE9"
-                  strokeWidth={1.1}
-                  drawDuration={1.4}
-                  fillDelay={0.1}
-                  stagger={0.02}
-                  trigger="mount"
-                  fillMode="wipe"
-                  fontSize={90}
-                  fontWeight={400}
-                  letterSpacing={-1}
-                  className="rw-hero-stroke-line"
-                />
-                <StrokeText
-                  text={slide.line2}
-                  strokeColor="#E8C97A"
-                  fillColor="#C39B53"
-                  strokeWidth={1.1}
-                  drawDuration={1.4}
-                  fillDelay={0.1}
-                  stagger={0.02}
-                  trigger="mount"
-                  fillMode="wipe"
-                  fontSize={90}
-                  fontWeight={400}
-                  letterSpacing={-1}
-                  reverse
-                  className="stroke-text--italic rw-hero-stroke-line"
-                  style={{ marginTop: '.05em' }}
-                />
+                <HeroTitle lang={lang} t={t} slide={slide} />
               </h2>
               <p style={{ ...body, margin: '32px 0 0', maxWidth: '34em', fontSize: fs('clamp(16px,1.6vw,19px)'), lineHeight: 1.6, color: 'rgba(234,241,249,.82)' }}>
-                {slide.lede}
+                {t(`home.slide.${slide.id}.lede`)}
               </p>
               <div className="rw-hero-actions">
-                <BookButton className="rw-cta" style={ctaCopper}>BOOK A STRATEGY CALL</BookButton>
-                <CtaButton to={slide.to} variant="secondary" arrow="→" className="rw-hero-explore">{slide.cta}</CtaButton>
+                <BookButton className="rw-cta" style={ctaCopper}>{t('mega.bookStrategy')}</BookButton>
+                <CtaButton to={slide.to} variant="secondary" arrow="→" className="rw-hero-explore">{t(`home.slide.${slide.id}.cta`)}</CtaButton>
               </div>
             </>
           )}
         </div>
       </div>
 
-      <div className="rw-hero-slider" role="group" aria-label="Hero slides">
-        <button type="button" className="rw-hero-slider-btn" aria-label="Previous slide" onClick={() => go(active - 1)}>‹</button>
+      <div className="rw-hero-slider" role="group" aria-label={t('home.slidesAria')}>
+        <button type="button" className="rw-hero-slider-btn" aria-label={t('home.prevSlide')} onClick={() => go(active - 1)}>‹</button>
         <div className="rw-hero-slider-dots">
           {HERO_SLIDES.map((item, i) => (
             <button
               key={item.id}
               type="button"
               className={`rw-hero-slider-dot${i === active ? ' is-on' : ''}`}
-              aria-label={`Go to slide ${i + 1}`}
+              aria-label={t('home.goSlide', { n: i + 1 })}
               aria-current={i === active ? 'true' : undefined}
               onClick={() => go(i)}
             />
           ))}
         </div>
-        <button type="button" className="rw-hero-slider-btn" aria-label="Next slide" onClick={() => go(active + 1)}>›</button>
+        <button type="button" className="rw-hero-slider-btn" aria-label={t('home.nextSlide')} onClick={() => go(active + 1)}>›</button>
       </div>
     </section>
   )
 }
 
 export default function Home() {
+  const { t } = useLang()
   const scrollToId = useSmoothScroll()
   const navigate = useNavigate()
   const location = useLocation()
@@ -458,7 +453,7 @@ He helps developers and their sales teams<br />
       <section id="services" className="rw-ways-section" style={sectionRule}>
         <div className="rw-pad" style={container}>
           <Reveal style={{ padding: '54px 0 4px', fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.26em', color: 'var(--faded)' }}>
-            THREE MOVES. ONE OUTCOME. MORE CLOSED.
+            {t('home.ways')}
             {/* THREE WAYS IN WHICH DEVELOPERS AND SALES LEADER STANDS TO BENEFIT  */}
           </Reveal>
           <div className="rw-grid-3 rw-ways" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', columnGap: 44 }}>
@@ -479,18 +474,19 @@ He helps developers and their sales teams<br />
                 <WayMedia
                   cover={{
                     ...WAY_COVERS[i],
+                    alt: t(`home.way.alt.${i + 1}`),
                     overlay: (
                       <span className="rw-way-overlay-title">
                         <span className="rw-way-numeral" style={{ fontFamily: serif }} aria-hidden>{way.k}</span>
-                        <span className="rw-way-service-name">{way.kicker}</span>
+                        <span className="rw-way-service-name">{t(`home.slide.${['coaching', 'consulting', 'realty'][i]}.line1`)} {t(`home.slide.${['coaching', 'consulting', 'realty'][i]}.line2`)}</span>
                       </span>
                     ),
                   }}
                 />
 
                 <span className="rw-way-body">
-                  <span style={{ fontFamily: serif, fontSize: fs('clamp(24px,1.9vw,29px)'), lineHeight: 1.1, letterSpacing: '-.01em' }}>{way.title}</span>
-                  <span style={{ fontFamily: text, fontWeight: 300, fontSize: fs('17px'), lineHeight: 1.5, color: 'var(--faded)' }}>{way.line}</span>
+                  <span style={{ fontFamily: serif, fontSize: fs('clamp(24px,1.9vw,29px)'), lineHeight: 1.1, letterSpacing: '-.01em' }}>{t(`home.way.${i + 1}.title`)}</span>
+                  <span style={{ fontFamily: text, fontWeight: 300, fontSize: fs('17px'), lineHeight: 1.5, color: 'var(--faded)' }}>{t(`home.way.${i + 1}.line`)}</span>
                 </span>
               </Reveal>
             ))}
@@ -535,13 +531,13 @@ He helps developers and their sales teams<br />
       {/* Testimonials */}
       <section id="testimonials" className="rw-pad" style={{ ...container, padding: 'clamp(36px, 5vw, 56px) 40px var(--rw-sy-lg)' }}>
         <Reveal style={{ borderBottom: '1px solid var(--line)', paddingBottom: 22 }}>
-          <h2 style={sectionHeading}>In their words</h2>
+          <h2 style={sectionHeading}>{t('home.words')}</h2>
         </Reveal>
         <div className="rw-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', columnGap: 44 }}>
-          {HOME_TESTIMONIALS.map((t, i) => (
-            <Reveal key={t.name} delay={i * 90} style={{ borderTop: '1px solid var(--line)', padding: '34px 0 8px', display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <p style={{ fontFamily: jost, fontWeight: 400, fontSize: fs('18px'), lineHeight: 1.55, color: 'var(--ink)' }}>“{t.text}”</p>
-              <div style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.06em', color: 'var(--copper)' }}>{t.name}</div>
+          {HOME_TESTIMONIALS.map((item, i) => (
+            <Reveal key={item.name} delay={i * 90} style={{ borderTop: '1px solid var(--line)', padding: '34px 0 8px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <p style={{ fontFamily: jost, fontWeight: 400, fontSize: fs('18px'), lineHeight: 1.55, color: 'var(--ink)' }}>“{t(TESTIMONIAL_KEYS[i])}”</p>
+              <div style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.06em', color: 'var(--copper)' }}>{item.name}</div>
             </Reveal>
           ))}
         </div>
@@ -561,11 +557,11 @@ He helps developers and their sales teams<br />
                 />
               }
             >
-              &ldquo;I never stopped selling. That is the whole method; everything I pass on was closed first, shared second.&rdquo;
+              &ldquo;{t('home.quote')}&rdquo;
             </PullQuote>
           </Reveal>
           <Reveal delay={220} style={{ marginTop: 46 }}>
-            <BookButton specular>BOOK A STRATEGY CALL</BookButton>
+            <BookButton specular>{t('mega.bookStrategy')}</BookButton>
           </Reveal>
         </div>
       </section>

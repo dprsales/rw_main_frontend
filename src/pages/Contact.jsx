@@ -5,45 +5,46 @@ import Seo from '../components/Seo'
 import { BookButton } from '../components/BookingModal'
 import Reveal from '../components/Reveal'
 import hydMark from '../assets/site/hyd-05.svg'
+import { useLang } from '../i18n/LangProvider'
 import { EMAIL, FOOTER_LINKS, PHONE, WHATSAPP, mono, serif } from '../theme'
 import { fs, container, eyebrowFaded, sectionRule } from '../styles'
 
-const HEADLINE = [
-  { text: 'One form. ' },
-  { br: true },
-  { text: 'Read personally.', italic: true, copper: true },
-]
-
-const CONTACT_ROWS = [
-  { label: 'EMAIL', value: 'connect@rajivwilliams.com', href: EMAIL },
-  { label: 'PHONE', value: PHONE.label, href: PHONE.href },
-  { label: 'WHATSAPP', value: 'Message on WhatsApp', href: WHATSAPP },
-  { label: 'LOCATION', value: 'Hyderabad, Telangana, India' },
-]
-
 export default function Contact() {
+  const { t } = useLang()
+  const headline = [
+    { text: t('contact.h1') },
+    { br: true },
+    { text: t('contact.h2'), italic: true, copper: true },
+  ]
+  const rows = [
+    { key: 'email', label: t('contact.email'), value: 'connect@rajivwilliams.com', href: EMAIL },
+    { key: 'phone', label: t('contact.phone'), value: PHONE.label, href: PHONE.href },
+    { key: 'whatsapp', label: t('contact.whatsapp'), value: t('contact.wa'), href: WHATSAPP },
+    { key: 'location', label: t('contact.location'), value: t('contact.place') },
+  ]
+
   return (
     <>
       <Seo route="/contact" />
       <Header />
 
       <PageIntro
-        eyebrow="CONTACT · RAJIV WILLIAMS"
-        headline={HEADLINE}
-        lede="Coaching applications, developer enquiries, and RW Realty mandates all start here."
-        intro="Book a call directly, or reach out on any of the channels below."
-        cta={<BookButton interest="General enquiry" specular>BOOK A CALL</BookButton>}
+        eyebrow={t('contact.eyebrow')}
+        headline={headline}
+        lede={t('contact.lede')}
+        intro={t('contact.intro')}
+        cta={<BookButton interest="General enquiry" specular>{t('cta.bookCall')}</BookButton>}
       />
 
       <section style={{ ...sectionRule, background: 'var(--chip)', position: 'relative', overflow: 'hidden' }}>
         <img src={hydMark} alt="" aria-hidden className="rw-watermark is-right" />
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px', position: 'relative', zIndex: 1 }}>
-          <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>REACH RAJIV DIRECTLY</Reveal>
+          <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>{t('contact.reach')}</Reveal>
 
           <div style={{ maxWidth: 560 }}>
-            {CONTACT_ROWS.map((row) => (
-              <div key={row.label} style={{ display: 'flex', alignItems: 'baseline', gap: 20, borderTop: '1px solid var(--line)', padding: '18px 0' }}>
-                <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)', width: 110, flexShrink: 0 }}>
+            {rows.map((row) => (
+              <div key={row.key} className="rw-contact-row" style={{ display: 'flex', alignItems: 'baseline', gap: 20, borderTop: '1px solid var(--line)', padding: '18px 0' }}>
+                <span className="rw-contact-label" style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)', width: 110, flexShrink: 0 }}>
                   {row.label}
                 </span>
                 {row.href ? (

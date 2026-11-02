@@ -1,4 +1,4 @@
-/** Day 1 chrome only. Page bodies stay in English until later days. */
+/** Day 1 chrome. Day 2 page bodies live in pages.js / pages-te.js. */
 export const chrome = {
   en: {
     'nav.home': 'Home',

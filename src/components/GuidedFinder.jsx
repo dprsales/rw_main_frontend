@@ -7,6 +7,8 @@ import FinderSteps from './FinderSteps'
 import Reveal from './Reveal'
 import { track } from '../data/analytics'
 import { useFinder } from '../hooks/useFinder'
+import { useLang } from '../i18n/LangProvider'
+import { finderOutcomeName } from '../i18n/pages'
 import { fs, eyebrow, sectionHeadingLg, body } from '../styles'
 import './GuidedFinder.css'
 
@@ -31,6 +33,7 @@ const FINDER_GLOW = {
  *   location  analytics label ('home' | 'start')
  */
 export default function GuidedFinder({ variant = 'inline', seed = {}, location = 'home' }) {
+  const { t } = useLang()
   const navigate = useNavigate()
   const finder = useFinder({ seed, location })
   const { answers, stepIndex, done, result, guidance, back, restart } = finder
@@ -95,21 +98,21 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
     >
       <div className="rw-finder-inner">
         <div className="rw-finder-lead">
-          <Reveal style={{ ...eyebrow, marginBottom: 22 }}>FIND THE RIGHT FIT</Reveal>
-          <Reveal as={variant === 'page' ? 'h1' : 'h2'} id="finder-heading" delay={80} style={{ ...sectionHeadingLg, fontSize: fs('clamp(28px,3.1vw,44px)'), lineHeight: 1.08 }}>
-            Tell us who you are. <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>We&rsquo;ll point you in the right direction.</span>
+          <Reveal style={{ ...eyebrow, marginBottom: 22 }}>{t('finder.eyebrow')}</Reveal>
+          <Reveal as={variant === 'page' ? 'h1' : 'h2'} id="finder-heading" delay={80} style={{ ...sectionHeadingLg, fontSize: fs('clamp(28px,3.1vw,44px)'), lineHeight: 1.28 }}>
+            {t('finder.title1')}<span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>{t('finder.title2')}</span>
           </Reveal>
           <Reveal as="p" delay={140} style={{ ...body, marginTop: 22, maxWidth: '30em' }}>
-            One to three taps, no typing. You can change an answer at any point, or skip this and book a call directly.
+            {t('finder.lede')}
           </Reveal>
         </div>
 
         <div className="rw-finder-stage" aria-live="polite">
           <FinderSteps finder={finder} onStartOver={startOver}>
             <div className="rw-finder-links">
-              {stepIndex > 0 && <CtaButton variant="secondary" arrow="←" onClick={back}>Back</CtaButton>}
-              <BookButton specular source="finder_skip" skipQuestions> BOOK A CALL</BookButton>
-              <CtaButton variant="secondary" arrow="→" onClick={browseServices}>BROWSE SERVICES </CtaButton>
+              {stepIndex > 0 && <CtaButton variant="secondary" arrow="←" onClick={back}>{t('cta.back')}</CtaButton>}
+              <BookButton specular source="finder_skip" skipQuestions> {t('cta.bookCall')}</BookButton>
+              <CtaButton variant="secondary" arrow="→" onClick={browseServices}>{t('finder.browse')}</CtaButton>
             </div>
           </FinderSteps>
 
@@ -130,35 +133,37 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
 }
 
 const ResultCard = forwardRef(function ResultCard({ result, guidance, onDeepPath, onBrowse, location }, ref) {
-  const { outcome, reason, secondary, candidates } = result
+  const { t } = useLang()
+  const { outcome, secondary, candidates, rule } = result
   const isCall = outcome.key === 'strategy_call'
   const isBrowse = outcome.key === 'realty_portfolio'
   const title = isCall && candidates.length
-    ? candidates.map((c) => c.name).join(' or ')
-    : outcome.name
+    ? candidates.map((c) => finderOutcomeName(t, c.key, c.name)).join(t('finder.or'))
+    : finderOutcomeName(t, outcome.key, outcome.name)
+  const outcomeName = finderOutcomeName(t, outcome.key, outcome.name)
 
   const bookPreset = {
     interest: outcome.interest,
     guidance,
     source: 'guided_finder',
-    eyebrow: isCall ? 'BOOK A STRATEGY CALL' : `BOOK A STRATEGY CALL · ${outcome.name.toUpperCase()}`,
+    eyebrow: isCall ? t('book.eyebrow') : `${t('book.eyebrow')} · ${outcomeName}`,
   }
 
   return (
     <BorderGlow {...FINDER_GLOW} className="rw-finder-card-glow">
-    <div className="rw-finder-card" role="region" aria-label="Our recommendation">
-      <div className="rw-finder-card-eyebrow">BASED ON YOUR ANSWERS</div>
+    <div className="rw-finder-card" role="region" aria-label={t('finder.recommend')}>
+      <div className="rw-finder-card-eyebrow">{t('finder.based')}</div>
       <h3 ref={ref} tabIndex={-1} className="rw-finder-card-title">{title}</h3>
-      <p className="rw-finder-card-reason">{reason}</p>
+      <p className="rw-finder-card-reason">{t(`finder.reason.${rule}`)}</p>
 
       <div className="rw-finder-card-actions">
-        <BookButton specular {...bookPreset}>BOOK A STRATEGY CALL</BookButton>
+        <BookButton specular {...bookPreset}>{t('mega.bookStrategy')}</BookButton>
         {outcome.formTrack && (
-          <CtaButton variant="outline" onClick={onDeepPath}>{outcome.formCta}</CtaButton>
+          <CtaButton variant="outline" onClick={onDeepPath}>{t(`finder.form.${outcome.formTrack}`)}</CtaButton>
         )}
         {isBrowse && (
           <CtaButton variant="outline" href={outcome.to} onClick={() => track('finder_service_click', { recommendedService: outcome.key, target: 'browse', location, attemptId: guidance?.attemptId })}>
-            BROWSE THE PROJECTS
+            {t('finder.browseProjects')}
           </CtaButton>
         )}
       </div>
@@ -168,16 +173,16 @@ const ResultCard = forwardRef(function ResultCard({ result, guidance, onDeepPath
         {outcome.to && !isBrowse && (
           <CtaButton variant="secondary" to={outcome.to} arrow="→"
             onClick={() => track('finder_service_click', { recommendedService: outcome.key, target: 'page', location, attemptId: guidance?.attemptId })}>
-            {outcome.cta}
+            {t(`finder.cta.${outcome.key}`)}
           </CtaButton>
         )}
         {secondary && (
           <CtaButton variant="secondary" to={secondary.to} arrow="→"
             onClick={() => track('finder_service_click', { recommendedService: outcome.key, target: 'secondary', location, attemptId: guidance?.attemptId })}>
-            {secondary.label}
+            {t('finder.secondary.assessment')}
           </CtaButton>
         )}
-        <CtaButton variant="secondary" arrow="→" onClick={onBrowse}>BROWSE SERVICES </CtaButton>
+        <CtaButton variant="secondary" arrow="→" onClick={onBrowse}>{t('finder.browse')}</CtaButton>
       </div>
     </div>
     </BorderGlow>

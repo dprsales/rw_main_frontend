@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Reveal from './Reveal'
 import { EXPERIENCE, EXPERIENCE_PHASES } from '../data/content'
+import { useLang } from '../i18n/LangProvider'
+import { experienceRoleKey } from '../i18n/pages'
 import { mono, text } from '../theme'
 import { fs, container, eyebrowFaded, sectionHeading, sectionRule } from '../styles'
 
@@ -42,6 +44,7 @@ const subpoint = {
 
 /** Career track — Dell through PVR Developers to the independent practice today. */
 export default function ExperienceSection() {
+  const { t } = useLang()
   const phaseKeys = useMemo(() => EXPERIENCE_PHASES.map((p) => p.key), [])
   const [activePhase, phaseRefs] = useActivePhase(phaseKeys)
 
@@ -51,12 +54,12 @@ export default function ExperienceSection() {
         <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.34fr .66fr', gap: 48 }}>
           {/* Pinned while the track scrolls past — the heading stays as context. */}
           <div className="rw-sticky-aside">
-            <Reveal style={{ ...eyebrowFaded, marginBottom: 18 }}>THE TRACK</Reveal>
+            <Reveal style={{ ...eyebrowFaded, marginBottom: 18 }}>{t('about.track')}</Reveal>
             <Reveal as="h2" delay={80} style={{ ...sectionHeading, fontSize: fs('clamp(28px,3.4vw,44px)'), lineHeight: 1.05, maxWidth: '11em' }}>
-              <span style={{ color: 'var(--copper)' }}>16+</span> yrs, from the call floor to the boardroom.
+              <span style={{ color: 'var(--copper)' }}>16+</span>{t('about.trackTitle')}
             </Reveal>
             <Reveal as="p" delay={140} style={{ marginTop: 22, fontFamily: text, fontWeight: 300, fontSize: fs('17px'), lineHeight: 1.6, color: 'var(--faded)', maxWidth: '26em' }}>
-              A path that runs from enterprise operations through developer sales leadership into independent mentoring and mandate work.
+              {t('about.trackLede')}
             </Reveal>
             {/* Decorative — phase headings already carry these labels to the reader. */}
             <Reveal aria-hidden delay={200} style={{ marginTop: 30, paddingTop: 22, borderTop: '1px solid var(--line)' }}>
@@ -78,7 +81,7 @@ export default function ExperienceSection() {
                         opacity: on ? 1 : .6, transition: 'color .45s, opacity .45s',
                       }}
                     >
-                      {phase.label}
+                      {t(`about.phase.${phase.key}`)}
                     </span>
                   </div>
                 )
@@ -87,7 +90,7 @@ export default function ExperienceSection() {
 
             {/* Stated once here rather than repeated on all thirteen rows. */}
             <Reveal delay={240} style={{ marginTop: 24, paddingTop: 18, borderTop: '1px solid var(--line)', fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)' }}>
-              ALL ROLES · HYDERABAD, INDIA
+              {t('about.allRoles')}
             </Reveal>
           </div>
 
@@ -116,9 +119,9 @@ export default function ExperienceSection() {
                       }}
                     />
                     <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', textTransform: 'uppercase', color: p === 0 ? 'var(--copper)' : 'var(--ink)' }}>
-                      {phase.label}
+                      {t(`about.phase.${phase.key}`)}
                     </div>
-                    <div style={{ ...subpoint, marginTop: 5 }}>{phase.note}</div>
+                    <div style={{ ...subpoint, marginTop: 5 }}>{t(`about.phase.${phase.key}.note`)}</div>
                   </Reveal>
 
                   <div
@@ -140,12 +143,12 @@ export default function ExperienceSection() {
                           <span style={point}>{role.company}</span>
                           {role.current && (
                             <span style={{ fontFamily: mono, fontSize: fs('9px'), letterSpacing: '.12em', color: 'var(--copper)', border: '1px solid var(--copper)', borderRadius: 100, padding: '3px 9px' }}>
-                              CURRENT
+                              {t('about.current')}
                             </span>
                           )}
                         </div>
                         <div style={{ ...subpoint, marginTop: 4 }}>
-                          {role.role}
+                          {t(experienceRoleKey(role.company) || role.role)}
                         </div>
                       </Reveal>
                     ))}
