@@ -11,6 +11,8 @@ const CRAWLABLE_LINKS = [
   { label: 'Luxury sales coaching', to: '/coaching' },
   { label: 'Developer sales consulting', to: '/consulting' },
   { label: 'Projects in Hyderabad', to: '/project-hyderabad' },
+  { label: 'List a property', to: '/list-property' },
+  { label: 'Listed properties', to: '/realty/listings' },
   { label: 'RW Realty mandates', to: '/realty' },
   { label: 'Track record and portfolio', to: '/realty/portfolio' },
   { label: 'About Rajiv Williams', to: '/about' },

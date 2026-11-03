@@ -42,6 +42,24 @@ export const ROUTE_SEO = {
     description:
       'Projects represented and mandated across Hyderabad’s luxury corridor, 27 developer partners, and recommendations from NAR India leadership.',
   },
+  '/realty/listings': {
+    title: 'Verified Property Listings in Hyderabad | RW Realty',
+    description:
+      'Browse verified apartments, villas and plots. Every listing is reviewed by the RW Realty team before it goes live.',
+  },
+  '/list-property': {
+    title: 'List a Property with Team RW | RW Realty',
+    description:
+      'List your Hyderabad property with Team RW. Free listing, team verification, and buyer enquiries to your inbox.',
+  },
+  '/list-property/login': {
+    title: 'Listing Login | RW Realty',
+    description: 'Sign in to manage your property listings with Team RW.',
+  },
+  '/list-property/dashboard': {
+    title: 'Listing Dashboard | RW Realty',
+    description: 'Manage your submitted property listings and enquiries.',
+  },
   '/careers': {
     title: 'Careers in Luxury Real Estate Sales, Hyderabad | Rajiv Williams',
     description:
