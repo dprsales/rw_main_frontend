@@ -19,6 +19,7 @@ import Reveal from '../components/Reveal'
 import RiseText from '../components/RiseText'
 import ClosingCTA from '../components/ClosingCTA'
 import SectionHead, { SectionAside } from '../components/SectionHead'
+import ApprovedListingsSection from '../listings/components/ApprovedListingsSection'
 import { useInView } from '../hooks/useInView'
 import { MANDATE_SCOPE } from '../data/content'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
@@ -332,6 +333,8 @@ export default function Realty() {
           </Reveal>
         </div>
       </section>
+
+      <ApprovedListingsSection />
 
       <ClosingCTA title="Mandates are limited to a handful of projects at a time.">
         <CtaButton variant="outline" href="/form/realty">TELL US ABOUT YOUR PROJECT</CtaButton>

@@ -1414,6 +1414,72 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 .rw-dnav-book:hover { background: color-mix(in srgb, var(--copper) 16%, transparent); }
 
+/* Listing Log in — gold filled `.rw-cta`, sized with clamp so it scales with the header. */
+.rw-header-login.rw-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  height: clamp(32px, 3.6vw, 40px);
+  padding: 0 clamp(14px, 1.8vw, 22px);
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: clamp(11px, 1.05vw, 12px);
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 1;
+  color: #16110a;
+  background: var(--gold-gradient);
+  border: 0 solid transparent;
+  border-radius: clamp(4px, 0.55vw, 8px);
+}
+.rw-header-account {
+  display: inline-flex; align-items: center; flex-shrink: 0; white-space: nowrap; text-decoration: none;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: clamp(11px, 1.05vw, 12px); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink); background: none; border: 1px solid var(--copper);
+  border-radius: clamp(4px, 0.55vw, 8px);
+  height: clamp(32px, 3.6vw, 40px); padding: 0 clamp(12px, 1.4vw, 16px) 0 clamp(5px, 0.6vw, 8px);
+  gap: clamp(6px, 0.8vw, 10px); cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+.rw-header-account:hover { background: color-mix(in srgb, var(--copper) 16%, transparent); color: var(--ink); }
+.rw-header-account-avatar {
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: clamp(22px, 2.4vw, 26px); height: clamp(22px, 2.4vw, 26px); border-radius: 50%;
+  background: var(--gold-gradient); color: #16110a;
+  font-size: clamp(10px, 1vw, 11px); font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+}
+.rw-header-account-name {
+  max-width: 120px; overflow: hidden; text-overflow: ellipsis; letter-spacing: .08em; text-transform: none; font-size: 13px;
+}
+.rw-header-account-menu {
+  position: absolute; right: 0; top: calc(100% + 10px); z-index: 60; width: 240px;
+  overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--card);
+  box-shadow: var(--shadow-lift);
+}
+.rw-header-account-menu a,
+.rw-header-account-menu button {
+  display: flex; width: 100%; align-items: center; gap: 10px; padding: 12px 16px;
+  border: 0; border-top: 1px solid var(--line); background: none; cursor: pointer; text-align: left;
+  font-family: 'Poppins', system-ui, sans-serif; font-size: 13px; color: var(--ink); text-decoration: none;
+}
+.rw-header-account-menu a:first-child,
+.rw-header-account-menu .rw-header-account-meta + a { border-top: 0; }
+.rw-header-account-menu a:hover,
+.rw-header-account-menu button:hover { background: color-mix(in srgb, var(--copper) 10%, transparent); color: var(--copper); }
+.rw-header-account-meta { padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.rw-header-account-meta strong { display: block; font-size: 14px; font-weight: 500; color: var(--ink); }
+.rw-header-account-meta span { display: block; margin-top: 2px; font-size: 12px; color: var(--faded); }
+.rw-header-account-logout { color: #f0a8a8 !important; }
+@media (max-width: 560px) {
+  .rw-header-account-name { display: none; }
+  .rw-header-account { padding-right: 8px; }
+}
+
 /* Legal lives in the footer as quiet text, so the header can stay one action plus a future login. */
 .rw-footer-legal {
   display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 16px;

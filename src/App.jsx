@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react'
+import React, { Suspense, lazy, useLayoutEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { BookingProvider } from './components/BookingModal'
 import ScrollProgress from './components/ScrollProgress'
@@ -6,6 +6,7 @@ import SiteLoader from './components/SiteLoader'
 import HiringModal from './components/HiringModal'
 import { ThemeProvider } from './components/ThemeProvider'
 import { LangProvider } from './i18n/LangProvider'
+import { ListingAuthProvider } from './listings/AuthContext'
 import { headerOffset } from './hooks/useSmoothScroll'
 import { useSiteVisitTracker } from './hooks/useSiteVisitTracker'
 import About from './pages/About'
@@ -33,6 +34,13 @@ import VendorPartner from './pages/VendorPartner'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
 import Faqs from './pages/Faqs'
+
+const ListPropertyPage = lazy(() => import('./listings/pages/ListPropertyPage'))
+const DashboardPage = lazy(() => import('./listings/pages/DashboardPage'))
+const LoginPage = lazy(() => import('./listings/pages/LoginPage'))
+const ResetPasswordPage = lazy(() => import('./listings/pages/ResetPasswordPage'))
+const ListingsPage = lazy(() => import('./listings/pages/ListingsPage'))
+const ListingDetailPage = lazy(() => import('./listings/pages/ListingDetailPage'))
 
 // Stop the browser (Safari especially) restoring the old scroll position on reload,
 // which would land a refreshed homepage on the finder instead of the hero.
@@ -80,9 +88,11 @@ export default function App() {
       <LangProvider>
         <SiteLoader />
         <BookingProvider>
+          <ListingAuthProvider>
           <ScrollToTop />
           <ScrollProgress />
           <HiringModal />
+          <Suspense fallback={<div style={{ minHeight: '100vh', background: 'var(--bg)' }} />}>
           <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/coaching" element={<Coaching />} />
@@ -120,6 +130,16 @@ export default function App() {
           <Route path="/projects/:slug" element={<Project />} />
           <Route path="/realty/projects/:slug" element={<Project />} />
 
+          {/* Property listings — builders list, team approves by email, approved ones go live */}
+          <Route path="/list-property" element={<ListPropertyPage key="new" />} />
+          <Route path="/list-property/edit/:id" element={<ListPropertyPage key="edit" />} />
+          <Route path="/list-property/login" element={<LoginPage />} />
+          <Route path="/login" element={<Navigate to="/list-property/login" replace />} />
+          <Route path="/list-property/dashboard" element={<DashboardPage />} />
+          <Route path="/list-property/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/realty/listings" element={<ListingsPage />} />
+          <Route path="/realty/listings/:slug" element={<ListingDetailPage />} />
+
           {/* Legacy URLs from the old site, still indexed — redirect to nearest live equivalent */}
           <Route path="/about-us" element={<Navigate to="/about" replace />} />
           <Route path="/services" element={<Navigate to="/" replace />} />
@@ -131,6 +151,8 @@ export default function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          </Suspense>
+          </ListingAuthProvider>
         </BookingProvider>
       </LangProvider>
     </ThemeProvider>

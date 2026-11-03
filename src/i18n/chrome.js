@@ -85,6 +85,10 @@ export const chrome = {
     'footer.careers': 'Careers \u2192',
     'footer.partners': 'Channel Partners \u2192',
     'footer.backProjects': '\u2190 Projects in Hyderabad',
+    'footer.listings': 'Browse listings',
+    'footer.listingsGo': 'Browse listings \u2192',
+    'footer.listProperty': 'List a property',
+    'footer.listPropertyGo': 'List a property \u2192',
   },
   te: {
     'nav.home': '\u0c39\u0c4b\u0c2e\u0c4d',
@@ -171,6 +175,10 @@ export const chrome = {
     'footer.careers': '\u0c15\u0c46\u0c30\u0c40\u0c30\u0c4d\u0c38\u0c4d \u2192',
     'footer.partners': '\u0c1b\u0c3e\u0c28\u0c32\u0c4d \u0c2a\u0c3e\u0c30\u0c4d\u0c1f\u0c4d\u200c\u0c28\u0c30\u0c4d\u0c38\u0c4d \u2192',
     'footer.backProjects': '\u2190 \u0c39\u0c48\u0c26\u0c30\u0c3e\u0c2c\u0c3e\u0c26\u0c4d \u0c2a\u0c4d\u0c30\u0c3e\u0c1c\u0c46\u0c15\u0c4d\u0c1f\u0c41\u0c32\u0c41',
+    'footer.listings': '\u0c32\u0c3f\u0c38\u0c4d\u0c1f\u0c3f\u0c02\u0c17\u0c4d\u0c38\u0c4d \u0c1a\u0c42\u0c21\u0c02\u0c21\u0c3f',
+    'footer.listingsGo': '\u0c32\u0c3f\u0c38\u0c4d\u0c1f\u0c3f\u0c02\u0c17\u0c4d\u0c38\u0c4d \u0c1a\u0c42\u0c21\u0c02\u0c21\u0c3f \u2192',
+    'footer.listProperty': '\u0c2a\u0c4d\u0c30\u0c3e\u0c2a\u0c30\u0c4d\u0c1f\u0c40 \u0c32\u0c3f\u0c38\u0c4d\u0c1f\u0c4d \u0c1a\u0c47\u0c2f\u0c02\u0c21\u0c3f',
+    'footer.listPropertyGo': '\u0c2a\u0c4d\u0c30\u0c3e\u0c2a\u0c30\u0c4d\u0c1f\u0c40 \u0c32\u0c3f\u0c38\u0c4d\u0c1f\u0c4d \u0c1a\u0c47\u0c2f\u0c02\u0c21\u0c3f \u2192',
   },
 }
 
@@ -188,4 +196,8 @@ export const FOOTER_LABEL_KEYS = {
   'Channel Partners \u2192': 'footer.partners',
   '\u2190 Projects in Hyderabad': 'footer.backProjects',
   'Portfolio': 'nav.portfolio',
+  'Browse listings': 'footer.listings',
+  'Browse listings \u2192': 'footer.listingsGo',
+  'List a property': 'footer.listProperty',
+  'List a property \u2192': 'footer.listPropertyGo',
 }

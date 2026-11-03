@@ -1,0 +1,111 @@
+/* Property listing module — utilities are important:true (see tailwind.config.js)
+ * so they beat the site's unlayered global.css reset. Component classes stay under .sy-root. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---- scoped mini-reset (Tailwind preflight is disabled for the rest of the site) ---- */
+.sy-root {
+  font-family: 'Jost', system-ui, -apple-system, sans-serif;
+  color: #F2EFE9;
+  background: #0B0A09;
+  min-height: 60vh;
+}
+.sy-root *, .sy-root ::before, .sy-root ::after {
+  border-width: 0;
+  border-style: solid;
+  border-color: rgba(242, 239, 233, 0.12);
+}
+.sy-root button, .sy-root input, .sy-root select, .sy-root textarea {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  line-height: inherit;
+}
+.sy-root button { cursor: pointer; }
+.sy-root button:disabled { cursor: not-allowed; }
+.sy-root img { display: block; max-width: 100%; }
+.sy-root ol, .sy-root ul { list-style: none; }
+.sy-root a { color: inherit; }
+.sy-root a:hover { color: inherit; }
+.sy-root select option { background: #141210; color: #F2EFE9; }
+.sy-root input[type='number']::-webkit-inner-spin-button { opacity: .4; }
+.sy-root summary::-webkit-details-marker { display: none; }
+
+/* ---- components ---- */
+.sy-root .card {
+  @apply rounded-xl border border-line bg-panel text-ink shadow-card;
+}
+.sy-root .field-label {
+  @apply mb-1.5 block text-[13px] font-medium text-ink;
+}
+.sy-root .field-input {
+  @apply w-full rounded-md border border-line bg-night px-3.5 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-faded/70 focus:border-gold-500;
+}
+.sy-root .field-input:disabled { @apply opacity-60; }
+.sy-root .btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-md px-6 py-3 text-sm font-semibold tracking-wide text-night transition-all disabled:cursor-not-allowed disabled:opacity-40;
+  background: linear-gradient(100deg, #A67C3D 0%, #E8C97A 48%, #C39B53 100%);
+  background-size: 180% 100%;
+  background-position: 0% 0;
+}
+.sy-root .btn-primary:not(:disabled):hover { background-position: 100% 0; box-shadow: 0 10px 30px rgba(195,155,83,.25); }
+.sy-root .btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-md border border-line bg-transparent px-6 py-3 text-sm font-semibold text-ink transition-colors hover:border-gold-500 hover:text-gold-300 disabled:opacity-40;
+}
+.sy-root .chip {
+  @apply inline-flex select-none items-center gap-1.5 rounded-full border border-line bg-chip px-3.5 py-2 text-sm text-ink transition-colors hover:border-gold-500/60;
+}
+.sy-root .chip.selected {
+  @apply border-gold-500 bg-gold-500/15 text-gold-300;
+}
+.sy-root .toggle-btn {
+  @apply flex-1 rounded-md border border-line bg-chip px-4 py-3 text-center text-sm font-medium text-ink transition-colors hover:border-gold-500/60;
+}
+.sy-root .toggle-btn.active {
+  @apply border-gold-500 bg-gold-500 text-night;
+}
+.sy-root .eyebrow {
+  @apply text-[11px] font-medium uppercase tracking-[0.22em] text-gold-500;
+}
+.sy-root .gold-text {
+  background: linear-gradient(100deg, #A67C3D 0%, #E8C97A 48%, #C39B53 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@keyframes sy-spin { to { transform: rotate(360deg); } }
+.sy-root .spinner {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid currentColor; border-right-color: transparent;
+  animation: sy-spin .7s linear infinite; display: inline-block;
+}
+@keyframes sy-shimmer { 0% { background-position: -400px 0 } 100% { background-position: 400px 0 } }
+.sy-root .skeleton {
+  background: linear-gradient(90deg, #141210 0px, #211d19 120px, #141210 240px);
+  background-size: 800px 100%;
+  animation: sy-shimmer 1.4s linear infinite;
+}
+.sy-root .scrollbar-none::-webkit-scrollbar { display: none; }
+.sy-root .scrollbar-none { scrollbar-width: none; }
+
+/* Cormorant defaults to old-style figures (1 looks like I, 0 like O) — prices and stats need lining numerals */
+.sy-root .font-serif { font-variant-numeric: lining-nums proportional-nums; }
+
+/* ---- dropdowns ---- */
+.sy-root .select-input {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.25rem;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23C39B53' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.95rem center;
+  background-size: 12px 8px;
+}
+.sy-root .field-input.is-invalid { border-color: #f87171; box-shadow: 0 0 0 3px rgba(248,113,113,.12); }
+@keyframes sy-pop { from { opacity: 0; transform: translateY(-4px) } to { opacity: 1; transform: none } }
+.sy-root .pop { animation: sy-pop .12s ease-out; }
+@keyframes sy-pulse { 0%,100% { opacity: 1 } 50% { opacity: .35 } }
+.sy-root .live-dot { animation: sy-pulse 1.6s ease-in-out infinite; }

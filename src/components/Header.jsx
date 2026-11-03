@@ -7,6 +7,7 @@ import OptionWheel from './OptionWheel'
 import Wordmark from './Wordmark'
 import FontSizeControl from './FontSizeControl'
 import LangSwitch from './LangSwitch'
+import AccountMenu from '../listings/components/AccountMenu'
 import { useBooking } from './BookingModal'
 import { useLang } from '../i18n/LangProvider'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
@@ -21,6 +22,9 @@ const SITE_NAV = [
   { key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching' },
   { key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting' },
   { key: 'nav.projects', label: 'Projects in Hyderabad', to: '/project-hyderabad' },
+  { key: 'mega.listProperty', label: 'List a property', to: '/list-property' },
+  { key: 'mega.listed', label: 'Listed properties', to: '/realty/listings' },
+  { key: 'mega.rentals', label: 'Rentals', to: '/realty/listings?listingType=Rent' },
   { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty' },
   { key: 'nav.portfolio', label: 'Portfolio', to: '/realty/portfolio' },
   { key: 'nav.careers', label: 'Careers', to: '/careers' },
@@ -80,18 +84,16 @@ const PROPERTY_COLUMNS = [
   {
     headingKey: 'mega.resale',
     heading: 'Resale',
-    soon: true,
     items: [
-      { key: 'mega.listProperty', label: 'List a property', descKey: 'mega.listDesc', desc: 'List your property with Team RW', soon: true, icon: ListPlus },
-      { key: 'mega.listed', label: 'Listed properties', descKey: 'mega.listedDesc', desc: 'See rates and send an enquiry', soon: true, icon: LayoutGrid },
+      { key: 'mega.listProperty', label: 'List a property', to: '/list-property', descKey: 'mega.listDesc', desc: 'List your property with Team RW', icon: ListPlus },
+      { key: 'mega.listed', label: 'Listed properties', to: '/realty/listings', descKey: 'mega.listedDesc', desc: 'See rates and send an enquiry', icon: LayoutGrid },
     ],
   },
   {
     headingKey: 'mega.rent',
     heading: 'Rent',
-    soon: true,
     items: [
-      { key: 'mega.rentals', label: 'Rentals', descKey: 'mega.rentalsDesc', desc: 'Hyderabad rentals', soon: true, icon: KeyRound },
+      { key: 'mega.rentals', label: 'Rentals', to: '/realty/listings?listingType=Rent', descKey: 'mega.rentalsDesc', desc: 'Hyderabad rentals', icon: KeyRound },
     ],
   },
 ]
@@ -208,7 +210,7 @@ function DesktopNav({ pathname, onBook }) {
         <button
           ref={propsTriggerRef}
           type="button"
-          className={`rw-dnav-link${pathname === '/project-hyderabad' ? ' is-active' : ''}`}
+          className={`rw-dnav-link${pathname === '/project-hyderabad' || pathname.startsWith('/list-property') || pathname.startsWith('/realty/listings') ? ' is-active' : ''}`}
           aria-expanded={open === 'props'}
           aria-controls="rw-props-mega"
           onClick={() => toggle('props')}
@@ -275,7 +277,8 @@ function MenuIcon({ open }) {
   )
 }
 
-/** Wordmark + menu button; nav lives in the wheel menu (SITE_NAV). Takes no props. */
+/** Wordmark + menu button; nav lives in the wheel menu (SITE_NAV).
+ *  Listing Log in / account sits where Book a call used to. */
 export default function Header() {
   const { t } = useLang()
   const scrollToId = useSmoothScroll()
@@ -370,7 +373,7 @@ export default function Header() {
           {/* Whole-site text-size control (Small/default, Medium, Large). */}
           <FontSizeControl />
 
-          <button type="button" className="rw-dnav-book" onClick={() => openBooking()}>{t('cta.bookCall')}</button>
+          <AccountMenu />
 
           {/* Tablet/phone: nav lives in the wheel menu behind this button. */}
           <button
