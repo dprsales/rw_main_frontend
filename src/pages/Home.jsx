@@ -4,11 +4,8 @@ import heroImage from '../assets/site/hero-rajiv.webp'
 import heroCoaching from '../assets/site/hero-slider-coaching.png'
 import heroConsulting from '../assets/site/hero-slider-consulting.jpg'
 import heroRealty from '../assets/site/hero-slider-realty.jpg'
-import wayCoachingVideo from '../assets/site/way-coaching.mp4'
 import wayCoachingPoster from '../assets/site/way-coaching.jpg'
-import wayConsultingVideo from '../assets/site/way-consulting.mp4'
 import wayConsultingPoster from '../assets/site/way-consulting.jpg'
-import wayMandateVideo from '../assets/site/way-mandate.mp4'
 import wayMandatePoster from '../assets/site/way-mandate.jpg'
 import hraLogo from '../assets/site/logo-hra.png'
 import narLogo from '../assets/site/logo-nar.png'
@@ -119,60 +116,27 @@ function HeroTitle({ lang, t, slide }) {
 }
 
 function WayMedia({ cover }) {
-  const videoRef = useRef(null)
-
-  useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
-    video.muted = true
-    const play = () => { video.play().catch(() => {}) }
-    play()
-    const onReady = () => play()
-    video.addEventListener('canplay', onReady)
-    return () => video.removeEventListener('canplay', onReady)
-  }, [cover.video])
-
   return (
     <span className="rw-way-media">
-      {cover.video ? (
-        <>
-          <img src={cover.src} alt="" aria-hidden className="rw-way-poster" />
-          <video
-            ref={videoRef}
-            src={cover.video}
-            poster={cover.src}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            aria-label={cover.alt}
-          />
-        </>
-      ) : (
-        <img src={cover.src} alt={cover.alt} loading="lazy" />
-      )}
+      <img src={cover.src} alt={cover.alt} loading="lazy" />
       {cover.overlay}
     </span>
   )
 }
 
-/** Covers for the three service cards, in WAYS order. */
+/** Infographic covers for the three service cards, in WAYS order. */
 const WAY_COVERS = [
   {
     src: wayCoachingPoster,
-    video: wayCoachingVideo,
-    alt: 'A male sales coach gives supportive feedback to a female salesperson',
+    alt: 'People Growth: Listen, Advise, Negotiate, Close',
   },
   {
     src: wayConsultingPoster,
-    video: wayConsultingVideo,
-    alt: 'A male sales advisor gives strategic direction to a client executive',
+    alt: 'Sales System: Audit, Design, Implement, Scale',
   },
   {
     src: wayMandatePoster,
-    video: wayMandateVideo,
-    alt: 'Two sales professionals close an executed agreement with a handshake',
+    alt: 'End-to-End Ownership: Leads through Closure',
   },
 ]
 

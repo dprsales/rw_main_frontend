@@ -43,6 +43,8 @@ export const PROJECT_SLUGS = {
   'Aika': 'aika',
   'Aranya': 'aranya',
   'Amora': 'amora',
+  'Eka One': 'eka-one',
+  'Sonthalia': 'sonthalia',
 }
 
 /** Resolve a CDN path (or absolute URL) from the API to a loadable image URL. */

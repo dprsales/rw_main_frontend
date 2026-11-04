@@ -570,23 +570,16 @@ a:hover { color: var(--ink, #12100D); }
 
 .rw-way-media {
   position: relative; display: block; overflow: hidden;
-  aspect-ratio: 4 / 5; background: var(--chip);
+  aspect-ratio: 3 / 4; background: #0b0a09;
 }
-.rw-way-media img,
-.rw-way-media video {
-  width: 100%; height: 100%; object-fit: cover; display: block;
+.rw-way-media img {
+  width: 100%; height: 100%; object-fit: contain; display: block;
   pointer-events: none;
 }
-.rw-way-media video {
-  position: absolute; inset: 0;
-}
-@media (prefers-reduced-motion: reduce) {
-  .rw-way-media video { display: none; }
-}
-/* A scrim, or the numeral has no contrast of its own against the photo. */
+/* Soft bottom scrim so the service numeral/title stays readable on the graphic. */
 .rw-way-media::after {
   content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(to top, rgba(11,10,9,.82), rgba(11,10,9,.16) 42%, rgba(11,10,9,0) 68%);
+  background: linear-gradient(to top, rgba(11,10,9,.72), rgba(11,10,9,.08) 38%, rgba(11,10,9,0) 58%);
 }
 
 .rw-way-overlay-title {
@@ -3544,8 +3537,7 @@ html[lang="te"] .rw-contact-row {
 @media (hover: none) {
   .rw-way:hover, .rw-achieve:hover, .rw-voice-card:hover, .rw-figure:hover,
   .rw-assoc-card:hover, .rw-cred-pill:hover { transform: none; }
-  .rw-way:hover .rw-way-media img,
-  .rw-way:hover .rw-way-media video { transform: none; }
+  .rw-way:hover .rw-way-media img { transform: none; }
   .rw-assoc-card:hover .rw-assoc-logo { transform: none; }
 }
 

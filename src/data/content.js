@@ -904,4 +904,6 @@ export const PROJECTS = [
   { name: 'Alora', area: 'Mokila', status: 'Mandate' },
   { name: 'Aika', area: 'Kokapet', status: 'Mandate' },
   { name: 'Aranya', area: 'Manchirevula', status: 'Mandate' },
+  { name: 'Eka One', area: 'Kokapet', status: 'Mandate' },
+  { name: 'Sonthalia', area: 'Kokapet', status: 'Mandate' },
 ]
