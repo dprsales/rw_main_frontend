@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import skylineImage from '../assets/site/skyline.png'
 import priyankaImage from '../assets/site/panda.png'
@@ -21,15 +22,14 @@ import ClosingCTA from '../components/ClosingCTA'
 import SectionHead, { SectionAside } from '../components/SectionHead'
 import ApprovedListingsSection from '../listings/components/ApprovedListingsSection'
 import { useInView } from '../hooks/useInView'
+import { useLang } from '../i18n/LangProvider'
 import { MANDATE_SCOPE } from '../data/content'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
-import { fs, ctaCopper, ctaInline,
+import { fs, ctaCopper,
   body, container, eyebrow, headLink,
   intro, lede, pageHeading, sectionHeading, sectionRule,
 } from '../styles'
 
-/* Short teaser set; Portfolio carries all nineteen. Rohas Ventures has only a bitmap
-   (no matching vector mark) so it's left out until one exists. */
 const CLIENT_MARKS = [
   { name: 'Vamsiram', src: vamsiramLogo, dark: true },
   { name: 'Zuari Infraworld', src: zuariLogo, dark: true },
@@ -40,41 +40,6 @@ const CLIENT_MARKS = [
   { name: 'The Trilight', src: trilightLogo, dark: true },
 ]
 
-const HEADLINE = [
-  { text: 'We take ownership ' },
-  { br: true },
-  { text: 'of the sale.', italic: true, copper: true },
-]
-
-/* The mandate article's "changes the economics in three ways" turn, as a numbered
-   card grid instead of three back-to-back paragraphs — same words, broken up so a
-   ten-paragraph article doesn't read as one unbroken wall of text. */
-const MANDATE_ECONOMICS = [
-  {
-    n: '01',
-    title: 'Absorption rate',
-    body: 'Built for velocity: buyers move from interest to signature faster.',
-  },
-  {
-    n: '02',
-    title: 'Price realisation',
-    body: 'We defend price, because our results are measured on it. No discounting by default.',
-  },
-  {
-    n: '03',
-    title: 'Cash flow predictability',
-    body: 'Sales that land on a schedule construction can plan around.',
-  },
-]
-
-/* `<b>` alone doesn't read as bold inside a fontWeight:300 paragraph — the browser's
-   default `font-weight: bolder` is relative to the parent, and "bolder" starting
-   from 300 only resolves to 400 per the CSS spec's relative-weight table. Same bug
-   sits pre-existing in the hero paragraph above (exclusive mandate, Ms. Priyanka
-   Panda, 8+ year track record — none of them are actually bold either), left alone
-   here since it wasn't asked for today. Fixed for this article's own emphasis with
-   an explicit weight, plus a lift out of the faded body color so it reads as
-   emphasis on both axes, not just one. */
 const strongInBody = { fontWeight: 500, color: 'var(--ink)' }
 
 function SignatureReveal() {
@@ -94,23 +59,41 @@ function SignatureReveal() {
 }
 
 export default function Realty() {
+  const { t } = useLang()
+
+  const headline = useMemo(() => [
+    { text: t('realty.hero.h1.a') },
+    { br: true },
+    { text: t('realty.hero.h1.b'), italic: true, copper: true },
+  ], [t])
+
+  const scope = useMemo(() => MANDATE_SCOPE.map((item, i) => ({
+    ...item,
+    title: t(`realty.scope.${i}`),
+  })), [t])
+
+  const economics = useMemo(() => [0, 1, 2].map((i) => ({
+    n: String(i + 1).padStart(2, '0'),
+    title: t(`realty.econ.${i}.title`),
+    body: t(`realty.econ.${i}.body`),
+  })), [t])
+
   return (
     <>
       <Seo route="/realty" />
       <Header />
 
-      {/* Intro */}
       <section id="top" className="rw-pad rw-realty-hero">
         <div className="rw-realty-hero-grid">
           <div className="rw-realty-hero-copy">
-            <Reveal style={{ ...eyebrow, marginBottom: 30 }}>RW REALTY · MANDATE MODEL</Reveal>
+            <Reveal style={{ ...eyebrow, marginBottom: 30 }}>{t('realty.hero.eyebrow')}</Reveal>
 
             <h1 className="rw-realty-hero-title" style={{ ...pageHeading, fontSize: undefined, lineHeight: 1, maxWidth: '14em' }}>
-              <RiseText lines={HEADLINE} step={0.12} />
+              <RiseText lines={headline} step={0.12} />
             </h1>
 
             <Reveal as="p" delay={110} style={{ ...lede, marginTop: 24, fontStyle: 'italic' }}>
-              “You Build, We Sell.” · Team RW
+              {t('realty.hero.lede')}
             </Reveal>
 
             <Reveal
@@ -124,16 +107,15 @@ export default function Realty() {
                 fontSize: undefined,
               }}
             >
-              For select high-conviction developments, Team RW operates under an{' '}
-              <b>exclusive mandate</b> taking complete ownership of sales strategy and
-              go-to-market execution. Led by{' '}
-              <b>Ms. Priyanka Panda, Director of Sales,</b> whose{' '}
-              <b>8+ year track record</b> spans luxury real estate branding, strategic
-              positioning, and high-value closures, the team functions as a fully embedded
-              growth partner. From initial market positioning and immersive buyer
-              experience design to pipeline governance, negotiations, and final closures,
-              RW Realty drives <b>faster absorption rates and maximized price realization</b>{' '}
-              through disciplined, leadership-led execution.
+              {t('realty.hero.intro.1')}
+              <b>{t('realty.hero.intro.2')}</b>
+              {t('realty.hero.intro.3')}
+              <b>{t('realty.hero.intro.4')}</b>
+              {t('realty.hero.intro.5')}
+              <b>{t('realty.hero.intro.6')}</b>
+              {t('realty.hero.intro.7')}
+              <b>{t('realty.hero.intro.8')}</b>
+              {t('realty.hero.intro.9')}
             </Reveal>
 
             <Reveal delay={220} className="rw-realty-hero-actions">
@@ -141,14 +123,14 @@ export default function Realty() {
                 interest="RW Realty mandate"
                 className="rw-cta rw-hero-book"
                 style={ctaCopper}
-                eyebrow="DISCUSS A MANDATE"
-                title="Let’s talk about your mandate."
-                subtitle="Share a few details and Team RW will walk you through how the mandate model fits your launch."
+                eyebrow={t('realty.hero.book.eyebrow')}
+                title={t('realty.hero.book.title')}
+                subtitle={t('realty.hero.book.sub')}
               >
-                DISCUSS A MANDATE
+                {t('realty.hero.book')}
               </BookButton>
               <CtaButton variant="secondary" to="/start?who=developer" arrow="→">
-                Find the right service
+                {t('realty.hero.fit')}
               </CtaButton>
             </Reveal>
           </div>
@@ -166,23 +148,22 @@ export default function Realty() {
             </div>
             <figcaption className="rw-realty-portrait-caption">
               <SignatureReveal />
-              <span className="rw-realty-portrait-role" style={{ fontFamily: mono }}>DIRECTOR OF SALES</span>
+              <span className="rw-realty-portrait-role" style={{ fontFamily: mono }}>{t('realty.role')}</span>
             </figcaption>
           </figure>
         </div>
       </section>
 
-      {/* What the mandate covers - numbered scope cards */}
       <section id="scope" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <SectionHead
-            eyebrow="WHAT THE MANDATE COVERS" tracking=".24em" titleWidth="12em"
-            title="One team owns the whole funnel."
-            aside={<SectionAside>Eight responsibilities we take off your plate from strategy and pricing through to closure and daily reporting.</SectionAside>}
+            eyebrow={t('realty.scope.eyebrow')} tracking=".24em" titleWidth="12em"
+            title={t('realty.scope.title')}
+            aside={<SectionAside>{t('realty.scope.aside')}</SectionAside>}
           />
 
           <div className="rw-matrix">
-            {MANDATE_SCOPE.map((item, i) => (
+            {scope.map((item, i) => (
               <Reveal key={item.n} delay={(i % 4) * 80} className="rw-matrix-cell">
                 <span className="rw-matrix-num" style={{ fontFamily: mono }}>{item.n}</span>
                 <div className="rw-matrix-title" style={{ fontFamily: serif }}>{item.title}</div>
@@ -192,63 +173,43 @@ export default function Realty() {
         </div>
       </section>
 
-      {/* Why this model */}
       <section id="why" className="rw-pad rw-why-section" style={{ ...container, padding: 'var(--rw-sy-lg) 40px', position: 'relative', overflow: 'hidden' }}>
         <img src={skylineImage} alt="" aria-hidden className="rw-why-watermark" />
         <div className="rw-split" style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56 }}>
-          <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>WHY IT WORKS</Reveal>
+          <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>{t('realty.why.eyebrow')}</Reveal>
           <div>
             <Reveal as="h2" style={{ ...sectionHeading, fontSize: fs('clamp(30px,3.8vw,48px)'), lineHeight: 1.06, maxWidth: '16em' }}>
-              One accountable partner, not another vendor to manage.
+              {t('realty.why.title')}
             </Reveal>
             <Reveal as="p" delay={120} style={{ ...body, marginTop: 26, maxWidth: '35em' }}>
-              Most projects split sales across brokers, an in-house team, and a marketing agency, each optimising for a different number. Under the mandate model, one team owns the outcome end to end, with the same discipline used in the coaching room applied directly to your launch.
+              {t('realty.why.p1')}
             </Reveal>
             <Reveal as="p" delay={200} style={{ marginTop: 24, fontFamily: serif, fontStyle: 'italic', fontSize: fs('clamp(16px,1.7vw,18px)'), lineHeight: 1.55, color: 'var(--ink)', maxWidth: '35em' }}>
-              Team RW operates primarily on projects with serious inventory, long-term developer intent, and real ambition. This is not for everyone, and that is by design.
+              {t('realty.why.p2')}
             </Reveal>
           </div>
         </div>
       </section>
 
-      {/* The full-length case for the mandate model — approved copy from Rajiv, 24 Sep.
-          Same .36fr/.64fr split as "Why it works" above, but that section is two
-          short paragraphs — an eyebrow-only left column doesn't look empty next to
-          two lines. This section is ten paragraphs plus a card grid, so an
-          eyebrow-only label just scrolls out of view after the first screen and
-          leaves the left column dead for the rest of the read. Fixed two ways: the
-          title moved into the left column too (real weight, not just a tag), and
-          the whole left column is sticky so it stays in view the entire scroll. */}
       <section id="mandate-article" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--card)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
           <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56 }}>
-            {/* .rw-sticky-aside is the site's existing pinned-column pattern (already
-                used elsewhere, already disabled on mobile) — reused rather than
-                rolling a second version of the same thing. */}
-            {/* Plain div, not <Reveal>: its fade-in transform (translateY(34px)) never
-                resolved to `none` once this element went sticky — the IntersectionObserver
-                in useInView never fired `isIntersecting` for it, leaving it permanently
-                offset by the un-cleared transform (confirmed via computed style: `top`
-                correctly resolved to 108px, but `transform` stayed at its pre-reveal
-                value indefinitely). A sticky element is pinned in view for most of the
-                scroll anyway, so a scroll-triggered reveal wasn't earning its keep here. */}
             <div className="rw-sticky-aside">
-              <div style={{ ...eyebrow, letterSpacing: '.24em' }}>THE CASE FOR A MANDATE</div>
+              <div style={{ ...eyebrow, letterSpacing: '.24em' }}>{t('realty.case.eyebrow')}</div>
               <h2 style={{ ...sectionHeading, fontSize: fs('clamp(28px,3.2vw,40px)'), lineHeight: 1.08, marginTop: 18, maxWidth: '11em' }}>
-                Why the sales mandate model works.
+                {t('realty.case.title')}
               </h2>
             </div>
 
-            {/* Short form: problem, fix, three outcomes, ask - about one screen instead of two. */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 22, maxWidth: '42em' }}>
               <Reveal as="p" delay={100} style={body}>
-                Most stalled launches share three problems:
+                {t('realty.case.lead')}
               </Reveal>
               <Reveal delay={112} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {[
-                  { l: 'A', text: <>Sales that don&rsquo;t convert fast enough.</> },
-                  { l: 'B', text: <><b style={strongInBody}>Cash flow</b> that doesn&rsquo;t match the construction timeline.</> },
-                  { l: 'C', text: <>A sales function nobody actually owns.</> },
+                  { l: 'A', text: t('realty.case.a') },
+                  { l: 'B', text: <><b style={strongInBody}>{t('realty.case.b.1')}</b>{t('realty.case.b.2')}</> },
+                  { l: 'C', text: t('realty.case.c') },
                 ].map((item) => (
                   <div key={item.l} style={{ display: 'flex', gap: 14, alignItems: 'baseline' }}>
                     <span style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.1em', color: 'var(--copper)', flexShrink: 0 }}>{item.l}</span>
@@ -257,14 +218,17 @@ export default function Realty() {
                 ))}
               </Reveal>
               <Reveal as="p" delay={130} style={body}>
-                Brokers chase commission. Agencies chase engagement. Nobody owns the one number that matters: <b style={{ ...strongInBody, textTransform: 'uppercase' }}>Units closed, at the right price, on schedule.</b> A mandate puts all of it with <b style={strongInBody}>one accountable partner</b>, from marketing strategy to closing.
+                {t('realty.case.body')}
+                <b style={{ ...strongInBody, textTransform: 'uppercase' }}>{t('realty.case.body.strong')}</b>
+                {t('realty.case.body.2')}
+                <b style={strongInBody}>{t('realty.case.body.partner')}</b>
+                {t('realty.case.body.3')}
               </Reveal>
             </div>
           </div>
 
-          {/* Outcome cards span the full section, not just the text column (they were 248px wide there). */}
           <div className="rw-econ-grid rw-econ-grid--wide">
-            {MANDATE_ECONOMICS.map((item, i) => (
+            {economics.map((item, i) => (
               <Reveal key={item.n} delay={160 + i * 60} className="rw-econ-cell">
                 <span className="rw-econ-num" style={{ fontFamily: mono }}>{item.n}</span>
                 <div className="rw-econ-title" style={{ fontFamily: serif }}>{item.title}</div>
@@ -275,38 +239,35 @@ export default function Realty() {
 
           <div className="rw-mandate-close">
             <Reveal as="p" delay={340} style={{ ...body, color: 'var(--ink)', maxWidth: '36em' }}>
-              Hyderabad&rsquo;s luxury market has more launches chasing the same buyers. If your sales are split across three vendors and owned by none, let&rsquo;s talk.
+              {t('realty.case.close')}
             </Reveal>
             <Reveal delay={380}>
               <BookButton
                 interest="RW Realty mandate"
                 className="rw-cta rw-hero-book"
                 style={ctaCopper}
-                eyebrow="DISCUSS A MANDATE"
-                title="Let’s see if a mandate fits."
-                subtitle="Tell us about the launch and where sales ownership is currently split, and Team RW will walk you through how a mandate would work for it."
+                eyebrow={t('realty.hero.book.eyebrow')}
+                title={t('realty.case.book.title')}
+                subtitle={t('realty.case.book.sub')}
               >
-                DISCUSS A MANDATE
+                {t('realty.hero.book')}
               </BookButton>
             </Reveal>
           </div>
         </div>
       </section>
 
-      {/* Teaser into the portfolio: projects we hold photography for, not the mandate roster. */}
       <section id="clients" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <SectionHead
-            eyebrow="SELECTED CLIENTS" faded size="sm" space={30}
-            title="A few of the addresses."
+            eyebrow={t('realty.clients.eyebrow')} faded size="sm" space={30}
+            title={t('realty.clients.title')}
             aside={(
               <Link to="/realty/portfolio" className="rw-nav-link" style={headLink}>
-                VIEW FULL PORTFOLIO →
+                {t('realty.clients.portfolio')}
               </Link>
             )}
           />
-          {/* `renderItem` gives each tile its own light-or-dark treatment; edge fade matches
-              the section background so the loop dissolves rather than stopping at a hard edge. */}
           <Reveal>
             <LogoLoop
               logos={CLIENT_MARKS.map((mark) => ({ src: mark.src, alt: mark.name, scale: mark.scale, dark: mark.dark }))}
@@ -316,11 +277,10 @@ export default function Realty() {
               hoverSpeed={0}
               fadeOut
               fadeOutColor="var(--chip)"
-              ariaLabel="Selected clients"
+              ariaLabel={t('realty.clients.aria')}
               className="rw-logoloop"
               renderItem={(item) => (
                 <div className={`rw-loop-tile${item.dark ? ' is-dark' : ''}`}>
-                  {/* Eager, not lazy: duplicated copies start off-screen and scroll in immediately. */}
                   <img
                     src={item.src}
                     alt={item.alt}
@@ -336,8 +296,8 @@ export default function Realty() {
 
       <ApprovedListingsSection />
 
-      <ClosingCTA title="Mandates are limited to a handful of projects at a time.">
-        <CtaButton variant="outline" href="/form/realty">TELL US ABOUT YOUR PROJECT</CtaButton>
+      <ClosingCTA title={t('realty.close.title')}>
+        <CtaButton variant="outline" href="/form/realty">{t('realty.close.cta')}</CtaButton>
       </ClosingCTA>
 
       <Footer chip links={FOOTER_LINKS} />

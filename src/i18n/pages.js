@@ -1,5 +1,7 @@
-/** Day 2 — Home, About, Contact page bodies. Names, phones, emails, URLs, stats stay as stored. */
+/** Home, About, Contact, Coaching, Consulting, Realty page bodies. Names, phones, emails, URLs, stats stay as stored. */
 import { te } from './pages-te'
+import servicesEn from './services-en'
+import servicesTe from './services-te'
 
 export const pages = {
   en: {
@@ -201,8 +203,9 @@ export const pages = {
     'hire.line.finance': 'Billing, payroll, P&L, and the books.',
     'hire.line.trainee': 'Ops, sales support, and real estate training.',
     'hire.apply': 'Apply',
+    ...servicesEn,
   },
-  te,
+  te: { ...te, ...servicesTe },
 }
 
 const ROLE_KEYS = {
@@ -237,6 +240,9 @@ const SEO_ROUTES = {
   '/': 'home',
   '/about': 'about',
   '/contact': 'contact',
+  '/coaching': 'coaching',
+  '/consulting': 'consulting',
+  '/realty': 'realty',
 }
 
 export function experienceRoleKey(company) {
