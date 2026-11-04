@@ -22,10 +22,12 @@ export const THEME = {
 
 /* Faces loaded in fonts.css - never name a family here the page doesn't fetch.
  * `serif` (Cormorant Garamond) - display headlines and featured pull-quotes.
+ * `cinzel` (Cinzel) - project hero taglines under the name/logo.
  * `jost` (Jost Book) - brand sans for reading copy (quotes, card body).
  * `mono` (Poppins) - eyebrows, nav, buttons, counters, tags.
  * `text` (Poppins) - site body, cards, and lists. */
 export const serif = "'Cormorant Garamond', 'Times New Roman', serif"
+export const cinzel = "'Cinzel', 'Times New Roman', serif"
 export const jost = "'Jost', system-ui, -apple-system, sans-serif"
 export const text = "'Poppins', system-ui, -apple-system, sans-serif"
 export const mono = "'Poppins', system-ui, -apple-system, sans-serif"

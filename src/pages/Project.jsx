@@ -13,7 +13,7 @@ import { useParallax } from '../hooks/useParallax'
 import { useTilt } from '../hooks/useTilt'
 import { fetchProject, flattenGallery, projectImage } from '../data/projects'
 import { projectSeo } from '../data/seo-config'
-import { PROJECT_FOOTER_LINKS, mono, serif, text } from '../theme'
+import { PROJECT_FOOTER_LINKS, cinzel, mono, serif, text } from '../theme'
 import { fs, body, container, ctaInk, eyebrow, pageHeading, sectionRule } from '../styles'
 
 /* ₹9,500 → "₹9,500". The API gives a plain number. */
@@ -28,7 +28,8 @@ function splitLines(str, n = 3) {
   for (let i = 0; i < words.length; i += per) lines.push(words.slice(i, i + per).join(' '))
   return lines.map((textLine, i) => ({
     text: i === lines.length - 1 ? textLine : textLine + ' ',
-    italic: i === lines.length - 1,
+    // Cinzel has no italic cut — keep the last line copper only.
+    italic: false,
     copper: i === lines.length - 1,
   }))
 }
@@ -258,13 +259,14 @@ function ProjectHero({ hero, details, name }) {
               <h2
                 style={{
                   marginTop: 'clamp(20px, 2.5vw, 34px)',
-                  fontFamily: serif,
+                  fontFamily: cinzel,
                   fontWeight: 400,
-                  fontSize: fs('clamp(30px, 4vw, 58px)'),
-                  lineHeight: 1.04,
-                  letterSpacing: '-.02em',
+                  fontSize: fs('clamp(28px, 3.6vw, 52px)'),
+                  lineHeight: 1.12,
+                  letterSpacing: '.04em',
+                  textTransform: 'uppercase',
                   color: '#F2EFE9',
-                  maxWidth: '13em',
+                  maxWidth: '14em',
                 }}
               >
                 <RiseText

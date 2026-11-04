@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { activeHiringCampaigns, showHiringRail } from '../data/content'
 import { careerRolePath } from '../data/jobs'
@@ -6,53 +5,46 @@ import { useLang } from '../i18n/LangProvider'
 import { hireLineKey } from '../i18n/pages'
 import { openHiringModal } from './HiringModal'
 
-const ROTATE_MS = 6000
-
-/** Time-bound hiring rail. Hidden when every campaign in `HIRING_CAMPAIGNS` has expired. */
+/** Time-bound hiring rail. Both open roles scroll as one strip; each Apply
+ *  jumps straight into that role’s careers form. Poster opens from the title. */
 export default function HiringBanner() {
   const { t } = useLang()
   const { pathname } = useLocation()
   const campaigns = activeHiringCampaigns()
-  const [index, setIndex] = useState(0)
   const onRail = showHiringRail(pathname)
-
-  useEffect(() => {
-    if (!onRail || campaigns.length < 2) return
-    const id = window.setInterval(() => {
-      setIndex((n) => (n + 1) % campaigns.length)
-    }, ROTATE_MS)
-    return () => window.clearInterval(id)
-  }, [onRail, campaigns.length])
 
   if (!onRail || !campaigns.length) return null
 
-  const row = campaigns[index % campaigns.length]
-  const href = careerRolePath(row.title)
+  const loop = campaigns.length > 1 ? [...campaigns, ...campaigns] : campaigns
 
   return (
     <div className="rw-hire-bar" role="region" aria-label={t('hire.urgent')}>
       <div className="rw-hire-bar-inner">
         <span className="rw-hire-tag">{t('hire.urgent')}</span>
-        <button type="button" className="rw-hire-copy" key={row.title} onClick={openHiringModal}>
-          <strong>{row.title}</strong>
-          {row.location ? <span className="rw-hire-meta"> · {row.location}</span> : null}
-          {row.line ? <span className="rw-hire-line"> — {hireLineKey(row.title) ? t(hireLineKey(row.title)) : row.line}</span> : null}
-        </button>
-        <Link className="rw-hire-go" to={href}>{t('cta.applyNow')}</Link>
-        {campaigns.length > 1 && (
-          <div className="rw-hire-dots" role="group" aria-label={t('hire.slides')}>
-            {campaigns.map((item, i) => (
-              <button
-                key={item.title}
-                type="button"
-                className={`rw-hire-dot${i === index ? ' is-on' : ''}`}
-                aria-label={t('hire.show', { title: item.title })}
-                aria-current={i === index ? 'true' : undefined}
-                onClick={() => setIndex(i)}
-              />
+        <div className="rw-hire-marquee" aria-live="off">
+          <div className={`rw-hire-track${campaigns.length > 1 ? ' is-moving' : ''}`}>
+            {loop.map((row, i) => (
+              <div key={`${row.title}-${i}`} className="rw-hire-item">
+                <button
+                  type="button"
+                  className="rw-hire-copy"
+                  onClick={() => openHiringModal(row.title)}
+                >
+                  <strong>{row.title}</strong>
+                  {row.location ? <span className="rw-hire-meta"> · {row.location}</span> : null}
+                  {row.line ? (
+                    <span className="rw-hire-line">
+                      {' '}— {hireLineKey(row.title) ? t(hireLineKey(row.title)) : row.line}
+                    </span>
+                  ) : null}
+                </button>
+                <Link className="rw-hire-go" to={careerRolePath(row.title)}>
+                  {t('hire.apply')}
+                </Link>
+              </div>
             ))}
           </div>
-        )}
+        </div>
       </div>
     </div>
   )

@@ -111,6 +111,7 @@ const CURATED_SALES_HEADS = [
   'Vice President',
   'Senior Vice President',
   'Finance & Account Manager',
+  'Management Trainee',
   'GM - CRM',
   'VP - Customer Experience & Post-Sales Operations',
   'Head of CRM & Customer Experience',

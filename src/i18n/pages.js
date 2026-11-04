@@ -199,6 +199,8 @@ export const pages = {
     'hire.slides': 'Hiring slides',
     'hire.show': 'Show {title}',
     'hire.line.finance': 'Billing, payroll, P&L, and the books.',
+    'hire.line.trainee': 'Ops, sales support, and real estate training.',
+    'hire.apply': 'Apply',
   },
   te,
 }
@@ -228,6 +230,7 @@ const ASSOC_ROLE_KEYS = {
 
 const HIRE_LINE_KEYS = {
   'Finance & Account Manager': 'hire.line.finance',
+  'Management Trainee': 'hire.line.trainee',
 }
 
 const SEO_ROUTES = {

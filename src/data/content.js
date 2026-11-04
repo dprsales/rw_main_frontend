@@ -55,6 +55,14 @@ export const HIRING_CAMPAIGNS = [
     location: 'Hyderabad',
     line: 'Billing, payroll, P&L, and the books.',
     until: '2026-11-30',
+    poster: 'finance',
+  },
+  {
+    title: 'Management Trainee',
+    location: 'Hyderabad',
+    line: 'Ops, sales support, and real estate training.',
+    until: '2026-11-30',
+    poster: 'trainee',
   },
 ]
 
@@ -895,4 +903,5 @@ export const PROJECTS = [
   { name: 'Srivari Meadows', area: 'Mokila', status: 'Mandate' },
   { name: 'Alora', area: 'Mokila', status: 'Mandate' },
   { name: 'Aika', area: 'Kokapet', status: 'Mandate' },
+  { name: 'Aranya', area: 'Manchirevula', status: 'Mandate' },
 ]

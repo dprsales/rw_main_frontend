@@ -1503,8 +1503,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   background: #16110A;
 }
 .rw-hire-bar-inner {
-  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
-  gap: 10px 16px;
+  display: flex; align-items: center; gap: 14px;
   max-width: 1320px; margin: 0 auto;
   padding: 9px 40px;
 }
@@ -1516,10 +1515,29 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
   line-height: 1.4;
 }
+.rw-hire-marquee {
+  flex: 1; min-width: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+}
+.rw-hire-track {
+  display: flex; align-items: center; gap: 28px;
+  width: max-content;
+}
+.rw-hire-track.is-moving {
+  animation: rw-hire-scroll 28s linear infinite;
+}
+.rw-hire-track.is-moving:hover { animation-play-state: paused; }
+.rw-hire-item {
+  display: inline-flex; align-items: center; gap: 12px;
+  flex: none;
+}
 .rw-hire-copy {
   margin: 0; min-width: 0;
   border: 0; background: none; padding: 0; cursor: pointer; text-align: left;
   font-size: 15px; line-height: 1.35; font-weight: 500; color: #F2EFE9;
+  white-space: nowrap;
 }
 .rw-hire-copy strong { font-weight: 700; color: #F2EFE9; }
 .rw-hire-meta { color: #E8C97A; }
@@ -1532,15 +1550,25 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   color: #16110a;
 }
 .rw-hire-go:hover { color: #16110a; filter: brightness(1.08); }
-.rw-hire-dots { display: flex; align-items: center; gap: 6px; }
+.rw-hire-dots,
+.rw-hire-modal-dots { display: flex; align-items: center; justify-content: center; gap: 6px; }
+.rw-hire-modal-dots { padding: 10px 16px 0; }
 .rw-hire-dot {
   width: 6px; height: 6px; padding: 0; border: 0; border-radius: 50%;
   background: rgba(242,239,233,.32); cursor: pointer;
 }
 .rw-hire-dot.is-on { background: var(--copper); width: 16px; border-radius: 100px; }
+@keyframes rw-hire-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
 @media (max-width: 720px) {
-  .rw-hire-bar-inner { padding: 8px 16px; justify-content: flex-start; }
+  .rw-hire-bar-inner { padding: 8px 16px; gap: 10px; }
   .rw-hire-line { display: none; }
+  .rw-hire-track.is-moving { animation-duration: 22s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rw-hire-track.is-moving { animation: none; }
 }
 
 .rw-hire-modal {
@@ -3414,13 +3442,12 @@ html[lang="te"] .rw-contact-row {
     rgba(11,10,9,0) 64%
   );
 }
-/* Cutouts fade on the left only; their bottom and right are raw canvas edges.
-   Dissolve just those two edges so the ground line melts into the sky - the
-   building itself is untouched. */
+/* Cutouts fade on the left (into the text) and bottom (into the sky).
+   Keep the right edge solid so the villa doesn't dissolve off-screen. */
 .rw-projx-render img {
   display: block; width: 100%; height: 100%; object-fit: contain; object-position: right bottom;
-  -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 14%), linear-gradient(to left, transparent 0%, #000 22%);
-  mask-image: linear-gradient(to top, transparent 0%, #000 14%), linear-gradient(to left, transparent 0%, #000 22%);
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 14%), linear-gradient(to right, transparent 0%, #000 28%);
+  mask-image: linear-gradient(to top, transparent 0%, #000 14%), linear-gradient(to right, transparent 0%, #000 28%);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }

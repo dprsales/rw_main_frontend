@@ -1,27 +1,34 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useLocation } from 'react-router-dom'
 import hireFinanceBanner from '../assets/site/hiring-finance-account-manager.jpg'
+import hireTraineeBanner from '../assets/site/hiring-management-trainee.jpg'
 import CtaButton from './CtaButton'
 import { activeHiringCampaigns, showHiringRail } from '../data/content'
 import { careerRolePath } from '../data/jobs'
 
 export const HIRE_OPEN = 'rw-open-hire'
+const SLIDE_MS = 5000
 
-export function openHiringModal() {
-  window.dispatchEvent(new CustomEvent(HIRE_OPEN))
+const POSTERS = {
+  finance: hireFinanceBanner,
+  trainee: hireTraineeBanner,
 }
 
-function seenKey(row) {
-  return `rw-hire-seen-${row?.until || row?.title || 'open'}`
+export function openHiringModal(title) {
+  window.dispatchEvent(new CustomEvent(HIRE_OPEN, { detail: { title } }))
 }
 
-function wasSeen(row) {
-  try { return window.sessionStorage.getItem(seenKey(row)) === '1' } catch { return false }
+function seenKey(campaigns) {
+  return `rw-hire-seen-${campaigns.map((row) => row.until || row.title).join('|') || 'open'}`
 }
 
-function markSeen(row) {
-  try { window.sessionStorage.setItem(seenKey(row), '1') } catch { /* private mode */ }
+function wasSeen(campaigns) {
+  try { return window.sessionStorage.getItem(seenKey(campaigns)) === '1' } catch { return false }
+}
+
+function markSeen(campaigns) {
+  try { window.sessionStorage.setItem(seenKey(campaigns), '1') } catch { /* private mode */ }
 }
 
 function loaderBlocking() {
@@ -29,28 +36,40 @@ function loaderBlocking() {
   return !!(el && !el.classList.contains('is-leaving'))
 }
 
+function posterFor(row) {
+  return POSTERS[row?.poster] || hireFinanceBanner
+}
+
 /** First-visit hiring poster. Close for the session; header rail can open it again. */
 export default function HiringModal() {
-  const campaigns = activeHiringCampaigns()
-  const row = campaigns[0]
+  const campaigns = useMemo(() => activeHiringCampaigns(), [])
   const { pathname } = useLocation()
   const [open, setOpen] = useState(false)
+  const [index, setIndex] = useState(0)
+  const row = campaigns[index] || campaigns[0]
   const href = row ? careerRolePath(row.title) : '/careers'
 
   const close = () => {
-    if (row) markSeen(row)
+    if (campaigns.length) markSeen(campaigns)
     setOpen(false)
   }
 
   useEffect(() => {
-    const onOpen = () => setOpen(true)
+    const onOpen = (event) => {
+      const title = event?.detail?.title
+      if (title) {
+        const hit = campaigns.findIndex((item) => item.title === title)
+        if (hit >= 0) setIndex(hit)
+      }
+      setOpen(true)
+    }
     window.addEventListener(HIRE_OPEN, onOpen)
     return () => window.removeEventListener(HIRE_OPEN, onOpen)
-  }, [])
+  }, [campaigns])
 
   useEffect(() => {
-    if (!row || !showHiringRail(pathname)) return
-    if (wasSeen(row)) return
+    if (!campaigns.length || !showHiringRail(pathname)) return
+    if (wasSeen(campaigns)) return
 
     let interval
     const failsafe = window.setTimeout(() => setOpen(true), 6500)
@@ -67,7 +86,15 @@ export default function HiringModal() {
     }
     interval = window.setInterval(tryOpen, 200)
     return () => { window.clearInterval(interval); window.clearTimeout(failsafe) }
-  }, [row, pathname])
+  }, [campaigns, pathname])
+
+  useEffect(() => {
+    if (!open || campaigns.length < 2) return
+    const id = window.setInterval(() => {
+      setIndex((n) => (n + 1) % campaigns.length)
+    }, SLIDE_MS)
+    return () => window.clearInterval(id)
+  }, [open, campaigns.length])
 
   useEffect(() => {
     if (!open) return
@@ -91,8 +118,22 @@ export default function HiringModal() {
       <div className="rw-hire-modal-card">
         <button type="button" className="rw-hire-modal-x" onClick={close} aria-label="Close">×</button>
         <Link className="rw-hire-modal-poster" to={href} onClick={close}>
-          <img src={hireFinanceBanner} alt={`${row.title} — apply now`} />
+          <img key={row.title} src={posterFor(row)} alt={`${row.title} — apply now`} />
         </Link>
+        {campaigns.length > 1 && (
+          <div className="rw-hire-modal-dots" role="group" aria-label="Hiring slides">
+            {campaigns.map((item, i) => (
+              <button
+                key={item.title}
+                type="button"
+                className={`rw-hire-dot${i === index ? ' is-on' : ''}`}
+                aria-label={`Show ${item.title}`}
+                aria-current={i === index ? 'true' : undefined}
+                onClick={() => setIndex(i)}
+              />
+            ))}
+          </div>
+        )}
         <div className="rw-hire-modal-actions">
           <CtaButton to={href} className="rw-cta" onClick={close}>APPLY NOW</CtaButton>
           <CtaButton type="button" variant="secondary" onClick={close}>Continue to site</CtaButton>
