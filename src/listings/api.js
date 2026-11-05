@@ -68,11 +68,19 @@ export const updateMe = (payload) =>
   request('/listing-auth/me', { method: 'PATCH', body: payload, auth: true })
 
 // ---------- listings ----------
-export const submitProperty = ({ city, listingType, details }) =>
-  request('/properties', { method: 'POST', body: { city, listingType, details }, auth: true })
+export const submitProperty = ({ city, listingType, details, commissionAccepted }) =>
+  request('/properties', {
+    method: 'POST',
+    body: { city, listingType, details, commissionAccepted: !!commissionAccepted },
+    auth: true,
+  })
 
-export const updateProperty = (id, { city, listingType, details }) =>
-  request(`/properties/${id}`, { method: 'PATCH', body: { city, listingType, details }, auth: true })
+export const updateProperty = (id, { city, listingType, details, commissionAccepted }) =>
+  request(`/properties/${id}`, {
+    method: 'PATCH',
+    body: { city, listingType, details, commissionAccepted: !!commissionAccepted },
+    auth: true,
+  })
 export const getMyListing = (id) => request(`/properties/mine/${id}`, { auth: true })
 export const getMyListings = () => request('/properties/mine', { auth: true })
 export const deleteListing = (id) => request(`/properties/${id}`, { method: 'DELETE', auth: true })

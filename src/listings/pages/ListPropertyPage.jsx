@@ -18,7 +18,7 @@ const DRAFT_KEY = 'rw_listing_draft'
 const INITIAL = { listingType: 'Sale', city: '', email: '', areaUnit: 'sq.ft', areaType: 'Carpet Area' }
 
 const FEATURES = [
-  'Free listing — zero hidden fees',
+  'Free to list and verify. Professional fee only if a sale closes with Team RW',
   'Every listing verified by our team before it goes live',
   'Buyer enquiries delivered straight to your inbox',
 ]
@@ -26,7 +26,7 @@ const STATS = [
   { value: '24 hrs', label: 'Verification' },
   { value: '100%', label: 'Verified listings' },
   { value: 'Free', label: 'To list' },
-  { value: 'Direct', label: 'Buyer enquiries' },
+  { value: '3%', label: 'On successful sale' },
 ]
 
 function loadDraft() {
@@ -89,13 +89,18 @@ export default function ListPropertyPage() {
 
   const handleSubmit = async () => {
     setSubmitError('')
+    if (!data.commissionAccepted) {
+      setSubmitError('Please confirm the Team RW partnership terms before submitting.')
+      return
+    }
     setSubmitting(true)
     try {
-      const { email, ...details } = data
+      const { email, commissionAccepted, ...details } = data
       if (!/^\d{4}-\d{2}$/.test(details.possessionDate || '')) delete details.possessionDate
       const payload = {
         city: data.city.trim(),
         listingType: data.listingType,
+        commissionAccepted: true,
         details: { ...details, images: (data.images || []).map(imgUrl), videos: (data.videos || []).map(imgUrl) },
       }
       const res = editing ? await updateProperty(id, payload) : await submitProperty(payload)
@@ -247,7 +252,7 @@ function SuccessView({ listing, edited, email, onListAnother, onDashboard }) {
         <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-emerald-400/40 bg-emerald-400/10 text-2xl text-emerald-300">✓</span>
         <div>
           <h1 className="font-serif text-3xl text-ink sm:text-4xl">
-            {edited ? (live ? 'Changes saved — your listing is still live!' : 'Changes saved and sent for verification!') : 'Thank you — your listing is submitted!'}
+            {edited ? (live ? 'Changes saved — your listing is still live!' : 'Changes saved and sent for verification!') : 'Thank you - your listing is submitted!'}
           </h1>
           <p className="mt-1 text-sm text-faded">
             {edited

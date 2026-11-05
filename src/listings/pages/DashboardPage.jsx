@@ -41,7 +41,7 @@ export default function DashboardPage() {
   const shown = filter === 'all' ? listings : listings.filter((l) => l.status === filter)
 
   const remove = async (id) => {
-    if (!window.confirm('Delete this listing permanently? Its photos will also be removed.')) return
+    if (!window.confirm('Delete this listing permanently? Photos are removed too. Use this to clear test listings before go-live.')) return
     try {
       await deleteListing(id)
       setListings((ls) => ls.filter((l) => l._id !== id))

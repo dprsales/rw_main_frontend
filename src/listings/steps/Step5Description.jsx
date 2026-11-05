@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ErrorNote, StepCard } from '../components/ui'
+import { COMMISSION_TERMS_TEXT } from '../commission'
 
 const TEMPLATES = [
   (d) =>
@@ -11,7 +12,7 @@ const TEMPLATES = [
   (d) =>
     `A ${(d.furnishingStatus || 'well-maintained').toLowerCase()} ${d.bhk || ''} home in ${d.locality || 'the heart of the city'}${
       d.facing ? `, ${d.facing.toLowerCase()} facing` : ''
-    } — close to schools, hospitals and everyday essentials. Ideal for buyers looking for a ${
+    }. Close to schools, hospitals and everyday essentials. Ideal for buyers looking for a ${
       d.possessionStatus === 'Under Construction' ? 'future-ready investment' : 'move-in-ready space'
     } with strong appreciation potential.`,
   (d) =>
@@ -22,9 +23,28 @@ const TEMPLATES = [
 
 export default function Step5Description({ data, update, onSubmit, onPrev, submitting, submitError, user, editing }) {
   const [showOptions, setShowOptions] = useState(false)
+  const [termsHint, setTermsHint] = useState(false)
+  const termsRef = useRef(null)
   const words = (data.oneLineDescription || '').trim().split(/\s+/).filter(Boolean).length
   const descWords = (data.description || '').trim().split(/\s+/).filter(Boolean).length
-  const canSubmit = data.oneLineDescription && words <= 20 && data.description && !submitting
+  const accepted = !!data.commissionAccepted
+  const fieldsOk = !!(data.oneLineDescription && words <= 20 && data.description)
+  const canSubmit = fieldsOk && accepted && !submitting
+
+  useEffect(() => {
+    if (accepted) setTermsHint(false)
+  }, [accepted])
+
+  const trySubmit = () => {
+    if (submitting) return
+    if (!fieldsOk) return
+    if (!accepted) {
+      setTermsHint(true)
+      termsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      return
+    }
+    onSubmit()
+  }
 
   return (
     <StepCard
@@ -33,8 +53,8 @@ export default function Step5Description({ data, update, onSubmit, onPrev, submi
       subtitle="A catchy title increases views by up to 37%."
       footer={
         <>
-          <button className="btn-secondary" onClick={onPrev} disabled={submitting}>← Previous</button>
-          <button className="btn-primary" disabled={!canSubmit} onClick={onSubmit}>
+          <button type="button" className="btn-secondary" onClick={onPrev} disabled={submitting}>← Previous</button>
+          <button type="button" className="btn-primary" disabled={!fieldsOk || submitting} onClick={trySubmit}>
             {submitting ? (<><span className="spinner" /> {editing ? 'Saving…' : 'Submitting…'}</>) : editing ? 'Save changes' : 'Submit for verification'}
           </button>
         </>
@@ -78,9 +98,54 @@ export default function Step5Description({ data, update, onSubmit, onPrev, submi
         )}
       </div>
 
+      <div
+        ref={termsRef}
+        className={`mb-4 rounded-md border p-4 ${
+          termsHint && !accepted
+            ? 'border-red-400/50 bg-red-400/10'
+            : 'border-gold-500/35 bg-gold-500/[0.06]'
+        }`}
+      >
+        <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-gold-300">Partnership terms · required</p>
+        <p className="mt-2 text-sm leading-relaxed text-faded">
+          How it works: listing and verification are free. Buyer enquiries come to you. Only if a sale closes with Team RW’s support does a professional fee apply: 3% of the total sale value. Tick the box below to continue.
+        </p>
+        <ul className="mt-3 list-disc space-y-1.5 pl-5 text-xs leading-relaxed text-faded">
+          <li>You confirm you are authorised to list this property and that details and media are accurate.</li>
+          <li>Team RW may verify, approve, reject or remove a listing. Going live is not a guarantee of sale or enquiries.</li>
+          <li>The 3% professional fee applies only when a sale completes with Team RW’s support. Invoice timing and GST follow the written confirmation at mandate or closing.</li>
+          <li>
+            By continuing you also agree to our{' '}
+            <a className="text-gold-300 underline-offset-2 hover:underline" href="/terms" target="_blank" rel="noreferrer">Terms of Use</a>
+            {' '}and{' '}
+            <a className="text-gold-300 underline-offset-2 hover:underline" href="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</a>.
+          </li>
+        </ul>
+        <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-md border border-line bg-night/50 p-3">
+          <input
+            type="checkbox"
+            className="mt-1 h-5 w-5 shrink-0 accent-[#C39B53]"
+            checked={accepted}
+            onChange={(e) => update('commissionAccepted', e.target.checked)}
+            disabled={submitting}
+            aria-required="true"
+          />
+          <span className="text-sm leading-relaxed text-ink">
+            <span className="font-medium text-gold-300">Required. </span>
+            {COMMISSION_TERMS_TEXT}
+          </span>
+        </label>
+        {(termsHint && !accepted) && (
+          <p className="mt-2 text-xs text-red-300">Please tick the partnership terms checkbox above, then submit again.</p>
+        )}
+        {!accepted && !termsHint && (
+          <p className="mt-2 text-xs text-faded">Tick the checkbox to enable a successful submit.</p>
+        )}
+      </div>
+
       <p className="text-xs text-faded">
         {editing ? 'Check the live preview on the right, then save.' : 'Check the live preview on the right'}
-        {!editing && user?.email ? <> — we'll email <span className="text-ink">{user.email}</span> as soon as it's approved.</> : !editing ? '.' : ''}
+        {!editing && user?.email ? <> · we will email <span className="text-ink">{user.email}</span> as soon as it is approved.</> : !editing ? '.' : ''}
       </p>
       <ErrorNote>{submitError}</ErrorNote>
     </StepCard>

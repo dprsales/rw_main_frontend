@@ -222,7 +222,7 @@ export default function ListingsPage() {
         <div className="mt-8 flex flex-col items-start justify-between gap-3 rounded-xl border border-gold-500/30 bg-gradient-to-br from-gold-500/10 to-transparent px-6 py-5 sm:flex-row sm:items-center">
           <div>
             <p className="font-serif text-2xl text-ink">Own a property or a project?</p>
-            <p className="text-sm text-faded">List it free — verified in 24 hours and shown to serious buyers.</p>
+            <p className="text-sm text-faded">List it free verified in 24 hours and shown to serious buyers.</p>
           </div>
           <Link to="/list-property" className="btn-primary shrink-0">List your property →</Link>
         </div>

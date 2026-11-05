@@ -45,7 +45,7 @@ export default function Step2BasicConfig({ data, update, onNext, onPrev }) {
           <MultiSelect options={BALCONY_OPTIONS} value={data.balcony || []} placeholder="Select balcony type" onChange={(v) => update('balcony', v)} />
         </StepField>
 
-        <StepField label="RERA number" hint="Optional — shown as a trust signal." className="sm:col-span-3">
+        <StepField label="RERA number" hint="Optional shown as a trust signal." className="sm:col-span-3">
           <input className="field-input sm:max-w-sm" placeholder="e.g. P02400001234" value={data.reraNumber || ''}
             onChange={(e) => update('reraNumber', e.target.value)} />
         </StepField>

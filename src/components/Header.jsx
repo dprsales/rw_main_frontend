@@ -201,29 +201,6 @@ function DesktopNav({ pathname, onBook }) {
       <Link to="/" className={linkClass('/')}>{t('nav.home')}</Link>
 
       <div
-        ref={propsRef}
-        className="rw-dnav-mega-wrap"
-        onMouseEnter={() => enter('props')}
-        onMouseLeave={leave}
-        onBlur={(e) => { if (e.relatedTarget && !propsRef.current?.contains(e.relatedTarget) && !workRef.current?.contains(e.relatedTarget)) setOpen(null) }}
-      >
-        <button
-          ref={propsTriggerRef}
-          type="button"
-          className={`rw-dnav-link${pathname === '/project-hyderabad' || pathname.startsWith('/list-property') || pathname.startsWith('/realty/listings') ? ' is-active' : ''}`}
-          aria-expanded={open === 'props'}
-          aria-controls="rw-props-mega"
-          onClick={() => toggle('props')}
-        >
-          {t('nav.properties')} <ChevronDown className="rw-dnav-caret" size={14} strokeWidth={1.75} aria-hidden="true" />
-        </button>
-
-        {open === 'props' && (
-          <MegaPanel id="rw-props-mega" columns={PROPERTY_COLUMNS} pathname={pathname} onClose={close} />
-        )}
-      </div>
-
-      <div
         ref={workRef}
         className="rw-dnav-mega-wrap"
         onMouseEnter={() => enter('work')}
@@ -243,6 +220,29 @@ function DesktopNav({ pathname, onBook }) {
 
         {open === 'work' && (
           <MegaPanel id="rw-mega" columns={MEGA_COLUMNS} pathname={pathname} onClose={close} onBook={onBook} />
+        )}
+      </div>
+
+      <div
+        ref={propsRef}
+        className="rw-dnav-mega-wrap"
+        onMouseEnter={() => enter('props')}
+        onMouseLeave={leave}
+        onBlur={(e) => { if (e.relatedTarget && !propsRef.current?.contains(e.relatedTarget) && !workRef.current?.contains(e.relatedTarget)) setOpen(null) }}
+      >
+        <button
+          ref={propsTriggerRef}
+          type="button"
+          className={`rw-dnav-link${pathname === '/project-hyderabad' || pathname.startsWith('/list-property') || pathname.startsWith('/realty/listings') ? ' is-active' : ''}`}
+          aria-expanded={open === 'props'}
+          aria-controls="rw-props-mega"
+          onClick={() => toggle('props')}
+        >
+          {t('nav.properties')} <ChevronDown className="rw-dnav-caret" size={14} strokeWidth={1.75} aria-hidden="true" />
+        </button>
+
+        {open === 'props' && (
+          <MegaPanel id="rw-props-mega" columns={PROPERTY_COLUMNS} pathname={pathname} onClose={close} />
         )}
       </div>
 
