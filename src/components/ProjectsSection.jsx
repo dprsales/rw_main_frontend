@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Reveal from './Reveal'
+import { useLang } from '../i18n/LangProvider'
 import { AREA_TO_LOCALITY, LOCALITIES, PROJECTS, resolveLocality } from '../data/content'
 import { PROJECT_SLUGS, fetchAllProjects, fetchProjectSlugs, projectImage } from '../data/projects'
 import { mono, serif, text } from '../theme'
@@ -71,6 +72,7 @@ function highlightMatch(name, query) {
  * map and panel already use, so search and browse can never disagree with each other.
  */
 function ProjectSearch({ shown, slugs }) {
+  const { t } = useLang()
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
   const [highlight, setHighlight] = useState(-1)
@@ -143,7 +145,7 @@ function ProjectSearch({ shown, slugs }) {
         aria-activedescendant={highlight >= 0 ? `rw-project-search-option-${highlight}` : undefined}
         className="rw-project-search-input"
         style={{ fontFamily: text }}
-        placeholder="Search projects by name…"
+        placeholder={t('projects.search.placeholder')}
         value={query}
         onChange={(e) => { setQuery(e.target.value); setOpen(true) }}
         onFocus={() => query && setOpen(true)}
@@ -153,7 +155,7 @@ function ProjectSearch({ shown, slugs }) {
         <button
           type="button"
           className="rw-project-search-clear"
-          aria-label="Clear search"
+          aria-label={t('projects.search.clear')}
           onClick={() => { setQuery(''); setOpen(false) }}
         >
           ×
@@ -176,13 +178,13 @@ function ProjectSearch({ shown, slugs }) {
               >
                 <span className="rw-project-search-name" style={{ fontFamily: serif }}>{highlightMatch(p.name, query)}</span>
                 <span className="rw-project-search-meta" style={{ fontFamily: mono }}>
-                  {slug ? p.area : <em>page coming soon</em>}
+                  {slug ? p.area : <em>{t('projects.search.soon')}</em>}
                 </span>
               </li>
             )
           }) : (
             <li className="rw-project-search-empty" style={{ fontFamily: text }}>
-              No projects match &ldquo;{query.trim()}&rdquo;.
+              {t('projects.search.empty', { q: query.trim() })}
             </li>
           )}
         </ul>
@@ -192,6 +194,7 @@ function ProjectSearch({ shown, slugs }) {
 }
 
 export default function ProjectsSection({ id = 'projects' }) {
+  const { t } = useLang()
   const [active, setActive] = useState('Kokapet')
   const [quadrant, setQuadrant] = useState('All')
 
@@ -276,38 +279,38 @@ export default function ProjectsSection({ id = 'projects' }) {
             no other section pairs its heading with controls like this. */}
         <div className="rw-influence-head">
           <div className="rw-influence-heading">
-            <div style={{ ...eyebrowFaded, marginBottom: 14 }}>HYDERABAD</div>
-            <h2 style={{ ...sectionHeadingLg, maxWidth: '13em' }}>Browse by area.</h2>
+            <div style={{ ...eyebrowFaded, marginBottom: 14 }}>{t('projects.map.eyebrow')}</div>
+            <h2 style={{ ...sectionHeadingLg, maxWidth: '13em' }}>{t('projects.map.title')}</h2>
           </div>
 
           <div className="rw-influence-summary">
             {/* Fills the column rather than stopping short at 26em — a narrow measure
                 here left ~170px of dead space that read as an oversized column gap. */}
             <p style={{ ...note, maxWidth: '34em' }}>
-              Luxury and premium developments across the city. Open a locality to see the projects.
+              {t('projects.map.note')}
             </p>
 
             <div className="rw-influence-stats">
               <div className="rw-influence-stat">
                 <span className="rw-influence-stat-num" style={{ fontFamily: serif }}>{visibleProjectCount}</span>
-                <span className="rw-influence-stat-label" style={{ fontFamily: mono }}>PROJECTS</span>
+                <span className="rw-influence-stat-label" style={{ fontFamily: mono }}>{t('projects.map.stat.projects')}</span>
               </div>
               <div className="rw-influence-stat">
                 <span className="rw-influence-stat-num" style={{ fontFamily: serif }}>{visibleLocalityCount}</span>
-                <span className="rw-influence-stat-label" style={{ fontFamily: mono }}>LOCALITIES</span>
+                <span className="rw-influence-stat-label" style={{ fontFamily: mono }}>{t('projects.map.stat.localities')}</span>
               </div>
             </div>
           </div>
 
           <div id="rw-influence-explore-label" className="rw-influence-explore-label" style={{ fontFamily: mono }}>
-            EXPLORE<br />OPPORTUNITIES
+            {t('projects.map.explore')}<br />{t('projects.map.opportunities')}
           </div>
 
           <div className="rw-influence-controls" role="group" aria-labelledby="rw-influence-explore-label">
             {/* Know the name already? Skip the map. */}
             <ProjectSearch shown={shown} slugs={slugs} />
 
-            <div className="rw-quadrant-pills" role="group" aria-label="Filter the map by area">
+            <div className="rw-quadrant-pills" role="group" aria-label={t('projects.map.filterAria')}>
               {QUADRANTS.map((q) => (
                 <button
                   key={q}
@@ -317,7 +320,7 @@ export default function ProjectsSection({ id = 'projects' }) {
                   aria-pressed={quadrant === q}
                   onClick={() => setQuadrant(q)}
                 >
-                  {q === 'All' ? 'All Areas' : q}
+                  {q === 'All' ? t('projects.map.all') : t(`projects.map.${q.toLowerCase()}`)}
                 </button>
               ))}
             </div>
@@ -325,14 +328,14 @@ export default function ProjectsSection({ id = 'projects' }) {
             {/* Rides in the controls column's spare height rather than claiming a row
                 of its own — the left column runs taller than search + pills anyway. */}
             <div className="rw-influence-caption" style={{ fontFamily: mono }}>
-              HYDERABAD · WEST CORRIDOR · SCHEMATIC
+              {t('projects.map.caption')}
             </div>
           </div>
         </div>
 
         <Reveal className="rw-territory">
           <div className="rw-map">
-            <svg viewBox="0 0 100 92" role="img" aria-label="Map of project localities across west Hyderabad">
+            <svg viewBox="0 0 100 92" role="img" aria-label={t('projects.map.aria')}>
               {nodes.map((n) => {
                 const on = n.name === activeNode?.name
                 const empty = n.projects.length === 0
@@ -373,7 +376,7 @@ export default function ProjectsSection({ id = 'projects' }) {
             {activeNode && (
               <>
                 <div className="rw-panel-count" style={{ fontFamily: mono }}>
-                  {String(activeNode.projects.length).padStart(2, '0')} {activeNode.projects.length === 1 ? 'PROJECT' : 'PROJECTS'}
+                  {String(activeNode.projects.length).padStart(2, '0')} {activeNode.projects.length === 1 ? t('projects.panel.one') : t('projects.panel.many')}
                 </div>
                 <h3 className="rw-panel-name" style={{ fontFamily: serif }}>{activeNode.name}</h3>
 
@@ -415,7 +418,7 @@ export default function ProjectsSection({ id = 'projects' }) {
                 </ul>
 
                 <div className="rw-panel-hint" style={{ fontFamily: mono }}>
-                  TAP A PROJECT TO VIEW ITS PAGE
+                  {t('projects.panel.hint')}
                 </div>
               </>
             )}

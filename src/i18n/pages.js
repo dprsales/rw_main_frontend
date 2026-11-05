@@ -1,7 +1,9 @@
-/** Home, About, Contact, Coaching, Consulting, Realty page bodies. Names, phones, emails, URLs, stats stay as stored. */
+/** Home, About, Contact, Coaching, Consulting, Realty, Projects, Portfolio, Articles, FAQs. Names, phones, emails, URLs, stats stay as stored. */
 import { te } from './pages-te'
 import servicesEn from './services-en'
 import servicesTe from './services-te'
+import contentPagesEn from './content-pages-en'
+import contentPagesTe from './content-pages-te'
 
 export const pages = {
   en: {
@@ -204,8 +206,9 @@ export const pages = {
     'hire.line.trainee': 'Ops, sales support, and real estate training.',
     'hire.apply': 'Apply',
     ...servicesEn,
+    ...contentPagesEn,
   },
-  te: { ...te, ...servicesTe },
+  te: { ...te, ...servicesTe, ...contentPagesTe },
 }
 
 const ROLE_KEYS = {
@@ -243,6 +246,10 @@ const SEO_ROUTES = {
   '/coaching': 'coaching',
   '/consulting': 'consulting',
   '/realty': 'realty',
+  '/project-hyderabad': 'projects',
+  '/realty/portfolio': 'portfolio',
+  '/articles': 'articles',
+  '/faqs': 'faqs',
 }
 
 export function experienceRoleKey(company) {

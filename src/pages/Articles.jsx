@@ -4,6 +4,7 @@ import Gallery from '../components/Gallery'
 import Header from '../components/Header'
 import PageIntro from '../components/PageIntro'
 import Seo from '../components/Seo'
+import { useLang } from '../i18n/LangProvider'
 import { fetchBlogsOnce } from '../data/blogs'
 import { FOOTER_LINKS, mono } from '../theme'
 import { fs, container, note } from '../styles'
@@ -11,6 +12,7 @@ import { fs, container, note } from '../styles'
 const withRhythm = (posts) => posts.map((post, i) => ({ ...post, wide: i % 5 === 0 }))
 
 export default function Articles() {
+  const { t } = useLang()
   const [items, setItems] = useState(null)
   const [failed, setFailed] = useState(false)
 
@@ -28,21 +30,21 @@ export default function Articles() {
       <Header />
 
       <PageIntro
-        eyebrow="ARTICLES"
-        headline={[{ text: 'Readings from a live market.' }]}
-        lede="Writing on luxury sales, teams, and mandates. Open any post to read it."
+        eyebrow={t('articles.eyebrow')}
+        headline={[{ text: t('articles.h1') }]}
+        lede={t('articles.lede')}
       />
 
       <section className="rw-pad" style={{ ...container, padding: '10px 40px var(--rw-sy-lg)' }}>
         {failed && (
           <p style={{ ...note, fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em' }}>
-            The articles could not be loaded. Try again in a moment.
+            {t('articles.fail')}
           </p>
         )}
         {items && items.length > 0 && <Gallery items={items} />}
         {items && items.length === 0 && (
           <p style={{ ...note, fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em' }}>
-            No articles yet.
+            {t('articles.empty')}
           </p>
         )}
       </section>

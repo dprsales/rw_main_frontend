@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import portraitImage from '../assets/site/rw-realty-hero.png'
 import hydMark from '../assets/site/hyd-01.svg'
 import Seo from '../components/Seo'
@@ -51,6 +52,8 @@ import ClosingCTA from '../components/ClosingCTA'
 import SectionHead, { SectionCount } from '../components/SectionHead'
 import TeamSection from '../components/TeamSection'
 import { useTilt } from '../hooks/useTilt'
+import { useLang } from '../i18n/LangProvider'
+import { associationRoleKey } from '../i18n/pages'
 import {
   ASSOCIATIONS,
   ORGANISATIONS_WORKED, PORTFOLIO_TESTIMONIALS,
@@ -60,12 +63,6 @@ import { fs,
   container, eyebrow, eyebrowFaded,
   sectionHeadingSm, sectionRule,
 } from '../styles'
-
-const HEADLINE = [
-  { text: 'The room, ' },
-  { text: 'not just the ' },
-  { text: 'résumé.', italic: true, copper: true },
-]
 
 /* Logos for ASSOCIATIONS, matched by index. */
 const ASSOC_LOGOS = [hraLogo, narLogo, tgreraLogo, dezignShark, happeningHyderabad]
@@ -127,18 +124,30 @@ const LOGO_NEEDS_DARK = new Set([
 /* Only organisations with a supplied logo are shown; rest appear once artwork arrives. */
 const ORGS_WITH_LOGO = ORGANISATIONS_WORKED.filter((org) => ORG_LOGOS[org])
 
-const TRACK_RECORD = [
-  { value: <CountUp to={2700} prefix="₹" suffix=" Cr" />, label: 'REVENUE GENERATED' },
-  { value: <CountUp to={1200} />, label: 'PROFESSIONALS COACHED' },
-  { value: <CountUp to={16} suffix="+" />, label: 'YEARS IN LUXURY REAL ESTATE' },
-]
-
-/* The first flagged voice leads the section at scale; the rest fill the wall beneath it. */
-const LEAD_VOICE = PORTFOLIO_TESTIMONIALS.find((t) => t.highlight) || PORTFOLIO_TESTIMONIALS[0]
-const REST_VOICES = PORTFOLIO_TESTIMONIALS.filter((t) => t !== LEAD_VOICE)
-
 export default function Portfolio() {
   const tilt = useTilt({ max: 4 })
+  const { t } = useLang()
+
+  const headline = useMemo(() => [
+    { text: t('portfolio.h1.a') },
+    { text: t('portfolio.h1.b') },
+    { text: t('portfolio.h1.c'), italic: true, copper: true },
+  ], [t])
+
+  const trackRecord = useMemo(() => [
+    { value: <CountUp to={2700} prefix="₹" suffix=" Cr" />, label: t('portfolio.stat.0') },
+    { value: <CountUp to={1200} />, label: t('portfolio.stat.1') },
+    { value: <CountUp to={16} suffix="+" />, label: t('portfolio.stat.2') },
+  ], [t])
+
+  const voices = useMemo(() => PORTFOLIO_TESTIMONIALS.map((voice, i) => ({
+    ...voice,
+    text: t(`portfolio.voice.${i}`),
+    role: t(`portfolio.voice.${i}.role`),
+  })), [t])
+
+  const leadVoice = voices.find((voice) => voice.highlight) || voices[0]
+  const restVoices = voices.filter((voice) => voice !== leadVoice)
 
   return (
     <>
@@ -149,12 +158,12 @@ export default function Portfolio() {
       <section id="top" className="rw-pad" style={{ ...container, padding: '80px 40px 56px' }}>
         <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: 56, alignItems: 'center' }}>
           <div>
-            <Reveal style={{ ...eyebrow, marginBottom: 30 }}>PORTFOLIO</Reveal>
+            <Reveal style={{ ...eyebrow, marginBottom: 30 }}>{t('portfolio.eyebrow')}</Reveal>
             <h1 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(48px,6.4vw,98px)'), lineHeight: .96, letterSpacing: '-.01em', color: 'var(--ink)', maxWidth: '13em' }}>
-              <RiseText lines={HEADLINE} step={0.085} />
+              <RiseText lines={headline} step={0.085} />
             </h1>
             <Reveal as="p" delay={140} style={{ marginTop: 32, maxWidth: '34em', fontFamily: text, fontWeight: 300, fontSize: fs('clamp(17px,1.9vw,21px)'), lineHeight: 1.55, color: 'var(--faded)' }}>
-              Where <span style={{ color: 'var(--copper)', fontWeight: 500 }}>Team RW</span> shows up, from mentoring sessions and developer launches to industry gatherings and the conversations that shape Hyderabad&apos;s luxury real estate market.
+              {t('portfolio.lede.1')}<span style={{ color: 'var(--copper)', fontWeight: 500 }}>{t('portfolio.lede.2')}</span>{t('portfolio.lede.3')}
             </Reveal>
           </div>
 
@@ -178,7 +187,7 @@ export default function Portfolio() {
         <div className="rw-pad" style={{ ...container, position: 'relative', zIndex: 1 }}>
           {/* Dividers drawn in CSS (.rw-stat) since only the stylesheet knows the wrap column count. */}
           <div className="rw-grid-4 rw-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)' }}>
-            {TRACK_RECORD.map((stat, i) => (
+            {trackRecord.map((stat, i) => (
               <Reveal key={stat.label} delay={i * 80} className="rw-stat">
                 <div style={{ fontFamily: serif, fontSize: fs('clamp(36px,4.2vw,54px)'), lineHeight: 1, color: 'var(--ink)' }}>{stat.value}</div>
                 <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.16em', color: 'var(--faded)', marginTop: 14 }}>{stat.label}</div>
@@ -200,17 +209,17 @@ export default function Portfolio() {
       {/* Testimonials wall: one line pulled out large, rest layer beneath as a denser grid. */}
       <section id="voices" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
         <SectionHead
-          eyebrow="WHAT OUR CLIENTS SAY" faded size="lg" space={34}
-          title="Results that speak."
+          eyebrow={t('portfolio.voices.eyebrow')} faded size="lg" space={34}
+          title={t('portfolio.voices.title')}
           aside={(
             <SectionCount>
-              {String(PORTFOLIO_TESTIMONIALS.length).padStart(2, '0')} VOICES · HYDERABAD&apos;S LUXURY MARKET
+              {t('portfolio.voices.count', { n: String(PORTFOLIO_TESTIMONIALS.length).padStart(2, '0') })}
             </SectionCount>
           )}
         />
 
         {/* One voice leads at scale; multiple large quotes gave the eye no entry point. */}
-        {LEAD_VOICE && (
+        {leadVoice && (
           <Reveal
             style={{
               borderTop: '2px solid var(--copper)',
@@ -220,15 +229,15 @@ export default function Portfolio() {
           >
             {/* ~26em keeps line length comfortable without stranding empty space on desktop. */}
             <p style={{ fontFamily: text, fontWeight: 400, fontSize: fs('clamp(18px,1.5vw,22px)'), lineHeight: 1.55, color: 'var(--ink)', margin: 0, maxWidth: '34em' }}>
-              “{LEAD_VOICE.text}”
+              “{leadVoice.text}”
             </p>
             {/* Attribution under the quote: a second column left a tall void beside shorter quotes. */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 'clamp(22px,2.4vw,30px)' }}>
               <span aria-hidden style={{ width: 34, height: 1, background: 'var(--copper)', flexShrink: 0 }} />
               <div>
-                <div style={{ fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em', color: 'var(--copper)' }}>{LEAD_VOICE.name}</div>
-                {LEAD_VOICE.role && (
-                  <div style={{ marginTop: 5, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.04em', lineHeight: 1.5, color: 'var(--faded)' }}>{LEAD_VOICE.role}</div>
+                <div style={{ fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em', color: 'var(--copper)' }}>{leadVoice.name}</div>
+                {leadVoice.role && (
+                  <div style={{ marginTop: 5, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.04em', lineHeight: 1.5, color: 'var(--faded)' }}>{leadVoice.role}</div>
                 )}
               </div>
             </div>
@@ -237,20 +246,20 @@ export default function Portfolio() {
 
         {/* Six voices by default; showing all ran the section to nearly 2,000px. */}
         <div className="rw-voice-grid">
-          {REST_VOICES.slice(0, 6).map((t, i) => (
-            <Reveal key={t.name} delay={(i % 3) * 80} className="rw-voice-card">
+          {restVoices.slice(0, 6).map((voice, i) => (
+            <Reveal key={voice.name} delay={(i % 3) * 80} className="rw-voice-card">
               <p style={{ fontFamily: text, fontWeight: 400, fontSize: fs('15px'), lineHeight: 1.6, color: 'var(--ink)', margin: 0 }}>
-                “{t.text}”
+                “{voice.text}”
               </p>
               <div className="rw-voice-attrib">
-                <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.06em', color: 'var(--copper)' }}>{t.name}</div>
-                {t.role && <div style={{ marginTop: 4, fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.04em', lineHeight: 1.5, color: 'var(--faded)' }}>{t.role}</div>}
+                <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.06em', color: 'var(--copper)' }}>{voice.name}</div>
+                {voice.role && <div style={{ marginTop: 4, fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.04em', lineHeight: 1.5, color: 'var(--faded)' }}>{voice.role}</div>}
               </div>
             </Reveal>
           ))}
         </div>
 
-        {REST_VOICES.length > 6 && (
+        {restVoices.length > 6 && (
           <Reveal style={{ display: 'flex', justifyContent: 'center', marginTop: 'clamp(24px,2.6vw,34px)' }}>
             <a
               href="https://www.linkedin.com/in/rajivwilliams/details/recommendations/"
@@ -264,7 +273,7 @@ export default function Portfolio() {
                 display: 'inline-block',
               }}
             >
-              SHOW ALL MORE VOICES ↗
+              {t('portfolio.voices.more')}
             </a>
           </Reveal>
         )}
@@ -273,9 +282,9 @@ export default function Portfolio() {
       {/* Organisations we've worked with - a typographic name wall. */}
       <section id="organisations" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
-          <Reveal style={{ ...eyebrowFaded, marginBottom: 14 }}>ORGANISATIONS WE&apos;VE WORKED WITH</Reveal>
+          <Reveal style={{ ...eyebrowFaded, marginBottom: 14 }}>{t('portfolio.orgs.eyebrow')}</Reveal>
           <Reveal delay={80} as="h2" style={{ ...sectionHeadingSm, maxWidth: '14em' }}>
-            Trusted across Hyderabad&apos;s luxury realestate market.
+            {t('portfolio.orgs.title')}
           </Reveal>
           {/* Frosted-glass tiles, dark - white artwork logos only read against a dark tile. */}
           <div className="rw-orgs" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10, marginTop: 'clamp(34px,4vw,52px)' }}>
@@ -309,7 +318,7 @@ export default function Portfolio() {
       {/* Credentials + associations */}
       <section id="credentials" style={{ ...sectionRule, background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
-          <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>CREDENTIALS &amp; MEMBERSHIPS</Reveal>
+          <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>{t('portfolio.creds')}</Reveal>
 
           <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
             {ASSOC_ITEMS.map((assoc, i) => (
@@ -339,9 +348,9 @@ export default function Portfolio() {
                     {assoc.name}
                     {assoc.href && <span aria-hidden style={{ marginLeft: 8, color: 'var(--copper)' }}>↗</span>}
                   </div>
-                  <div style={{ marginTop: 4, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.08em', color: 'var(--copper)' }}>{assoc.role}</div>
+                  <div style={{ marginTop: 4, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.08em', color: 'var(--copper)' }}>{t(associationRoleKey(assoc.role) || assoc.role)}</div>
                   {assoc.desc && (
-                    <div style={{ marginTop: 6, fontFamily: text, fontSize: fs('13px'), lineHeight: 1.45, color: 'var(--faded)' }}>{assoc.desc}</div>
+                    <div style={{ marginTop: 6, fontFamily: text, fontSize: fs('13px'), lineHeight: 1.45, color: 'var(--faded)' }}>{t('about.assoc.hh')}</div>
                   )}
                 </div>
               </Reveal>
@@ -352,9 +361,9 @@ export default function Portfolio() {
 
       <ClosingCTA
         pad="clamp(90px,12vw,130px)" titleStyle={{ fontStyle: 'italic' }}
-        title="Whatever the room, it starts with a conversation."
+        title={t('portfolio.close')}
       >
-        <BookButton specular>BOOK A STRATEGY CALL</BookButton>
+        <BookButton specular>{t('portfolio.book')}</BookButton>
       </ClosingCTA>
 
       <Footer chip links={FOOTER_LINKS} />
