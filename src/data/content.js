@@ -906,4 +906,5 @@ export const PROJECTS = [
   { name: 'Aranya', area: 'Manchirevula', status: 'Mandate' },
   { name: 'Eka One', area: 'Kokapet', status: 'Mandate' },
   { name: 'Sonthalia', area: 'Kokapet', status: 'Mandate' },
+  { name: 'Issara Belmond', area: 'Shamshabad', status: 'Mandate' },
 ]
