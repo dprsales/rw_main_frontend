@@ -1,4 +1,4 @@
-/** Home, About, Contact, Coaching, Consulting, Realty, Projects, Portfolio, Articles, FAQs, Careers, Assessment. Names, phones, emails, URLs, stats, and stored form values stay as stored. */
+/** Home, About, Contact, Coaching, Consulting, Realty, Projects, Portfolio, Articles, FAQs, Careers, Assessment, Partner, Vendor, Start, sale forms. Names, phones, emails, URLs, stats, and stored form values stay as stored. */
 import { te } from './pages-te'
 import servicesEn from './services-en'
 import servicesTe from './services-te'
@@ -6,6 +6,8 @@ import contentPagesEn from './content-pages-en'
 import contentPagesTe from './content-pages-te'
 import flowPagesEn from './flow-pages-en'
 import flowPagesTe from './flow-pages-te'
+import partnerFormsEn from './partner-forms-en'
+import partnerFormsTe from './partner-forms-te'
 
 export const pages = {
   en: {
@@ -64,6 +66,26 @@ export const pages = {
     'home.more.eyebrow': '& MORE',
     'home.more.title': 'Strategic support, beyond the framework.',
     'home.more.aside': 'Additional services designed to strengthen visibility, accelerate sales movement, and improve operational efficiency.',
+    'home.more.0.title': 'Social Media & Brand Presence',
+    'home.more.0.desc': 'Built to improve visibility, positioning, and long-term market recall.',
+    'home.more.1.title': 'Performance Marketing',
+    'home.more.1.desc': 'Campaigns engineered for reach, lead generation, and qualified conversions.',
+    'home.more.2.title': 'Media & PR Collaborations',
+    'home.more.2.desc': 'Strategic visibility partnerships and media collaborations (including platforms like Happening Hyderabad) to strengthen brand reach and market presence.',
+    'home.more.3.title': 'Organic Video Marketing',
+    'home.more.3.desc': 'Content designed to improve engagement, trust, and brand perception.',
+    'home.more.4.title': 'Podcasts & Authority Building',
+    'home.more.4.desc': 'Positioning founders and leadership voices with stronger market credibility.',
+    'home.more.5.title': 'Channel Partner Networking',
+    'home.more.5.desc': 'Broker ecosystem activation, designed to accelerate market movement.',
+    'home.more.6.title': 'Vendor Management',
+    'home.more.6.desc': 'Reliable execution enabled through trusted partner ecosystems.',
+    'home.more.7.title': 'Sales Hiring',
+    'home.more.7.desc': 'Capability-focused recruitment for high-performance sales environments.',
+    'home.more.8.title': 'Workforce Structuring',
+    'home.more.8.desc': 'Operational alignment built for scalable and efficient growth.',
+    'home.more.9.title': 'Brand Positioning & Market Narratives',
+    'home.more.9.desc': 'Crafting perception, differentiation, and premium market identity.',
     'home.t1': 'Rajiv negotiates like the asset is his own. His deep understanding of local market dynamics gave us a very good perspective on the opportunities in Hyderabad.',
     'home.t2': 'He always says, "do it with your passion and heart or else don’t do it." Having a mentor like him makes you sharper on tasks, skills, focus and life.',
     'home.t3': 'His expertise and guidance were instrumental in my professional growth, the best mentor I have come across.',
@@ -210,8 +232,9 @@ export const pages = {
     ...servicesEn,
     ...contentPagesEn,
     ...flowPagesEn,
+    ...partnerFormsEn,
   },
-  te: { ...te, ...servicesTe, ...contentPagesTe, ...flowPagesTe },
+  te: { ...te, ...servicesTe, ...contentPagesTe, ...flowPagesTe, ...partnerFormsTe },
 }
 
 const ROLE_KEYS = {
@@ -257,6 +280,13 @@ const SEO_ROUTES = {
   '/careers/apply': 'careersApply',
   '/assessment': 'assessment',
   '/assessment/result': 'assessmentResult',
+  '/partner': 'partner',
+  '/vendorpartner': 'vendor',
+  '/start': 'start',
+  '/form': 'form',
+  '/form/coaching': 'formCoaching',
+  '/form/consulting': 'formConsulting',
+  '/form/realty': 'formRealty',
 }
 
 export function experienceRoleKey(company) {

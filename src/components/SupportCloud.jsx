@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { SUPPORT_SERVICES } from '../data/content'
+import { useLang } from '../i18n/LangProvider'
 import { mono, serif } from '../theme'
 
 /** "& More" services as a chip cloud. The first chip is on by default so the
  *  caption is never empty; hover (or tap/focus) moves the active one. */
 export default function SupportCloud() {
+  const { t } = useLang()
   const [active, setActive] = useState(0)
 
   return (
@@ -21,7 +23,7 @@ export default function SupportCloud() {
             onClick={() => setActive(i)}
             aria-pressed={i === active}
           >
-            {svc.title}
+            {t(`home.more.${i}.title`)}
           </button>
         ))}
       </div>
@@ -38,8 +40,8 @@ export default function SupportCloud() {
               style={{ fontFamily: serif }}
               aria-hidden={i !== active}
             >
-              <span className="rw-chip-caption-label" style={{ fontFamily: mono }}>{svc.title}</span>
-              {svc.desc}
+              <span className="rw-chip-caption-label" style={{ fontFamily: mono }}>{t(`home.more.${i}.title`)}</span>
+              {t(`home.more.${i}.desc`)}
             </p>
           ))}
         </div>

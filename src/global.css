@@ -813,6 +813,17 @@ a:hover { color: var(--ink, #12100D); }
 /* & MORE - support services as a chip cloud; pointing/tapping a pill reveals
    its description below, the same hover-to-reveal idiom as the territory map. */
 .rw-chips { display: flex; flex-wrap: wrap; gap: clamp(9px, 1vw, 13px); }
+html[lang="te"] .rw-chip,
+html[lang="te"] .rw-chip-caption-label,
+html[lang="te"] .rw-chip-caption-text,
+html[lang="te"] #support h2,
+html[lang="te"] #support .rw-section-kicker {
+  font-family: 'Nirmala UI', 'Noto Sans Telugu', 'Gautami', 'Poppins', system-ui, sans-serif !important;
+  letter-spacing: .02em !important;
+  text-transform: none;
+}
+html[lang="te"] .rw-chip { font-size: 13px; line-height: 1.4; }
+html[lang="te"] .rw-chip-caption-text { line-height: 1.55; }
 .rw-chip {
   cursor: pointer; background: transparent;
   border: 1px solid var(--line); border-radius: 100px;

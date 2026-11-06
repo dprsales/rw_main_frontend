@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Seo from '../components/Seo'
@@ -8,12 +8,8 @@ import BorderGlow from '../components/BorderGlow'
 import { getErrorMessage, submitVendorPartner } from '../data/api'
 import { FOOTER_LINKS, serif, WHATSAPP } from '../theme'
 import { ctaCopper, eyebrow, fs, note, sectionHeading, sectionRule } from '../styles'
+import { useLang } from '../i18n/LangProvider'
 import '../form/form.css'
-
-const HEADLINE = [
-  { text: 'Tell us about ' },
-  { text: 'your business.', italic: true, copper: true },
-]
 
 const INDUSTRIES = [
   'Advertising', 'Animation', 'Architects', 'Bags', 'Content', 'Customized Chocolates',
@@ -53,6 +49,7 @@ const FIELDS = [
 ]
 
 function FileDrop({ title, hint, required, accept, file, onSelect, imageOnly, wide }) {
+  const { t } = useLang()
   const [dragOver, setDragOver] = useState(false)
   const [previewUrl, setPreviewUrl] = useState('')
   const [localError, setLocalError] = useState('')
@@ -70,11 +67,11 @@ function FileDrop({ title, hint, required, accept, file, onSelect, imageOnly, wi
   const acceptFile = (candidate) => {
     if (!candidate) return
     if (candidate.size > 8 * 1024 * 1024) {
-      setLocalError('That file is over 8MB. Please attach a smaller one.')
+      setLocalError(t('vendor.file.tooBig'))
       return
     }
     if (imageOnly && !candidate.type.startsWith('image/')) {
-      setLocalError('Use a JPG, PNG, or WEBP image.')
+      setLocalError(t('vendor.file.image'))
       return
     }
     setLocalError('')
@@ -85,7 +82,7 @@ function FileDrop({ title, hint, required, accept, file, onSelect, imageOnly, wi
     <div className={`rw-form-field-wrap${wide ? ' rw-form-field-wrap--wide' : ''}`}>
       <span className="rw-form-q-title">
         {title}
-        {required ? <span className="rw-form-req"> *</span> : <span className="rw-form-optional"> (optional)</span>}
+        {required ? <span className="rw-form-req"> *</span> : <span className="rw-form-optional"> {t('sale.optional')}</span>}
       </span>
       {file ? (
         <div className="rw-file-preview" style={{ marginTop: 10 }}>
@@ -96,7 +93,7 @@ function FileDrop({ title, hint, required, accept, file, onSelect, imageOnly, wi
             <strong>{file.name}</strong>
             <small>{(file.size / 1024).toFixed(0)} KB</small>
           </span>
-          <button type="button" className="rw-file-remove" onClick={() => onSelect(null)} aria-label={`Remove ${file.name}`}>×</button>
+          <button type="button" className="rw-file-remove" onClick={() => onSelect(null)} aria-label={t('vendor.file.remove', { name: file.name })}>×</button>
         </div>
       ) : (
         <label
@@ -107,7 +104,7 @@ function FileDrop({ title, hint, required, accept, file, onSelect, imageOnly, wi
           onDrop={(event) => { event.preventDefault(); setDragOver(false); acceptFile(event.dataTransfer.files?.[0]) }}
         >
           <span>{hint}</span>
-          <small>or click to browse · max 8MB</small>
+          <small>{t('vendor.file.browse')}</small>
           <input type="file" accept={accept} onChange={(event) => { acceptFile(event.target.files?.[0]); event.target.value = '' }} />
         </label>
       )}
@@ -117,6 +114,11 @@ function FileDrop({ title, hint, required, accept, file, onSelect, imageOnly, wi
 }
 
 export default function VendorPartner() {
+  const { t } = useLang()
+  const headline = useMemo(() => [
+    { text: t('vendor.h1.a') },
+    { text: t('vendor.h1.b'), italic: true, copper: true },
+  ], [t])
   const [values, setValues] = useState({ industry: '' })
   const [profileImage, setProfileImage] = useState(null)
   const [brochure, setBrochure] = useState(null)
@@ -133,25 +135,25 @@ export default function VendorPartner() {
       return
     }
     if (!profileImage) {
-      setError('Add a profile image of you or the business.')
+      setError(t('vendor.err.photo'))
       return
     }
     if (!values.industry?.trim()) {
-      setError('Tell us what the business supplies.')
+      setError(t('vendor.err.supply'))
       return
     }
     if ((values.about || '').trim().length < 10) {
-      setError('Write a short note about the business.')
+      setError(t('vendor.err.about'))
       return
     }
     if (values.gstNumber?.trim() && !GST_PATTERN.test(values.gstNumber.trim())) {
-      setError('Enter a valid 15-character GST number.')
+      setError(t('vendor.err.gst'))
       return
     }
     if (values.yearOfIncorporation?.trim()) {
       const year = Number(values.yearOfIncorporation.trim())
       if (!YEAR_PATTERN.test(values.yearOfIncorporation.trim()) || year > THIS_YEAR) {
-        setError('Enter a 4-digit year of incorporation.')
+        setError(t('vendor.err.year'))
         return
       }
     }
@@ -183,29 +185,29 @@ export default function VendorPartner() {
       <Seo route="/vendorpartner" />
       <Header />
       <PageIntro
-        eyebrow="VENDOR PARTNER"
-        headline={HEADLINE}
-        lede="Share a profile photo, what you offer, and a link to the work. The team reviews every submission from this page."
+        eyebrow={t('vendor.eyebrow')}
+        headline={headline}
+        lede={t('vendor.lede')}
       />
 
       <section style={{ ...sectionRule, background: 'var(--chip)', borderBottom: '1px solid var(--line)' }}>
         <div className="rw-pad" style={{ maxWidth: 860, margin: '0 auto', padding: 'var(--rw-sy) 40px' }}>
-          <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>YOUR BUSINESS</Reveal>
+          <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>{t('vendor.section')}</Reveal>
           <Reveal as="h2" delay={80} style={{ ...sectionHeading, marginTop: 16 }}>
-            The details we keep on file.
+            {t('vendor.title')}
           </Reveal>
 
           {status === 'done' ? (
             <Reveal delay={100} style={{ textAlign: 'center', paddingTop: 'clamp(44px,6vw,66px)' }}>
               <h3 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(24px,3vw,32px)'), color: 'var(--ink)', marginTop: 8 }}>
-                Received.
+                {t('vendor.done.title')}
               </h3>
               <p style={{ ...note, marginTop: 14, marginLeft: 'auto', marginRight: 'auto', maxWidth: '32em' }}>
-                The team will look through what you sent. If there is a fit, someone will be in touch.
+                {t('vendor.done.body')}
               </p>
               <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
                 <a className="rw-cta" style={{ ...ctaCopper }} href={WHATSAPP} target="_blank" rel="noreferrer">
-                  WHATSAPP THE TEAM
+                  {t('vendor.done.wa')}
                 </a>
               </div>
             </Reveal>
@@ -224,8 +226,8 @@ export default function VendorPartner() {
                 <BorderGlow {...FORM_GLOW} className="rw-form-glow">
                   <div className="rw-form-panel rw-form-panel--compact rw-form-panel--glow">
                   <FileDrop
-                    title="Profile image"
-                    hint="Drop a photo of you or the business"
+                    title={t('vendor.photo')}
+                    hint={t('vendor.photoHint')}
                     required
                     accept=".jpg,.jpeg,.png,.webp"
                     file={profileImage}
@@ -235,10 +237,10 @@ export default function VendorPartner() {
                   {FIELDS.map((field) => (
                     <label key={field.id} className="rw-form-field-wrap" style={{ display: 'block' }}>
                       <span className="rw-form-q-title">
-                        {field.title}
+                        {t(`vendor.f.${field.id}`)}
                         {field.required
                           ? <span className="rw-form-req"> *</span>
-                          : <span className="rw-form-optional"> (optional)</span>}
+                          : <span className="rw-form-optional"> {t('sale.optional')}</span>}
                       </span>
                       <input
                         className="rw-form-field"
@@ -246,20 +248,20 @@ export default function VendorPartner() {
                         style={{ marginTop: 10 }}
                         required={field.required}
                         maxLength={field.maxLength}
-                        placeholder={field.placeholder}
+                        placeholder={t(`vendor.f.${field.id}.ph`)}
                         value={values[field.id] || ''}
                         onChange={set(field.id)}
                       />
                     </label>
                   ))}
                   <label className="rw-form-field-wrap" style={{ display: 'block' }}>
-                    <span className="rw-form-q-title">What you supply <span className="rw-form-req"> *</span></span>
+                    <span className="rw-form-q-title">{t('vendor.supply')} <span className="rw-form-req"> *</span></span>
                     <input
                       className="rw-form-field"
                       list="vendor-industries"
                       style={{ marginTop: 10 }}
                       required
-                      placeholder="Interior, printing, catering…"
+                      placeholder={t('vendor.supplyPh')}
                       value={values.industry || ''}
                       onChange={set('industry')}
                     />
@@ -268,20 +270,20 @@ export default function VendorPartner() {
                     </datalist>
                   </label>
                   <label className="rw-form-field-wrap rw-form-field-wrap--wide" style={{ display: 'block' }}>
-                    <span className="rw-form-q-title">About the business <span className="rw-form-req"> *</span></span>
+                    <span className="rw-form-q-title">{t('vendor.about')} <span className="rw-form-req"> *</span></span>
                     <textarea
                       className="rw-form-field"
                       style={{ marginTop: 10, minHeight: 120 }}
                       required
                       minLength={10}
-                      placeholder="What you make or offer, and who it is for."
+                      placeholder={t('vendor.aboutPh')}
                       value={values.about || ''}
                       onChange={set('about')}
                     />
                   </label>
                   <FileDrop
-                    title="Brochure"
-                    hint="Drop a PDF or image"
+                    title={t('vendor.brochure')}
+                    hint={t('vendor.brochureHint')}
                     accept=".pdf,.jpg,.jpeg,.png,.webp"
                     file={brochure}
                     onSelect={setBrochure}
@@ -293,7 +295,7 @@ export default function VendorPartner() {
                   <p style={{ ...note, color: 'var(--copper)', marginTop: 16 }}>{error}</p>
                 )}
                 <button className="rw-cta" style={{ ...ctaCopper, marginTop: 28 }} type="submit" disabled={status === 'sending'}>
-                  {status === 'sending' ? 'SENDING…' : 'SEND DETAILS'}
+                  {status === 'sending' ? t('sale.submitting') : t('vendor.send')}
                 </button>
               </form>
             </Reveal>

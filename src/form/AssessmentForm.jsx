@@ -2,6 +2,7 @@ import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 're
 import { createPortal } from 'react-dom'
 import { ASSESSMENT_TRACKS, TRACK_ORDER } from './tracks'
 import { useReveal } from './useReveal'
+import { useLang } from '../i18n/LangProvider'
 import './form.css'
 
 /* Fades and lifts children in on first sight; kept local so this folder imports nothing upward. */
@@ -60,8 +61,9 @@ function wideQuestions(questions) {
   return wide
 }
 
-function FormSelect({ id, value, options, placeholder = 'Select one…', onChange }) {
+function FormSelect({ id, value, options, placeholder = 'Select one…', onChange, labelFor }) {
   const reactId = useId()
+  const show = (option) => (labelFor ? labelFor(option) : option)
   const uid = id || `rw-sel-${reactId.replace(/:/g, '')}`
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(0)
@@ -191,7 +193,7 @@ function FormSelect({ id, value, options, placeholder = 'Select one…', onChang
         onClick={() => setOpen((v) => !v)}
         onKeyDown={onKeyDown}
       >
-        <span className="rw-form-select-label">{value || placeholder}</span>
+        <span className="rw-form-select-label">{value ? show(value) : placeholder}</span>
         <svg className="rw-form-select-caret" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
           <path d="M2.4 4.4 6 8l3.6-3.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -219,7 +221,7 @@ function FormSelect({ id, value, options, placeholder = 'Select one…', onChang
                   onMouseDown={(event) => event.preventDefault()}
                   onClick={() => pick(option)}
                 >
-                  <span>{option}</span>
+                  <span>{show(option)}</span>
                   {on && (
                     <svg className="rw-form-select-check" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
                       <path d="M2.5 7.2 5.6 10.2 11.5 3.8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
@@ -246,6 +248,7 @@ const Arrow = () => (
 
 /** Pre-consultation assessment: track picker, questionnaire, confirmation. Self-contained inside `src/form/`. */
 export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, stickyOffset = 0, prefill = {}, extraAnswers = {}, onFirstInput }) {
+  const { t } = useLang()
   const [trackKey, setTrackKey] = useState(ASSESSMENT_TRACKS[initialTrack] ? initialTrack : null)
   const track = trackKey ? ASSESSMENT_TRACKS[trackKey] : null
 
@@ -311,11 +314,27 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
       setSent(true)
     } catch (error) {
       console.error('Lead submission failed:', error)
-      setSubmitError(error?.message || 'Unable to submit your enquiry.')
+      setSubmitError(error?.message || t('sale.err'))
       setSubmitStatus('error')
     } finally {
       submitLock.current = false
     }
+  }
+
+  const contact = q => q.id === 'name' || q.id === 'phone' || q.id === 'email'
+  const qTitle = (q) => t(contact(q) ? `sale.q.contact.${q.id}.title` : `sale.q.${trackKey}.${q.id}.title`)
+  const qPh = (q) => {
+    const key = contact(q) ? `sale.q.contact.${q.id}.ph` : `sale.q.${trackKey}.${q.id}.ph`
+    const next = t(key)
+    return next === key ? (q.placeholder || '') : next
+  }
+  const qHelp = (q) => (q.help ? t(`sale.q.${trackKey}.${q.id}.help`) : '')
+  const optLabel = (q, option) => {
+    const i = (q.options || []).indexOf(option)
+    if (i < 0) return option
+    const key = `sale.opt.${trackKey}.${q.id}.${i}`
+    const next = t(key)
+    return next === key ? option : next
   }
 
   /* ---------- 1. Track picker ---------- */
@@ -323,33 +342,33 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
     return (
       <div className="rw-form">
         <section className="rw-form-pad rw-form-wrap" style={{ padding: '80px 40px 30px' }}>
-          <Reveal className="rw-form-eyebrow" style={{ marginBottom: 30 }}>PRE-CONSULTATION ASSESSMENT</Reveal>
+          <Reveal className="rw-form-eyebrow" style={{ marginBottom: 30 }}>{t('sale.eyebrow')}</Reveal>
 
           <Reveal as="h1" delay={80} className="rw-form-h1" style={{ maxWidth: '15em' }}>
-            Coaching your team, consulting on your process,{' '}
-            <span className="rw-form-gold">or owning the sale outright.</span>
+            {t('sale.h1.a')}
+            <span className="rw-form-gold">{t('sale.h1.b')}</span>
           </Reveal>
 
           <Reveal as="p" delay={140} className="rw-form-lede" style={{ marginTop: 28 }}>
-            Where do you need us?
+            {t('sale.lede')}
           </Reveal>
 
           <Reveal as="p" delay={180} className="rw-form-intro" style={{ marginTop: 16, maxWidth: '36em' }}>
-            Pick a track below. A short set of questions is what lets us walk into the consultation already knowing your project, so the hour is spent on answers, not introductions.
+            {t('sale.intro')}
           </Reveal>
         </section>
 
         <section className="rw-form-pad rw-form-wrap" style={{ padding: '10px 40px clamp(80px,10vw,120px)' }}>
           <div className="rw-form-tracks">
             {TRACK_ORDER.map((key, i) => {
-              const t = ASSESSMENT_TRACKS[key]
+              const item = ASSESSMENT_TRACKS[key]
               return (
                 <Reveal key={key} delay={i * 90}>
                   <button type="button" className="rw-form-track" onClick={() => openTrack(key)}>
-                    <span className="rw-form-track-num">{t.numeral}. {t.label}</span>
-                    <span className="rw-form-track-title">{t.cardTitle}</span>
-                    <span className="rw-form-track-body rw-form-note">{t.cardBody}</span>
-                    <span className="rw-form-track-cta">{t.cardCta} <Arrow /></span>
+                    <span className="rw-form-track-num">{item.numeral}. {t(`sale.track.${key}.label`)}</span>
+                    <span className="rw-form-track-title">{t(`sale.track.${key}.cardTitle`)}</span>
+                    <span className="rw-form-track-body rw-form-note">{t(`sale.track.${key}.cardBody`)}</span>
+                    <span className="rw-form-track-cta">{t(`sale.track.${key}.cardCta`)} <Arrow /></span>
                   </button>
                 </Reveal>
               )
@@ -371,12 +390,12 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
                 <path d="M4 12.5 9.5 18 20 6.5" />
               </svg>
             </div>
-            <h2 className="rw-form-h2" style={{ marginTop: 28 }}>Thank you.</h2>
+            <h2 className="rw-form-h2" style={{ marginTop: 28 }}>{t('sale.thanks')}</h2>
             <p className="rw-form-note" style={{ marginTop: 16, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em' }}>
-              {track.confirm}
+              {t(`sale.track.${trackKey}.confirm`)}
             </p>
             <button type="button" className="rw-form-back" onClick={reset} style={{ marginTop: 34 }}>
-              ← All tracks
+              {t('sale.all')}
             </button>
           </Reveal>
         </section>
@@ -390,8 +409,8 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
       {/* Progress rail counts required questions only. */}
       <div className="rw-form-rail" style={{ top: stickyOffset }}>
         <div className="rw-form-pad rw-form-wrap rw-form-rail-inner">
-          <button type="button" className="rw-form-back" onClick={reset} disabled={isSubmitting}>← All tracks</button>
-          <span className="rw-form-rail-label">{track.label} form · {done} of {required.length}</span>
+          <button type="button" className="rw-form-back" onClick={reset} disabled={isSubmitting}>{t('sale.all')}</button>
+          <span className="rw-form-rail-label">{t('sale.rail', { label: t(`sale.track.${trackKey}.label`), done, total: required.length })}</span>
           <div className="rw-form-bar">
             <div className="rw-form-bar-fill" style={{ transform: `scaleX(${required.length ? done / required.length : 0})` }} />
           </div>
@@ -400,27 +419,25 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
 
       <section className="rw-form-pad rw-form-body">
         <Reveal className="rw-form-preamble">
-          <div className="rw-form-eyebrow" style={{ fontSize: 13 }}>{track.intro.eyebrow}</div>
-          <h1 className="rw-form-h2" style={{ marginTop: 12 }}>{track.intro.title}</h1>
-          {track.intro.thanks && <p className="rw-form-thanks">{track.intro.thanks}</p>}
-          {track.intro.lines.map((line) => (
-            <p key={line} className="rw-form-note" style={{ marginTop: 6, marginLeft: 'auto', marginRight: 'auto', maxWidth: '36em' }}>
-              {line}
-            </p>
-          ))}
-          <span className="rw-form-time">{track.intro.time}</span>
+          <div className="rw-form-eyebrow" style={{ fontSize: 13 }}>{t(`sale.track.${trackKey}.eyebrow`)}</div>
+          <h1 className="rw-form-h2" style={{ marginTop: 12 }}>{t(`sale.track.${trackKey}.title`)}</h1>
+          {track.intro.thanks && <p className="rw-form-thanks">{t(`sale.track.${trackKey}.thanks`)}</p>}
+          <p className="rw-form-note" style={{ marginTop: 6, marginLeft: 'auto', marginRight: 'auto', maxWidth: '36em' }}>
+            {t(`sale.track.${trackKey}.line`)}
+          </p>
+          <span className="rw-form-time">{t(`sale.track.${trackKey}.time`)}</span>
         </Reveal>
 
         <div className="rw-form-questions rw-form-panel rw-form-panel--questions">
           {track.questions.map((q, i) => (
             <Reveal key={q.id} delay={Math.min(i, 4) * 60} className={`rw-form-field-wrap${wide.has(q.id) ? ' rw-form-field-wrap--wide' : ''}`}>
               <div className="rw-form-q-title">
-                {q.title}
+                {qTitle(q)}
                 {q.required
                   ? <span className="rw-form-req"> *</span>
-                  : <span className="rw-form-optional"> (optional)</span>}
+                  : <span className="rw-form-optional"> {t('sale.optional')}</span>}
               </div>
-              {q.help && <span className="rw-form-help">{q.help}</span>}
+              {q.help && <span className="rw-form-help">{qHelp(q)}</span>}
 
               <div className="rw-form-controls">
                 {controlKind(q) === 'select' && (
@@ -428,12 +445,14 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
                     id={`rw-sel-${q.id}`}
                     value={answers[q.id]}
                     options={q.options}
+                    placeholder={t('sale.select')}
+                    labelFor={(option) => optLabel(q, option)}
                     onChange={(option) => set(q.id, option)}
                   />
                 )}
 
                 {controlKind(q) === 'segment' && (
-                  <div className="rw-form-segment" role="group" aria-label={q.title}>
+                  <div className="rw-form-segment" role="group" aria-label={qTitle(q)}>
                     {q.options.map((option) => {
                       const on = answers[q.id] === option
                       return (
@@ -444,7 +463,7 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
                           className={on ? 'is-on' : ''}
                           onClick={() => set(q.id, on ? '' : option)}
                         >
-                          {option}
+                          {optLabel(q, option)}
                         </button>
                       )
                     })}
@@ -458,7 +477,7 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
                       return (
                         <label key={option} className={`rw-form-check${on ? ' is-on' : ''}`}>
                           <input type="checkbox" checked={on} onChange={() => toggle(q.id, option)} />
-                          {option}
+                          {optLabel(q, option)}
                         </label>
                       )
                     })}
@@ -470,7 +489,7 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
                     className="rw-form-field"
                     type={q.inputType}
                     value={answers[q.id]}
-                    placeholder={q.placeholder || ''}
+                    placeholder={qPh(q)}
                     onChange={(e) => set(q.id, e.target.value)}
                   />
                 )}
@@ -480,7 +499,7 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
                     className="rw-form-field"
                     rows={3}
                     value={answers[q.id]}
-                    placeholder={q.placeholder || ''}
+                    placeholder={qPh(q)}
                     onChange={(e) => set(q.id, e.target.value)}
                   />
                 )}
@@ -492,10 +511,10 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
         <div className="rw-form-submit-bar">
           <span className="rw-form-left" role="status" aria-live="polite">
             {isSubmitting
-              ? 'Submitting your details…'
+              ? t('sale.working')
               : left > 0
-                ? `${left} required question${left === 1 ? '' : 's'} left`
-                : 'Ready to submit'}
+                ? (left === 1 ? t('sale.leftOne', { n: left }) : t('sale.left', { n: left }))
+                : t('sale.ready')}
           </span>
           <button
             type="button"
@@ -505,12 +524,12 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
             aria-busy={isSubmitting}
             aria-describedby={submitStatus === 'error' ? 'rw-form-submit-error' : undefined}
           >
-            {isSubmitting ? 'SUBMITTING…' : 'SUBMIT & SCHEDULE CONSULTATION'}
+            {isSubmitting ? t('sale.submitting') : t('sale.submit')}
           </button>
         </div>
         {submitStatus === 'error' && (
           <p id="rw-form-submit-error" className="rw-form-submit-error" role="alert">
-            {submitError} Your answers are still here. Please try again.
+            {submitError} {t('sale.errKeep')}
           </p>
         )}
       </section>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -13,58 +13,13 @@ import { submitChannelPartner, getErrorMessage } from '../data/api'
 import { errorCategory, track } from '../data/analytics'
 import { FOOTER_LINKS, mono, serif, text, WHATSAPP } from '../theme'
 import { fs, container, ctaCopper, eyebrow, note, sectionHeading, sectionRule } from '../styles'
+import { useLang } from '../i18n/LangProvider'
 import '../form/form.css'
 
 const PARTNER_INTEREST = 'Channel partner application'
 
-const HEADLINE = [
-  { text: 'Sell luxury inventory ' },
-  { br: true },
-  { text: 'with the people who move it.', italic: true, copper: true },
-]
-
-const VALUE = [
-  {
-    n: '01',
-    tag: 'ACCESS',
-    title: 'Transparency at all levels, not open-market.',
-    body: 'A small roster of projects owned end to end. Transparency at all levels, not open-market. Your buyers are chasing a property only you can sell.',
-  },
-  {
-    n: '02',
-    tag: 'TRUST',
-    title: 'Golden-rate commissions, published before you sign.',
-    body: 'The structure is on the table from day one, the deal log is shared every month, and payments clear on schedule. No surprises at settlement.',
-  },
-  {
-    n: '03',
-    tag: 'GROWTH',
-    title: 'Training, warm leads and Volume.',
-    body: 'In-house sales training before the first site visit, leads kept warm by our funnel, and more inventory offered as your numbers come in.',
-  },
-  {
-    n: '04',
-    tag: 'SUPPORT',
-    title: 'The funnel runs with you, not past you.',
-    body: 'Site visits, buyer handling, and payout support sit with the same team. Excellent customer service is the standard, not an extra.',
-  },
-]
-
-
-// Trimmed to what's needed to identify and route an applicant before the Step 2 call —
-// designation, operating cities, expected business, preferred inventory, social links,
-// team size and buyer segments all move to that live conversation instead, where they
-// get a real answer rather than a guessed one. "How did you hear about us" is cut
-// outright: queryAttribution() below already captures UTM source/medium from the URL,
-// so asking the applicant to retype it was pure duplication. RERA is asked here (not
-// deferred) because it gates eligibility under Telangana law.
-const PILL_FIELDS = [
-  { title: 'Years in real estate', id: 'yearsExperience', required: true, options: ['0-2', '2-5', '5-10', '10+'] },
-]
-
-const CHECK_GROUPS = [
-  { title: 'Which categories do you sell?', id: 'projectCategories', required: true, options: ['Luxury apartments', 'Villas', 'Plots and lands', 'Mixed use'] },
-]
+const YEARS = ['0-2', '2-5', '5-10', '10+']
+const CATEGORIES = ['Luxury apartments', 'Villas', 'Plots and lands', 'Mixed use']
 
 const FILE_MAX_BYTES = 5 * 1024 * 1024
 const FILE_TYPES = '.pdf,.jpg,.jpeg,.png'
@@ -80,6 +35,7 @@ const FILE_FIELDS = [
    drag/drop state, an image/document preview after selection, a remove button, and
    the accepted formats spelled out so applicants aren't guessing about file types. */
 function FileDropzone({ title, hint, required, accept, maxBytes, file, onSelect }) {
+  const { t } = useLang()
   const [dragOver, setDragOver] = useState(false)
   const [previewUrl, setPreviewUrl] = useState('')
   const [localError, setLocalError] = useState('')
@@ -96,7 +52,7 @@ function FileDropzone({ title, hint, required, accept, maxBytes, file, onSelect 
   const acceptFile = (candidate) => {
     if (!candidate) return
     if (candidate.size > maxBytes) {
-      setLocalError('That file is over 5MB. Please attach a smaller one.')
+      setLocalError(t('partner.file.tooBig'))
       return
     }
     setLocalError('')
@@ -128,7 +84,7 @@ function FileDropzone({ title, hint, required, accept, maxBytes, file, onSelect 
         {title}
         {required
           ? <span className="rw-form-req"> *</span>
-          : <span className="rw-form-optional"> (optional)</span>}
+          : <span className="rw-form-optional"> {t('sale.optional')}</span>}
       </span>
 
       {file ? (
@@ -145,9 +101,9 @@ function FileDropzone({ title, hint, required, accept, maxBytes, file, onSelect 
             )}
           <span className="rw-file-preview-meta">
             <strong>{file.name}</strong>
-            <small>{file.type || 'Document'} · {(file.size / 1024).toFixed(1)} KB</small>
+            <small>{file.type || t('partner.file.doc')} · {(file.size / 1024).toFixed(1)} KB</small>
           </span>
-          <button type="button" className="rw-file-remove" onClick={clear} aria-label={`Remove ${file.name}`}>×</button>
+          <button type="button" className="rw-file-remove" onClick={clear} aria-label={t('partner.file.remove', { name: file.name })}>×</button>
         </div>
       ) : (
         <label
@@ -162,7 +118,7 @@ function FileDropzone({ title, hint, required, accept, maxBytes, file, onSelect 
             <path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" />
           </svg>
           <span>{hint}</span>
-          <small>or click to browse · {accept === '.pdf,.jpg,.jpeg,.png' ? 'PDF, JPG or PNG' : accept.split(',').join(', ').replace(/\./g, '').toUpperCase()} (Max {Math.round(maxBytes / 1024 / 1024)}MB)</small>
+          <small>{t('partner.file.browse')}</small>
           {/* No `required` here: this input is CSS-hidden (.rw-resume-dropzone input
               { display:none }), and a hidden control failing native constraint
               validation blocks submission with no visible browser tooltip to explain
@@ -200,7 +156,19 @@ function queryAttribution(search) {
 }
 
 export default function Partner() {
+  const { t } = useLang()
   const scrollToId = useSmoothScroll()
+  const headline = useMemo(() => [
+    { text: t('partner.h1.a') },
+    { br: true },
+    { text: t('partner.h1.b'), italic: true, copper: true },
+  ], [t])
+  const value = useMemo(() => [0, 1, 2, 3].map((i) => ({
+    n: String(i + 1).padStart(2, '0'),
+    tag: t(`partner.v.${i}.tag`),
+    title: t(`partner.v.${i}.title`),
+    body: t(`partner.v.${i}.body`),
+  })), [t])
   const { search } = useLocation()
 
   const [attribution] = useState(() => queryAttribution(search))
@@ -243,27 +211,27 @@ export default function Partner() {
       return
     }
     if (!pills.yearsExperience) {
-      setError('Please choose your years of experience.')
+      setError(t('partner.err.years'))
       return
     }
     if (!pills.hasRera) {
-      setError('Please tell us whether you are RERA registered.')
+      setError(t('partner.err.rera'))
       return
     }
     if (pills.hasRera === 'Yes' && !values.reraNo?.trim()) {
-      setError('Please enter your RERA registration number.')
+      setError(t('partner.err.reraNo'))
       return
     }
     if (!files.panCard) {
-      setError('Please upload your PAN card.')
+      setError(t('partner.err.pan'))
       return
     }
     if (!files.cancelledCheque) {
-      setError('Please upload a cancelled cheque.')
+      setError(t('partner.err.cheque'))
       return
     }
     if (!termsAccepted) {
-      setError('Please read and accept the Channel Partner Terms to submit.')
+      setError(t('partner.err.terms'))
       return
     }
     setError('')
@@ -317,27 +285,27 @@ export default function Partner() {
 
       {/* Intro */}
       <PageIntro
-        eyebrow="RW REALTY · CHANNEL PARTNERS"
-        headline={HEADLINE}
+        eyebrow={t('partner.eyebrow')}
+        headline={headline}
         headlineStyle={{ fontSize: fs('clamp(42px,4.4vw,64px)') }}
-        lede="Exclusive mandates, golden-rate commissions, and a team that runs the funnel with you."
-        intro="RW Realty carries a small number of projects at a time, on exclusive mandates. Partners inside those mandates get inventory worth carrying, leads we keep warm, and the training to close at the ticket size."
+        lede={t('partner.lede')}
+        intro={t('partner.intro')}
         image={partnerNetwork}
-        imageAlt="Partnership network: trust, people, communication, handshake, shared aim, care and growth."
+        imageAlt={t('partner.alt')}
         cta={<>
           <button type="button" onClick={() => scrollToId('apply')} className="rw-cta rw-cta--live" style={ctaCopper}>
-            APPLY TO BECOME A CHANNEL PARTNER <span className="rw-cta-arrow" aria-hidden> →</span>
+            {t('partner.apply')} <span className="rw-cta-arrow" aria-hidden> →</span>
           </button>
-          <BookButton specular interest={PARTNER_INTEREST}>OR BOOK A CALL FIRST</BookButton>
+          <BookButton specular interest={PARTNER_INTEREST}>{t('partner.orCall')}</BookButton>
         </>}
       />
 
       {/* Why partner with us */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
-          <Reveal style={{ ...eyebrow, marginBottom: 14 }}>WHY PARTNER WITH US</Reveal>
+          <Reveal style={{ ...eyebrow, marginBottom: 14 }}>{t('partner.why')}</Reveal>
           <Reveal as="h2" delay={80} style={{ ...sectionHeading, maxWidth: '14em' }}>
-            A few mandates, run properly.
+            {t('partner.whyTitle')}
           </Reveal>
 
           <div
@@ -347,7 +315,7 @@ export default function Partner() {
               gap: 'clamp(16px, 2.2vw, 30px)', marginTop: 'clamp(40px,5vw,64px)',
             }}
           >
-            {VALUE.map((item, i) => (
+            {value.map((item, i) => (
               <Reveal key={item.n} delay={i * 90} style={{ border: '1px solid var(--line)', background: 'var(--card)', padding: 'clamp(26px,3.4vw,38px)' }}>
                 <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--ink)' }}>{item.tag}</div>
                 <h3 className="rw-gold-text" style={{ marginTop: 16, fontFamily: serif, fontWeight: 700, fontSize: fs('clamp(21px,2.3vw,25px)'), lineHeight: 1.15 }}>
@@ -364,9 +332,9 @@ export default function Partner() {
       <section style={{ ...sectionRule, background: 'var(--card)', position: 'relative', overflow: 'hidden' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-sm) 40px', textAlign: 'center' }}>
           <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, maxWidth: '20em', margin: '0 auto' }}>
-            Transparency at all levels.{' '}
-            <span className="rw-gold-text" style={{ fontStyle: 'italic' }}>Excellent customer services.</span><br />
-            & Timely Payout support.
+            {t('partner.band.a')}
+            <span className="rw-gold-text" style={{ fontStyle: 'italic' }}>{t('partner.band.b')}</span><br />
+            {t('partner.band.c')}
           </Reveal>
         </div>
       </section>
@@ -376,12 +344,12 @@ export default function Partner() {
       {/* Application */}
       <section id="apply" style={{ ...sectionRule, background: 'var(--chip)', borderBottom: '1px solid var(--line)' }}>
         <div className="rw-pad" style={{ maxWidth: 860, margin: '0 auto', padding: 'var(--rw-sy) 40px' }}>
-          <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>APPLICATION</Reveal>
+          <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>{t('partner.app.eyebrow')}</Reveal>
           <Reveal as="h2" delay={80} style={{ ...sectionHeading, marginTop: 16 }}>
-            Apply to become a channel partner.
+            {t('partner.app.title')}
           </Reveal>
           <Reveal as="p" delay={140} style={{ ...note, marginTop: 14, fontSize: fs('clamp(16px,1.7vw,18px)'), maxWidth: '36em' }}>
-            Ten minutes, references over a big deck. Everything you share stays between us.
+            {t('partner.app.lede')}
           </Reveal>
 
           {status === 'done' ? (
@@ -392,16 +360,16 @@ export default function Partner() {
                 </svg>
               </div>
               <h3 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(24px,3vw,32px)'), color: 'var(--ink)', marginTop: 26 }}>
-                Application received.
+                {t('partner.done.title')}
               </h3>
               <p style={{ ...note, marginTop: 14, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em' }}>
-                It's under review. We respond within two hours, usually we reply faster and if you would rather talk first, call or WhatsApp us below.
+                {t('partner.done.body')}
               </p>
               <div style={{ display: 'flex', justifyContent: 'center', gap: 20, flexWrap: 'wrap', marginTop: 32 }}>
                 <a className="rw-cta" style={{ ...ctaCopper }} href={WHATSAPP} target="_blank" rel="noreferrer">
-                  WHATSAPP THE TEAM
+                  {t('partner.done.wa')}
                 </a>
-                <BookButton specular interest={PARTNER_INTEREST}>BOOK A CALL</BookButton>
+                <BookButton specular interest={PARTNER_INTEREST}>{t('partner.done.call')}</BookButton>
               </div>
             </Reveal>
           ) : (
@@ -425,42 +393,38 @@ export default function Partner() {
                   {INPUT_FIELDS.map((field) => (
                     <label key={field.id} className="rw-form-field-wrap" style={{ display: 'block' }}>
                       <span className="rw-form-q-title">
-                        {field.title}
+                        {t(`partner.f.${field.id}`)}
                         {field.required
                           ? <span className="rw-form-req"> *</span>
-                          : <span className="rw-form-optional"> (optional)</span>}
+                          : <span className="rw-form-optional"> {t('sale.optional')}</span>}
                       </span>
                       <input
                         className="rw-form-field"
                         type={field.type || 'text'}
                         style={{ marginTop: 10 }}
                         required={field.required}
-                        placeholder={field.placeholder}
+                        placeholder={t(`partner.f.${field.id}.ph`)}
                         value={values[field.id] || ''}
                         onChange={set(field.id)}
                       />
                     </label>
                   ))}
 
-                  {PILL_FIELDS.map((field) => (
-                    <div key={field.id} className="rw-form-field-wrap">
+                  <div className="rw-form-field-wrap">
                       <span className="rw-form-q-title">
-                        {field.title}
-                        {field.required
-                          ? <span className="rw-form-req"> *</span>
-                          : <span className="rw-form-optional"> (optional)</span>}
+                        {t('partner.years')}
+                        <span className="rw-form-req"> *</span>
                       </span>
-                      {field.help && <span className="rw-form-help">{field.help}</span>}
                       <div className="rw-form-controls rw-form-pills">
-                        {field.options.map((option) => {
-                          const on = pills[field.id] === option
+                        {YEARS.map((option) => {
+                          const on = pills.yearsExperience === option
                           return (
                             <button
                               key={option}
                               type="button"
                               aria-pressed={on}
                               className={`rw-form-pill${on ? ' is-on' : ''}`}
-                              onClick={() => setPill(field.id, option)}
+                              onClick={() => setPill('yearsExperience', option)}
                             >
                               {option}
                             </button>
@@ -468,14 +432,13 @@ export default function Partner() {
                         })}
                       </div>
                     </div>
-                  ))}
 
                   {/* RERA registration — a No does not block the application, but the
                       applicant is told upfront that Telangana law requires registration
                       before they can operate. A Yes reveals the number field. */}
                   <div className="rw-form-field-wrap rw-form-field-wrap--wide">
                     <span className="rw-form-q-title">
-                      Are you RERA registered?
+                      {t('partner.rera')}
                       <span className="rw-form-req"> *</span>
                     </span>
                     <div className="rw-form-controls rw-form-pills">
@@ -489,7 +452,7 @@ export default function Partner() {
                             className={`rw-form-pill${on ? ' is-on' : ''}`}
                             onClick={() => setPill('hasRera', option)}
                           >
-                            {option}
+                            {option === 'Yes' ? t('partner.yes') : t('partner.no')}
                           </button>
                         )
                       })}
@@ -499,40 +462,38 @@ export default function Partner() {
                         className="rw-form-field"
                         type="text"
                         style={{ marginTop: 12 }}
-                        placeholder="Your RERA registration number"
+                        placeholder={t('partner.reraPh')}
                         value={values.reraNo || ''}
                         onChange={set('reraNo')}
                       />
                     )}
                     {pills.hasRera === 'No' && (
                       <span className="rw-form-help" style={{ marginTop: 12, color: 'var(--ink)', fontSize: fs('13px'), lineHeight: 1.55, letterSpacing: '.02em' }}>
-                        As per TG RERA, it is mandatory for every agent, channel partner, broker to have a RERA number, we recommend you encourage you to file for a RERA number ASAP to avoid future inconvenience.
+                        {t('partner.reraNo')}
                       </span>
                     )}
                   </div>
 
-                  {CHECK_GROUPS.map((group) => (
-                    <div key={group.id} className="rw-form-field-wrap rw-form-field-wrap--wide">
-                      <span className="rw-form-q-title">{group.title} <span className="rw-form-optional"> (optional)</span></span>
+                  <div className="rw-form-field-wrap rw-form-field-wrap--wide">
+                      <span className="rw-form-q-title">{t('partner.cats')} <span className="rw-form-optional"> {t('sale.optional')}</span></span>
                       <div className="rw-form-controls rw-form-checks">
-                        {group.options.map((option) => {
-                          const on = checks[group.id].includes(option)
+                        {CATEGORIES.map((option, i) => {
+                          const on = checks.projectCategories.includes(option)
                           return (
                             <label key={option} className={`rw-form-check${on ? ' is-on' : ''}`}>
-                              <input type="checkbox" checked={on} onChange={() => toggleCheck(group.id, option)} />
-                              {option}
+                              <input type="checkbox" checked={on} onChange={() => toggleCheck('projectCategories', option)} />
+                              {t(`partner.cat.${i}`)}
                             </label>
                           )
                         })}
                       </div>
                     </div>
-                  ))}
 
                   {FILE_FIELDS.map((field) => (
                     <FileDropzone
                       key={field.id}
-                      title={field.title}
-                      hint={field.hint}
+                      title={t(field.id === 'panCard' ? 'partner.file.pan' : 'partner.file.cheque')}
+                      hint={t(field.id === 'panCard' ? 'partner.file.panHint' : 'partner.file.chequeHint')}
                       required={field.required}
                       accept={FILE_TYPES}
                       maxBytes={FILE_MAX_BYTES}
@@ -543,7 +504,7 @@ export default function Partner() {
                 </div>
 
                 <div className="rw-consent" style={{ marginTop: 24 }}>
-                  <span className="rw-consent-title">Terms &amp; conditions <span className="rw-form-req">*</span></span>
+                  <span className="rw-consent-title">{t('partner.terms.title')} <span className="rw-form-req">*</span></span>
                   <label className="rw-career-consent">
                     <input
                       id="partnerTerms"
@@ -556,11 +517,11 @@ export default function Partner() {
                       }}
                     />
                     <span>
-                      I have read the{' '}
-                      <Link to="/partner/terms" target="_blank" rel="noreferrer">Channel Partner Terms</Link>
-                      {' '}and the{' '}
-                      <Link to="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</Link>.
-                      I confirm the details and documents in this application are accurate, and I agree Team RW may contact me about this application.
+                      {t('partner.terms.before')}{' '}
+                      <Link to="/partner/terms" target="_blank" rel="noreferrer">{t('partner.terms.link')}</Link>
+                      {' '}{t('partner.terms.mid')}{' '}
+                      <Link to="/privacy-policy" target="_blank" rel="noreferrer">{t('partner.terms.privacy')}</Link>
+                      {t('partner.terms.after')}
                     </span>
                   </label>
                 </div>
@@ -570,13 +531,13 @@ export default function Partner() {
                 )}
 
                 <div className="rw-form-submit-bar">
-                  <span className="rw-form-left">One application, no obligation to proceed.</span>
+                  <span className="rw-form-left">{t('partner.note')}</span>
                   <button
                     type="submit"
                     className="rw-form-submit rw-cta rw-cta--live"
                     disabled={status === 'sending'}
                   >
-                    {status === 'sending' ? 'SENDING…' : 'SUBMIT APPLICATION'} <span className="rw-cta-arrow" aria-hidden>→</span>
+                    {status === 'sending' ? t('sale.submitting') : t('apply.submit')} <span className="rw-cta-arrow" aria-hidden>→</span>
                   </button>
                 </div>
               </form>
@@ -585,9 +546,9 @@ export default function Partner() {
         </div>
       </section>
 
-      <ClosingCTA id="join" title="Put your buyer network in front of Hyderabad’s premium inventory.">
+      <ClosingCTA id="join" title={t('partner.close')}>
         <button type="button" onClick={() => scrollToId('apply')} className="rw-cta rw-cta--live" style={{ ...ctaCopper, background: 'var(--ink)', color: 'var(--bg)' }}>
-          APPLY TO BECOME A CHANNEL PARTNER <span className="rw-cta-arrow" aria-hidden> →</span>
+          {t('partner.apply')} <span className="rw-cta-arrow" aria-hidden> →</span>
         </button>
       </ClosingCTA>
 

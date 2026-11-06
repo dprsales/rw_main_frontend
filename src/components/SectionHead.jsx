@@ -31,7 +31,7 @@ export default function SectionHead({
     >
       <div>
         {kicker && (
-          <div style={{ ...(faded ? eyebrowFaded : eyebrow), ...(tracking && { letterSpacing: tracking }), marginBottom: 14 }}>
+          <div className="rw-section-kicker" style={{ ...(faded ? eyebrowFaded : eyebrow), ...(tracking && { letterSpacing: tracking }), marginBottom: 14 }}>
             {kicker}
           </div>
         )}
