@@ -47,6 +47,8 @@ export const PROJECT_SLUGS = {
   'Sonthalia': 'sonthalia',
   'Vantage': 'vantage',
   'Issara Belmond': 'issara-belmond',
+  'Vanamaali': 'vanamaali',
+  'Pavani Mirai': 'pavani-mirai',
 }
 
 /** Resolve a CDN path (or absolute URL) from the API to a loadable image URL. */
