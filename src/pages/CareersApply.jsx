@@ -20,24 +20,16 @@ import {
 import { FOOTER_LINKS, mono, serif, text, WHATSAPP } from '../theme'
 import { ctaCopper, eyebrow, fs, note, sectionRule } from '../styles'
 import SuccessAnimation from '../components/SuccessAnimation'
+import { useLang } from '../i18n/LangProvider'
 import '../form/form.css'
-
-const HEADLINE = [
-  { text: 'Apply to ' },
-  { text: 'Team RW.', italic: true, copper: true },
-]
 
 const EXPERIENCE_LEVELS = [
   'Fresher (0–1 years)', 'Junior (1–3 years)', 'Mid-Level (3–6 years)',
   'Senior (6–10 years)', 'Senior Manager (10+ years)', 'Other',
 ]
 const NOTICE_OPTIONS = ['Immediate', '15 days', '30 days', '60 days', '90 days']
-const CTC_HINT = 'Type annual CTC in LPA. Example: 8 LPA. Freshers can enter 0.'
 const RELOCATE_OPTIONS = ['Yes', 'No', 'Maybe, depending on the role']
 const SOURCE_OPTIONS = ['LinkedIn', 'Company website', 'Employee referral', 'Job portal', 'Social media', 'Other']
-const SOURCE_HINT = 'If someone at Team RW told you about this role, choose Employee referral.'
-const REFERRAL_HINT = 'Type the Team RW name. This is not a professional reference - those come later.'
-const SOURCE_OTHER_HINT = 'A short line is enough. Example: Naukri, a friend outside the team.'
 
 const RESUME_TYPES = '.pdf,.doc,.docx'
 const RESUME_MAX = 5 * 1024 * 1024
@@ -65,12 +57,6 @@ const STEP_META = [
 ]
 const LAST_STEP = STEP_META.length - 1
 const NOT_AVAILABLE = 'Not available'
-const PROFILE_TIP = 'A LinkedIn profile & a portfolio help us process your application faster.'
-const REFERENCE_HINT = 'Not the Team RW person who referred you.'
-const DISCLAIMER_POINTS = [
-  'Team RW reviews every application in full.',
-  'Fill every field with genuine details. All fields are required.',
-]
 
 const AI_TOOL_OPTIONS = [
   'Write an email',
@@ -138,6 +124,7 @@ function Section({ eyebrow: kicker, title, children, panel }) {
 }
 
 function TextField({ label, id, values, set, setValues, required, type = 'text', placeholder, wide, invalid, allowMissing, hint }) {
+  const { t } = useLang()
   const na = values[id] === NOT_AVAILABLE
   const filled = String(values[id] || '').trim() !== ''
   const hintId = hint ? `${id}-hint` : undefined
@@ -145,7 +132,7 @@ function TextField({ label, id, values, set, setValues, required, type = 'text',
     <div className={`rw-form-field-wrap${wide ? ' rw-form-field-wrap--wide' : ''}`} style={{ display: 'block' }}>
       <span className="rw-form-q-title">
         {label}
-        {required ? <span className="rw-form-req"> *</span> : <span className="rw-form-optional"> (optional)</span>}
+        {required ? <span className="rw-form-req"> *</span> : <span className="rw-form-optional"> {t('apply.optional')}</span>}
       </span>
       <span className="rw-clearable">
         <input
@@ -163,7 +150,7 @@ function TextField({ label, id, values, set, setValues, required, type = 'text',
         {filled && !na && (
           <button
             type="button" className="rw-field-clear" tabIndex={-1}
-            aria-label={`Clear ${label}`} title={`Clear ${label}`}
+            aria-label={t('apply.clear', { label })} title={t('apply.clear', { label })}
             onClick={() => setValues((prev) => ({ ...prev, [id]: '' }))}
           >
             ×
@@ -178,7 +165,7 @@ function TextField({ label, id, values, set, setValues, required, type = 'text',
           aria-pressed={na}
           onClick={() => setValues((prev) => ({ ...prev, [id]: na ? '' : NOT_AVAILABLE }))}
         >
-          {na ? 'Undo — I have this' : "I don't have this"}
+          {na ? t('apply.undoHave') : t('apply.dontHave')}
         </button>
       )}
     </div>
@@ -186,6 +173,7 @@ function TextField({ label, id, values, set, setValues, required, type = 'text',
 }
 
 function SelectField({ label, id, values, set, setValues, options, required, wide, invalid, hint }) {
+  const { t } = useLang()
   const filled = String(values[id] || '').trim() !== ''
   const current = values[id] || ''
   const hintId = hint ? `${id}-hint` : undefined
@@ -193,7 +181,7 @@ function SelectField({ label, id, values, set, setValues, options, required, wid
     <div className={`rw-form-field-wrap${wide ? ' rw-form-field-wrap--wide' : ''}`}>
       <span className="rw-form-q-title">
         {label}
-        {required ? <span className="rw-form-req"> *</span> : <span className="rw-form-optional"> (optional)</span>}
+        {required ? <span className="rw-form-req"> *</span> : <span className="rw-form-optional"> {t('apply.optional')}</span>}
       </span>
       <span className="rw-clearable">
         <select
@@ -212,7 +200,7 @@ function SelectField({ label, id, values, set, setValues, options, required, wid
         {filled && (
           <button
             type="button" className="rw-field-clear" tabIndex={-1}
-            aria-label={`Clear ${label}`} title={`Clear ${label}`}
+            aria-label={t('apply.clear', { label })} title={t('apply.clear', { label })}
             onClick={() => setValues((prev) => ({ ...prev, [id]: '' }))}
           >
             ×
@@ -241,7 +229,14 @@ function uniqueRolesByTitle(roles, extraTitle) {
   return out
 }
 
+function catLabel(t, tab) {
+  const key = `careers.cat.${tab}`
+  const next = t(key)
+  return next === key ? tab : next
+}
+
 function RoleSearchField({ id, roles, value, invalid, onSelect, onClear }) {
+  const { t } = useLang()
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [active, setActive] = useState(0)
@@ -348,7 +343,7 @@ function RoleSearchField({ id, roles, value, invalid, onSelect, onClear }) {
 
   return (
     <div className="rw-form-field-wrap">
-      <span className="rw-form-q-title">Role you are applying for <span className="rw-form-req"> *</span></span>
+      <span className="rw-form-q-title">{t('apply.role')} <span className="rw-form-req"> *</span></span>
       <span className="rw-clearable">
         <input
           ref={input}
@@ -361,7 +356,7 @@ function RoleSearchField({ id, roles, value, invalid, onSelect, onClear }) {
           aria-controls={`${id}-list`}
           aria-activedescendant={open && flat[active] ? `${id}-opt-${active}` : undefined}
           autoComplete="off"
-          placeholder={open ? 'Type to find a role…' : 'Select or search a role…'}
+          placeholder={open ? t('apply.role.type') : t('apply.role.search')}
           value={open ? query : (value || '')}
           onChange={(e) => { setQuery(e.target.value); setOpen(true); setActive(0) }}
           onFocus={() => { setQuery(''); setOpen(true); setActive(0) }}
@@ -373,8 +368,8 @@ function RoleSearchField({ id, roles, value, invalid, onSelect, onClear }) {
             type="button"
             className="rw-field-clear"
             tabIndex={-1}
-            aria-label="Clear the role"
-            title="Clear the role"
+            aria-label={t('apply.role.clear')}
+            title={t('apply.role.clear')}
             onClick={() => { onClear(); setQuery(''); input.current?.focus() }}
           >
             ×
@@ -390,11 +385,11 @@ function RoleSearchField({ id, roles, value, invalid, onSelect, onClear }) {
           style={pos}
         >
           {groups.length === 0 && (
-            <div className="rw-role-empty">No roles match that search.</div>
+            <div className="rw-role-empty">{t('apply.role.empty')}</div>
           )}
           {groups.map((group) => (
             <div key={group.category} className="rw-role-group">
-              <div className="rw-role-group-label">{group.category}</div>
+              <div className="rw-role-group-label">{catLabel(t, group.category)}</div>
               {group.items.map((role) => {
                 const index = flat.findIndex((item) => item.title === role.title)
                 return (
@@ -422,6 +417,7 @@ function RoleSearchField({ id, roles, value, invalid, onSelect, onClear }) {
 }
 
 function AiToolsField({ values, setValues, invalid }) {
+  const { t } = useLang()
   const [open, setOpen] = useState(false)
   const [pos, setPos] = useState(null)
   const btn = useRef(null)
@@ -429,7 +425,11 @@ function AiToolsField({ values, setValues, invalid }) {
   const picked = Array.isArray(values.aiTools) ? values.aiTools : []
   const otherOn = picked.includes('Other') || Boolean(String(values.aiToolsOther || '').trim())
   const summary = chosenAiTools(values)
-  const label = summary.length ? summary.join(', ') : 'Select what you can do with AI…'
+  const aiDisplay = (value) => {
+    const i = AI_TOOL_OPTIONS.indexOf(value)
+    return i >= 0 ? t(`apply.ai.${i}`) : value
+  }
+  const label = summary.length ? summary.map(aiDisplay).join(', ') : t('apply.ai.placeholder')
 
   const place = () => {
     const el = btn.current
@@ -491,7 +491,7 @@ function AiToolsField({ values, setValues, invalid }) {
 
   return (
     <div className="rw-form-field-wrap rw-form-field-wrap--wide">
-      <span className="rw-form-q-title">Social media and AI <span className="rw-form-req"> *</span></span>
+      <span className="rw-form-q-title">{t('apply.ai.title')} <span className="rw-form-req"> *</span></span>
       <label className="rw-ai-tick" htmlFor="socialMediaSavvy">
         <input
           id="socialMediaSavvy"
@@ -508,7 +508,7 @@ function AiToolsField({ values, setValues, invalid }) {
             if (!on) setOpen(false)
           }}
         />
-        <span>I am comfortable on social media and I know how to use AI tools.</span>
+        <span>{t('apply.ai.check')}</span>
       </label>
       {values.socialMediaSavvy && (
         <div className="rw-ai-drop-wrap">
@@ -532,15 +532,15 @@ function AiToolsField({ values, setValues, invalid }) {
               aria-multiselectable="true"
               style={pos}
             >
-              {AI_TOOL_OPTIONS.map((opt) => (
+              {AI_TOOL_OPTIONS.map((opt, i) => (
                 <label key={opt} className={`rw-form-check${picked.includes(opt) ? ' is-on' : ''}`}>
                   <input type="checkbox" checked={picked.includes(opt)} onChange={() => toggle(opt)} />
-                  <span>{opt}</span>
+                  <span>{t(`apply.ai.${i}`)}</span>
                 </label>
               ))}
               <label className={`rw-form-check rw-form-check--wide${otherOn ? ' is-on' : ''}`}>
                 <input type="checkbox" checked={otherOn} onChange={() => toggle('Other')} />
-                <span>Other — write your own</span>
+                <span>{t('apply.ai.other')}</span>
               </label>
             </div>,
             document.getElementById('rw-app-shell') || document.body,
@@ -549,7 +549,7 @@ function AiToolsField({ values, setValues, invalid }) {
             <input
               className="rw-form-field"
               style={{ marginTop: 8 }}
-              placeholder="e.g. Edit product photos, write WhatsApp replies"
+              placeholder={t('apply.ai.otherPh')}
               value={values.aiToolsOther || ''}
               onChange={(e) => setValues((prev) => ({
                 ...prev,
@@ -576,8 +576,9 @@ const CheckIcon = () => (
  * check and can be clicked to jump back; steps ahead of the furthest reached are
  * locked. On mobile the labels collapse to just the active one. */
 function Stepper({ steps, current, reached, onJump }) {
+  const { t } = useLang()
   return (
-    <div className="rw-stepper" role="list" aria-label="Application progress">
+    <div className="rw-stepper" role="list" aria-label={t('apply.eyebrow')}>
       {steps.map((s, i) => {
         const state = i < current ? 'done' : i === current ? 'active' : 'todo'
         const clickable = i <= reached && i !== current
@@ -589,7 +590,7 @@ function Stepper({ steps, current, reached, onJump }) {
               className="rw-step-dot"
               disabled={!clickable}
               aria-current={state === 'active' ? 'step' : undefined}
-              aria-label={`Step ${i + 1}: ${s.label}`}
+              aria-label={t('apply.stepCount', { n: i + 1, total: steps.length, label: s.label })}
               onClick={() => clickable && onJump(i)}
             >
               {state === 'done' ? <CheckIcon /> : i + 1}
@@ -603,9 +604,15 @@ function Stepper({ steps, current, reached, onJump }) {
 }
 
 export default function CareersApply() {
+  const { t } = useLang()
   const { roleSlug } = useParams()
   const { search } = useLocation()
   const params = useMemo(() => new URLSearchParams(search), [search])
+  const headline = useMemo(() => [
+    { text: t('apply.h1.a') },
+    { text: t('apply.h1.b'), italic: true, copper: true },
+  ], [t])
+  const steps = useMemo(() => STEP_META.map((s) => ({ ...s, label: t(`apply.step.${s.key}`) })), [t])
   const legacySlug = !roleSlug ? careerRoleSlug(params.get('role')) : ''
   const slugKey = roleSlug || ''
   const [slugState, setSlugState] = useState(() => {
@@ -755,8 +762,8 @@ export default function CareersApply() {
 
   const setResumeFile = (file) => {
     if (!file) { clearResume(); return }
-    if (!/\.(pdf|docx?|DOC|DOCX|PDF)$/.test(file.name)) { setError('Resume must be a PDF, DOC or DOCX.'); return }
-    if (file.size > RESUME_MAX) { setError('That resume is over 5MB. Please attach a smaller file.'); return }
+    if (!/\.(pdf|docx?|DOC|DOCX|PDF)$/.test(file.name)) { setError(t('apply.err.resumeType')); return }
+    if (file.size > RESUME_MAX) { setError(t('apply.err.resumeSize')); return }
     setError('')
     setInvalidField('')
     setResume(file)
@@ -791,7 +798,7 @@ export default function CareersApply() {
   function acceptDisclaimer() {
     if (!disclaimerTick) {
       setInvalidField('disclaimerRead')
-      setError('Please tick that you have read this before you start.')
+      setError(t('apply.err.disc'))
       focusControl('disclaimerRead')
       return
     }
@@ -815,75 +822,75 @@ export default function CareersApply() {
   /** Validate one step; returns { message, field } or null when the step is complete. */
   function validateStep(i) {
     const need = (id, label) => {
-      if (!String(values[id] || '').trim()) return { field: id, message: `Please provide ${label}.` }
+      if (!String(values[id] || '').trim()) return { field: id, message: t('apply.err.need', { label }) }
       return null
     }
     if (i === 0) {
       if (!values.disclaimerRead) {
-        return { field: 'disclaimerRead', message: 'Please read the note above and tick that you have read it.' }
+        return { field: 'disclaimerRead', message: t('apply.err.discRead') }
       }
       const req = [
-        ['name', 'your name'], ['phone', 'your phone number'], ['email', 'your email'],
-        ['role', 'the role'], ['linkedinUrl', 'your LinkedIn profile, or choose Not available'],
-        ['portfolioUrl', 'your portfolio, or choose Not available'], ['experience', 'your experience level'],
+        ['name', t('apply.name')], ['phone', t('apply.phone')], ['email', t('apply.email')],
+        ['role', t('apply.role')], ['linkedinUrl', t('apply.linkedin')],
+        ['portfolioUrl', t('apply.portfolio')], ['experience', t('apply.exp')],
       ]
       for (const [f, l] of req) {
         const miss = need(f, l)
         if (miss) return miss
       }
-      if (!isValidPhone(values.phone)) return { field: 'phone', message: 'Please enter a valid 10-digit phone number.' }
+      if (!isValidPhone(values.phone)) return { field: 'phone', message: t('apply.err.phone') }
       if (values.experience === 'Other' && !values.experienceCustom.trim()) {
-        return { field: 'experienceCustom', message: 'Please describe your experience.' }
+        return { field: 'experienceCustom', message: t('apply.err.exp') }
       }
       if (!values.socialMediaSavvy) {
-        return { field: 'socialMediaSavvy', message: 'Please confirm you are comfortable on social media and with AI tools.' }
+        return { field: 'socialMediaSavvy', message: t('apply.err.social') }
       }
       if (!chosenAiTools(values).length) {
-        return { field: 'aiTools', message: 'Please select what you can do with AI, or write your own.' }
+        return { field: 'aiTools', message: t('apply.err.ai') }
       }
     }
     if (i === 1) {
       const req = [
-        ['currentCtc', 'current CTC'], ['expectedCtc', 'expected CTC'], ['currentLocation', 'current location'],
-        ['noticePeriod', 'notice period'], ['relocation', 'relocation preference'],
-        ['workMode', 'work mode'], ['applicationSource', 'how you heard about us'],
+        ['currentCtc', t('apply.ctc')], ['expectedCtc', t('apply.ectc')], ['currentLocation', t('apply.location')],
+        ['noticePeriod', t('apply.notice')], ['relocation', t('apply.relocate')],
+        ['workMode', t('apply.mode')], ['applicationSource', t('apply.source')],
       ]
       for (const [f, l] of req) {
         const miss = need(f, l)
         if (miss) return miss
       }
       if (values.applicationSource === 'Employee referral' && !String(values.referredBy || '').trim()) {
-        return { field: 'referredBy', message: 'Please type who on Team RW referred you.' }
+        return { field: 'referredBy', message: t('apply.err.ref') }
       }
       if (values.applicationSource === 'Other' && !String(values.applicationSourceOther || '').trim()) {
-        return { field: 'applicationSourceOther', message: 'Please tell us how you heard about us.' }
+        return { field: 'applicationSourceOther', message: t('apply.err.source') }
       }
     }
     if (i === 2) {
       for (const q of CHARACTER_QUESTIONS) {
-        if (!String(values[q.id] || '').trim()) return { field: q.id, message: `Please answer: “${q.label}”.` }
+        if (!String(values[q.id] || '').trim()) return { field: q.id, message: t('apply.err.answer', { label: t(`apply.q.${q.id}.label`) }) }
       }
     }
     if (i === 3) {
       const first = HEXACO_STATEMENT_IDS.find((id) => hex[id] === undefined)
-      if (first) return { field: `hex-${first}`, message: 'Please answer every statement in the assessment before continuing.' }
+      if (first) return { field: `hex-${first}`, message: t('apply.err.hex') }
     }
     if (i === 4) {
       const refs = [
-        ['ref1Name', 'reference 1 name, or choose Not available'],
-        ['ref1Number', 'reference 1 number, or choose Not available'],
-        ['ref1Relationship', 'reference 1 relationship, or choose Not available'],
-        ['ref2Name', 'reference 2 name, or choose Not available'],
-        ['ref2Number', 'reference 2 number, or choose Not available'],
-        ['ref2Relationship', 'reference 2 relationship, or choose Not available'],
+        ['ref1Name', t('apply.ref1n')],
+        ['ref1Number', t('apply.ref1p')],
+        ['ref1Relationship', t('apply.ref1r')],
+        ['ref2Name', t('apply.ref2n')],
+        ['ref2Number', t('apply.ref2p')],
+        ['ref2Relationship', t('apply.ref2r')],
       ]
       for (const [f, l] of refs) {
         const miss = need(f, l)
         if (miss) return miss
       }
-      if (!resume) return { field: 'resume', message: 'Please attach your resume.' }
-      if (!String(values.message || '').trim()) return { field: 'message', message: 'Please add anything else we should know, even a short line.' }
-      if (!values.privacyConsent) return { field: 'privacyConsent', message: 'Please give consent to proceed.' }
+      if (!resume) return { field: 'resume', message: t('apply.err.resume') }
+      if (!String(values.message || '').trim()) return { field: 'message', message: t('apply.err.message') }
+      if (!values.privacyConsent) return { field: 'privacyConsent', message: t('apply.err.consent') }
     }
     return null
   }
@@ -957,7 +964,7 @@ export default function CareersApply() {
       setStatus('done')
       track('application_submitted', { applicationType: 'careers', source: 'careers_apply_page', role: values.role })
     } catch (err) {
-      setError(err?.message || 'Something went wrong. Please try again.')
+      setError(err?.message || t('apply.err.generic'))
       setStatus('idle')
     }
   }
@@ -982,10 +989,11 @@ export default function CareersApply() {
           className="rw-apply-disclaimer-overlay"
         >
           <div className="rw-apply-disclaimer-modal rw-modal-card">
-            <p className="rw-apply-disclaimer-kicker">Please read before you start</p>
-            <h2 id="rw-apply-disclaimer-title" className="rw-apply-disclaimer-title">This form is reviewed in full.</h2>
+            <p className="rw-apply-disclaimer-kicker">{t('apply.disc.kicker')}</p>
+            <h2 id="rw-apply-disclaimer-title" className="rw-apply-disclaimer-title">{t('apply.disc.title')}</h2>
             <ul>
-              {DISCLAIMER_POINTS.map((line) => <li key={line}>{line}</li>)}
+              <li>{t('apply.disc.0')}</li>
+              <li>{t('apply.disc.1')}</li>
             </ul>
             <label className="rw-apply-disclaimer-check" htmlFor="disclaimerRead">
               <input
@@ -998,13 +1006,13 @@ export default function CareersApply() {
                   if (invalidField === 'disclaimerRead') { setInvalidField(''); setError('') }
                 }}
               />
-              <span>I have read this. I will fill every field with genuine details.</span>
+              <span>{t('apply.disc.check')}</span>
             </label>
             {error && invalidField === 'disclaimerRead' && (
               <p role="alert" className="rw-apply-disclaimer-error">{error}</p>
             )}
             <button type="button" className="rw-cta rw-cta--live rw-apply-disclaimer-go" style={ctaCopper} onClick={acceptDisclaimer}>
-              START THE FORM <span className="rw-cta-arrow" aria-hidden>→</span>
+              {t('apply.disc.go')} <span className="rw-cta-arrow" aria-hidden>→</span>
             </button>
           </div>
         </div>,
@@ -1015,17 +1023,17 @@ export default function CareersApply() {
       <Header />
 
       <PageIntro
-        eyebrow="CAREERS · APPLICATION"
-        headline={HEADLINE}
+        eyebrow={t('apply.eyebrow')}
+        headline={headline}
         headlineStyle={{ fontSize: fs('clamp(38px,4.4vw,64px)') }}
-        lede="One form, about ten minutes."
-        intro="Tell us who you are and how you work. The short questions and the quick assessment matter as much as the resume. They are how we read judgement, integrity and fit."
+        lede={t('apply.lede')}
+        intro={t('apply.intro')}
         padding="80px 40px 20px"
       />
 
       <section style={{ ...sectionRule, background: 'var(--chip)', borderBottom: '1px solid var(--line)' }}>
         <div className="rw-pad" style={{ maxWidth: 880, margin: '0 auto', padding: 'clamp(40px,6vw,70px) 40px' }}>
-          <Link to="/careers" style={{ ...eyebrow, fontSize: fs('12px'), color: 'var(--faded)', textDecoration: 'none' }}>← Back to open roles</Link>
+          <Link to="/careers" style={{ ...eyebrow, fontSize: fs('12px'), color: 'var(--faded)', textDecoration: 'none' }}>{t('apply.back')}</Link>
 
           {status === 'done' ? (
             /* Wrapped rather than put on the Reveal itself: Reveal keeps its own
@@ -1046,19 +1054,19 @@ export default function CareersApply() {
                   weight instead — it is the confirmation, and the thank-you is
                   the headline beneath it. */}
               <div style={{ ...eyebrow, fontSize: fs('clamp(11px,1.4vw,12px)'), letterSpacing: '.28em', color: 'var(--copper)', marginTop: 28 }}>
-                APPLICATION RECEIVED
+                {t('apply.done.kicker')}
               </div>
 
               <h3 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(26px,3.4vw,38px)'), color: 'var(--ink)', marginTop: 14, letterSpacing: '-.01em' }}>
-                Thank you{firstName ? `, ${firstName}` : ''}.
+                {t('apply.done.title', { name: firstName ? `, ${firstName}` : '' })}
               </h3>
               <p style={{ ...note, marginTop: 16, marginLeft: 'auto', marginRight: 'auto', maxWidth: '34em' }}>
-                Someone from the team reads every one personally. If we see a fit, you will hear from us on the number or email you gave us within a couple of working days.
+                {t('apply.done.body')}
               </p>
 
               <div style={{ display: 'flex', justifyContent: 'center', gap: 20, flexWrap: 'wrap', marginTop: 32 }}>
-                <a className="rw-cta" style={{ ...ctaCopper }} href={WHATSAPP} target="_blank" rel="noreferrer">WHATSAPP THE TEAM</a>
-                <Link to="/careers" className="rw-cta" style={{ ...ctaCopper, background: 'transparent', color: 'var(--ink)', border: '1px solid var(--line)' }}>BACK TO CAREERS</Link>
+                <a className="rw-cta" style={{ ...ctaCopper }} href={WHATSAPP} target="_blank" rel="noreferrer">{t('apply.done.wa')}</a>
+                <Link to="/careers" className="rw-cta" style={{ ...ctaCopper, background: 'transparent', color: 'var(--ink)', border: '1px solid var(--line)' }}>{t('apply.done.back')}</Link>
               </div>
               </Reveal>
             </div>
@@ -1069,7 +1077,7 @@ export default function CareersApply() {
                 style={{ position: 'absolute', left: '-9999px', width: 1, height: 1 }} />
 
               <div ref={formTopRef} style={{ scrollMarginTop: 90 }}>
-                <Stepper steps={STEP_META} current={step} reached={reached} onJump={jumpTo} />
+                <Stepper steps={steps} current={step} reached={reached} onJump={jumpTo} />
               </div>
 
               {/* Saved-as-you-go, said out loud. A candidate who knows their answers
@@ -1078,19 +1086,19 @@ export default function CareersApply() {
               <div className="rw-draft-note" style={{ fontFamily: text }}>
                 <span className="rw-draft-note-text">
                   {restored
-                    ? 'We kept what you had already entered on this device. Pick up where you left off.'
-                    : 'Your answers are kept on this device as you go, so a refresh or a dropped connection will not lose your form.'}
+                    ? t('apply.draft.restored')
+                    : t('apply.draft.fresh')}
                 </span>
                 <button type="button" className="rw-draft-clear" onClick={resetEverything}>
-                  START OVER
+                  {t('apply.restart')}
                 </button>
               </div>
 
               {step === 0 && (
-                <Section key="about" panel={dir} eyebrow="ABOUT YOU">
-                  <TextField label="Full name" id="name" values={values} set={set} setValues={setValues} required invalid={invalidField === 'name'} placeholder="Your name" />
-                  <TextField label="Phone" id="phone" values={values} set={set} setValues={setValues} required invalid={invalidField === 'phone'} type="tel" placeholder="10-digit mobile" />
-                  <TextField label="Email" id="email" values={values} set={set} setValues={setValues} required invalid={invalidField === 'email'} type="email" placeholder="you@email.com" />
+                <Section key="about" panel={dir} eyebrow={t('apply.about')}>
+                  <TextField label={t('apply.name')} id="name" values={values} set={set} setValues={setValues} required invalid={invalidField === 'name'} placeholder="Your name" />
+                  <TextField label={t('apply.phone')} id="phone" values={values} set={set} setValues={setValues} required invalid={invalidField === 'phone'} type="tel" placeholder="10-digit mobile" />
+                  <TextField label={t('apply.email')} id="email" values={values} set={set} setValues={setValues} required invalid={invalidField === 'email'} type="email" placeholder="you@email.com" />
                   <RoleSearchField
                     id="role"
                     roles={openRoles}
@@ -1102,46 +1110,47 @@ export default function CareersApply() {
                     }}
                     onClear={() => setValues((prev) => ({ ...prev, role: '' }))}
                   />
-                  <TextField label="LinkedIn profile" id="linkedinUrl" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'linkedinUrl'} type="url" placeholder="https://linkedin.com/in/your-name" />
-                  <TextField label="Portfolio or website" id="portfolioUrl" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'portfolioUrl'} type="url" placeholder="https://yourportfolio.com" />
+                  <TextField label={t('apply.linkedin')} id="linkedinUrl" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'linkedinUrl'} type="url" placeholder="https://linkedin.com/in/your-name" />
+                  <TextField label={t('apply.portfolio')} id="portfolioUrl" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'portfolioUrl'} type="url" placeholder="https://yourportfolio.com" />
                   <p className="rw-form-tip">
-                    <span className="rw-form-tip-kicker">Tip</span>
-                    {PROFILE_TIP}
+                    <span className="rw-form-tip-kicker">{t('apply.tip')}</span>
+                    {t('apply.tip.body')}
                   </p>
                   <AiToolsField values={values} setValues={setValues} invalid={invalidField === 'aiTools' || invalidField === 'socialMediaSavvy'} />
-                  <SelectField label="Experience level" id="experience" values={values} set={set} setValues={setValues} options={EXPERIENCE_LEVELS} required wide invalid={invalidField === 'experience'} />
+                  <SelectField label={t('apply.exp')} id="experience" values={values} set={set} setValues={setValues} options={EXPERIENCE_LEVELS} required wide invalid={invalidField === 'experience'} />
                   {values.experience === 'Other' && (
-                    <TextField label="Your experience" id="experienceCustom" values={values} set={set} setValues={setValues} required invalid={invalidField === 'experienceCustom'} placeholder="e.g. 18 months in luxury retail" wide />
+                    <TextField label={t('apply.exp.custom')} id="experienceCustom" values={values} set={set} setValues={setValues} required invalid={invalidField === 'experienceCustom'} placeholder="e.g. 18 months in luxury retail" wide />
                   )}
                 </Section>
               )}
 
               {step === 1 && (
-                <Section key="career" panel={dir} eyebrow="CAREER DETAILS">
-                  <TextField label="Current CTC" id="currentCtc" values={values} set={set} setValues={setValues} required invalid={invalidField === 'currentCtc'} placeholder="e.g. 8 LPA" hint={CTC_HINT} />
-                  <TextField label="Expected CTC" id="expectedCtc" values={values} set={set} setValues={setValues} required invalid={invalidField === 'expectedCtc'} placeholder="e.g. 10 LPA" hint={CTC_HINT} />
-                  <TextField label="Current location" id="currentLocation" values={values} set={set} setValues={setValues} required invalid={invalidField === 'currentLocation'} placeholder="City, state" />
-                  <SelectField label="Notice period" id="noticePeriod" values={values} set={set} setValues={setValues} options={NOTICE_OPTIONS} required invalid={invalidField === 'noticePeriod'} />
-                  <SelectField label="Open to relocate" id="relocation" values={values} set={set} setValues={setValues} options={RELOCATE_OPTIONS} required invalid={invalidField === 'relocation'} />
-                  <SelectField label="Preferred work mode" id="workMode" values={values} set={set} setValues={setValues} options={workMode.options} required invalid={invalidField === 'workMode'} hint={workMode.hint} />
-                  <SelectField label="How did you hear about us?" id="applicationSource" values={values} set={set} setValues={setValues} options={SOURCE_OPTIONS} required invalid={invalidField === 'applicationSource'} hint={SOURCE_HINT} />
+                <Section key="career" panel={dir} eyebrow={t('apply.career')}>
+                  <TextField label={t('apply.ctc')} id="currentCtc" values={values} set={set} setValues={setValues} required invalid={invalidField === 'currentCtc'} placeholder="e.g. 8 LPA" hint={t('apply.ctcHint')} />
+                  <TextField label={t('apply.ectc')} id="expectedCtc" values={values} set={set} setValues={setValues} required invalid={invalidField === 'expectedCtc'} placeholder="e.g. 10 LPA" hint={t('apply.ctcHint')} />
+                  <TextField label={t('apply.location')} id="currentLocation" values={values} set={set} setValues={setValues} required invalid={invalidField === 'currentLocation'} placeholder="City, state" />
+                  <SelectField label={t('apply.notice')} id="noticePeriod" values={values} set={set} setValues={setValues} options={NOTICE_OPTIONS} required invalid={invalidField === 'noticePeriod'} />
+                  <SelectField label={t('apply.relocate')} id="relocation" values={values} set={set} setValues={setValues} options={RELOCATE_OPTIONS} required invalid={invalidField === 'relocation'} />
+                  <SelectField label={t('apply.mode')} id="workMode" values={values} set={set} setValues={setValues} options={workMode.options} required invalid={invalidField === 'workMode'} hint={workMode.hint} />
+                  <SelectField label={t('apply.source')} id="applicationSource" values={values} set={set} setValues={setValues} options={SOURCE_OPTIONS} required invalid={invalidField === 'applicationSource'} hint={t('apply.sourceHint')} />
                   {values.applicationSource === 'Employee referral' && (
-                    <TextField label="Who referred you?" id="referredBy" values={values} set={set} setValues={setValues} required invalid={invalidField === 'referredBy'} placeholder="Team RW name" hint={REFERRAL_HINT} />
+                    <TextField label={t('apply.who')} id="referredBy" values={values} set={set} setValues={setValues} required invalid={invalidField === 'referredBy'} placeholder="Team RW name" hint={t('apply.whoHint')} />
                   )}
                   {values.applicationSource === 'Other' && (
-                    <TextField label="Please specify" id="applicationSourceOther" values={values} set={set} setValues={setValues} required invalid={invalidField === 'applicationSourceOther'} placeholder="e.g. Naukri, a friend outside the team" hint={SOURCE_OTHER_HINT} />
+                    <TextField label={t('apply.specify')} id="applicationSourceOther" values={values} set={set} setValues={setValues} required invalid={invalidField === 'applicationSourceOther'} placeholder="e.g. Naukri, a friend outside the team" hint={t('apply.specifyHint')} />
                   )}
                 </Section>
               )}
 
               {step === 2 && (
-                <Section key="questions" panel={dir} eyebrow="IN YOUR WORDS" title="Short answers, around a line or two each. Be specific, a concrete example tells us more than a polished summary.">
+                <Section key="questions" panel={dir} eyebrow={t('apply.words')} title={t('apply.words.title')}>
                   {CHARACTER_QUESTIONS.map((q) => {
                     const val = values[q.id] || ''
+                    const qLabel = t(`apply.q.${q.id}.label`)
                     return (
                       <label key={q.id} className="rw-form-field-wrap rw-form-field-wrap--wide" style={{ display: 'block' }}>
                         <span className="rw-form-q-title">
-                          {q.label}
+                          {qLabel}
                           <span className="rw-form-req"> *</span>
                         </span>
                         <span className="rw-clearable">
@@ -1150,13 +1159,13 @@ export default function CareersApply() {
                             className={`rw-form-field${invalidField === q.id ? ' is-invalid' : ''}`}
                             rows={3} maxLength={ANSWER_MAX}
                             style={{ marginTop: 10, resize: 'vertical' }}
-                            placeholder={q.placeholder} value={val} onChange={set(q.id)}
+                            placeholder={t(`apply.q.${q.id}.ph`)} value={val} onChange={set(q.id)}
                             aria-invalid={invalidField === q.id || undefined}
                           />
                           {val.trim() !== '' && (
                             <button
                               type="button" className="rw-field-clear" tabIndex={-1}
-                              aria-label={`Clear: ${q.label}`} title="Clear this answer"
+                              aria-label={t('apply.clear', { label: qLabel })} title={t('apply.clear', { label: qLabel })}
                               onClick={() => setValues((prev) => ({ ...prev, [q.id]: '' }))}
                             >
                               ×
@@ -1173,15 +1182,15 @@ export default function CareersApply() {
               )}
 
               {step === 3 && (
-                <Section key="assessment" panel={dir} eyebrow="QUICK ASSESSMENT" title="There are no right answers, just be honest. Rate how much you agree with each statement.">
+                <Section key="assessment" panel={dir} eyebrow={t('apply.assess')} title={t('apply.assess.title')}>
                   <div className="rw-form-field-wrap rw-form-field-wrap--wide" style={{ display: 'block' }}>
                     {HEXACO_TRAITS.map((trait) => (
                       <div key={trait.key} style={{ marginBottom: 18 }}>
-                        <p style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--faded)', margin: '8px 0 12px' }}>{trait.key}</p>
+                        <p style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--faded)', margin: '8px 0 12px' }}>{t(`apply.trait.${trait.key}`)}</p>
                         {trait.statements.map((s) => (
                           <div key={s.id} id={`hex-${s.id}`} tabIndex={-1} className={`rw-likert${invalidField === `hex-${s.id}` ? ' is-invalid' : ''}`}>
-                            <p className="rw-likert-text" style={{ fontFamily: text }}>{s.text}</p>
-                            <div className="rw-likert-scale" role="group" aria-label={s.text}>
+                            <p className="rw-likert-text" style={{ fontFamily: text }}>{t(`apply.hex.${s.id}`)}</p>
+                            <div className="rw-likert-scale" role="group" aria-label={t(`apply.hex.${s.id}`)}>
                               {LIKERT.map((opt) => {
                                 const on = Number(hex[s.id]) === opt.v
                                 return (
@@ -1208,7 +1217,7 @@ export default function CareersApply() {
                         ))}
                       </div>
                     ))}
-                    <div className="rw-likert-legend" style={{ fontFamily: mono }}>−2 = strongly disagree · 0 = neutral · +2 = strongly agree</div>
+                    <div className="rw-likert-legend" style={{ fontFamily: mono }}>{t('apply.likert')}</div>
                   </div>
                 </Section>
               )}
@@ -1216,18 +1225,18 @@ export default function CareersApply() {
               {step === 4 && (
                 // A div rather than a fragment so the transition class has something to sit on.
                 <div key="wrapup" className={`rw-step-panel rw-step-panel--${dir}`}>
-                    <Section eyebrow="REFERENCES" title="A former manager or colleague. They must have agreed to be contacted.">
-                    <TextField label="Reference 1 name" id="ref1Name" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref1Name'} placeholder="Full name" />
-                    <TextField label="Reference 1 number" id="ref1Number" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref1Number'} type="tel" placeholder="Mobile number" />
-                    <TextField label="Reference 1 relationship" id="ref1Relationship" values={values} set={set} setValues={setValues} required allowMissing wide invalid={invalidField === 'ref1Relationship'} placeholder="Former manager, colleague…" hint={REFERENCE_HINT} />
-                    <TextField label="Reference 2 name" id="ref2Name" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref2Name'} placeholder="Full name" />
-                    <TextField label="Reference 2 number" id="ref2Number" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref2Number'} type="tel" placeholder="Mobile number" />
-                    <TextField label="Reference 2 relationship" id="ref2Relationship" values={values} set={set} setValues={setValues} required allowMissing wide invalid={invalidField === 'ref2Relationship'} placeholder="Former manager, colleague…" hint={REFERENCE_HINT} />
+                    <Section eyebrow={t('apply.refs')} title={t('apply.refs.title')}>
+                    <TextField label={t('apply.ref1n')} id="ref1Name" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref1Name'} placeholder="Full name" />
+                    <TextField label={t('apply.ref1p')} id="ref1Number" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref1Number'} type="tel" placeholder="Mobile number" />
+                    <TextField label={t('apply.ref1r')} id="ref1Relationship" values={values} set={set} setValues={setValues} required allowMissing wide invalid={invalidField === 'ref1Relationship'} placeholder="Former manager, colleague…" hint={t('apply.refHint')} />
+                    <TextField label={t('apply.ref2n')} id="ref2Name" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref2Name'} placeholder="Full name" />
+                    <TextField label={t('apply.ref2p')} id="ref2Number" values={values} set={set} setValues={setValues} required allowMissing invalid={invalidField === 'ref2Number'} type="tel" placeholder="Mobile number" />
+                    <TextField label={t('apply.ref2r')} id="ref2Relationship" values={values} set={set} setValues={setValues} required allowMissing wide invalid={invalidField === 'ref2Relationship'} placeholder="Former manager, colleague…" hint={t('apply.refHint')} />
                   </Section>
 
-                  <Section eyebrow="RESUME">
+                  <Section eyebrow={t('apply.resume')}>
                     <div id="resume" tabIndex={-1} className="rw-form-field-wrap rw-form-field-wrap--wide">
-                      <span className="rw-form-q-title">Resume / CV <span className="rw-form-req"> *</span></span>
+                      <span className="rw-form-q-title">{t('apply.resume.label')} <span className="rw-form-req"> *</span></span>
                       {resume ? (
                         <div className="rw-file-preview" style={{ marginTop: 10 }}>
                           <span className="rw-file-preview-icon" aria-hidden>
@@ -1239,30 +1248,30 @@ export default function CareersApply() {
                             <strong>{resume.name}</strong>
                             <small>{(resume.size / 1024).toFixed(1)} KB</small>
                           </span>
-                          <button type="button" className="rw-file-remove" onClick={clearResume} aria-label={`Remove ${resume.name}`} title="Remove this resume">×</button>
+                          <button type="button" className="rw-file-remove" onClick={clearResume} aria-label={t('apply.resume.remove')} title={t('apply.resume.remove')}>×</button>
                         </div>
                       ) : (
                         <label className="rw-resume-dropzone" style={{ marginTop: 10 }}>
                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
                             <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" /><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" />
                           </svg>
-                          <span>Drag and drop your resume here</span>
-                          <small>or click to browse · PDF, DOC or DOCX (Max 5MB)</small>
+                          <span>{t('apply.resume.drop')}</span>
+                          <small>{t('apply.resume.browse')}</small>
                           <input type="file" accept={RESUME_TYPES} onChange={(e) => { setResumeFile(e.target.files?.[0]); e.target.value = '' }} />
                         </label>
                       )}
                     </div>
                     <label className="rw-form-field-wrap rw-form-field-wrap--wide" style={{ display: 'block' }}>
-                      <span className="rw-form-q-title">Anything else we should know? <span className="rw-form-req"> *</span></span>
+                      <span className="rw-form-q-title">{t('apply.else')} <span className="rw-form-req"> *</span></span>
                       <span className="rw-clearable">
                         <textarea id="message" className={`rw-form-field${invalidField === 'message' ? ' is-invalid' : ''}`} rows={3} style={{ marginTop: 10, resize: 'vertical' }}
-                          placeholder="Anything about your experience, skills or situation that helps us read your application."
+                          placeholder={t('apply.elsePh')}
                           value={values.message} onChange={set('message')}
                           aria-invalid={invalidField === 'message' || undefined} />
                         {String(values.message || '').trim() !== '' && (
                           <button
                             type="button" className="rw-field-clear" tabIndex={-1}
-                            aria-label="Clear anything else we should know" title="Clear this"
+                            aria-label={t('apply.clear', { label: t('apply.else') })} title={t('apply.clear', { label: t('apply.else') })}
                             onClick={() => setValues((prev) => ({ ...prev, message: '' }))}
                           >
                             ×
@@ -1280,10 +1289,10 @@ export default function CareersApply() {
                       checkbox to native browser validation, which would fight
                       the per-step messages. */}
                   <div className="rw-consent" style={{ marginTop: 24 }}>
-                    <span className="rw-consent-title">Consent to proceed <span className="rw-form-req">*</span></span>
+                    <span className="rw-consent-title">{t('apply.consent.title')} <span className="rw-form-req">*</span></span>
                     <label className="rw-career-consent">
                       <input id="privacyConsent" type="checkbox" aria-required="true" checked={values.privacyConsent} onChange={(e) => { setValues((p) => ({ ...p, privacyConsent: e.target.checked })); if (invalidField === 'privacyConsent') { setInvalidField(''); setError('') } }} />
-                      <span>I confirm that the details in this application are accurate, and I consent to Team Rajiv Williams using them for recruitment and selection.</span>
+                      <span>{t('apply.consent')}</span>
                     </label>
                   </div>
                 </div>
@@ -1295,18 +1304,18 @@ export default function CareersApply() {
 
               <div className="rw-step-nav">
                 <button type="button" className="rw-step-back" onClick={back} disabled={step === 0 || status === 'sending'}>
-                  <span aria-hidden>←</span> Back
+                  <span aria-hidden>←</span> {t('apply.backBtn')}
                 </button>
                 <span className="rw-step-count" style={{ fontFamily: mono }}>
-                  Step {step + 1} of {STEP_META.length} · {STEP_META[step].label}
+                  {t('apply.stepCount', { n: step + 1, total: steps.length, label: steps[step].label })}
                 </span>
                 {step < LAST_STEP ? (
                   <button type="button" className="rw-form-submit rw-cta rw-cta--live" onClick={next}>
-                    CONTINUE <span className="rw-cta-arrow" aria-hidden>→</span>
+                    {t('apply.continue')} <span className="rw-cta-arrow" aria-hidden>→</span>
                   </button>
                 ) : (
                   <button type="submit" className="rw-form-submit rw-cta rw-cta--live" disabled={status === 'sending'}>
-                    {status === 'sending' ? 'SENDING…' : 'SUBMIT APPLICATION'} <span className="rw-cta-arrow" aria-hidden>→</span>
+                    {status === 'sending' ? t('apply.sending') : t('apply.submit')} <span className="rw-cta-arrow" aria-hidden>→</span>
                   </button>
                 )}
               </div>

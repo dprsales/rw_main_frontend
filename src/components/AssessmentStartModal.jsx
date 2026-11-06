@@ -7,8 +7,10 @@ import { track } from '../data/analytics'
 import { mono, serif, text } from '../theme'
 import { ctaCopper, fs } from '../styles'
 import CtaButton from './CtaButton'
+import { useLang } from '../i18n/LangProvider'
 
 export default function AssessmentStartModal({ location, onClose }) {
+  const { t } = useLang()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -29,15 +31,15 @@ export default function AssessmentStartModal({ location, onClose }) {
   async function handleSubmit(event) {
     event.preventDefault()
     if (!name.trim()) {
-      setError('Enter your name.')
+      setError(t('assess.modal.errName'))
       return
     }
     if (!email.trim() || !email.includes('@')) {
-      setError('Enter a valid email.')
+      setError(t('assess.modal.errEmail'))
       return
     }
     if (!isValidPhone(phone)) {
-      setError('Enter a 10-digit mobile number.')
+      setError(t('assess.modal.errPhone'))
       return
     }
     setSending(true)
@@ -81,7 +83,7 @@ export default function AssessmentStartModal({ location, onClose }) {
           type="button"
           onClick={onClose}
           disabled={sending}
-          aria-label="Close"
+          aria-label={t('assess.modal.close')}
           style={{
             position: 'absolute', top: 16, right: 16, width: 38, height: 38, borderRadius: '50%',
             border: '1px solid var(--line)', background: 'transparent', color: 'var(--ink)',
@@ -91,32 +93,32 @@ export default function AssessmentStartModal({ location, onClose }) {
           ×
         </button>
         <p style={{ fontFamily: mono, fontSize: fs('15px'), letterSpacing: '.22em', color: 'var(--copper)', marginBottom: 12, paddingRight: 44 }}>
-          START ASSESSMENT
+          {t('assess.modal.kicker')}
         </p>
         <h2 id="rw-assessment-start-title" style={{ fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', fontSize: fs('clamp(24px,3.2vw,32px)'), color: 'var(--ink)', lineHeight: 1.15, marginBottom: 8 }}>
-          Your details first.
+          {t('assess.modal.title')}
         </h2>
         <p style={{ fontFamily: text, fontWeight: 300, fontSize: fs('14px'), lineHeight: 1.6, color: 'var(--faded)', marginBottom: 22 }}>
-          We save these so we can send your follow-up. Then the interview opens on KRISAH.
+          {t('assess.modal.body')}
         </p>
         <div style={{ display: 'grid', gap: 14 }}>
           <label style={{ display: 'grid', gap: 7 }}>
             <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.12em', color: 'var(--faded)' }}>
-              NAME <span style={{ color: 'var(--copper)' }}>*</span>
+              {t('assess.modal.name')} <span style={{ color: 'var(--copper)' }}>*</span>
             </span>
-            <input ref={nameRef} required value={name} onChange={(event) => setName(event.target.value)} style={inputStyle} placeholder="Your full name" autoComplete="name" />
+            <input ref={nameRef} required value={name} onChange={(event) => setName(event.target.value)} style={inputStyle} placeholder={t('assess.modal.namePh')} autoComplete="name" />
           </label>
           <label style={{ display: 'grid', gap: 7 }}>
             <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.12em', color: 'var(--faded)' }}>
-              EMAIL <span style={{ color: 'var(--copper)' }}>*</span>
+              {t('assess.modal.email')} <span style={{ color: 'var(--copper)' }}>*</span>
             </span>
-            <input required type="email" value={email} onChange={(event) => setEmail(event.target.value)} style={inputStyle} placeholder="you@company.com" autoComplete="email" />
+            <input required type="email" value={email} onChange={(event) => setEmail(event.target.value)} style={inputStyle} placeholder={t('assess.modal.emailPh')} autoComplete="email" />
           </label>
           <label style={{ display: 'grid', gap: 7 }}>
             <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.12em', color: 'var(--faded)' }}>
-              PHONE <span style={{ color: 'var(--copper)' }}>*</span>
+              {t('assess.modal.phone')} <span style={{ color: 'var(--copper)' }}>*</span>
             </span>
-            <input required type="tel" inputMode="numeric" value={phone} onChange={(event) => setPhone(event.target.value)} style={inputStyle} placeholder="10-digit mobile" autoComplete="tel" />
+            <input required type="tel" inputMode="numeric" value={phone} onChange={(event) => setPhone(event.target.value)} style={inputStyle} placeholder={t('assess.modal.phonePh')} autoComplete="tel" />
           </label>
           <input
             tabIndex={-1}
@@ -131,7 +133,7 @@ export default function AssessmentStartModal({ location, onClose }) {
           <p role="alert" style={{ fontFamily: text, fontSize: fs('13px'), color: 'var(--copper)', marginTop: 14 }}>{error}</p>
         )}
         <CtaButton live type="submit" disabled={sending} style={{ ...ctaCopper, width: '100%', marginTop: 22 }}>
-          {sending ? 'SAVING…' : <>CONTINUE TO ASSESSMENT <span className="rw-cta-arrow">→</span></>}
+          {sending ? t('assess.modal.saving') : <>{t('assess.modal.go')} <span className="rw-cta-arrow">→</span></>}
         </CtaButton>
       </form>
     </div>,

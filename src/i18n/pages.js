@@ -1,9 +1,11 @@
-/** Home, About, Contact, Coaching, Consulting, Realty, Projects, Portfolio, Articles, FAQs. Names, phones, emails, URLs, stats stay as stored. */
+/** Home, About, Contact, Coaching, Consulting, Realty, Projects, Portfolio, Articles, FAQs, Careers, Assessment. Names, phones, emails, URLs, stats, and stored form values stay as stored. */
 import { te } from './pages-te'
 import servicesEn from './services-en'
 import servicesTe from './services-te'
 import contentPagesEn from './content-pages-en'
 import contentPagesTe from './content-pages-te'
+import flowPagesEn from './flow-pages-en'
+import flowPagesTe from './flow-pages-te'
 
 export const pages = {
   en: {
@@ -207,8 +209,9 @@ export const pages = {
     'hire.apply': 'Apply',
     ...servicesEn,
     ...contentPagesEn,
+    ...flowPagesEn,
   },
-  te: { ...te, ...servicesTe, ...contentPagesTe },
+  te: { ...te, ...servicesTe, ...contentPagesTe, ...flowPagesTe },
 }
 
 const ROLE_KEYS = {
@@ -250,6 +253,10 @@ const SEO_ROUTES = {
   '/realty/portfolio': 'portfolio',
   '/articles': 'articles',
   '/faqs': 'faqs',
+  '/careers': 'careers',
+  '/careers/apply': 'careersApply',
+  '/assessment': 'assessment',
+  '/assessment/result': 'assessmentResult',
 }
 
 export function experienceRoleKey(company) {

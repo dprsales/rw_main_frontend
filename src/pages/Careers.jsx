@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import skylineImage from '../assets/site/skyline.png'
 import careersHero from '../assets/site/careers-hero.png'
 import cultureImage from '../assets/site/the-floor.png'
@@ -17,7 +17,8 @@ import PageIntro from '../components/PageIntro'
 import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { useInView } from '../hooks/useInView'
-import { CAREER_CATEGORIES, CAREER_CULTURE, CAREER_HOOK, CAREER_PROCESS, CAREER_REASONS, CAREER_ROLES } from '../data/content'
+import { useLang } from '../i18n/LangProvider'
+import { CAREER_CATEGORIES, CAREER_PROCESS, CAREER_REASONS, CAREER_ROLES } from '../data/content'
 import { CAREERS_INTEREST } from '../data/booking'
 import { CRM_PRIORITY_TITLES, careerRolePath, fetchRoles } from '../data/jobs'
 import { FOOTER_LINKS, mono, serif } from '../theme'
@@ -25,12 +26,6 @@ import { fs,
   container, ctaInline, eyebrow,
   note, sectionHeading, sectionRule,
 } from '../styles'
-
-const HEADLINE = [
-  { text: 'Anyone can sell a flat. ' },
-  { br: true },
-  { text: 'We are hiring people who can hold a room.', italic: true, copper: true },
-]
 
 // Applications go through the booking form, same as every other CTA; CAREERS_INTEREST switches it into application mode.
 const APPLY_INTEREST = CAREERS_INTEREST
@@ -103,8 +98,30 @@ function RoleIcon({ type }) {
   return <svg className="rw-role-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>{paths}</svg>
 }
 
+function catLabel(t, tab) {
+  if (tab === ALL) return t('careers.filter.all')
+  const key = `careers.cat.${tab}`
+  const next = t(key)
+  return next === key ? tab : next
+}
+
 export default function Careers() {
+  const { t } = useLang()
   const scrollToId = useSmoothScroll()
+  const headline = useMemo(() => [
+    { text: t('careers.h1.a') },
+    { br: true },
+    { text: t('careers.h1.b'), italic: true, copper: true },
+  ], [t])
+  const reasons = useMemo(() => CAREER_REASONS.map((_, i) => ({
+    title: t(`careers.reason.${i}.title`),
+    body: t(`careers.reason.${i}.body`),
+  })), [t])
+  const process = useMemo(() => CAREER_PROCESS.map((step, i) => ({
+    ...step,
+    title: t(`careers.process.${i}.title`),
+    body: t(`careers.process.${i}.body`),
+  })), [t])
   const [stepsRef, stepsInView] = useInView({ rootMargin: '0px 0px -18% 0px' })
   const [filter, setFilter] = useState(ALL)
   const [visibleCount, setVisibleCount] = useState(ROLES_PER_PAGE)
@@ -158,14 +175,14 @@ export default function Careers() {
 
         <div style={{ position: 'relative', zIndex: 1 }}>
           <PageIntro
-            eyebrow="CAREERS · TEAM RAJIV WILLIAMS"
-            headline={HEADLINE}
-            lede="A small floor, selling Hyderabad’s luxury inventory."
-            intro="We hire for judgement and follow-through, then train the rest. If you have been carrying a target and want the ticket size to match the effort, this is the room."
+            eyebrow={t('careers.eyebrow')}
+            headline={headline}
+            lede={t('careers.lede')}
+            intro={t('careers.intro')}
             cta={<>
-              <CtaButton to="/careers/apply">APPLY TO THE TEAM</CtaButton>
+              <CtaButton to="/careers/apply">{t('careers.apply')}</CtaButton>
               <button type="button" onClick={() => scrollToId('roles')} className="rw-inline-cta" style={ctaInline}>
-                See open roles →
+                {t('careers.seeRoles')}
               </button>
             </>}
           />
@@ -191,10 +208,10 @@ export default function Careers() {
         <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, var(--card) 0%, rgba(20,18,16,.36) 55%, rgba(20,18,16,.62) 100%)' }} />
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-sm) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, textShadow: '0 2px 24px rgba(11,10,9,.75)' }}>
-            {CAREER_HOOK.lead}
+            {t('careers.hook.lead')}
           </Reveal>
           <Reveal as="p" delay={120} style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, fontStyle: 'italic', color: 'var(--copper)', marginTop: 10, textShadow: '0 2px 24px rgba(11,10,9,.75)' }}>
-            {CAREER_HOOK.accent}
+            {t('careers.hook.accent')}
           </Reveal>
         </div>
       </section>
@@ -203,12 +220,12 @@ export default function Careers() {
       <section id="why" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <SectionHead
-            eyebrow="WHY HERE" titleWidth="11em"
-            title="A floor built like a practice."
-            aside={<SectionAside>The same frameworks Rajiv runs with developer sales teams are what you are trained on in your first fortnight.</SectionAside>}
+            eyebrow={t('careers.why.eyebrow')} titleWidth="11em"
+            title={t('careers.why.title')}
+            aside={<SectionAside>{t('careers.why.aside')}</SectionAside>}
           />
 
-          <AchieveGrid items={CAREER_REASONS} className="rw-reason-grid" stagger={4} />
+          <AchieveGrid items={reasons} className="rw-reason-grid" stagger={4} />
         </div>
       </section>
 
@@ -228,7 +245,7 @@ export default function Careers() {
             style={{ border: '1px solid var(--line)', aspectRatio: '4/3' }}
           >
             <ImageSlot
-              alt="Team Rajiv Williams after a sales floor session"
+              alt={t('careers.work.alt')}
               placeholder="Team Rajiv Williams"
               caption="The floor"
               spec="Landscape 4:3 · ≥1800px wide · the team mid-session, faces engaged"
@@ -240,7 +257,7 @@ export default function Careers() {
 
           <Reveal delay={120}>
             <div style={{ ...eyebrow, marginBottom: 16 }}>
-              WHAT THE WORK LOOKS LIKE
+              {t('careers.work.eyebrow')}
             </div>
 
             <h2
@@ -250,7 +267,7 @@ export default function Careers() {
                 lineHeight: 1.08
               }}
             >
-              Less noise. More leverage. Bigger deals.
+              {t('careers.work.title')}
             </h2>
 
             <p
@@ -261,9 +278,7 @@ export default function Careers() {
                 lineHeight: 1.6
               }}
             >
-              We do not chase every lead. We pursue the right ones with precision,
-              preparation, and intent. Every conversation has a purpose. Every
-              mandate demands complete command.
+              {t('careers.work.p1')}
             </p>
 
             <p
@@ -274,8 +289,7 @@ export default function Careers() {
                 lineHeight: 1.6
               }}
             >
-              No noise. No desperate selling. Just sharp thinking, decisive action,
-              and a team that knows how to close.
+              {t('careers.work.p2')}
             </p>
           </Reveal>
         </div>
@@ -285,7 +299,7 @@ export default function Careers() {
       <section style={{ position: 'relative', minHeight: 'clamp(420px,62vh,620px)', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
         <img
           src={cultureImage}
-          alt="A working session on the Team Rajiv Williams floor"
+          alt={t('careers.culture.alt')}
           loading="lazy"
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 35%' }}
         />
@@ -293,16 +307,16 @@ export default function Careers() {
         <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(rgba(11,10,9,.55), rgba(11,10,9,.82))' }} />
 
         <div className="rw-pad" style={{ ...container, position: 'relative', zIndex: 2, padding: 'var(--rw-sy) 40px', textAlign: 'center' }}>
-          <Reveal style={{ ...eyebrow, marginBottom: 16 }}>{CAREER_CULTURE.eyebrow}</Reveal>
+          <Reveal style={{ ...eyebrow, marginBottom: 16 }}>{t('careers.culture.eyebrow')}</Reveal>
           <Reveal as="h2" delay={80} style={{ ...sectionHeading, lineHeight: 1.06, maxWidth: '13em', margin: '0 auto' }}>
-            {CAREER_CULTURE.title}
+            {t('careers.culture.title')}
           </Reveal>
           <Reveal as="p" delay={140} style={{ ...note, marginTop: 18, marginLeft: 'auto', marginRight: 'auto', maxWidth: '38em', fontSize: fs('clamp(16px,1.7vw,19px)'), lineHeight: 1.6 }}>
-            {CAREER_CULTURE.body}
+            {t('careers.culture.body')}
           </Reveal>
           <Reveal delay={200} style={{ marginTop: 30 }}>
             <button type="button" onClick={() => scrollToId('roles')} className="rw-inline-cta" style={ctaInline}>
-              {CAREER_CULTURE.cta} →
+              {t('careers.culture.cta')} →
             </button>
           </Reveal>
         </div>
@@ -312,14 +326,14 @@ export default function Careers() {
       <section id="roles" style={{ ...sectionRule, background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
           <CenteredHead
-            eyebrow="OPEN ROLES"
-            title="Where we are hiring right now"
-            intro="Sales, marketing, and operations sit on the Hyderabad floor. Freelance creative roles are remote. The band on each card is what we are looking for. If you are close, or simply belong here, apply anyway and say why."
+            eyebrow={t('careers.roles.eyebrow')}
+            title={t('careers.roles.title')}
+            intro={t('careers.roles.intro')}
           />
 
           {openRoles.length > 0 && (
             <Reveal delay={80} style={{ marginTop: 38, display: 'flex', justifyContent: 'center' }}>
-              <div className="rw-tabs rw-desktop-career-filters" role="tablist" aria-label="Filter roles by team">
+              <div className="rw-tabs rw-desktop-career-filters" role="tablist" aria-label={t('careers.filter.aria')}>
                 {tabs.map((tab) => (
                   <button
                     key={tab}
@@ -330,7 +344,7 @@ export default function Careers() {
                     className={`rw-tab${filter === tab ? ' is-on' : ''}`}
                     style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.12em', textTransform: 'uppercase' }}
                   >
-                    {tab}
+                    {catLabel(t, tab)}
                   </button>
                 ))}
               </div>
@@ -340,9 +354,9 @@ export default function Careers() {
           {openRoles.length > 0 && (
             <div className="rw-mobile-career-filters">
               <label>
-                <span>DEPARTMENT</span>
+                <span>{t('careers.filter.dept')}</span>
                 <select value={filter} onChange={(event) => { setFilter(event.target.value); setVisibleCount(ROLES_PER_PAGE) }}>
-                  {tabs.map((tab) => <option key={tab} value={tab}>{tab}</option>)}
+                  {tabs.map((tab) => <option key={tab} value={tab}>{catLabel(t, tab)}</option>)}
                 </select>
               </label>
             </div>
@@ -352,11 +366,11 @@ export default function Careers() {
             <Reveal style={{ marginTop: 48 }}>
               <BorderGlow {...CAREER_GLOW} className="rw-empty-roles-glow">
                 <div style={{ textAlign: 'center', padding: 'clamp(36px,6vw,64px)' }}>
-                  <div style={{ fontFamily: serif, fontSize: fs('clamp(22px,2.6vw,28px)'), color: 'var(--ink)' }}>No open positions this month.</div>
+                  <div style={{ fontFamily: serif, fontSize: fs('clamp(22px,2.6vw,28px)'), color: 'var(--ink)' }}>{t('careers.empty.title')}</div>
                   <p style={{ ...note, marginTop: 12 }}>
-                    Strong profiles are kept on file and called first when a seat opens.
+                    {t('careers.empty.body')}
                   </p>
-                  <BookButton to="/careers/apply" interest={APPLY_INTEREST} roleOptions={roleOptions} specular style={{ marginTop: 26 }}>SEND YOUR PROFILE</BookButton>
+                  <BookButton to="/careers/apply" interest={APPLY_INTEREST} roleOptions={roleOptions} specular style={{ marginTop: 26 }}>{t('careers.empty.cta')}</BookButton>
                 </div>
               </BorderGlow>
             </Reveal>
@@ -374,13 +388,13 @@ export default function Careers() {
                       </div>
                       <div className="rw-role-summary">
                         <div className="rw-role-meta">
-                          <span><RoleIcon type="briefcase" /> {role.category === 'Freelancer' ? 'Freelance' : 'Full-time'}</span>
-                          <span><RoleIcon type="location" /> {role.location || (role.category === 'Freelancer' ? 'Remote' : 'Hyderabad')}</span>
+                          <span><RoleIcon type="briefcase" /> {role.category === 'Freelancer' ? t('careers.role.freelance') : t('careers.role.fulltime')}</span>
+                          <span><RoleIcon type="location" /> {role.location || (role.category === 'Freelancer' ? t('careers.role.remote') : t('careers.role.hyd'))}</span>
                         </div>
                         <p>{role.description}</p>
                       </div>
                       <BookButton className="rw-role-apply" to={careerRolePath(role.title)} interest={APPLY_INTEREST} role={role.title} jobId={role.id} roleOptions={roleOptions} specular style={{ marginTop: 0 }}>
-                        APPLY NOW <span aria-hidden>→</span>
+                        {t('careers.role.apply')} <span aria-hidden>→</span>
                       </BookButton>
                       </article>
                     </BorderGlow>
@@ -393,12 +407,12 @@ export default function Careers() {
           {roles.length > visibleCount && (
             <div className="rw-load-more-wrap">
               <button type="button" className="rw-load-more" onClick={() => setVisibleCount((count) => count + ROLES_PER_PAGE)}>
-                <span>LOAD MORE</span>
+                <span>{t('careers.more')}</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
                   <path d="M12 5v14M6 13l6 6 6-6" />
                 </svg>
               </button>
-              <span className="rw-load-more-count">Showing {visibleRoles.length} of {roles.length}</span>
+              <span className="rw-load-more-count">{t('careers.showing', { shown: visibleRoles.length, total: roles.length })}</span>
             </div>
           )}
         </div>
@@ -406,18 +420,18 @@ export default function Careers() {
 
       {/* Process */}
       <section id="process" className="rw-pad" style={{ ...container, ...sectionRule, padding: 'var(--rw-sy) 40px' }}>
-        <Reveal style={{ ...eyebrow, marginBottom: 16 }}>HOW HIRING RUNS</Reveal>
+        <Reveal style={{ ...eyebrow, marginBottom: 16 }}>{t('careers.process.eyebrow')}</Reveal>
         <Reveal as="h2" delay={80} style={{ ...sectionHeading, maxWidth: '14em' }}>
-          Four steps, about two weeks.
+          {t('careers.process.title')}
         </Reveal>
 
         {/* One rail across desktop, stacking to a vertical rail on a phone. */}
         <div ref={stepsRef} className={`rw-track${stepsInView ? ' is-in' : ''}`} style={{ marginTop: 'clamp(44px,6vw,72px)' }}>
           <div className="rw-track-steps">
-            {CAREER_PROCESS.map((step, i) => (
+            {process.map((step, i) => (
               <Reveal key={step.n} delay={i * 90} className="rw-track-step" style={{ textAlign: 'center' }}>
                 <div className="rw-track-node" style={{ fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em' }}>
-                  {i === CAREER_PROCESS.length - 1 ? (
+                  {i === process.length - 1 ? (
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
                       <path d="M4 12.5 9.5 18 20 6.5" />
                     </svg>
@@ -433,8 +447,8 @@ export default function Careers() {
         </div>
       </section>
 
-      <ClosingCTA title="Tell us what you have closed, and what you want to be closing a year from now." titleStyle={{ maxWidth: '15em' }}>
-        <CtaButton to="/careers/apply">APPLY TO THE TEAM</CtaButton>
+      <ClosingCTA title={t('careers.close')} titleStyle={{ maxWidth: '15em' }}>
+        <CtaButton to="/careers/apply">{t('careers.apply')}</CtaButton>
       </ClosingCTA>
 
       <Footer links={FOOTER_LINKS} />
