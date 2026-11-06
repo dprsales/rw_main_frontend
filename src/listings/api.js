@@ -2,9 +2,7 @@
 // Auth lives under /listing-auth so it never collides with staff /auth.
 import { API_BASE } from '../data/api'
 
-export const LISTINGS_API = (
-  import.meta.env.VITE_LISTINGS_API_URL || API_BASE || 'https://api.rajivwilliams.com'
-).replace(/\/$/, '')
+export const LISTINGS_API = (API_BASE || 'https://api.rajivwilliams.com').replace(/\/$/, '')
 
 const TOKEN_KEY = 'rw_listing_token'
 

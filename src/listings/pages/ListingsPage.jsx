@@ -122,7 +122,9 @@ export default function ListingsPage({ embedded = false }) {
               )}
             </div>
             <p className="max-w-xs text-sm font-light text-faded sm:pb-1 sm:text-right">
-              Every property is reviewed and approved by our team before it goes live.
+              {embedded
+                ? 'Live listings from every owner. Your pending and rejected properties stay on My listings.'
+                : 'Every property is reviewed and approved by our team before it goes live.'}
             </p>
           </div>
 

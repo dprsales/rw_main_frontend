@@ -11,7 +11,7 @@ import Step3Media from '../steps/Step3Media'
 import Step4DetailedConfig from '../steps/Step4DetailedConfig'
 import Step5Description from '../steps/Step5Description'
 import { useListingAuth } from '../AuthContext'
-import { getMyListing, submitProperty, updateProperty } from '../api'
+import { getMyListing, getMyListings, submitProperty, updateProperty } from '../api'
 import { formatPrice, imgUrl, listingStrength, listingTitle } from '../format'
 import { LISTING_CONSENTS } from '../commission'
 import ListingsPage from './ListingsPage'
@@ -54,6 +54,7 @@ export default function ListPropertyPage() {
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [submitted, setSubmitted] = useState(null)
+  const [mine, setMine] = useState(null)
 
   // Keep a draft so a refresh doesn't lose the wizard (new listings only)
   useEffect(() => {
@@ -88,6 +89,15 @@ export default function ListPropertyPage() {
   }, [editing, id, user])
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }) }, [step, screen])
+
+  useEffect(() => {
+    if (!isLoggedIn || screen !== 'landing') return undefined
+    let alive = true
+    getMyListings()
+      .then((rows) => { if (alive) setMine(rows || []) })
+      .catch(() => { if (alive) setMine([]) })
+    return () => { alive = false }
+  }, [isLoggedIn, screen])
 
   const update = (field, value) => setData((prev) => ({ ...prev, [field]: value }))
   const goToStep = (n) => {
@@ -196,6 +206,13 @@ export default function ListPropertyPage() {
                   <p className="eyebrow">Welcome back</p>
                   <h2 className="mt-2 font-serif text-3xl text-ink">{user.name || user.email}</h2>
                   <p className="mt-1 text-sm text-faded">Logged in as {user.email}</p>
+                  <p className="mt-4 text-sm leading-relaxed text-faded">
+                    {mine == null
+                      ? 'Checking your listings…'
+                      : mine.length === 0
+                        ? 'You have no listings yet. The homes below are live listings from every owner.'
+                        : `You have ${mine.length} ${mine.length === 1 ? 'listing' : 'listings'} (${mine.filter((l) => l.status === 'approved').length} live). Those stay under My listings. The homes below are the public market.`}
+                  </p>
                   {submitError && <p className="mt-4 text-sm text-red-300">{submitError}</p>}
                   <button className="btn-primary mt-7 w-full" onClick={startWizard}>
                     {data.images?.length || data.locality ? 'Continue your draft →' : 'Start a new listing →'}
