@@ -32,7 +32,7 @@ export default function LoginPage() {
               Welcome back to your <em className="gold-text">dashboard.</em>
             </h1>
             <ul className="mt-8 space-y-3 text-sm text-ink">
-              {['Track every listing — pending, live or needing changes', 'See views and buyer enquiries in one place', 'List a new property in a few minutes'].map((t) => (
+              {['Track every listing — pending, live or needing changes', 'See views and how many buyers have enquired', 'List a new property in a few minutes'].map((t) => (
                 <li key={t} className="flex items-center gap-3">
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-gold-500/40 text-[11px] text-gold-300">✓</span>
                   {t}
@@ -40,7 +40,7 @@ export default function LoginPage() {
               ))}
             </ul>
             <p className="mt-8 text-sm text-faded">
-              Just browsing? <Link to="/realty/listings" className="text-gold-300 hover:underline">See verified projects →</Link>
+              Just browsing? <Link to="/list-property#listings" className="text-gold-300 hover:underline">See listed properties →</Link>
             </p>
           </div>
           {!ready ? (

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ErrorNote, StepCard } from '../components/ui'
-import { COMMISSION_TERMS_TEXT } from '../commission'
+import { commissionTermsFor, LISTING_CONSENTS } from '../commission'
 
 const TEMPLATES = [
   (d) =>
@@ -23,13 +23,21 @@ const TEMPLATES = [
 
 export default function Step5Description({ data, update, onSubmit, onPrev, submitting, submitError, user, editing }) {
   const [showOptions, setShowOptions] = useState(false)
+  const [consentHint, setConsentHint] = useState(false)
   const [termsHint, setTermsHint] = useState(false)
+  const consentRef = useRef(null)
   const termsRef = useRef(null)
   const words = (data.oneLineDescription || '').trim().split(/\s+/).filter(Boolean).length
   const descWords = (data.description || '').trim().split(/\s+/).filter(Boolean).length
   const accepted = !!data.commissionAccepted
+  const fee = commissionTermsFor(data.listingType)
+  const isRent = data.listingType === 'Rent'
+  const permissionsOk = LISTING_CONSENTS.every((item) => !!data[item.key])
   const fieldsOk = !!(data.oneLineDescription && words <= 20 && data.description)
-  const canSubmit = fieldsOk && accepted && !submitting
+
+  useEffect(() => {
+    if (permissionsOk) setConsentHint(false)
+  }, [permissionsOk])
 
   useEffect(() => {
     if (accepted) setTermsHint(false)
@@ -38,6 +46,11 @@ export default function Step5Description({ data, update, onSubmit, onPrev, submi
   const trySubmit = () => {
     if (submitting) return
     if (!fieldsOk) return
+    if (!permissionsOk) {
+      setConsentHint(true)
+      consentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      return
+    }
     if (!accepted) {
       setTermsHint(true)
       termsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -99,53 +112,73 @@ export default function Step5Description({ data, update, onSubmit, onPrev, submi
       </div>
 
       <div
+        ref={consentRef}
+        className={`mb-4 rounded-md border px-4 py-4 ${
+          consentHint && !permissionsOk ? 'border-red-400/50' : 'border-line'
+        }`}
+      >
+        <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-gold-300">Permissions to publish · required</p>
+        <p className="mt-2 text-sm leading-relaxed text-faded">
+          Tick each line. These permissions are separate from the fee below. We email you a copy of what you agreed.
+        </p>
+        <div className="mt-4 space-y-3">
+          {LISTING_CONSENTS.map((item) => (
+            <label key={item.key} className="flex cursor-pointer items-start gap-3">
+              <input
+                type="checkbox"
+                className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#C39B53]"
+                checked={!!data[item.key]}
+                onChange={(e) => update(item.key, e.target.checked)}
+                disabled={submitting}
+                aria-required="true"
+              />
+              <span className="text-sm leading-relaxed text-ink">{item.text}</span>
+            </label>
+          ))}
+        </div>
+        {consentHint && !permissionsOk && (
+          <p className="mt-3 text-xs text-red-300">Please tick every permission above, then submit again.</p>
+        )}
+      </div>
+
+      <div
         ref={termsRef}
-        className={`mb-4 rounded-md border p-4 ${
-          termsHint && !accepted
-            ? 'border-red-400/50 bg-red-400/10'
-            : 'border-gold-500/35 bg-gold-500/[0.06]'
+        className={`mb-4 rounded-md border px-4 py-4 ${
+          termsHint && !accepted ? 'border-red-400/50' : 'border-line'
         }`}
       >
         <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-gold-300">Partnership terms · required</p>
         <p className="mt-2 text-sm leading-relaxed text-faded">
-          How it works: listing and verification are free. Buyer enquiries come to you. Only if a sale closes with Team RW’s support does a professional fee apply: 3% of the total sale value. Tick the box below to continue.
+          Listing and verification are free. Enquiries come to Team RW first. We introduce you when there is a serious match.{' '}
+          {isRent
+            ? 'Any professional fee for a tenancy is confirmed in writing before it applies.'
+            : 'A 3% professional fee applies only if a sale closes with Team RW’s support.'}
         </p>
-        <ul className="mt-3 list-disc space-y-1.5 pl-5 text-xs leading-relaxed text-faded">
-          <li>You confirm you are authorised to list this property and that details and media are accurate.</li>
-          <li>Team RW may verify, approve, reject or remove a listing. Going live is not a guarantee of sale or enquiries.</li>
-          <li>The 3% professional fee applies only when a sale completes with Team RW’s support. Invoice timing and GST follow the written confirmation at mandate or closing.</li>
-          <li>
-            By continuing you also agree to our{' '}
-            <a className="text-gold-300 underline-offset-2 hover:underline" href="/terms" target="_blank" rel="noreferrer">Terms of Use</a>
-            {' '}and{' '}
-            <a className="text-gold-300 underline-offset-2 hover:underline" href="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</a>.
-          </li>
-        </ul>
-        <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-md border border-line bg-night/50 p-3">
+        <label className="mt-4 flex cursor-pointer items-start gap-3">
           <input
             type="checkbox"
-            className="mt-1 h-5 w-5 shrink-0 accent-[#C39B53]"
+            className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#C39B53]"
             checked={accepted}
             onChange={(e) => update('commissionAccepted', e.target.checked)}
             disabled={submitting}
             aria-required="true"
           />
-          <span className="text-sm leading-relaxed text-ink">
-            <span className="font-medium text-gold-300">Required. </span>
-            {COMMISSION_TERMS_TEXT}
-          </span>
+          <span className="text-sm leading-relaxed text-ink">{fee.text}</span>
         </label>
-        {(termsHint && !accepted) && (
-          <p className="mt-2 text-xs text-red-300">Please tick the partnership terms checkbox above, then submit again.</p>
-        )}
-        {!accepted && !termsHint && (
-          <p className="mt-2 text-xs text-faded">Tick the checkbox to enable a successful submit.</p>
+        <p className="mt-3 text-xs leading-relaxed text-faded">
+          You also agree to our{' '}
+          <a className="text-gold-300 underline-offset-2 hover:underline" href="/terms" target="_blank" rel="noreferrer">Terms of Use</a>
+          {' '}and{' '}
+          <a className="text-gold-300 underline-offset-2 hover:underline" href="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</a>.
+        </p>
+        {termsHint && !accepted && (
+          <p className="mt-2 text-xs text-red-300">Please tick the partnership terms, then submit again.</p>
         )}
       </div>
 
       <p className="text-xs text-faded">
         {editing ? 'Check the live preview on the right, then save.' : 'Check the live preview on the right'}
-        {!editing && user?.email ? <> · we will email <span className="text-ink">{user.email}</span> as soon as it is approved.</> : !editing ? '.' : ''}
+        {!editing && user?.email ? <> · we email <span className="text-ink">{user.email}</span> a record of these permissions, and again when the listing is approved.</> : !editing ? '.' : ''}
       </p>
       <ErrorNote>{submitError}</ErrorNote>
     </StepCard>

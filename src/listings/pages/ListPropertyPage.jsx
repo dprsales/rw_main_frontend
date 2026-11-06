@@ -13,6 +13,8 @@ import Step5Description from '../steps/Step5Description'
 import { useListingAuth } from '../AuthContext'
 import { getMyListing, submitProperty, updateProperty } from '../api'
 import { formatPrice, imgUrl, listingStrength, listingTitle } from '../format'
+import { LISTING_CONSENTS } from '../commission'
+import ListingsPage from './ListingsPage'
 
 const DRAFT_KEY = 'rw_listing_draft'
 const INITIAL = { listingType: 'Sale', city: '', email: '', areaUnit: 'sq.ft', areaType: 'Carpet Area' }
@@ -20,7 +22,7 @@ const INITIAL = { listingType: 'Sale', city: '', email: '', areaUnit: 'sq.ft', a
 const FEATURES = [
   'Free to list and verify. Professional fee only if a sale closes with Team RW',
   'Every listing verified by our team before it goes live',
-  'Buyer enquiries delivered straight to your inbox',
+  'Team RW handles every buyer enquiry and introduces you when there is a serious match',
 ]
 const STATS = [
   { value: '24 hrs', label: 'Verification' },
@@ -66,7 +68,18 @@ export default function ListPropertyPage() {
     getMyListing(id)
       .then((l) => {
         if (!alive) return
-        setData({ ...INITIAL, ...l.details, city: l.city, listingType: l.listingType })
+        const saved = l.listingConsents || {}
+        setData({
+          ...INITIAL,
+          ...l.details,
+          city: l.city,
+          listingType: l.listingType,
+          commissionAccepted: !!l.commissionAccepted,
+          displayOnWebsite: !!saved.displayOnWebsite,
+          useDetails: !!saved.useDetails,
+          useMedia: !!saved.useMedia,
+          runAds: !!saved.runAds,
+        })
         setEditInfo({ status: l.status, reason: l.rejectionReason, slug: l.slug })
         setScreen('wizard')
       })
@@ -89,18 +102,25 @@ export default function ListPropertyPage() {
 
   const handleSubmit = async () => {
     setSubmitError('')
-    if (!data.commissionAccepted) {
-      setSubmitError('Please confirm the Team RW partnership terms before submitting.')
+    const listingConsents = {
+      displayOnWebsite: !!data.displayOnWebsite,
+      useDetails: !!data.useDetails,
+      useMedia: !!data.useMedia,
+      runAds: !!data.runAds,
+    }
+    if (LISTING_CONSENTS.some((item) => !listingConsents[item.key]) || !data.commissionAccepted) {
+      setSubmitError('Please tick every publish permission and the partnership terms before submitting.')
       return
     }
     setSubmitting(true)
     try {
-      const { email, commissionAccepted, ...details } = data
+      const { email, commissionAccepted, displayOnWebsite, useDetails, useMedia, runAds, ...details } = data
       if (!/^\d{4}-\d{2}$/.test(details.possessionDate || '')) delete details.possessionDate
       const payload = {
         city: data.city.trim(),
         listingType: data.listingType,
         commissionAccepted: true,
+        listingConsents,
         details: { ...details, images: (data.images || []).map(imgUrl), videos: (data.videos || []).map(imgUrl) },
       }
       const res = editing ? await updateProperty(id, payload) : await submitProperty(payload)
@@ -133,9 +153,10 @@ export default function ListPropertyPage() {
   return (
     <ListingsShell title="List your property — free | RW Realty" description="List your property for free. Verified within 24 hours and shown to serious buyers.">
       {screen === 'landing' && (
+        <>
         <section className="relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(60% 55% at 85% 0%, rgba(195,155,83,0.14) 0%, rgba(11,10,9,0) 70%)' }} />
-          <div className="relative mx-auto grid max-w-[1320px] grid-cols-1 gap-12 px-5 pb-20 pt-14 sm:px-10 lg:grid-cols-[1.1fr_0.9fr] lg:pt-20">
+          <div id="list-form" className="relative mx-auto grid max-w-[1320px] scroll-mt-[var(--rw-header-h,76px)] grid-cols-1 gap-12 px-5 pb-12 pt-14 sm:px-10 lg:grid-cols-[1.1fr_0.9fr] lg:pt-20">
             <div>
               <p className="eyebrow">RW Realty · Owner & builder listings</p>
               <h1 className="mt-5 font-serif text-5xl font-normal leading-[1.02] text-ink sm:text-6xl lg:text-7xl">
@@ -162,9 +183,9 @@ export default function ListPropertyPage() {
                   </div>
                 ))}
               </div>
-              <Link to="/realty/listings" className="mt-8 inline-block text-sm text-gold-300 hover:underline">
-                Browse verified projects →
-              </Link>
+              <a href="#listings" className="mt-8 inline-block text-sm text-gold-300 hover:underline">
+                Browse listed properties ↓
+              </a>
             </div>
 
             <div className="w-full lg:max-w-[440px] lg:justify-self-end">
@@ -187,6 +208,8 @@ export default function ListPropertyPage() {
             </div>
           </div>
         </section>
+        <ListingsPage embedded />
+        </>
       )}
 
       {screen === 'loading' && (

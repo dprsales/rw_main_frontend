@@ -77,15 +77,13 @@ const LEGAL_LINKS = [
 ]
 
 const VENDOR_PARTNER_LINK = { label: 'Vendor Partner', to: '/vendorpartner', muted: true }
-const LISTINGS_LINK = { label: 'Browse listings', to: '/realty/listings', muted: true }
-const LIST_PROPERTY_LINK = { label: 'List a property', to: '/list-property', muted: true }
+const MARKET_LINK = { label: 'Buy, sell, rent', to: '/list-property', muted: true }
 
 /** The interior pages - Coaching, Consulting, Realty, Careers, Portfolio. */
 export const FOOTER_LINKS = [
   { label: '← Back to home', to: '/' },
   ...FOOTER_CONTACT,
-  LISTINGS_LINK,
-  LIST_PROPERTY_LINK,
+  MARKET_LINK,
   VENDOR_PARTNER_LINK,
   ...LEGAL_LINKS,
 ]
@@ -94,8 +92,7 @@ export const FOOTER_LINKS = [
 export const HOME_FOOTER_LINKS = [
   EMAIL_LINK, PHONE_LINK, HH_LINK, ...SOCIAL_LINKS,
   { label: 'RW Realty →', to: '/realty', muted: true },
-  { ...LISTINGS_LINK, label: 'Browse listings →' },
-  { ...LIST_PROPERTY_LINK, label: 'List a property →' },
+  { ...MARKET_LINK, label: 'Buy, sell, rent →' },
   { label: 'Careers →', to: '/careers', muted: true },
   { label: 'Channel Partners →', to: '/partner', muted: true },
   { ...VENDOR_PARTNER_LINK, label: 'Vendor Partner →' },
@@ -106,8 +103,7 @@ export const HOME_FOOTER_LINKS = [
 export const PROJECT_FOOTER_LINKS = [
   { label: '← Projects in Hyderabad', to: '/project-hyderabad' },
   { label: 'Portfolio', to: '/realty/portfolio' },
-  LISTINGS_LINK,
-  LIST_PROPERTY_LINK,
+  MARKET_LINK,
   ...FOOTER_CONTACT,
   VENDOR_PARTNER_LINK,
   ...LEGAL_LINKS,

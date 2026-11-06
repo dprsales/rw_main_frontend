@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import ListingsShell from '../components/ListingsShell'
 import { StatusBadge } from '../components/ui'
 import { useListingAuth } from '../AuthContext'
-import { deleteListing, getListingEnquiries, getMyListings, updateMe } from '../api'
+import { deleteListing, getMyListings, updateMe } from '../api'
 import { ErrorNote } from '../components/ui'
 import { formatDate, formatPrice, imgUrl, listingTitle, timeAgo } from '../format'
 
@@ -82,7 +82,7 @@ export default function DashboardPage() {
             ['Total listings', counts.all],
             ['Live', counts.approved],
             ['Pending approval', counts.pending],
-            ['Buyer enquiries', enquiries],
+            ['Enquiries with Team RW', enquiries],
           ].map(([label, value]) => (
             <div key={label} className="card p-5">
               <p className="font-serif text-4xl text-gold-300">{value}</p>
@@ -90,6 +90,9 @@ export default function DashboardPage() {
             </div>
           ))}
         </div>
+        <p className="mt-3 text-xs text-faded">
+          You can see how many buyers have enquired. Team RW speaks to them first and introduces you when there is a serious match. Buyer phone and email stay with our desk.
+        </p>
 
         <div className="mt-8 flex gap-2 overflow-x-auto scrollbar-none">
           {['all', 'approved', 'pending', 'rejected'].map((f) => (
@@ -121,13 +124,7 @@ export default function DashboardPage() {
 function ListingRow({ listing, onDelete }) {
   const d = listing.details || {}
   const cover = imgUrl(d.images?.[0])
-  const [open, setOpen] = useState(false)
-  const [enquiries, setEnquiries] = useState(null)
-
-  const toggleEnquiries = () => {
-    setOpen((o) => !o)
-    if (!enquiries) getListingEnquiries(listing._id).then(setEnquiries).catch(() => setEnquiries([]))
-  }
+  const enquiryCount = listing.enquiryCount || 0
 
   return (
     <div className="card overflow-hidden">
@@ -157,7 +154,7 @@ function ListingRow({ listing, onDelete }) {
           )}
           {listing.status === 'approved' && (
             <p className="mt-3 text-xs text-faded">
-              Live since {timeAgo(listing.approvedAt)} · 👁 {listing.views || 0} views · ✉️ {listing.enquiryCount || 0} enquiries
+              Live since {timeAgo(listing.approvedAt)} · 👁 {listing.views || 0} views · ✉️ {enquiryCount} {enquiryCount === 1 ? 'enquiry with Team RW' : 'enquiries with Team RW'}
             </p>
           )}
         </div>
@@ -169,31 +166,12 @@ function ListingRow({ listing, onDelete }) {
         <Link to={`/list-property/edit/${listing._id}`} className="btn-primary !px-4 !py-2 !text-xs">
           ✏️ Edit {listing.status === 'approved' ? 'live listing' : 'listing'}
         </Link>
-        <button onClick={toggleEnquiries} className="btn-secondary !px-4 !py-2 !text-xs">
-          {open ? 'Hide' : 'Show'} enquiries ({listing.enquiryCount || 0})
-        </button>
         <button onClick={onDelete} className="ml-auto text-xs text-red-300 hover:underline">Delete</button>
       </div>
-      {open && (
-        <div className="border-t border-line bg-night/40 px-5 py-4">
-          {!enquiries && <p className="text-xs text-faded">Loading…</p>}
-          {enquiries?.length === 0 && <p className="text-xs text-faded">No enquiries yet.</p>}
-          <ul className="space-y-3">
-            {enquiries?.map((e) => (
-              <li key={e._id} className="rounded-md border border-line bg-panel p-3 text-sm">
-                <div className="flex flex-wrap justify-between gap-2">
-                  <span className="text-ink">{e.name}</span>
-                  <span className="text-xs text-faded">{timeAgo(e.createdAt)}</span>
-                </div>
-                <p className="mt-1 text-xs">
-                  <a href={`mailto:${e.email}`} className="text-gold-300 hover:underline">{e.email}</a>
-                  {e.phone && <> · <a href={`tel:${e.phone}`} className="text-gold-300 hover:underline">{e.phone}</a></>}
-                </p>
-                {e.message && <p className="mt-2 whitespace-pre-line text-faded">{e.message}</p>}
-              </li>
-            ))}
-          </ul>
-        </div>
+      {enquiryCount > 0 && (
+        <p className="border-t border-line bg-night/40 px-5 py-3 text-xs text-faded">
+          {enquiryCount} {enquiryCount === 1 ? 'buyer has' : 'buyers have'} enquired. Team RW is handling {enquiryCount === 1 ? 'this' : 'them'} and will connect you when it is a fit.
+        </p>
       )}
     </div>
   )

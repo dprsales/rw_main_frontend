@@ -13,7 +13,7 @@ import { useLang } from '../i18n/LangProvider'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { mono } from '../theme'
 import {
-  ArrowRight, Building2, ChartNoAxesColumnIncreasing, ChevronDown, ChevronRight, FileSignature, Handshake, KeyRound, LayoutGrid, ListPlus, Target, Users,
+  ArrowRight, Building2, ChartNoAxesColumnIncreasing, ChevronDown, ChevronRight, FileSignature, Handshake, LayoutGrid, Target, Users,
 } from 'lucide-react'
 
 // Same wheel menu on every page: only route links belong here, not per-page scroll anchors.
@@ -22,9 +22,7 @@ const SITE_NAV = [
   { key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching' },
   { key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting' },
   { key: 'nav.projects', label: 'Projects in Hyderabad', to: '/project-hyderabad' },
-  { key: 'mega.listProperty', label: 'List a property', to: '/list-property' },
-  { key: 'mega.listed', label: 'Listed properties', to: '/realty/listings' },
-  { key: 'mega.rentals', label: 'Rentals', to: '/realty/listings?listingType=Rent' },
+  { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/list-property' },
   { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty' },
   { key: 'nav.portfolio', label: 'Portfolio', to: '/realty/portfolio' },
   { key: 'nav.careers', label: 'Careers', to: '/careers' },
@@ -82,18 +80,10 @@ const PROPERTY_COLUMNS = [
     ],
   },
   {
-    headingKey: 'mega.resale',
-    heading: 'Resale',
+    headingKey: 'mega.market',
+    heading: 'Buy, sell, rent',
     items: [
-      { key: 'mega.listProperty', label: 'List a property', to: '/list-property', descKey: 'mega.listDesc', desc: 'List your property with Team RW', icon: ListPlus },
-      { key: 'mega.listed', label: 'Listed properties', to: '/realty/listings', descKey: 'mega.listedDesc', desc: 'See rates and send an enquiry', icon: LayoutGrid },
-    ],
-  },
-  {
-    headingKey: 'mega.rent',
-    heading: 'Rent',
-    items: [
-      { key: 'mega.rentals', label: 'Rentals', to: '/realty/listings?listingType=Rent', descKey: 'mega.rentalsDesc', desc: 'Hyderabad rentals', icon: KeyRound },
+      { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/list-property', descKey: 'mega.listDesc', desc: 'List a property, or browse homes for sale and rent', icon: LayoutGrid },
     ],
   },
 ]

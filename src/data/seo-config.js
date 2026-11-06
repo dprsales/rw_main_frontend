@@ -50,7 +50,7 @@ export const ROUTE_SEO = {
   '/list-property': {
     title: 'List a Property with Team RW | RW Realty',
     description:
-      'List your Hyderabad property with Team RW. Free listing, team verification, and buyer enquiries to your inbox.',
+      'Buy, sell, or rent in Hyderabad with Team RW. List a property for free, or browse verified homes for sale and rent.',
   },
   '/list-property/login': {
     title: 'Listing Login | RW Realty',

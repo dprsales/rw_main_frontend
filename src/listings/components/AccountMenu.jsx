@@ -70,13 +70,12 @@ export default function AccountMenu() {
             <span>{user.email}</span>
           </div>
           <Link role="menuitem" to="/list-property/dashboard" onClick={() => setOpen(false)}>My listings</Link>
-          <Link role="menuitem" to="/list-property" onClick={() => setOpen(false)}>List a property</Link>
-          <Link role="menuitem" to="/realty/listings" onClick={() => setOpen(false)}>Browse listings</Link>
+          <Link role="menuitem" to="/list-property" onClick={() => setOpen(false)}>Buy, sell, rent</Link>
           <button
             type="button"
             role="menuitem"
             className="rw-header-account-logout"
-            onClick={() => { logout(); setOpen(false); navigate('/realty/listings') }}
+            onClick={() => { logout(); setOpen(false); navigate('/list-property') }}
           >
             Log out
           </button>

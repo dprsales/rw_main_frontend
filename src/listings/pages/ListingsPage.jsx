@@ -9,7 +9,7 @@ import { BHK_OPTIONS, BUDGET_OPTIONS, PROPERTY_TYPES, SORT_OPTIONS } from '../op
 const PAGE_SIZE = 12
 const FILTER_KEYS = ['q', 'city', 'listingType', 'propertyType', 'bhk', 'budget', 'possession', 'furnishing', 'sort']
 
-export default function ListingsPage() {
+export default function ListingsPage({ embedded = false }) {
   const [params, setParams] = useSearchParams()
   const filters = useMemo(() => Object.fromEntries(FILTER_KEYS.map((k) => [k, params.get(k) || ''])), [params])
   const [search, setSearch] = useState(filters.q)
@@ -99,18 +99,27 @@ export default function ListingsPage() {
     filters.furnishing && ['furnishing', filters.furnishing],
   ].filter(Boolean)
 
+  const shell = embedded ? 'section' : ListingsShell
+  const Shell = shell
+
   return (
-    <ListingsShell title="Verified property listings in Hyderabad | RW Realty" description="Browse verified apartments, villas and plots — every listing is reviewed by the RW Realty team before it goes live.">
+    <Shell {...(embedded ? { id: 'listings', className: 'scroll-mt-[var(--rw-header-h,76px)] border-t border-line' } : { title: 'Verified property listings in Hyderabad | RW Realty', description: 'Browse verified apartments, villas and plots. Every listing is reviewed by the RW Realty team before it goes live.' })}>
       {/* Compact hero + search */}
       <section className="relative border-b border-line">
         <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(50% 90% at 85% 0%, rgba(195,155,83,0.16) 0%, rgba(11,10,9,0) 70%)' }} />
         <div className="relative mx-auto max-w-[1440px] px-4 pb-5 pt-7 sm:px-8 sm:pt-9">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
             <div>
-              <p className="eyebrow">RW Realty · Verified projects</p>
-              <h1 className="mt-2 font-serif text-4xl font-normal leading-[1.05] text-ink sm:text-5xl">
-                Homes worth the address, <em className="gold-text">verified.</em>
-              </h1>
+              <p className="eyebrow">{embedded ? 'Buy, sell, rent' : 'RW Realty · Verified projects'}</p>
+              {embedded ? (
+                <h2 className="mt-2 font-serif text-4xl font-normal leading-[1.05] text-ink sm:text-5xl">
+                  Listed properties
+                </h2>
+              ) : (
+                <h1 className="mt-2 font-serif text-4xl font-normal leading-[1.05] text-ink sm:text-5xl">
+                  Homes worth the address, <em className="gold-text">verified.</em>
+                </h1>
+              )}
             </div>
             <p className="max-w-xs text-sm font-light text-faded sm:pb-1 sm:text-right">
               Every property is reviewed and approved by our team before it goes live.
@@ -206,7 +215,9 @@ export default function ListingsPage() {
             </p>
             <div className="mt-5 flex flex-wrap justify-center gap-3">
               {activeCount > 0 && <button className="btn-secondary" onClick={clearAll}>Clear filters</button>}
-              <Link to="/list-property" className="btn-primary">List your property</Link>
+              {embedded
+                ? <a href="#list-form" className="btn-primary">List your property</a>
+                : <Link to="/list-property" className="btn-primary">List your property</Link>}
             </div>
           </div>
         )}
@@ -219,15 +230,17 @@ export default function ListingsPage() {
           </div>
         )}
 
-        <div className="mt-8 flex flex-col items-start justify-between gap-3 rounded-xl border border-gold-500/30 bg-gradient-to-br from-gold-500/10 to-transparent px-6 py-5 sm:flex-row sm:items-center">
-          <div>
-            <p className="font-serif text-2xl text-ink">Own a property or a project?</p>
-            <p className="text-sm text-faded">List it free verified in 24 hours and shown to serious buyers.</p>
+        {!embedded && (
+          <div className="mt-8 flex flex-col items-start justify-between gap-3 rounded-xl border border-gold-500/30 bg-gradient-to-br from-gold-500/10 to-transparent px-6 py-5 sm:flex-row sm:items-center">
+            <div>
+              <p className="font-serif text-2xl text-ink">Own a property or a project?</p>
+              <p className="text-sm text-faded">List it free. Verified in 24 hours and shown to serious buyers.</p>
+            </div>
+            <Link to="/list-property" className="btn-primary shrink-0">List your property →</Link>
           </div>
-          <Link to="/list-property" className="btn-primary shrink-0">List your property →</Link>
-        </div>
+        )}
       </div>
-    </ListingsShell>
+    </Shell>
   )
 }
 

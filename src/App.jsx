@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useLayoutEffect } from 'react'
+import React, { Suspense, lazy, useEffect, useLayoutEffect, useRef } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { BookingProvider } from './components/BookingModal'
 import ScrollProgress from './components/ScrollProgress'
@@ -39,13 +39,29 @@ const ListPropertyPage = lazy(() => import('./listings/pages/ListPropertyPage'))
 const DashboardPage = lazy(() => import('./listings/pages/DashboardPage'))
 const LoginPage = lazy(() => import('./listings/pages/LoginPage'))
 const ResetPasswordPage = lazy(() => import('./listings/pages/ResetPasswordPage'))
-const ListingsPage = lazy(() => import('./listings/pages/ListingsPage'))
 const ListingDetailPage = lazy(() => import('./listings/pages/ListingDetailPage'))
+
+function ListingsRedirect() {
+  const { search } = useLocation()
+  return <Navigate to={{ pathname: '/list-property', search, hash: '#listings' }} replace />
+}
 
 // Stop the browser (Safari especially) restoring the old scroll position on reload,
 // which would land a refreshed homepage on the finder instead of the hero.
 if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
   window.history.scrollRestoration = 'manual'
+}
+
+/** The pixel in index.html already sends the landing PageView. This covers the
+ *  routes a visitor opens after that, which never reload the document. */
+function MetaPageView() {
+  const { pathname } = useLocation()
+  const skipFirst = useRef(true)
+  useEffect(() => {
+    if (skipFirst.current) { skipFirst.current = false; return }
+    if (typeof window.fbq === 'function') window.fbq('track', 'PageView')
+  }, [pathname])
+  return null
 }
 
 /** Every route change lands at the top before the page is painted - unless the link
@@ -90,6 +106,7 @@ export default function App() {
         <BookingProvider>
           <ListingAuthProvider>
           <ScrollToTop />
+          <MetaPageView />
           <ScrollProgress />
           <HiringModal />
           <Suspense fallback={<div style={{ minHeight: '100vh', background: 'var(--bg)' }} />}>
@@ -137,7 +154,7 @@ export default function App() {
           <Route path="/login" element={<Navigate to="/list-property/login" replace />} />
           <Route path="/list-property/dashboard" element={<DashboardPage />} />
           <Route path="/list-property/reset-password" element={<ResetPasswordPage />} />
-          <Route path="/realty/listings" element={<ListingsPage />} />
+          <Route path="/realty/listings" element={<ListingsRedirect />} />
           <Route path="/realty/listings/:slug" element={<ListingDetailPage />} />
 
           {/* Legacy URLs from the old site, still indexed — redirect to nearest live equivalent */}

@@ -30,7 +30,7 @@ export default function ApprovedListingsSection({ limit = 6 }) {
             </h2>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link to="/realty/listings" className="btn-secondary">View all {total ? total : ''} projects →</Link>
+            <Link to="/list-property#listings" className="btn-secondary">View all {total ? total : ''} properties →</Link>
             <Link to="/list-property" className="btn-primary">List your property</Link>
           </div>
         </div>
