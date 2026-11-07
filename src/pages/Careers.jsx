@@ -207,10 +207,10 @@ export default function Careers() {
         />
         <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, var(--card) 0%, rgba(20,18,16,.36) 55%, rgba(20,18,16,.62) 100%)' }} />
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-sm) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-          <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, textShadow: '0 2px 24px rgba(11,10,9,.75)' }}>
+          <Reveal as="p" className="rw-te-display" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, textShadow: '0 2px 24px rgba(11,10,9,.75)' }}>
             {t('careers.hook.lead')}
           </Reveal>
-          <Reveal as="p" delay={120} style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, fontStyle: 'italic', color: 'var(--copper)', marginTop: 10, textShadow: '0 2px 24px rgba(11,10,9,.75)' }}>
+          <Reveal as="p" className="rw-te-display" delay={120} style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, fontStyle: 'italic', color: 'var(--copper)', marginTop: 10, textShadow: '0 2px 24px rgba(11,10,9,.75)' }}>
             {t('careers.hook.accent')}
           </Reveal>
         </div>

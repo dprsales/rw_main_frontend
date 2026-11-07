@@ -15,6 +15,7 @@ import { fetchProject, flattenGallery, projectImage } from '../data/projects'
 import { projectSeo } from '../data/seo-config'
 import { PROJECT_FOOTER_LINKS, cinzel, mono, serif, text } from '../theme'
 import { fs, body, container, ctaInk, eyebrow, pageHeading, sectionRule } from '../styles'
+import { useLang } from '../i18n/LangProvider'
 
 /* ₹9,500 → "₹9,500". The API gives a plain number. */
 const rupees = (n) => (typeof n === 'number' ? `₹${n.toLocaleString('en-IN')}` : n)
@@ -80,6 +81,7 @@ function Section({ id, eyebrow: kicker, title, intro, chip = false, bleed = fals
 }
 
 function ProjectHero({ hero, details, name }) {
+  const { t } = useLang()
   const { targetRef, targetStyle, container: parallax } = useParallax({ strength: 22 })
 
   const sideImage =
@@ -190,7 +192,7 @@ function ProjectHero({ hero, details, name }) {
                 color: 'rgba(234,241,249,.72)',
               }}
             >
-              ← PROJECTS IN HYDERABAD
+              {t('projects.back')}
             </Link>
 
             {(hero?.loc || details?.location) && (

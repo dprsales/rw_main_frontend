@@ -331,7 +331,7 @@ export default function Partner() {
       {/* Statement band */}
       <section style={{ ...sectionRule, background: 'var(--card)', position: 'relative', overflow: 'hidden' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-sm) 40px', textAlign: 'center' }}>
-          <Reveal as="p" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, maxWidth: '20em', margin: '0 auto' }}>
+          <Reveal as="p" className="rw-te-display" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, maxWidth: '20em', margin: '0 auto' }}>
             {t('partner.band.a')}
             <span className="rw-gold-text" style={{ fontStyle: 'italic' }}>{t('partner.band.b')}</span><br />
             {t('partner.band.c')}

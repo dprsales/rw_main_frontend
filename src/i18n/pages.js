@@ -1,4 +1,4 @@
-/** Home, About, Contact, Coaching, Consulting, Realty, Projects, Portfolio, Articles, FAQs, Careers, Assessment, Partner, Vendor, Start, sale forms. Names, phones, emails, URLs, stats, and stored form values stay as stored. */
+/** Home, About, Contact, Coaching, Consulting, Realty, Projects, Portfolio, Articles, FAQs, Careers, Assessment, Partner, Vendor, Start, sale forms, coaching result/purchase. Names, phones, emails, URLs, stats, and stored form values stay as stored. */
 import { te } from './pages-te'
 import servicesEn from './services-en'
 import servicesTe from './services-te'
@@ -8,6 +8,8 @@ import flowPagesEn from './flow-pages-en'
 import flowPagesTe from './flow-pages-te'
 import partnerFormsEn from './partner-forms-en'
 import partnerFormsTe from './partner-forms-te'
+import coachCheckoutEn from './coach-checkout-en'
+import coachCheckoutTe from './coach-checkout-te'
 
 export const pages = {
   en: {
@@ -233,8 +235,9 @@ export const pages = {
     ...contentPagesEn,
     ...flowPagesEn,
     ...partnerFormsEn,
+    ...coachCheckoutEn,
   },
-  te: { ...te, ...servicesTe, ...contentPagesTe, ...flowPagesTe, ...partnerFormsTe },
+  te: { ...te, ...servicesTe, ...contentPagesTe, ...flowPagesTe, ...partnerFormsTe, ...coachCheckoutTe },
 }
 
 const ROLE_KEYS = {
@@ -287,6 +290,8 @@ const SEO_ROUTES = {
   '/form/coaching': 'formCoaching',
   '/form/consulting': 'formConsulting',
   '/form/realty': 'formRealty',
+  '/coaching/result': 'coachingResult',
+  '/coaching/purchase': 'coachingPurchase',
 }
 
 export function experienceRoleKey(company) {

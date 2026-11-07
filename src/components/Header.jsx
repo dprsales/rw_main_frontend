@@ -358,7 +358,7 @@ export default function Header() {
         {/* Desktop/laptop only (CSS hides it below 1100px, where the wheel menu takes over). */}
         <DesktopNav pathname={pathname} onBook={openBooking} />
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px,1.6vw,20px)' }}>
+        <div className="rw-header-tools" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px,1.6vw,20px)' }}>
           <LangSwitch />
           {/* Whole-site text-size control (Small/default, Medium, Large). */}
           <FontSizeControl />

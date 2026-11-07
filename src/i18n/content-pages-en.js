@@ -14,6 +14,7 @@ export default {
   "projects.lede": "Homes across Hyderabad, in one place. Browse by area and open a project when you want a closer look.",
   "projects.intro": "See what is in each locality. When a project feels right, talk to an expert and we will help you look.",
   "projects.cta": "TALK TO AN EXPERT",
+  "projects.back": "← PROJECTS IN HYDERABAD",
   "projects.map.eyebrow": "HYDERABAD",
   "projects.map.title": "Browse by area.",
   "projects.map.stat.projects": "PROJECTS",

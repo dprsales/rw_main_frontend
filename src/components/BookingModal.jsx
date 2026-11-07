@@ -264,7 +264,7 @@ function BookingModal({ preset, onClose }) {
         }
       }
     } catch (err) {
-      setError(err?.message || 'Something went wrong. Please try again.')
+      setError(err?.message || t('book.err.generic'))
       setStatus('error')
       track(isApplying ? 'application_submission_failed' : 'lead_submission_failed', isApplying
         ? { applicationType: 'careers', source: form.source || 'site_cta', errorCategory: errorCategory(err), submitAttempt: sub.attempts, submissionId }

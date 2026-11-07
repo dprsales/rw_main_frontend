@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { VerifiedBadge } from './ui'
 import { formatPrice, imgUrl, isRent, listingTitle, perSqft, timeAgo } from '../format'
+import { useLang } from '../../i18n/LangProvider'
 
 const isFresh = (iso) => iso && Date.now() - new Date(iso).getTime() < 7 * 86400000
 
 /** Compact property card: photo, price overlay, key specs, selling points, CTA. */
 export default function ListingCard({ project, layout = 'grid' }) {
+  const { t } = useLang()
   const d = project.details || {}
   const images = (d.images || []).map(imgUrl).filter(Boolean)
   const [idx, setIdx] = useState(0)
@@ -81,9 +83,9 @@ export default function ListingCard({ project, layout = 'grid' }) {
         <p className="mt-1 truncate text-[13px] text-faded">📍 {[d.projectName, d.locality, project.city].filter(Boolean).slice(0, 3).join(', ')}</p>
 
         <div className="mt-3 grid grid-cols-3 divide-x divide-line rounded-md border border-line bg-night/40 text-center">
-          <Spec label="Config" value={isPlot ? 'Plot' : d.bhk} />
-          <Spec label="Area" value={d.areaSize ? `${d.areaSize} ${d.areaUnit || 'sq.ft'}` : null} />
-          <Spec label="Furnish" value={d.furnishingStatus} />
+          <Spec label={t('listings.spec.config')} value={isPlot ? t('listings.spec.plot') : d.bhk} />
+          <Spec label={t('listings.spec.area')} value={d.areaSize ? `${d.areaSize} ${d.areaUnit || 'sq.ft'}` : null} />
+          <Spec label={t('listings.spec.furnish')} value={d.furnishingStatus} />
         </div>
 
         {(d.propertyHighlights?.length > 0 || notes > 0) && (

@@ -1,10 +1,11 @@
 import { mono, serif, text } from './theme'
 
 /* Wraps a font-size so the site-wide text-size control (FontSizeControl) can scale it.
- * `--rw-fs` is the multiplier (1 by default; the control raises it). Pass a full length
- * — a px string or a clamp() — since calc(number * length) needs a unit on the length.
+ * `--rw-fs` is the multiplier (1 by default; the control raises it).
+ * `--rw-te` shrinks Telugu (set on html[lang="te"]) so Indic glyphs match Latin visual weight.
+ * Pass a full length — a px string or a clamp() — since calc(number * length) needs a unit.
  * e.g. fs('clamp(28px,3.6vw,46px)') or fs('17px'). */
-export const fs = (size) => `calc(var(--rw-fs, 1) * ${size})`
+export const fs = (size) => `calc(var(--rw-fs, 1) * var(--rw-te, 1) * ${size})`
 
 /* The horizontal padding is the page gutter; `.rw-pad` steps it down by breakpoint - see global.css. */
 export const container = { maxWidth: 1320, margin: '0 auto', padding: '0 40px' }

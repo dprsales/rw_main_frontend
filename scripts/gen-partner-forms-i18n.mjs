@@ -175,7 +175,7 @@ const tracks = {
   coaching: {
     label: ['Coaching', 'కోచింగ్'],
     cardTitle: ['Sales Mastery Coaching', 'సేల్స్ మాస్టరీ కోచింగ్'],
-    cardBody: ['Personalised coaching to sharpen closing skills, build a high-performing team, and grow into luxury real estate sales.', 'క్లోజింగ్ నైపుణ్యాలు పదును, బలమైన టీమ్, లగ్జరీ రియల్ ఎస్టేట్ సేల్స్‌లోకి ఎదగడం — వ్యక్తిగత కోచింగ్.'],
+    cardBody: ['Personalised coaching to sharpen closing skills, build a high-performing team, and grow into luxury real estate sales.', 'క్లోజింగ్ నైపుణ్యాలు పదును, బలమైన టీమ్, లగ్జరీ రియల్ ఎస్టేట్ సేల్స్‌లోకి ఎదగడం. వ్యక్తిగత కోచింగ్.'],
     cardCta: ['Share your coaching details', 'మీ కోచింగ్ వివరాలు పంచుకోండి'],
     eyebrow: ['RAJIV WILLIAMS COACHING', 'RAJIV WILLIAMS కోచింగ్'],
     title: ['Let’s Understand Where You Are Today', 'ఈరోజు మీరు ఎక్కడ ఉన్నారో అర్థం చేసుకుందాం'],
@@ -186,7 +186,7 @@ const tracks = {
   consulting: {
     label: ['Consulting', 'కన్సల్టింగ్'],
     cardTitle: ['Business & Sales Consulting', 'బిజినెస్ & సేల్స్ కన్సల్టింగ్'],
-    cardBody: ['Expert guidance on sales setup, branding, hiring and process, tailored to where your business stands today.', 'సేల్స్ సెటప్, బ్రాండింగ్, హైరింగ్, ప్రాసెస్ — మీ వ్యాపారం ఈరోజు ఎక్కడ ఉందో దానికి తగిన మార్గదర్శకత్వం.'],
+    cardBody: ['Expert guidance on sales setup, branding, hiring and process, tailored to where your business stands today.', 'సేల్స్ సెటప్, బ్రాండింగ్, హైరింగ్, ప్రాసెస్. మీ వ్యాపారం ఈరోజు ఎక్కడ ఉందో దానికి తగిన మార్గదర్శకత్వం.'],
     cardCta: ['Share your business details', 'మీ వ్యాపార వివరాలు పంచుకోండి'],
     eyebrow: ['RAJIV WILLIAMS CONSULTING', 'RAJIV WILLIAMS కన్సల్టింగ్'],
     title: ['Welcome to Rajiv Williams Consulting', 'Rajiv Williams కన్సల్టింగ్‌కు స్వాగతం'],

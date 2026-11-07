@@ -1,14 +1,14 @@
 import Reveal from './Reveal'
+import { useLang } from '../i18n/LangProvider'
 import { mono, serif } from '../theme'
-import { fs, eyebrow, note } from '../styles'
+import { fs, note } from '../styles'
 
-/* Score → tone lines, honest to the band the route maps to. Never a made-up number. */
-function bandLineFor(overall) {
+function bandLineFor(t, overall) {
   if (overall == null) return null
-  if (overall >= 60) return 'Advanced refinement. You are building on a strong base.'
-  if (overall >= 50) return 'Gap-based progression. Targeted work will move you quickly.'
-  if (overall >= 40) return 'Priority improvement areas. A focused plan lifts you fastest.'
-  return 'Foundations first. The basics give you the fastest gains.'
+  if (overall >= 60) return t('score.band.60')
+  if (overall >= 50) return t('score.band.50')
+  if (overall >= 40) return t('score.band.40')
+  return t('score.band.low')
 }
 
 const BAR_STYLE = {
@@ -18,17 +18,6 @@ const BAR_STYLE = {
   overflow: 'hidden',
 }
 
-const bandChip = {
-  fontFamily: mono,
-  fontSize: fs('9px'),
-  letterSpacing: '.14em',
-  color: 'var(--faded)',
-  border: '1px solid var(--line)',
-  borderRadius: 999,
-  padding: '4px 10px',
-  whiteSpace: 'nowrap',
-}
-
 /**
  * Score at a glance — the customer-facing readout of an assessment result.
  *
@@ -36,6 +25,7 @@ const bandChip = {
  * otherwise from the route scenario's band so nothing is ever invented.
  */
 export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
+  const { t } = useLang()
   const overall = scoreData?.overall
   const dims = scoreData?.dimensions ?? []
 
@@ -46,10 +36,7 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
   const hasData = overall != null || dims.length > 0
   const isNumber = hasData && overall != null
   const headline = isNumber ? `${Math.round(overall)}` : scenario.bandTitle
-  // No fallback to scenario.bandTitle here: without a real score, bandLineFor
-  // returns null and headline already shows scenario.bandTitle — repeating it
-  // as the line underneath was pure duplication.
-  const statusLine = bandLineFor(overall)
+  const statusLine = bandLineFor(t, overall)
 
   return (
     <Reveal delay={delay}>
@@ -60,18 +47,14 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, flexWrap: 'wrap' }}>
             <div>
               <div style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.16em', color: 'var(--copper)' }}>
-                YOUR ASSESSMENT SCORE
+                {t('score.your')}
               </div>
               <div style={{ fontFamily: serif, fontSize: fs('17px'), color: 'var(--ink)', marginTop: 4 }}>
-                Interview Readiness Score
+                {t('score.readiness')}
               </div>
             </div>
-            {/* <span style={bandChip}>
-              {hasData ? 'LIVE RESULT' : 'RESULT BAND'}
-            </span> */}
           </div>
 
-          {/* Overall score / band */}
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, margin: '22px 0 6px' }}>
             <span style={{
               fontFamily: serif,
@@ -83,7 +66,7 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
             </span>
             {isNumber && (
               <span style={{ fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.16em', color: 'var(--faded)' }}>
-                OUT OF 100
+                {t('score.outOf')}
               </span>
             )}
           </div>
@@ -91,7 +74,6 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
             <p style={{ ...note, fontSize: fs('16px'), color: 'var(--ink)', lineHeight: 1.5 }}>{statusLine}</p>
           )}
 
-          {/* Per-dimension bars when real scores exist */}
           {dims.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 22 }}>
               {dims.map((d) => (
@@ -101,7 +83,7 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
                       {d.label.toUpperCase()}
                     </span>
                     <span style={{ fontFamily: mono, fontSize: fs('12px'), color: 'var(--copper)' }}>
-                      {d.value}%{d.value < 50 ? ' · HIGH PRIORITY' : ''}
+                      {d.value}%{d.value < 50 ? t('score.highPriority') : ''}
                     </span>
                   </div>
                   <div style={BAR_STYLE}>
@@ -113,27 +95,26 @@ export default function ScoreResult({ scenario, scoreData, delay = 0 }) {
           ) : (
             <div style={{ marginTop: 22, border: '1px dashed var(--line)', padding: '13px 16px' }}>
               <span style={{ ...note, fontSize: fs('14px'), color: 'var(--ink)', lineHeight: 1.5 }}>
-                Your priority areas and the full development plan follow below.
+                {t('score.fallback')}
               </span>
             </div>
           )}
 
-          {/* Strongest vs priority footer */}
           <div style={{ marginTop: 22, paddingTop: 14, borderTop: '1px solid var(--line)', display: 'flex', gap: 22, flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span aria-hidden style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--copper)', flexShrink: 0 }} />
               <span style={{ fontFamily: mono, fontSize: fs('9px'), letterSpacing: '.06em', color: 'var(--faded)' }}>
                 {strongest
-                  ? `STRONGEST: ${strongest.short.toUpperCase()} (${strongest.value}%)`
-                  : 'STRONGEST AREAS ARRIVE WITH YOUR FULL REPORT'}
+                  ? t('score.strongest', { name: strongest.short.toUpperCase(), value: strongest.value })
+                  : t('score.strongestEmpty')}
               </span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span aria-hidden style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--copper)', flexShrink: 0 }} />
               <span style={{ fontFamily: mono, fontSize: fs('9px'), letterSpacing: '.06em', color: 'var(--faded)' }}>
                 {priorityDims.length
-                  ? `PRIORITY · ${priorityDims.map((d) => d.short.toUpperCase()).join(' · ')}`
-                  : 'PRIORITY · FOCUSED DEVELOPMENT'}
+                  ? t('score.priority', { names: priorityDims.map((d) => d.short.toUpperCase()).join(' · ') })
+                  : t('score.priorityEmpty')}
               </span>
             </div>
           </div>

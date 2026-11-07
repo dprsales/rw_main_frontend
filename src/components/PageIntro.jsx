@@ -23,24 +23,24 @@ export default function PageIntro({
   return (
     <section
       id="top"
-      className={`rw-pad${image ? ' rw-intro-with-image' : ''}`}
+      className={`rw-pad rw-page-intro${image ? ' rw-intro-with-image' : ''}`}
       style={{ ...container, padding }}
     >
-      <div className={image ? 'rw-intro-copy' : undefined}>
+      <div className="rw-intro-copy">
         <Reveal style={{ ...eyebrowToken, marginBottom: 30 }}>{eyebrow}</Reveal>
 
-        <h3 style={{ ...pageHeading, maxWidth: '17em', ...headlineStyle }}>
+        <h3 className="rw-page-intro-title" style={{ ...pageHeading, maxWidth: '17em', ...headlineStyle }}>
           <RiseText lines={headline} step={headlineStep} />
         </h3>
 
         {lede && (
-          <Reveal as="p" delay={140} style={{ ...ledeToken, marginTop: 28, ...ledeStyle }}>
+          <Reveal as="p" className="rw-page-intro-lede" delay={140} style={{ ...ledeToken, marginTop: 28, ...ledeStyle }}>
             {lede}
           </Reveal>
         )}
 
         {intro && (
-          <Reveal as="p" delay={180} style={{ ...introToken, marginTop: 16, maxWidth: '36em', ...introStyle }}>
+          <Reveal as="p" className="rw-page-intro-body" delay={180} style={{ ...introToken, marginTop: 16, maxWidth: '36em', ...introStyle }}>
             {intro}
           </Reveal>
         )}
