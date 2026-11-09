@@ -278,6 +278,7 @@ const SEO_ROUTES = {
   '/project-hyderabad': 'projects',
   '/realty/portfolio': 'portfolio',
   '/articles': 'articles',
+  '/content-library': 'contentLibrary',
   '/faqs': 'faqs',
   '/careers': 'careers',
   '/careers/apply': 'careersApply',

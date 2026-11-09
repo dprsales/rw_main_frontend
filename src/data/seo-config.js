@@ -85,6 +85,11 @@ export const ROUTE_SEO = {
     description:
       'Writing from Rajiv Williams on luxury sales, sales teams, and mandates in Hyderabad.',
   },
+  '/content-library': {
+    title: 'Sales Carousel Content Library | Rajiv Williams',
+    description:
+      'Browse and download Team RW sales carousels for learning — preview covers, open PDFs, and save them free.',
+  },
   '/faqs': {
     title: 'FAQs | Coaching, Consulting, Mandates | Rajiv Williams',
     description:

@@ -61,6 +61,7 @@ const PAGE_AREAS = [
   [/^\/careers/, 'Careers'],
   [/^\/partner/, 'Partner'],
   [/^\/templates/, 'Templates'],
+  [/^\/content-library/, 'Content Library'],
   [/^\/contact/, 'Contact'],
   [/^\/about/, 'About'],
   [/^\/assessment/, 'Assessment'],

@@ -21,6 +21,7 @@ const CRAWLABLE_LINKS = [
   { label: 'Channel Partner Terms', to: '/partner/terms' },
   { label: 'Careers', to: '/careers' },
   { label: 'Articles', to: '/articles' },
+  { label: 'Content Library', to: '/content-library' },
   { label: 'FAQs', to: '/faqs' },
   { label: 'Channel partner applications', to: '/partner' },
   { label: 'AI assessment', to: '/assessment' },

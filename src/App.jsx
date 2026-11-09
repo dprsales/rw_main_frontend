@@ -34,6 +34,7 @@ import VendorPartner from './pages/VendorPartner'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
 import Faqs from './pages/Faqs'
+import ContentLibrary from './pages/ContentLibrary'
 
 const ListPropertyPage = lazy(() => import('./listings/pages/ListPropertyPage'))
 const DashboardPage = lazy(() => import('./listings/pages/DashboardPage'))
@@ -130,6 +131,7 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/articles" element={<Articles />} />
           <Route path="/articles/:slug" element={<Article />} />
+          <Route path="/content-library" element={<ContentLibrary />} />
           <Route path="/faqs" element={<Faqs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />

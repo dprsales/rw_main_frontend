@@ -13,7 +13,7 @@ import { useLang } from '../i18n/LangProvider'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { mono } from '../theme'
 import {
-  ArrowRight, Building2, ChartNoAxesColumnIncreasing, ChevronDown, ChevronRight, FileSignature, Handshake, LayoutGrid, Target, Users,
+  ArrowRight, BookOpen, Building2, ChartNoAxesColumnIncreasing, ChevronDown, ChevronRight, CircleHelp, FileSignature, Handshake, LayoutGrid, Library, Target, Users,
 } from 'lucide-react'
 
 // Same wheel menu on every page: only route links belong here, not per-page scroll anchors.
@@ -27,6 +27,7 @@ const SITE_NAV = [
   { key: 'nav.portfolio', label: 'Portfolio', to: '/realty/portfolio' },
   { key: 'nav.careers', label: 'Careers', to: '/careers' },
   { key: 'nav.articles', label: 'Articles', to: '/articles' },
+  { key: 'nav.contentLibrary', label: 'Content Library', to: '/content-library' },
   { key: 'nav.faqs', label: 'FAQs', to: '/faqs' },
   { key: 'nav.partners', label: 'Channel Partners', to: '/partner' },
   { key: 'nav.krisah', label: 'KRISAH Assessment', to: '/assessment' },
@@ -65,12 +66,19 @@ const MEGA_COLUMNS = [
   },
 ]
 const MEGA_PATHS = MEGA_COLUMNS.flatMap((col) => col.items.map((item) => item.to).filter(Boolean))
-const TOP_LINKS = [
-  { key: 'nav.portfolio', label: 'Portfolio', to: '/realty/portfolio' },
-  { key: 'nav.articles', label: 'Articles', to: '/articles' },
-  { key: 'nav.faqs', label: 'FAQs', to: '/faqs' },
-  { key: 'nav.careers', label: 'Careers', to: '/careers' },
+/** Learn mega: Articles + Content Library + FAQs — keeps the top bar uncrowded. */
+const LEARN_COLUMNS = [
+  {
+    headingKey: 'mega.learn',
+    heading: 'Learn',
+    items: [
+      { key: 'nav.articles', label: 'Articles', to: '/articles', descKey: 'mega.articlesDesc', desc: 'Readings on luxury sales and teams', icon: BookOpen },
+      { key: 'nav.contentLibrary', label: 'Content Library', to: '/content-library', descKey: 'mega.contentLibraryDesc', desc: 'Sales carousels to preview and download', icon: Library },
+      { key: 'nav.faqs', label: 'FAQs', to: '/faqs', descKey: 'mega.faqsDesc', desc: 'Answers on coaching, consulting, mandates', icon: CircleHelp },
+    ],
+  },
 ]
+const LEARN_PATHS = LEARN_COLUMNS.flatMap((col) => col.items.map((item) => item.to).filter(Boolean))
 const PROPERTY_COLUMNS = [
   {
     headingKey: 'mega.builder',
@@ -137,8 +145,10 @@ function DesktopNav({ pathname, onBook }) {
   const [open, setOpen] = useState(null)
   const workRef = useRef(null)
   const propsRef = useRef(null)
+  const learnRef = useRef(null)
   const workTriggerRef = useRef(null)
   const propsTriggerRef = useRef(null)
+  const learnTriggerRef = useRef(null)
   const hoverOpenedRef = useRef(false)
   const closeTimerRef = useRef(null)
   const openTimerRef = useRef(null)
@@ -151,10 +161,14 @@ function DesktopNav({ pathname, onBook }) {
 
   useEffect(() => {
     if (!open) return
-    const wraps = [workRef.current, propsRef.current].filter(Boolean)
+    const wraps = [workRef.current, propsRef.current, learnRef.current].filter(Boolean)
     const onKey = (e) => {
       if (e.key !== 'Escape') return
-      const trigger = open === 'work' ? workTriggerRef.current : propsTriggerRef.current
+      const trigger = open === 'work'
+        ? workTriggerRef.current
+        : open === 'learn'
+          ? learnTriggerRef.current
+          : propsTriggerRef.current
       if (wraps.some((el) => el.contains(document.activeElement))) trigger?.focus()
       setOpen(null)
     }
@@ -185,6 +199,13 @@ function DesktopNav({ pathname, onBook }) {
   }
   const close = () => setOpen(null)
   const linkClass = (to) => `rw-dnav-link${pathname === to ? ' is-active' : ''}`
+  const blurUnlessSibling = (e, selfRef) => {
+    const related = e.relatedTarget
+    if (!related) return
+    const wraps = [workRef.current, propsRef.current, learnRef.current]
+    if (!wraps.some((el) => el?.contains(related))) setOpen(null)
+    else if (!selfRef.current?.contains(related)) {/* switching megas handled by enter */}
+  }
 
   return (
     <nav className="rw-dnav" aria-label={t('ui.main')}>
@@ -195,7 +216,7 @@ function DesktopNav({ pathname, onBook }) {
         className="rw-dnav-mega-wrap"
         onMouseEnter={() => enter('work')}
         onMouseLeave={leave}
-        onBlur={(e) => { if (e.relatedTarget && !workRef.current?.contains(e.relatedTarget) && !propsRef.current?.contains(e.relatedTarget)) setOpen(null) }}
+        onBlur={(e) => blurUnlessSibling(e, workRef)}
       >
         <button
           ref={workTriggerRef}
@@ -218,7 +239,7 @@ function DesktopNav({ pathname, onBook }) {
         className="rw-dnav-mega-wrap"
         onMouseEnter={() => enter('props')}
         onMouseLeave={leave}
-        onBlur={(e) => { if (e.relatedTarget && !propsRef.current?.contains(e.relatedTarget) && !workRef.current?.contains(e.relatedTarget)) setOpen(null) }}
+        onBlur={(e) => blurUnlessSibling(e, propsRef)}
       >
         <button
           ref={propsTriggerRef}
@@ -236,9 +257,32 @@ function DesktopNav({ pathname, onBook }) {
         )}
       </div>
 
-      {TOP_LINKS.map((item) => (
-        <Link key={item.to} to={item.to} className={linkClass(item.to)}>{t(item.key)}</Link>
-      ))}
+      <Link to="/realty/portfolio" className={linkClass('/realty/portfolio')}>{t('nav.portfolio')}</Link>
+
+      <div
+        ref={learnRef}
+        className="rw-dnav-mega-wrap"
+        onMouseEnter={() => enter('learn')}
+        onMouseLeave={leave}
+        onBlur={(e) => blurUnlessSibling(e, learnRef)}
+      >
+        <button
+          ref={learnTriggerRef}
+          type="button"
+          className={`rw-dnav-link${LEARN_PATHS.includes(pathname) ? ' is-active' : ''}`}
+          aria-expanded={open === 'learn'}
+          aria-controls="rw-learn-mega"
+          onClick={() => toggle('learn')}
+        >
+          {t('nav.learn')} <ChevronDown className="rw-dnav-caret" size={14} strokeWidth={1.75} aria-hidden="true" />
+        </button>
+
+        {open === 'learn' && (
+          <MegaPanel id="rw-learn-mega" columns={LEARN_COLUMNS} pathname={pathname} onClose={close} />
+        )}
+      </div>
+
+      <Link to="/careers" className={linkClass('/careers')}>{t('nav.careers')}</Link>
     </nav>
   )
 }
