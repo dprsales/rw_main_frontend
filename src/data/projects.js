@@ -51,6 +51,8 @@ export const PROJECT_SLUGS = {
   'Pavani Mirai': 'pavani-mirai',
   'SAS Crown': 'sas-crown',
   'Trump Towers': 'trump-towers',
+  'Western Marina': 'western-marina',
+  'Brigade Gateway': 'brigade-gateway',
 }
 
 /** Resolve a CDN path (or absolute URL) from the API to a loadable image URL. */

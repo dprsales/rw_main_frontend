@@ -909,4 +909,6 @@ export const PROJECTS = [
   { name: 'Pavani Mirai', area: 'Financial District', status: 'Mandate' },
   { name: 'SAS Crown', area: 'Kokapet', status: 'Mandate' },
   { name: 'Trump Towers', area: 'Kokapet', status: 'Mandate' },
+  { name: 'Western Marina', area: 'Puppalaguda', status: 'Mandate' },
+  { name: 'Brigade Gateway', area: 'Neopolis, Kokapet', status: 'Mandate' },
 ]
