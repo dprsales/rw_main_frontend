@@ -20,7 +20,6 @@ import Reveal from '../components/Reveal'
 import RiseText from '../components/RiseText'
 import ClosingCTA from '../components/ClosingCTA'
 import SectionHead, { SectionAside } from '../components/SectionHead'
-import ApprovedListingsSection from '../listings/components/ApprovedListingsSection'
 import { useInView } from '../hooks/useInView'
 import { useLang } from '../i18n/LangProvider'
 import { MANDATE_SCOPE } from '../data/content'
@@ -293,8 +292,6 @@ export default function Realty() {
           </Reveal>
         </div>
       </section>
-
-      <ApprovedListingsSection />
 
       <ClosingCTA title={t('realty.close.title')}>
         <CtaButton variant="outline" href="/form/realty">{t('realty.close.cta')}</CtaButton>
