@@ -33,7 +33,7 @@ export default function Contact() {
         headline={headline}
         lede={t('contact.lede')}
         intro={t('contact.intro')}
-        cta={<BookButton interest="General enquiry" specular>{t('cta.bookCall')}</BookButton>}
+        cta={<BookButton to="/form" interest="General enquiry" specular>{t('cta.bookCall')}</BookButton>}
       />
 
       <section style={{ ...sectionRule, background: 'var(--chip)', position: 'relative', overflow: 'hidden' }}>

@@ -139,8 +139,12 @@ export default function App() {
           <Route path="/partner/terms" element={<PartnerTerms />} />
           {/* /start is the guided finder on its own page; service pages link here with ?who= */}
           <Route path="/start" element={<Start />} />
-          {/* /form is the track picker; each questionnaire has its own URL (/form/coaching etc) for direct links */}
+          {/* Service forms: /coaching/form, /consulting/form, /realty/form. /form is the track picker. */}
+          <Route path="/coaching/form" element={<Form forcedTrack="coaching" />} />
+          <Route path="/consulting/form" element={<Form forcedTrack="consulting" />} />
+          <Route path="/realty/form" element={<Form forcedTrack="realty" />} />
           <Route path="/form" element={<Form />} />
+          {/* Legacy /form/:track → redirected inside Form to /{track}/form */}
           <Route path="/form/:track" element={<Form />} />
           <Route path="/realty/portfolio" element={<Portfolio />} />
           <Route path="/partner" element={<Partner />} />

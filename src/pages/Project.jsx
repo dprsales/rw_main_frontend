@@ -342,6 +342,7 @@ function ProjectHero({ hero, details, name }) {
               }}
             >
               <BookButton
+                to="/realty/form"
                 interest="RW Realty mandate"
                 specular
               >
@@ -488,7 +489,7 @@ export default function Project() {
           <p style={{ ...body, maxWidth: '32em' }}>The listing may have moved, or the connection dropped. Explore the full portfolio, or reach out and we’ll send the details directly.</p>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8 }}>
             <Link to="/realty/portfolio" style={ctaInk}>View the portfolio</Link>
-            <BookButton interest="RW Realty mandate" specular>Request details</BookButton>
+            <BookButton to="/realty/form" interest="RW Realty mandate" specular>Request details</BookButton>
           </div>
         </div>
       )}
@@ -701,10 +702,8 @@ Let’s connect and discover if {name} feels like home.
 </Reveal>
           <Reveal delay={140} style={{ marginTop: 44 }}>
             <BookButton
+              to="/realty/form"
               interest="RW Realty mandate"
-              eyebrow="BOOK A PRIVATE TOUR"
-              title="Let’s schedule your visit."
-              subtitle="Fill the form and speak to an expert on how and when to schedule a site visit."
               specular
             >BOOK A PRIVATE TOUR</BookButton>
           </Reveal>

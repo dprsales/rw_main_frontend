@@ -592,6 +592,8 @@ a:hover { color: var(--ink, #12100D); }
 .rw-way-media img {
   width: 100%; height: 100%; object-fit: contain; display: block;
   pointer-events: none;
+  /* Soften baked-in gold vector posters so they don't overpower the card. */
+  filter: saturate(0.78) brightness(0.94) contrast(0.96);
 }
 /* Soft bottom scrim so the service numeral/title stays readable on the graphic. */
 .rw-way-media::after {
@@ -620,8 +622,8 @@ a:hover { color: var(--ink, #12100D); }
   text-shadow: 0 2px 14px rgba(11,10,9,.9);
   transition: color .4s ease;
 }
-.rw-way:hover .rw-way-numeral { color: var(--copper); -webkit-text-stroke-color: var(--copper); }
-.rw-way:hover .rw-way-service-name { color: var(--copper); }
+.rw-way:hover .rw-way-numeral { color: #F2EFE9; -webkit-text-stroke-color: #F2EFE9; }
+.rw-way:hover .rw-way-service-name { color: #F2EFE9; }
 
 /* WHAT YOU'LL ACHIEVE - numbered outcome cards, matching the chapter marks used elsewhere (.rw-way / .rw-flow-numeral). */
 .rw-achieve-grid {
@@ -2803,14 +2805,17 @@ html[lang="te"] .rw-contact-row {
 }
 
 .rw-hero .rw-hero-explore {
-  background: rgba(11,10,9,.62);
-  border-color: var(--copper);
-  color: var(--copper);
+  background: rgba(11,10,9,.45);
+  border-color: rgba(242,239,233,.28);
+  color: rgba(242,239,233,.72);
   backdrop-filter: blur(8px);
+  opacity: 0.9;
 }
 .rw-hero .rw-hero-explore:hover {
-  background: color-mix(in srgb, var(--copper) 18%, rgba(11,10,9,.72));
-  color: var(--copper);
+  background: rgba(11,10,9,.62);
+  border-color: rgba(242,239,233,.45);
+  color: #F2EFE9;
+  opacity: 1;
 }
 
 .rw-hero-fade {
@@ -3093,10 +3098,11 @@ html[lang="te"] .rw-contact-row {
   min-width: 0;
   height: 48px;
   padding: 0 22px;
-  border: 1px solid color-mix(in srgb, var(--copper) 72%, transparent);
+  border: 1px solid rgba(242,239,233,.28);
   border-radius: 10px;
-  background: rgba(11,10,9,.26);
-  color: var(--ink);
+  background: transparent;
+  color: rgba(242,239,233,.72);
+  opacity: 0.9;
   cursor: pointer;
   font-family: 'Poppins', system-ui, -apple-system, sans-serif;
   font-size: 13px;
@@ -3107,8 +3113,34 @@ html[lang="te"] .rw-contact-row {
   text-transform: uppercase;
   transition: background .25s ease, border-color .25s ease;
 }
-.rw-coaching-hero-explore:hover { background: rgba(195,155,83,.13); border-color: var(--copper); transform: none; }
-.rw-coaching-hero-explore:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.rw-coaching-hero-explore:hover {
+  background: rgba(242,239,233,.08);
+  border-color: rgba(242,239,233,.45);
+  color: #F2EFE9;
+  opacity: 1;
+  transform: none;
+}
+.rw-coaching-hero-explore:focus-visible { outline: 2px solid #F2EFE9; outline-offset: 3px; }
+
+/* Dark heroes: keep secondary CTAs quiet (no gold rim) so primary gold owns the row. */
+.rw-coaching-hero-actions .rw-cta-secondary,
+.rw-consulting-hero .rw-cta-secondary,
+.rw-realty-hero-actions .rw-cta-secondary,
+.rw-hero .rw-hero-actions .rw-cta-secondary {
+  border-color: rgba(242,239,233,.28);
+  background: transparent;
+  color: rgba(242,239,233,.72);
+  opacity: 0.9;
+}
+.rw-coaching-hero-actions .rw-cta-secondary:hover,
+.rw-consulting-hero .rw-cta-secondary:hover,
+.rw-realty-hero-actions .rw-cta-secondary:hover,
+.rw-hero .rw-hero-actions .rw-cta-secondary:hover {
+  border-color: rgba(242,239,233,.45);
+  background: rgba(242,239,233,.08);
+  color: #F2EFE9;
+  opacity: 1;
+}
 .rw-coaching-hero-actions .rw-cta-secondary,
 .rw-hero-actions .rw-cta-secondary,
 .rw-realty-hero-actions .rw-cta-secondary {
@@ -4258,15 +4290,22 @@ body.rw-faqs-page [class*="fb_"] {
    the way .rw-way-arrow does. */
 .rw-cta-secondary {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  height: 48px; padding: 0 24px; box-sizing: border-box;
-  border: 1px solid color-mix(in srgb, var(--copper) 55%, transparent);
-  border-radius: 10px; background: color-mix(in srgb, var(--copper) 6%, transparent);
-  color: var(--ink); text-decoration: none; cursor: pointer; white-space: nowrap;
+  height: 48px; padding: 0 22px; box-sizing: border-box;
+  border: 1px solid var(--line);
+  border-radius: 10px; background: transparent;
+  color: var(--faded); text-decoration: none; cursor: pointer; white-space: nowrap;
   font-family: 'Poppins', system-ui, -apple-system, sans-serif;
-  font-size: 12px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase;
-  transition: border-color .25s ease, background .25s ease, transform .18s cubic-bezier(.34, 1.56, .64, 1);
+  font-size: 11px; font-weight: 400; letter-spacing: .12em; text-transform: uppercase;
+  opacity: 0.88;
+  transition: border-color .25s ease, background .25s ease, color .25s ease, opacity .25s ease, transform .18s cubic-bezier(.34, 1.56, .64, 1);
 }
-.rw-cta-secondary:hover { border-color: var(--copper); background: color-mix(in srgb, var(--copper) 14%, transparent); transform: translateY(-1px); }
+.rw-cta-secondary:hover {
+  border-color: color-mix(in srgb, var(--ink) 28%, var(--line));
+  background: color-mix(in srgb, var(--ink) 4%, transparent);
+  color: var(--ink);
+  opacity: 1;
+  transform: translateY(-1px);
+}
 .rw-cta-secondary:active { transform: translateY(0); }
 .rw-cta-secondary:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
 .rw-cta-secondary .rw-cta-secondary-arrow { display: inline-block; transition: transform .3s cubic-bezier(.2,.7,.2,1); }
@@ -4335,6 +4374,23 @@ body.rw-faqs-page [class*="fb_"] {
 .rw-program-outcome { margin: 4px 0 0; font-weight: 400; font-size: 15px; line-height: 1.55; color: var(--faded); }
 .rw-program-session { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--faded); }
 .rw-program-cta { width: 100%; margin-top: auto; gap: 10px; }
+.rw-program-start {
+  margin-top: auto;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-family: var(--mono, 'Poppins', system-ui, sans-serif);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--copper);
+  transition: color .2s ease, gap .2s ease;
+}
+.rw-program-start:hover { color: var(--ink); gap: 12px; }
+.rw-program-start:focus-visible { outline: 1px solid var(--copper); outline-offset: 4px; }
 
 @media (prefers-reduced-motion: reduce) {
   .rw-program, .rw-program-media img { transition: none; }

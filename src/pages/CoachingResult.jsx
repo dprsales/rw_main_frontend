@@ -124,7 +124,7 @@ export default function CoachingResult() {
             <CtaButton variant="outline" href="/assessment" onClick={() => track('coaching_result_cta', { target: 'view-assessment' })}>
               {t('cresult.cta.assessment')}
             </CtaButton>
-            <BookButton interest="Coaching" specular>{t('cresult.cta.book')}</BookButton>
+            <BookButton to="/coaching/form" interest="Coaching" specular>{t('cresult.cta.book')}</BookButton>
           </Reveal>
 
           <Reveal delay={320} style={{ marginTop: 26, fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.14em', color: 'var(--faded)' }}>
@@ -254,7 +254,7 @@ export default function CoachingResult() {
           <CtaButton href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'coaching-result-retake' })}>
             {t('cresult.close.retake')} <span className="rw-cta-arrow">→</span>
           </CtaButton>
-          <BookButton interest="Coaching" specular>{t('cresult.close.book')}</BookButton>
+          <BookButton to="/coaching/form" interest="Coaching" specular>{t('cresult.close.book')}</BookButton>
           <button type="button" onClick={() => scrollToId('plan')} className="rw-inline-cta" style={ctaInline}>
             {t('cresult.close.review')}
           </button>

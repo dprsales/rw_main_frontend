@@ -291,7 +291,7 @@ export default function Assessment() {
             <CtaButton live onClick={() => setStartFrom('closing')}>
               {t('assess.start')} <span className="rw-cta-arrow">→</span>
             </CtaButton>
-            <BookButton interest="Coaching" specular>{t('assess.orCall')}</BookButton>
+            <BookButton to="/coaching/form" interest="Coaching" specular>{t('assess.orCall')}</BookButton>
           </div>
           <p style={{ ...note, marginTop: 22, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)' }}>
             {t('assess.fine')}

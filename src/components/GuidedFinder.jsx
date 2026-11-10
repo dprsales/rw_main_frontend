@@ -6,6 +6,7 @@ import CtaButton from './CtaButton'
 import FinderSteps from './FinderSteps'
 import Reveal from './Reveal'
 import { track } from '../data/analytics'
+import { formPathForTrack } from '../data/booking'
 import { useFinder } from '../hooks/useFinder'
 import { useLang } from '../i18n/LangProvider'
 import { finderOutcomeName } from '../i18n/pages'
@@ -85,7 +86,13 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
 
   const deepPath = () => {
     track('finder_service_click', { recommendedService: result.outcome.key, target: 'form', location, attemptId: finder.attemptId })
-    navigate(`/form/${result.outcome.formTrack}`, { state: { prefill: { finder: { ...answers, recommendedService: result.outcome.key, rule: result.rule } }, attemptId: finder.attemptId } })
+    navigate(formPathForTrack(result.outcome.formTrack), {
+      state: {
+        from: location === 'page' ? '/start' : '/',
+        prefill: { finder: { ...answers, recommendedService: result.outcome.key, rule: result.rule } },
+        attemptId: finder.attemptId,
+      },
+    })
   }
 
   return (
@@ -109,7 +116,7 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
 
         <div className="rw-finder-stage" aria-live="polite">
           <FinderSteps finder={finder} onStartOver={startOver}>
-            <BookButton specular source="finder_skip" skipQuestions>{t('cta.bookCall')}</BookButton>
+            <BookButton to="/form" specular source="finder_skip" skipQuestions>{t('cta.bookCall')}</BookButton>
           </FinderSteps>
 
           {done && result && (
@@ -158,13 +165,20 @@ const ResultCard = forwardRef(function ResultCard({ result, guidance, onDeepPath
             {t('finder.browseProjects')}
           </CtaButton>
         ) : (
-          <BookButton className="rw-cta" style={ctaCopper} {...bookPreset}>{t('mega.bookStrategy')}</BookButton>
+          <BookButton
+            to={outcome.formTrack ? formPathForTrack(outcome.formTrack) : '/form'}
+            className="rw-cta"
+            style={ctaCopper}
+            {...bookPreset}
+          >
+            {t('mega.bookStrategy')}
+          </BookButton>
         )}
         {outcome.formTrack && (
           <CtaButton variant="outline" onClick={onDeepPath}>{t(`finder.form.${outcome.formTrack}`)}</CtaButton>
         )}
         {isBrowse && (
-          <BookButton specular {...bookPreset}>{t('mega.bookStrategy')}</BookButton>
+          <BookButton to="/realty/form" specular {...bookPreset}>{t('mega.bookStrategy')}</BookButton>
         )}
       </div>
 

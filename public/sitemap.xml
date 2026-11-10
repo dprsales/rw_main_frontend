@@ -104,9 +104,9 @@
 
   <!-- Pre-consultation assessment — picker plus one URL per track -->
   <url><loc>https://www.rajivwilliams.com/form</loc><priority>0.4</priority></url>
-  <url><loc>https://www.rajivwilliams.com/form/coaching</loc><priority>0.4</priority></url>
-  <url><loc>https://www.rajivwilliams.com/form/consulting</loc><priority>0.4</priority></url>
-  <url><loc>https://www.rajivwilliams.com/form/realty</loc><priority>0.4</priority></url>
+  <url><loc>https://www.rajivwilliams.com/coaching/form</loc><priority>0.4</priority></url>
+  <url><loc>https://www.rajivwilliams.com/consulting/form</loc><priority>0.4</priority></url>
+  <url><loc>https://www.rajivwilliams.com/realty/form</loc><priority>0.4</priority></url>
 
   <!-- Project detail pages — real long-tail search demand in Hyderabad -->
   <url><loc>https://www.rajivwilliams.com/projects/acasasimchah</loc><priority>0.7</priority></url>

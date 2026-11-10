@@ -8,7 +8,7 @@ import Wordmark from './Wordmark'
 import FontSizeControl from './FontSizeControl'
 import LangSwitch from './LangSwitch'
 import AccountMenu from '../listings/components/AccountMenu'
-import { useBooking } from './BookingModal'
+import { formPathForRoute } from '../data/booking'
 import { useLang } from '../i18n/LangProvider'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { mono } from '../theme'
@@ -22,7 +22,7 @@ const SITE_NAV = [
   { key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching' },
   { key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting' },
   { key: 'nav.projects', label: 'Projects in Hyderabad', to: '/project-hyderabad' },
-  { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/list-property' },
+  { key: 'mega.listProperty', label: 'List or browse homes', to: '/list-property' },
   { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty' },
   { key: 'nav.portfolio', label: 'Portfolio', to: '/realty/portfolio' },
   { key: 'nav.careers', label: 'Careers', to: '/careers' },
@@ -32,7 +32,7 @@ const SITE_NAV = [
   { key: 'nav.partners', label: 'Channel Partners', to: '/partner' },
   { key: 'nav.krisah', label: 'KRISAH Assessment', to: '/assessment' },
   // { label: 'Find your fit', to: '/start' },
-  { key: 'nav.bookCall', label: 'Book a call', book: true },
+  { key: 'nav.bookCall', label: 'Talk to Team RW', book: true },
 ]
 
 /**
@@ -88,10 +88,10 @@ const PROPERTY_COLUMNS = [
     ],
   },
   {
-    headingKey: 'mega.market',
-    heading: 'Buy, sell, rent',
+    headingKey: 'mega.resale',
+    heading: 'Resale',
     items: [
-      { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/list-property', descKey: 'mega.listDesc', desc: 'List a property, or browse homes for sale and rent', icon: LayoutGrid },
+      { key: 'mega.listProperty', label: 'List or browse homes', to: '/list-property', descKey: 'mega.listDesc', desc: 'Resale and rental homes — list yours, or browse', icon: LayoutGrid },
     ],
   },
 ]
@@ -316,7 +316,6 @@ function MenuIcon({ open }) {
 export default function Header() {
   const { t } = useLang()
   const scrollToId = useSmoothScroll()
-  const openBooking = useBooking()
   const [open, setOpen] = useState(false)
   const headerRef = useRef(null)
 
@@ -331,8 +330,11 @@ export default function Header() {
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
   const navigate = useNavigate()
+  const goBookStrategy = () => navigate(formPathForRoute(pathname), {
+    state: { from: `${pathname}${search}` },
+  })
 
   /* A route change means the menu's job is done. */
   useEffect(() => { setOpen(false) }, [pathname])
@@ -366,7 +368,7 @@ export default function Header() {
     if (!item) return
     if (item.section) { jumpTo(item.section); return }
     setOpen(false)
-    if (item.book) openBooking()
+    if (item.book) goBookStrategy()
     else if (item.to) navigate(item.to)
     else if (item.href) window.location.href = item.href
   }
@@ -400,7 +402,7 @@ export default function Header() {
         </Link>
 
         {/* Desktop/laptop only (CSS hides it below 1100px, where the wheel menu takes over). */}
-        <DesktopNav pathname={pathname} onBook={openBooking} />
+        <DesktopNav pathname={pathname} onBook={goBookStrategy} />
 
         <div className="rw-header-tools" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px,1.6vw,20px)' }}>
           <LangSwitch />

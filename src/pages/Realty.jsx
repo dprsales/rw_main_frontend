@@ -14,7 +14,6 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 import LogoLoop from '../components/LogoLoop'
 import Seo from '../components/Seo'
-import { BookButton } from '../components/BookingModal'
 import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import RiseText from '../components/RiseText'
@@ -118,17 +117,10 @@ export default function Realty() {
             </Reveal>
 
             <Reveal delay={220} className="rw-realty-hero-actions">
-              <BookButton
-                interest="RW Realty mandate"
-                className="rw-cta rw-hero-book"
-                style={ctaCopper}
-                eyebrow={t('realty.hero.book.eyebrow')}
-                title={t('realty.hero.book.title')}
-                subtitle={t('realty.hero.book.sub')}
-              >
+              <CtaButton to="/realty/form" className="rw-hero-book" style={ctaCopper}>
                 {t('realty.hero.book')}
-              </BookButton>
-              <CtaButton variant="secondary" to="/start?who=developer" arrow="→">
+              </CtaButton>
+              <CtaButton variant="secondary" href="#scope" arrow="→">
                 {t('realty.hero.fit')}
               </CtaButton>
             </Reveal>
@@ -240,18 +232,6 @@ export default function Realty() {
             <Reveal as="p" delay={340} style={{ ...body, color: 'var(--ink)', maxWidth: '36em' }}>
               {t('realty.case.close')}
             </Reveal>
-            <Reveal delay={380}>
-              <BookButton
-                interest="RW Realty mandate"
-                className="rw-cta rw-hero-book"
-                style={ctaCopper}
-                eyebrow={t('realty.hero.book.eyebrow')}
-                title={t('realty.case.book.title')}
-                subtitle={t('realty.case.book.sub')}
-              >
-                {t('realty.hero.book')}
-              </BookButton>
-            </Reveal>
           </div>
         </div>
       </section>
@@ -294,7 +274,7 @@ export default function Realty() {
       </section>
 
       <ClosingCTA title={t('realty.close.title')}>
-        <CtaButton variant="outline" href="/form/realty">{t('realty.close.cta')}</CtaButton>
+        <CtaButton to="/realty/form" live>{t('realty.close.cta')} <span className="rw-cta-arrow">→</span></CtaButton>
       </ClosingCTA>
 
       <Footer chip links={FOOTER_LINKS} />

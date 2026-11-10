@@ -296,7 +296,7 @@ export default function Partner() {
           <button type="button" onClick={() => scrollToId('apply')} className="rw-cta rw-cta--live" style={ctaCopper}>
             {t('partner.apply')} <span className="rw-cta-arrow" aria-hidden> →</span>
           </button>
-          <BookButton specular interest={PARTNER_INTEREST}>{t('partner.orCall')}</BookButton>
+          <BookButton to="/form" specular interest={PARTNER_INTEREST}>{t('partner.orCall')}</BookButton>
         </>}
       />
 
@@ -369,7 +369,7 @@ export default function Partner() {
                 <a className="rw-cta" style={{ ...ctaCopper }} href={WHATSAPP} target="_blank" rel="noreferrer">
                   {t('partner.done.wa')}
                 </a>
-                <BookButton specular interest={PARTNER_INTEREST}>{t('partner.done.call')}</BookButton>
+                <BookButton to="/form" specular interest={PARTNER_INTEREST}>{t('partner.done.call')}</BookButton>
               </div>
             </Reveal>
           ) : (

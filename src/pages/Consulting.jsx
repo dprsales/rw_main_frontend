@@ -12,6 +12,7 @@ import Reveal from '../components/Reveal'
 import ClosingCTA from '../components/ClosingCTA'
 import PullQuote from '../components/PullQuote'
 import { useLang } from '../i18n/LangProvider'
+import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { ECOSYSTEM } from '../data/content'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import { fs, ctaCopper,
@@ -114,6 +115,7 @@ function PhaseCard({ flow, index, delay, active, expanded, onToggle, onHover, on
 export default function Consulting() {
   const { hash } = useLocation()
   const { t } = useLang()
+  const scrollToId = useSmoothScroll()
 
   const ecosystem = useMemo(() => ECOSYSTEM.map((flow, i) => ({
     ...flow,
@@ -156,6 +158,7 @@ export default function Consulting() {
 
           <Reveal delay={220} className="rw-hero-actions">
             <BookButton
+              to="/consulting/form"
               interest="Consulting"
               className="rw-cta rw-hero-book"
               style={ctaCopper}
@@ -164,9 +167,10 @@ export default function Consulting() {
             </BookButton>
             <CtaButton
               variant="secondary"
-              to="/start?who=developer"
+              href="#model"
               arrow="→"
               className="rw-hero-fit"
+              onClick={(e) => { e.preventDefault(); scrollToId('model') }}
             >
               {t('consult.hero.fit')}
             </CtaButton>
@@ -245,8 +249,8 @@ export default function Consulting() {
         </div>
       </section>
 
-      <ClosingCTA id="talk" chip title={t('consult.close.title')}>
-        <CtaButton variant="outline" href="/form/consulting">{t('consult.close.cta')}</CtaButton>
+      <ClosingCTA id="apply" chip title={t('consult.close.title')}>
+        <CtaButton to="/consulting/form" live>{t('consult.close.cta')} <span className="rw-cta-arrow">→</span></CtaButton>
       </ClosingCTA>
 
       <Footer links={FOOTER_LINKS} />

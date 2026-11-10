@@ -27,7 +27,7 @@ export default function ProjectHyderabad() {
         headlineStyle={{ fontSize: fs('clamp(32px,4vw,56px)'), lineHeight: 1.1, maxWidth: '11em' }}
         lede={t('projects.lede')}
         intro={t('projects.intro')}
-        cta={<BookButton interest="Looking for a home" className="rw-cta" style={ctaCopper}>{t('projects.cta')}</BookButton>}
+        cta={<BookButton to="/realty/form" interest="Looking for a home" className="rw-cta" style={ctaCopper}>{t('projects.cta')}</BookButton>}
       />
 
       <ProjectsSection id="projects" />

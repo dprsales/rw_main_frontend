@@ -26,7 +26,7 @@ import { fs,
   note, sectionRule,
 } from '../styles'
 import {
-  ArrowRight, Award, Brain, ChevronDown, Compass, Crown, Gem, Handshake, HeartHandshake,
+  Award, Brain, ChevronDown, Compass, Crown, Gem, Handshake, HeartHandshake,
   BarChart3, MessagesSquare, ShieldCheck, Target, Trophy, UserRoundSearch, UsersRound,
 } from 'lucide-react'
 
@@ -105,9 +105,6 @@ function ProgramCard({ program, index, labels }) {
             <ChevronDown size={14} strokeWidth={1.8} aria-hidden />
           </button>
         )}
-        <BookButton interest="Coaching" className="rw-cta rw-program-cta" style={ctaCopper}>
-         {labels.learn} <ArrowRight size={16} strokeWidth={1.8} aria-hidden />
-        </BookButton>
       </div>
     </article>
   )
@@ -212,7 +209,6 @@ export default function Coaching() {
     included: t('coach.programs.included'),
     hide: t('coach.programs.hide'),
     show: t('coach.programs.show'),
-    learn: t('coach.programs.learn'),
   }), [t])
 
   return (
@@ -253,15 +249,12 @@ export default function Coaching() {
           </Reveal>
 
           <Reveal delay={300} className="rw-coaching-hero-actions">
-            <BookButton interest="Coaching" className="rw-cta rw-coaching-hero-book" style={ctaCopper}>
+            <BookButton to="/coaching/form" interest="Coaching" className="rw-cta rw-coaching-hero-book" style={ctaCopper}>
               {t('coach.hero.book')} <span className="rw-cta-arrow">→</span>
             </BookButton>
             <button type="button" onClick={() => scrollToId('premium-programs')} className="rw-coaching-hero-explore">
               {t('coach.hero.explore')} <span aria-hidden="true">→</span>
             </button>
-            <CtaButton variant="secondary" to="/start?who=sales_pro" arrow="→">
-              {t('coach.hero.fit')}
-            </CtaButton>
           </Reveal>
         </div>
       </section>
@@ -370,7 +363,7 @@ export default function Coaching() {
       </section>
 
       <ClosingCTA title={t('coach.close.title')} titleStyle={{ maxWidth: '15em' }}>
-        <CtaButton variant="outline" href="/form/coaching">{t('coach.close.cta')}</CtaButton>
+        <CtaButton to="/coaching/form" live>{t('coach.close.cta')} <span className="rw-cta-arrow">→</span></CtaButton>
       </ClosingCTA>
 
       <Footer links={FOOTER_LINKS} />

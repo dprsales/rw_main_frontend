@@ -363,7 +363,7 @@ export default function Portfolio() {
         pad="clamp(90px,12vw,130px)" titleStyle={{ fontStyle: 'italic' }}
         title={t('portfolio.close')}
       >
-        <BookButton specular>{t('portfolio.book')}</BookButton>
+        <BookButton to="/realty/form" specular>{t('portfolio.book')}</BookButton>
       </ClosingCTA>
 
       <Footer chip links={FOOTER_LINKS} />

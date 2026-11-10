@@ -2,6 +2,44 @@
 import { createApplication, submitLead } from './api'
 import { labelFor } from './guidance'
 
+/** Track → service form URL (`/realty/form`, not `/form/realty`). */
+export function formPathForTrack(track) {
+  if (track === 'coaching' || track === 'consulting' || track === 'realty') {
+    return `/${track}/form`
+  }
+  return '/form'
+}
+
+/**
+ * Strategy-call CTAs go to the long service questionnaires (not the short booking modal).
+ * Matched to the page the visitor is on; unknown routes land on the track picker.
+ */
+export function formPathForRoute(pathname = '/') {
+  const path = String(pathname || '/')
+  if (
+    path.startsWith('/coaching')
+    || path.startsWith('/assessment')
+    || path.startsWith('/result')
+  ) return formPathForTrack('coaching')
+  if (path.startsWith('/consulting')) return formPathForTrack('consulting')
+  if (
+    path.startsWith('/realty')
+    || path.startsWith('/project')
+    || path.startsWith('/project-hyderabad')
+  ) return formPathForTrack('realty')
+  return '/form'
+}
+
+/** Where the form Back control should return — prefer the page that linked here. */
+export function formReturnPath(track, from) {
+  const origin = typeof from === 'string' ? from : ''
+  if (origin && !/\/form\/?$/.test(origin) && !origin.includes('/form/')) return origin
+  if (track === 'coaching') return '/coaching'
+  if (track === 'consulting') return '/consulting'
+  if (track === 'realty') return '/realty'
+  return '/'
+}
+
 /** Interest value the careers page presets — the branch into `/applications`. */
 export const CAREERS_INTEREST = 'Joining Team RW'
 

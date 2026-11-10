@@ -288,7 +288,7 @@ function HeroCinematic() {
           </p>
 
           <div className="rw-hero-actions">
-            <BookButton className="rw-cta" style={ctaCopper}>{t('mega.bookStrategy')}</BookButton>
+            <BookButton to="/form" className="rw-cta" style={ctaCopper}>{t('mega.bookStrategy')}</BookButton>
             <Link to="/realty/portfolio" className="rw-inline-cta" style={{ ...ctaInline, color: '#F2EFE9' }}>
               {t('home.story')}
             </Link>
@@ -327,7 +327,13 @@ function HeroCinematic() {
                 {t(`home.slide.${slide.id}.lede`)}
               </p>
               <div className="rw-hero-actions">
-                <BookButton className="rw-cta" style={ctaCopper}>{t('mega.bookStrategy')}</BookButton>
+                <BookButton
+                  to={slide.id === 'coaching' ? '/coaching/form' : slide.id === 'consulting' ? '/consulting/form' : '/realty/form'}
+                  className="rw-cta"
+                  style={ctaCopper}
+                >
+                  {t(`home.slide.${slide.id}.book`)}
+                </BookButton>
                 <CtaButton to={slide.to} variant="secondary" arrow="→" className="rw-hero-explore">{t(`home.slide.${slide.id}.cta`)}</CtaButton>
               </div>
             </>

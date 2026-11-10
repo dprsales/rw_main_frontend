@@ -148,15 +148,15 @@ export const ROUTE_SEO = {
     description:
       'Select coaching modules from the sixteen areas of specialisation with live pricing. Choose fixed packages or build your own selection, then place your purchase request.',
   },
-  '/form/coaching': {
+  '/coaching/form': {
     title: 'Coaching Assessment | Rajiv Williams',
     description: 'A short pre-consultation assessment for luxury real estate sales coaching in Hyderabad.',
   },
-  '/form/consulting': {
+  '/consulting/form': {
     title: 'Consulting Assessment | Rajiv Williams',
     description: 'A short pre-consultation assessment for developer sales consulting in Hyderabad.',
   },
-  '/form/realty': {
+  '/realty/form': {
     title: 'RW Realty Mandate Assessment | Rajiv Williams',
     description: 'A short pre-consultation assessment for an exclusive RW Realty sales mandate.',
   },

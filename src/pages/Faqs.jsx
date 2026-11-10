@@ -178,7 +178,7 @@ export default function Faqs() {
               <h2>{t('faqs.more')}</h2>
               <p>{t('faqs.more.sub')}</p>
               <div className="rw-faqs-cta-actions">
-                <BookButton interest="General enquiry" className="rw-cta" style={ctaCopper}>
+                <BookButton to="/form" interest="General enquiry" className="rw-cta" style={ctaCopper}>
                   {t('faqs.book')}
                 </BookButton>
                 <a href={WHATSAPP} className="rw-faqs-wa-btn" target="_blank" rel="noopener noreferrer">

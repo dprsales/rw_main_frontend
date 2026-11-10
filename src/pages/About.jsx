@@ -31,7 +31,7 @@ export default function About() {
         headline={headline}
         lede={t('about.lede')}
         intro={t('about.intro')}
-        cta={<BookButton interest="About" specular>{t('about.apply')}</BookButton>}
+        cta={<BookButton to="/form" interest="About" specular>{t('about.apply')}</BookButton>}
       />
 
       <ExperienceSection />
@@ -65,7 +65,7 @@ export default function About() {
       </section>
 
       <ClosingCTA title={t('about.close')} titleStyle={{ maxWidth: '15em' }}>
-        <BookButton interest="About" specular>{t('about.apply')}</BookButton>
+        <BookButton to="/form" interest="About" specular>{t('about.apply')}</BookButton>
       </ClosingCTA>
 
       <Footer links={FOOTER_LINKS} />

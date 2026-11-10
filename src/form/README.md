@@ -56,9 +56,9 @@ site header and footer, measures the header for `stickyOffset`, and maps
 [`src/App.jsx`](../App.jsx), so each questionnaire has an address of its own:
 
 - `/form` — the track picker
-- `/form/coaching`
-- `/form/consulting`
-- `/form/realty`
+- `/coaching/form`
+- `/consulting/form`
+- `/realty/form`
 
 An unknown or differently-cased segment redirects to the canonical URL, and the
 older `/form?track=x` links redirect onto `/form/x`. React Router matches

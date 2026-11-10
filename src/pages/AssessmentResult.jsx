@@ -104,7 +104,7 @@ export default function AssessmentResult() {
             <CtaButton variant="gold" onClick={scrollToCapture}>
               {t('result.writeup')}
             </CtaButton>
-            <BookButton interest="Coaching" specular>{t('result.call')}</BookButton>
+            <BookButton to="/coaching/form" interest="Coaching" specular>{t('result.call')}</BookButton>
           </Reveal>
         </div>
       </section>
@@ -193,7 +193,7 @@ export default function AssessmentResult() {
             <CtaButton ref={retakeRef} href={KRISAH_ASSESSMENT_URL} target="_blank" rel="noopener noreferrer" live onClick={() => track('krisah_assessment_start', { location: 'retake' })}>
               {t('result.retake')} <span className="rw-cta-arrow">→</span>
             </CtaButton>
-            <BookButton interest="Coaching" specular>{t('assess.orCall')}</BookButton>
+            <BookButton to="/coaching/form" interest="Coaching" specular>{t('assess.orCall')}</BookButton>
           </Reveal>
         </div>
       </section>

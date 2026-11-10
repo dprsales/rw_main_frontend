@@ -1,9 +1,21 @@
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import BorderGlow from '../components/BorderGlow'
 import { ASSESSMENT_TRACKS, TRACK_ORDER } from './tracks'
 import { useReveal } from './useReveal'
 import { useLang } from '../i18n/LangProvider'
 import './form.css'
+
+/* Same cursor-tracked gold edge as CareersApply — replaces the flat copper spine. */
+const FORM_GLOW = {
+  backgroundColor: 'var(--card)',
+  glowColor: '41 82 71',
+  colors: ['#C39B53', '#E8C97A', '#A67C3D'],
+  borderRadius: 4,
+  glowRadius: 18,
+  fillOpacity: 0.16,
+  animated: false,
+}
 
 /* Fades and lifts children in on first sight; kept local so this folder imports nothing upward. */
 function Reveal({ as: Tag = 'div', delay = 0, className = '', style, children, ...rest }) {
@@ -247,7 +259,7 @@ const Arrow = () => (
 )
 
 /** Pre-consultation assessment: track picker, questionnaire, confirmation. Self-contained inside `src/form/`. */
-export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, stickyOffset = 0, prefill = {}, extraAnswers = {}, onFirstInput }) {
+export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, stickyOffset = 0, prefill = {}, extraAnswers = {}, onFirstInput, onBack, returnTo }) {
   const { t } = useLang()
   const [trackKey, setTrackKey] = useState(ASSESSMENT_TRACKS[initialTrack] ? initialTrack : null)
   const track = trackKey ? ASSESSMENT_TRACKS[trackKey] : null
@@ -280,6 +292,12 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
   function reset() {
     if (submitLock.current) return
 
+    // Deep-linked service forms return to the page that sent the visitor here.
+    if (initialTrack && onBack) {
+      onBack()
+      return
+    }
+
     setTrackKey(null)
     setAnswers({})
     setSent(false)
@@ -287,6 +305,8 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
     setSubmitError('')
     onTrackChange?.(null)
   }
+
+  const backLabel = initialTrack && onBack ? t('cta.back') : t('sale.all')
 
   // Optional analytics hook: the parent decides what (if anything) to record.
   const set = (id, value) => { onFirstInput?.(); setAnswers((prev) => ({ ...prev, [id]: value })) }
@@ -395,7 +415,7 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
               {t(`sale.track.${trackKey}.confirm`)}
             </p>
             <button type="button" className="rw-form-back" onClick={reset} style={{ marginTop: 34 }}>
-              {t('sale.all')}
+              {backLabel}
             </button>
           </Reveal>
         </section>
@@ -409,7 +429,7 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
       {/* Progress rail counts required questions only. */}
       <div className="rw-form-rail" style={{ top: stickyOffset }}>
         <div className="rw-form-pad rw-form-wrap rw-form-rail-inner">
-          <button type="button" className="rw-form-back" onClick={reset} disabled={isSubmitting}>{t('sale.all')}</button>
+          <button type="button" className="rw-form-back" onClick={reset} disabled={isSubmitting}>{backLabel}</button>
           <span className="rw-form-rail-label">{t('sale.rail', { label: t(`sale.track.${trackKey}.label`), done, total: required.length })}</span>
           <div className="rw-form-bar">
             <div className="rw-form-bar-fill" style={{ transform: `scaleX(${required.length ? done / required.length : 0})` }} />
@@ -428,85 +448,87 @@ export default function AssessmentForm({ initialTrack, onTrackChange, onSubmit, 
           <span className="rw-form-time">{t(`sale.track.${trackKey}.time`)}</span>
         </Reveal>
 
-        <div className="rw-form-questions rw-form-panel rw-form-panel--questions">
-          {track.questions.map((q, i) => (
-            <Reveal key={q.id} delay={Math.min(i, 4) * 60} className={`rw-form-field-wrap${wide.has(q.id) ? ' rw-form-field-wrap--wide' : ''}`}>
-              <div className="rw-form-q-title">
-                {qTitle(q)}
-                {q.required
-                  ? <span className="rw-form-req"> *</span>
-                  : <span className="rw-form-optional"> {t('sale.optional')}</span>}
-              </div>
-              {q.help && <span className="rw-form-help">{qHelp(q)}</span>}
+        <BorderGlow {...FORM_GLOW} className="rw-form-glow">
+          <div className="rw-form-questions rw-form-panel rw-form-panel--questions rw-form-panel--glow">
+            {track.questions.map((q, i) => (
+              <Reveal key={q.id} delay={Math.min(i, 4) * 60} className={`rw-form-field-wrap${wide.has(q.id) ? ' rw-form-field-wrap--wide' : ''}`}>
+                <div className="rw-form-q-title">
+                  {qTitle(q)}
+                  {q.required
+                    ? <span className="rw-form-req"> *</span>
+                    : <span className="rw-form-optional"> {t('sale.optional')}</span>}
+                </div>
+                {q.help && <span className="rw-form-help">{qHelp(q)}</span>}
 
-              <div className="rw-form-controls">
-                {controlKind(q) === 'select' && (
-                  <FormSelect
-                    id={`rw-sel-${q.id}`}
-                    value={answers[q.id]}
-                    options={q.options}
-                    placeholder={t('sale.select')}
-                    labelFor={(option) => optLabel(q, option)}
-                    onChange={(option) => set(q.id, option)}
-                  />
-                )}
+                <div className="rw-form-controls">
+                  {controlKind(q) === 'select' && (
+                    <FormSelect
+                      id={`rw-sel-${q.id}`}
+                      value={answers[q.id]}
+                      options={q.options}
+                      placeholder={t('sale.select')}
+                      labelFor={(option) => optLabel(q, option)}
+                      onChange={(option) => set(q.id, option)}
+                    />
+                  )}
 
-                {controlKind(q) === 'segment' && (
-                  <div className="rw-form-segment" role="group" aria-label={qTitle(q)}>
-                    {q.options.map((option) => {
-                      const on = answers[q.id] === option
-                      return (
-                        <button
-                          key={option}
-                          type="button"
-                          aria-pressed={on}
-                          className={on ? 'is-on' : ''}
-                          onClick={() => set(q.id, on ? '' : option)}
-                        >
-                          {optLabel(q, option)}
-                        </button>
-                      )
-                    })}
-                  </div>
-                )}
+                  {controlKind(q) === 'segment' && (
+                    <div className="rw-form-segment" role="group" aria-label={qTitle(q)}>
+                      {q.options.map((option) => {
+                        const on = answers[q.id] === option
+                        return (
+                          <button
+                            key={option}
+                            type="button"
+                            aria-pressed={on}
+                            className={on ? 'is-on' : ''}
+                            onClick={() => set(q.id, on ? '' : option)}
+                          >
+                            {optLabel(q, option)}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  )}
 
-                {q.type === 'check' && (
-                  <div className={`rw-form-checks${q.id === 'role' ? ' rw-form-checks--single' : ''}`}>
-                    {q.options.map((option) => {
-                      const on = answers[q.id].includes(option)
-                      return (
-                        <label key={option} className={`rw-form-check${on ? ' is-on' : ''}`}>
-                          <input type="checkbox" checked={on} onChange={() => toggle(q.id, option)} />
-                          {optLabel(q, option)}
-                        </label>
-                      )
-                    })}
-                  </div>
-                )}
+                  {q.type === 'check' && (
+                    <div className={`rw-form-checks${q.id === 'role' ? ' rw-form-checks--single' : ''}`}>
+                      {q.options.map((option) => {
+                        const on = answers[q.id].includes(option)
+                        return (
+                          <label key={option} className={`rw-form-check${on ? ' is-on' : ''}`}>
+                            <input type="checkbox" checked={on} onChange={() => toggle(q.id, option)} />
+                            {optLabel(q, option)}
+                          </label>
+                        )
+                      })}
+                    </div>
+                  )}
 
-                {q.type === 'input' && (
-                  <input
-                    className="rw-form-field"
-                    type={q.inputType}
-                    value={answers[q.id]}
-                    placeholder={qPh(q)}
-                    onChange={(e) => set(q.id, e.target.value)}
-                  />
-                )}
+                  {q.type === 'input' && (
+                    <input
+                      className="rw-form-field"
+                      type={q.inputType}
+                      value={answers[q.id]}
+                      placeholder={qPh(q)}
+                      onChange={(e) => set(q.id, e.target.value)}
+                    />
+                  )}
 
-                {q.type === 'text' && (
-                  <textarea
-                    className="rw-form-field"
-                    rows={3}
-                    value={answers[q.id]}
-                    placeholder={qPh(q)}
-                    onChange={(e) => set(q.id, e.target.value)}
-                  />
-                )}
-              </div>
-            </Reveal>
-          ))}
-        </div>
+                  {q.type === 'text' && (
+                    <textarea
+                      className="rw-form-field"
+                      rows={3}
+                      value={answers[q.id]}
+                      placeholder={qPh(q)}
+                      onChange={(e) => set(q.id, e.target.value)}
+                    />
+                  )}
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </BorderGlow>
 
         <div className="rw-form-submit-bar">
           <span className="rw-form-left" role="status" aria-live="polite">

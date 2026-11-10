@@ -1,7 +1,16 @@
 import { forwardRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import SpecularButton from './SpecularButton'
 import { ctaCopper } from '../styles'
+
+function isFormPath(path) {
+  return typeof path === 'string' && /\/form\/?$/.test(path)
+}
+
+function withFromState(to, state, pathname, search) {
+  if (!isFormPath(to)) return state
+  return { from: `${pathname}${search || ''}`, ...state }
+}
 
 /**
  * One button token for every CTA on the site. Renders a real <button>, or an
@@ -16,14 +25,19 @@ import { ctaCopper } from '../styles'
  *                       ("→" or "←") renders a sliding arrow; "←" puts it first.
  */
 const CtaButton = forwardRef(function CtaButton(
-  { href, to, target, rel, variant = 'gold', live = false, arrow, className = '', style, children, ...rest },
+  { href, to, target, rel, variant = 'gold', live = false, arrow, className = '', style, state, children, ...rest },
   ref,
 ) {
+  const { pathname, search } = useLocation()
+  const linkState = to ? withFromState(to, state, pathname, search) : state
+
   if (variant === 'outline') {
+    // SpecularButton is <a>/<button> only — map `to` onto href for SPA-less form links.
+    const outlineHref = href || to
     return (
       <SpecularButton
         ref={ref}
-        href={href}
+        href={outlineHref}
         target={target}
         rel={rel}
         radius={10}
@@ -51,7 +65,7 @@ const CtaButton = forwardRef(function CtaButton(
         {arrow && <span className="rw-cta-secondary-arrow" aria-hidden="true">{arrow}</span>}
       </>
     )
-    if (to) return <Link ref={ref} to={to} className={classes} style={style} {...rest}>{inner}</Link>
+    if (to) return <Link ref={ref} to={to} state={linkState} className={classes} style={style} {...rest}>{inner}</Link>
     if (href) return <a ref={ref} href={href} target={target} rel={rel} className={classes} style={style} {...rest}>{inner}</a>
     return <button ref={ref} type={rest.type || 'button'} className={classes} style={style} {...rest}>{inner}</button>
   }
@@ -66,9 +80,7 @@ const CtaButton = forwardRef(function CtaButton(
     ...ctaCopper,
     ...style,
   }
-  // Gold had no `to` branch, so a client-side route could only be reached by giving up
-  // SPA navigation for an href and a full reload. Same treatment as `secondary` above.
-  if (to) return <Link ref={ref} to={to} className={classes} style={base} {...rest}>{children}</Link>
+  if (to) return <Link ref={ref} to={to} state={linkState} className={classes} style={base} {...rest}>{children}</Link>
   return (
     <Tag
       ref={ref}

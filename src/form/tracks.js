@@ -16,7 +16,7 @@ export const ASSESSMENT_TRACKS = {
     intro: {
       eyebrow: 'RAJIV WILLIAMS COACHING',
 
-      title: 'Let’s Understand Where You Are Today',
+      title: 'Tell us about your coaching needs',
 
       lines: [
         'A few thoughtful questions about your business, challenges, and where you want to go.',
@@ -24,7 +24,7 @@ export const ASSESSMENT_TRACKS = {
 
       time: 'About 2 minutes',
     },
-    confirm: 'We will prepare a personalised coaching recommendation from your responses and be in touch shortly.',
+    confirm: 'Team RW will review your coaching brief and get back to you shortly.',
     questions: [
       ...CONTACT_QUESTIONS,
       {
@@ -74,14 +74,13 @@ export const ASSESSMENT_TRACKS = {
     cardCta: 'Share your business details',
     intro: {
       eyebrow: 'RAJIV WILLIAMS CONSULTING',
-      title: 'Welcome to Rajiv Williams Consulting',
-      thanks: 'Thank you for choosing Rajiv Williams Consulting.',
+      title: 'Tell us about your business',
       lines: [
-        'We would like to understand your business, your current challenges, and the areas where you are seeking expert guidance.',
+        'A short brief on your business, challenges, and where you want guidance — so Team RW can reply with clarity.',
       ],
       time: 'About 2 minutes',
     },
-    confirm: 'We will review your business context and follow up to schedule your consulting session.',
+    confirm: 'We’ve received your consulting details. Team RW will review them and get back to you shortly.',
     questions: [
       ...CONTACT_QUESTIONS,
       { id: 'orgName', type: 'input', inputType: 'text', required: true, title: 'Please state the name of your organisation' },
@@ -155,14 +154,13 @@ export const ASSESSMENT_TRACKS = {
     cardCta: 'Share your project details',
     intro: {
       eyebrow: 'RAJIV WILLIAMS REALTY SERVICES',
-      title: 'Welcome to Rajiv Williams Realty Services',
-      thanks: 'Thank you for reaching out to Rajiv Williams Realty Services.',
+      title: 'Tell us about your project',
       lines: [
-        'To help us understand your project and recommend the right sales and marketing strategy, please answer a few quick questions.',
+        'A few details on your project help Team RW see whether a mandate fit is right.',
       ],
       time: 'Under 2 minutes',
     },
-    confirm: 'We will review your project details and follow up to schedule a consultation.',
+    confirm: 'Team RW will review your project brief and get back to you shortly.',
     questions: [
       ...CONTACT_QUESTIONS,
       { id: 'orgName', type: 'input', inputType: 'text', required: true, title: 'Please state the name of your organisation' },

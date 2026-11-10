@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { fs } from '../styles'
 import { createPortal } from 'react-dom'
 import SpecularButton from './SpecularButton'
@@ -36,12 +36,21 @@ const DEFAULT_SPECULAR_PROPS = {
 }
 
 // Button that opens the booking modal instead of a mailto: link; role/jobId tag careers applications.
-export function BookButton({ interest, role, jobId, roleOptions, guidance, source, skipQuestions, eyebrow: eyebrowText, title, subtitle, to, style, children, specular = false, specularProps, className = '', ...rest }) {
+export function BookButton({ interest, role, jobId, roleOptions, guidance, source, skipQuestions, eyebrow: eyebrowText, title, subtitle, to, state, style, children, specular = false, specularProps, className = '', ...rest }) {
   const open = useBooking()
   const navigate = useNavigate()
+  const location = useLocation()
   // `to` turns the CTA into a route navigation (e.g. the careers apply page) instead of the modal.
   const handleClick = () => {
-    if (to) { navigate(to); return }
+    if (to) {
+      const isForm = typeof to === 'string' && /\/form\/?$/.test(to)
+      navigate(to, {
+        state: isForm
+          ? { from: `${location.pathname}${location.search}`, ...state }
+          : state,
+      })
+      return
+    }
     open({ interest, role, jobId, roleOptions, guidance, source, skipQuestions, eyebrow: eyebrowText, title, subtitle })
   }
 

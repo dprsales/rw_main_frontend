@@ -7,6 +7,7 @@ import AssessmentForm from '../form/AssessmentForm'
 import { ASSESSMENT_TRACKS } from '../form/tracks'
 import { FOOTER_LINKS } from '../theme'
 import { submitSaleLead } from '../data/api'
+import { formPathForTrack, formReturnPath } from '../data/booking'
 import { crmDeliveryOf, errorCategory, newId, track } from '../data/analytics'
 
 /** Finder answers → this track's own question ids, only where the option label exists in the track. */
@@ -24,22 +25,22 @@ function prefillFromFinder(trackKey, finder) {
   return out
 }
 
-// /form — pre-consultation assessment (logic in src/form/); tracks are paths (/form/coaching etc),
-// legacy ?track= links redirect to the path form, and unknown/mis-cased segments normalize below.
-export default function Form() {
+/**
+ * Service forms live at `/coaching/form`, `/consulting/form`, `/realty/form`.
+ * `/form` is the track picker. Legacy `/form/:track` redirects here.
+ */
+export default function Form({ forcedTrack = null }) {
   const { track: trackParam } = useParams()
   const [params] = useSearchParams()
   const navigate = useNavigate()
-  const { state } = useLocation()
+  const { state, pathname } = useLocation()
   const finder = state?.prefill?.finder || null
-  // Analytics-only correlation from the Finder; deliberately kept out of the lead payload.
   const attemptId = state?.attemptId
+  const from = state?.from
 
-  const key = trackParam?.toLowerCase()
+  const key = (forcedTrack || trackParam || '').toLowerCase() || null
   const valid = key && ASSESSMENT_TRACKS[key] ? key : null
 
-  // One submission per questionnaire instance: a new track starts a new submissionId,
-  // retries on the same track reuse it (handoff §10.4).
   const leadContext = () => ({
     flow: 'assessment_form',
     source: finder ? 'guided_finder' : 'form',
@@ -50,13 +51,12 @@ export default function Form() {
   })
   const submissionRef = useRef(null)
   useEffect(() => {
-    if ((submissionRef.current?.track ?? null) === valid) return   // StrictMode double-invokes effects in dev
+    if ((submissionRef.current?.track ?? null) === valid) return
     submissionRef.current = valid ? { track: valid, id: newId(), attempts: 0, started: false, accepted: false } : null
     if (valid) track('lead_form_viewed', leadContext())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [valid])
 
-  // Measured header height positions the progress rail; must run before any conditional return below.
   const [headerH, setHeaderH] = useState(0)
   useEffect(() => {
     const measure = () => setHeaderH(document.querySelector('header')?.offsetHeight || 0)
@@ -65,29 +65,36 @@ export default function Form() {
     return () => window.removeEventListener('resize', measure)
   }, [])
 
-  // Legacy ?track= is only honoured on bare /form; a path segment takes priority.
+  // Legacy ?track= on bare /form → /{track}/form
   const legacy = params.get('track')?.toLowerCase()
-  if (!trackParam && legacy && ASSESSMENT_TRACKS[legacy]) {
-    return <Navigate to={`/form/${legacy}`} replace />
+  if (!forcedTrack && !trackParam && legacy && ASSESSMENT_TRACKS[legacy]) {
+    return <Navigate to={formPathForTrack(legacy)} replace state={state} />
   }
 
-  // Normalize casing and unknown tracks onto a canonical URL.
-  if (trackParam && key !== trackParam) return <Navigate to={`/form/${key}`} replace />
-  if (trackParam && !valid) return <Navigate to="/form" replace />
+  // Legacy /form/:track → /{track}/form
+  if (!forcedTrack && trackParam) {
+    if (ASSESSMENT_TRACKS[key]) {
+      return <Navigate to={formPathForTrack(key)} replace state={state} />
+    }
+    return <Navigate to="/form" replace />
+  }
+
+  const seoRoute = valid ? formPathForTrack(valid) : '/form'
+  const returnTo = formReturnPath(valid, from)
 
   return (
     <>
-      <Seo route={valid ? `/form/${valid}` : '/form'} />
+      <Seo route={seoRoute} />
       <Header />
 
       <AssessmentForm
-        // Keyed by track so switching questionnaires builds a fresh form.
         key={valid || 'picker'}
         initialTrack={valid}
         stickyOffset={headerH}
         prefill={valid ? prefillFromFinder(valid, finder) : {}}
-        // The finder's answers ride along so the CRM sees how the visitor got here.
         extraAnswers={finder ? { finder } : {}}
+        returnTo={returnTo}
+        onBack={() => navigate(returnTo)}
         onFirstInput={() => {
           const sub = submissionRef.current
           if (!sub || sub.started) return
@@ -106,15 +113,16 @@ export default function Form() {
           }
           if (!sub.accepted) {
             sub.accepted = true
-            // Accepted and saved enquiry — not a confirmed meeting (see handoff §10).
             track('lead_submitted', { ...leadContext(), submissionId: sub.id, submitAttempt: sub.attempts, crmDelivery: crmDeliveryOf(result) })
           }
           return result
         }}
-        // Keep Finder context while the visitor compares tracks; the selected URL still controls the questionnaire.
-        onTrackChange={(next) => navigate(next ? `/form/${next}` : '/form', {
+        onTrackChange={(next) => navigate(next ? formPathForTrack(next) : '/form', {
           replace: true,
-          state: finder ? { prefill: { finder }, attemptId } : null,
+          state: {
+            ...(finder ? { prefill: { finder }, attemptId } : {}),
+            from: from || pathname,
+          },
         })}
       />
 

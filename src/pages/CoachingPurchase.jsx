@@ -632,7 +632,7 @@ export default function CoachingPurchase() {
       <ClosingCTA chip title={t('cpur.close.title')} titleStyle={{ maxWidth: '16em' }}>
         <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
           <CtaButton variant="outline" href="/coaching/result">{t('cpur.close.result')}</CtaButton>
-          <BookButton interest="Coaching" specular>{t('cpur.close.ask')}</BookButton>
+          <BookButton to="/coaching/form" interest="Coaching" specular>{t('cpur.close.ask')}</BookButton>
         </div>
       </ClosingCTA>
 
