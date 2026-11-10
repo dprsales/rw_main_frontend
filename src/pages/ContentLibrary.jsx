@@ -8,17 +8,16 @@ import Reveal from '../components/Reveal'
 import Seo from '../components/Seo'
 import { useLang } from '../i18n/LangProvider'
 import {
+  CAROUSEL_MONTHS,
   CAROUSELS,
-  driveDownloadUrl,
-  driveThumbCandidates,
+  carouselCoverUrl,
+  carouselDownloadUrl,
 } from '../data/carousels'
 import { isValidPhone, submitBooking } from '../data/booking'
 import { getErrorMessage } from '../data/api'
 import { FOOTER_LINKS, mono } from '../theme'
 import { container, fs, note } from '../styles'
 
-/** Public gallery ships October 2026 only. */
-const OCTOBER = CAROUSELS.filter((item) => item.month === '2026-10')
 const GATE_KEY = 'rw-cl-download-gate'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -42,33 +41,8 @@ function writeGate(data) {
   }
 }
 
-function probeThumb(id) {
-  const urls = driveThumbCandidates(id)
-  return new Promise((resolve) => {
-    let i = 0
-    const tryNext = () => {
-      if (i >= urls.length) {
-        resolve(null)
-        return
-      }
-      const url = urls[i++]
-      const img = new Image()
-      img.referrerPolicy = 'no-referrer'
-      img.onload = () => {
-        if (img.naturalWidth < 40 || img.naturalHeight < 40) tryNext()
-        else resolve(url)
-      }
-      img.onerror = tryNext
-      img.src = url
-    }
-    tryNext()
-  })
-}
-
 function startDownload(item) {
-  // Drive is cross-origin, so <a download> can't force a file save and target=_blank
-  // opens a tab. A hidden iframe starts the download without leaving this page.
-  const href = driveDownloadUrl(item.id)
+  const href = carouselDownloadUrl(item)
   const frame = document.createElement('iframe')
   frame.style.display = 'none'
   frame.setAttribute('aria-hidden', 'true')
@@ -97,16 +71,15 @@ function recordContentDownload(person, item, website = '') {
   })
 }
 
-function CarouselCard({ item, thumb, t, onDownload }) {
+function CarouselCard({ item, t, onDownload }) {
   return (
     <article className="rw-cl-card">
       <div className="rw-cl-thumb">
         <img
-          src={thumb}
+          src={carouselCoverUrl(item)}
           alt=""
           loading="lazy"
           decoding="async"
-          referrerPolicy="no-referrer"
         />
         <span className="rw-cl-date">{item.date}</span>
       </div>
@@ -116,7 +89,7 @@ function CarouselCard({ item, thumb, t, onDownload }) {
         <p className="rw-cl-meta">
           <span>{item.sizeLabel}</span>
           <span aria-hidden="true">·</span>
-          <span>PDF</span>
+          <span>{item.slideCount ? `${item.slideCount} slides` : 'ZIP'}</span>
         </p>
         <div className="rw-cl-actions">
           <button type="button" className="rw-cl-btn is-dl" onClick={() => onDownload(item)}>
@@ -244,7 +217,6 @@ function DownloadGateModal({ item, t, initial, onClose, onUnlocked }) {
             />
           </label>
 
-          {/* Honeypot — leave empty */}
           <input
             ref={honeypot}
             type="text"
@@ -273,31 +245,13 @@ function DownloadGateModal({ item, t, initial, onClose, onUnlocked }) {
 export default function ContentLibrary() {
   const { t } = useLang()
   const [query, setQuery] = useState('')
-  const [thumbs, setThumbs] = useState({})
-  const [probing, setProbing] = useState(true)
+  const [month, setMonth] = useState('all')
   const [gate, setGate] = useState(() => (typeof window !== 'undefined' ? readGate() : null))
   const [pending, setPending] = useState(null)
 
-  useEffect(() => {
-    let alive = true
-    ;(async () => {
-      const map = {}
-      const batchSize = 8
-      for (let i = 0; i < OCTOBER.length; i += batchSize) {
-        if (!alive) return
-        const slice = OCTOBER.slice(i, i + batchSize)
-        const results = await Promise.all(slice.map(async (item) => [item.id, await probeThumb(item.id)]))
-        for (const [id, url] of results) {
-          if (url) map[id] = url
-        }
-        if (alive) setThumbs({ ...map })
-      }
-      if (alive) {
-        setThumbs({ ...map })
-        setProbing(false)
-      }
-    })()
-    return () => { alive = false }
+  const months = useMemo(() => {
+    const present = new Set(CAROUSELS.map((c) => c.month))
+    return CAROUSEL_MONTHS.filter((m) => present.has(m.id))
   }, [])
 
   const headline = useMemo(() => [
@@ -306,23 +260,25 @@ export default function ContentLibrary() {
     { text: t('cl.h1.b'), italic: true, copper: true },
   ], [t])
 
-  const visibleCatalog = useMemo(
-    () => OCTOBER.filter((item) => thumbs[item.id]),
-    [thumbs],
-  )
+  const catalog = useMemo(() => {
+    if (month === 'all') return CAROUSELS
+    return CAROUSELS.filter((item) => item.month === month)
+  }, [month])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
-    if (!q) return visibleCatalog
-    return visibleCatalog.filter((item) => (
-      item.title.toLowerCase().includes(q) || item.date.includes(q) || item.name.toLowerCase().includes(q)
+    if (!q) return catalog
+    return catalog.filter((item) => (
+      item.title.toLowerCase().includes(q)
+      || item.date.includes(q)
+      || item.name.toLowerCase().includes(q)
+      || item.slug?.toLowerCase().includes(q)
     ))
-  }, [visibleCatalog, query])
+  }, [catalog, query])
 
   function requestDownload(item) {
     if (gate) {
       startDownload(item)
-      // Log every file in this visit for nurture history (don't block the download).
       recordContentDownload(gate, item).catch(() => {})
       return
     }
@@ -349,6 +305,30 @@ export default function ContentLibrary() {
 
       <section className="rw-pad rw-cl-section" style={{ ...container, padding: '10px 40px var(--rw-sy-lg)' }}>
         <div className="rw-cl-toolbar">
+          <div className="rw-cl-months" role="tablist" aria-label="Month">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={month === 'all'}
+              className={`rw-cl-month${month === 'all' ? ' is-on' : ''}`}
+              onClick={() => setMonth('all')}
+            >
+              All
+            </button>
+            {months.map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                role="tab"
+                aria-selected={month === m.id}
+                className={`rw-cl-month${month === m.id ? ' is-on' : ''}`}
+                onClick={() => setMonth(m.id)}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+
           <label className="rw-cl-search">
             <Search size={16} strokeWidth={1.7} aria-hidden="true" />
             <span className="sr-only">{t('cl.search')}</span>
@@ -363,16 +343,10 @@ export default function ContentLibrary() {
         </div>
 
         <p className="rw-cl-showing" style={{ ...note, fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.08em' }}>
-          {probing && visibleCatalog.length === 0
-            ? t('cl.loading')
-            : t('cl.showing', { n: filtered.length, total: visibleCatalog.length })}
+          {t('cl.showing', { n: filtered.length, total: catalog.length })}
         </p>
 
-        {probing && filtered.length === 0 ? (
-          <p style={{ ...note, fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em', marginTop: 28 }}>
-            {t('cl.loading')}
-          </p>
-        ) : filtered.length === 0 ? (
+        {filtered.length === 0 ? (
           <p style={{ ...note, fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em', marginTop: 28 }}>
             {t('cl.empty')}
           </p>
@@ -383,7 +357,6 @@ export default function ContentLibrary() {
                 <CarouselCard
                   key={item.id}
                   item={item}
-                  thumb={thumbs[item.id]}
                   t={t}
                   onDownload={requestDownload}
                 />

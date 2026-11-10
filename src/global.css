@@ -4649,8 +4649,33 @@ body.rw-faqs-page [class*="fb_"] {
   flex-wrap: wrap;
   gap: 16px 20px;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-bottom: 10px;
+}
+
+.rw-cl-months {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rw-cl-month {
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--faded);
+  font-family: var(--rw-mono, ui-monospace, monospace);
+  font-size: 12px;
+  letter-spacing: .06em;
+  cursor: pointer;
+}
+
+.rw-cl-month.is-on {
+  border-color: var(--gold, #C5A46E);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--gold, #C5A46E) 14%, transparent);
 }
 
 .rw-cl-search {
