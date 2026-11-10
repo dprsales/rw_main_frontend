@@ -107,6 +107,7 @@ function toLead(form) {
     ...(g.challengeNote?.trim() && { challengeNote: g.challengeNote.trim() }),
     ...(g.goal && { goal: g.goal }),
     ...(g.recommendedKey && { recommendedService: g.recommendedKey }),
+    ...(form.contentDownload && { contentDownload: form.contentDownload }),
     // Honeypot: real visitors never see this field; bots fill it and the server drops the request.
     ...(form.website && { website: form.website }),
   }

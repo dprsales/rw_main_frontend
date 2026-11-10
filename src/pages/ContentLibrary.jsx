@@ -66,15 +66,35 @@ function probeThumb(id) {
 }
 
 function startDownload(item) {
+  // Drive is cross-origin, so <a download> can't force a file save and target=_blank
+  // opens a tab. A hidden iframe starts the download without leaving this page.
   const href = driveDownloadUrl(item.id)
-  const a = document.createElement('a')
-  a.href = href
-  a.rel = 'noopener'
-  a.target = '_blank'
-  a.download = item.name || ''
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
+  const frame = document.createElement('iframe')
+  frame.style.display = 'none'
+  frame.setAttribute('aria-hidden', 'true')
+  frame.src = href
+  document.body.appendChild(frame)
+  window.setTimeout(() => frame.remove(), 60_000)
+}
+
+/** Save who + which carousel for nurture (fire-and-forget after unlock). */
+function recordContentDownload(person, item, website = '') {
+  return submitBooking({
+    name: person.name,
+    email: person.email,
+    phone: person.phone,
+    interest: 'Content Library',
+    source: 'content_library',
+    intent: 'nurture',
+    message: `Content Library download: ${item.title}\nFile: ${item.name}\nDate: ${item.date}`,
+    contentDownload: {
+      title: item.title,
+      fileId: item.id,
+      fileName: item.name,
+      date: item.date,
+    },
+    website,
+  })
 }
 
 function CarouselCard({ item, thumb, t, onDownload }) {
@@ -151,17 +171,8 @@ function DownloadGateModal({ item, t, initial, onClose, onUnlocked }) {
     setError('')
     setSending(true)
     try {
-      await submitBooking({
-        name: cleanName,
-        email: cleanEmail,
-        phone: cleanPhone,
-        interest: 'Content Library',
-        source: 'content_library',
-        intent: 'nurture',
-        message: `Content Library download: ${item.title}\nFile: ${item.name}\nDate: ${item.date}`,
-        website: honeypot.current?.value || '',
-      })
       const gate = { name: cleanName, email: cleanEmail, phone: cleanPhone }
+      await recordContentDownload(gate, item, honeypot.current?.value || '')
       writeGate(gate)
       onUnlocked(gate, item)
     } catch (err) {
@@ -311,6 +322,8 @@ export default function ContentLibrary() {
   function requestDownload(item) {
     if (gate) {
       startDownload(item)
+      // Log every file in this visit for nurture history (don't block the download).
+      recordContentDownload(gate, item).catch(() => {})
       return
     }
     setPending(item)
