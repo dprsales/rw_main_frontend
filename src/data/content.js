@@ -890,8 +890,6 @@ export const PROJECTS = [
   { name: 'Bliss in the Woods', area: 'Tukkuguda', status: 'Mandate' },
   { name: 'Mirai Mist', area: 'Gandipet', status: 'Mandate' },
   { name: 'High9', area: 'Kollur', status: 'Under Construction' },
-  { name: 'SAS Crown', area: 'Golden Mile, Kokapet', status: 'Mandate' },
-  { name: 'Trump Tower', area: 'Neopolis, Kokapet', status: 'Mandate' },
   { name: 'IWA', area: 'Puppalaguda', status: 'Mandate' },
   { name: 'Prestige Clairmont', area: 'Neopolis, Kokapet', status: 'Mandate' },
   { name: 'Alekhya Rise', area: 'Kokapet', status: 'Mandate' },
@@ -909,4 +907,6 @@ export const PROJECTS = [
   { name: 'Issara Belmond', area: 'Shamshabad', status: 'Mandate' },
   { name: 'Vanamaali', area: 'Thummaloor', status: 'Mandate' },
   { name: 'Pavani Mirai', area: 'Financial District', status: 'Mandate' },
+  { name: 'SAS Crown', area: 'Kokapet', status: 'Mandate' },
+  { name: 'Trump Towers', area: 'Kokapet', status: 'Mandate' },
 ]

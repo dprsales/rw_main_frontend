@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Download, ExternalLink, Search } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { Download, Search, X } from 'lucide-react'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import PageIntro from '../components/PageIntro'
@@ -10,13 +11,36 @@ import {
   CAROUSELS,
   driveDownloadUrl,
   driveThumbCandidates,
-  driveViewUrl,
 } from '../data/carousels'
+import { isValidPhone, submitBooking } from '../data/booking'
+import { getErrorMessage } from '../data/api'
 import { FOOTER_LINKS, mono } from '../theme'
 import { container, fs, note } from '../styles'
 
 /** Public gallery ships October 2026 only. */
 const OCTOBER = CAROUSELS.filter((item) => item.month === '2026-10')
+const GATE_KEY = 'rw-cl-download-gate'
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+function readGate() {
+  try {
+    const raw = sessionStorage.getItem(GATE_KEY)
+    if (!raw) return null
+    const data = JSON.parse(raw)
+    if (!data?.name || !data?.email || !data?.phone) return null
+    return data
+  } catch {
+    return null
+  }
+}
+
+function writeGate(data) {
+  try {
+    sessionStorage.setItem(GATE_KEY, JSON.stringify(data))
+  } catch {
+    /* private mode / quota — unlock still works in memory for this visit */
+  }
+}
 
 function probeThumb(id) {
   const urls = driveThumbCandidates(id)
@@ -41,19 +65,22 @@ function probeThumb(id) {
   })
 }
 
-function CarouselCard({ item, thumb, t }) {
-  const view = driveViewUrl(item.id)
-  const download = driveDownloadUrl(item.id)
+function startDownload(item) {
+  const href = driveDownloadUrl(item.id)
+  const a = document.createElement('a')
+  a.href = href
+  a.rel = 'noopener'
+  a.target = '_blank'
+  a.download = item.name || ''
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+}
 
+function CarouselCard({ item, thumb, t, onDownload }) {
   return (
     <article className="rw-cl-card">
-      <a
-        className="rw-cl-thumb"
-        href={view}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`${t('cl.view')}: ${item.title}`}
-      >
+      <div className="rw-cl-thumb">
         <img
           src={thumb}
           alt=""
@@ -62,7 +89,7 @@ function CarouselCard({ item, thumb, t }) {
           referrerPolicy="no-referrer"
         />
         <span className="rw-cl-date">{item.date}</span>
-      </a>
+      </div>
 
       <div className="rw-cl-body">
         <h3 className="rw-cl-title">{item.title}</h3>
@@ -72,17 +99,163 @@ function CarouselCard({ item, thumb, t }) {
           <span>PDF</span>
         </p>
         <div className="rw-cl-actions">
-          <a href={view} target="_blank" rel="noopener noreferrer" className="rw-cl-btn is-view">
-            <ExternalLink size={14} strokeWidth={1.8} aria-hidden="true" />
-            {t('cl.view')}
-          </a>
-          <a href={download} className="rw-cl-btn is-dl" download>
+          <button type="button" className="rw-cl-btn is-dl" onClick={() => onDownload(item)}>
             <Download size={14} strokeWidth={1.8} aria-hidden="true" />
             {t('cl.download')}
-          </a>
+          </button>
         </div>
       </div>
     </article>
+  )
+}
+
+function DownloadGateModal({ item, t, initial, onClose, onUnlocked }) {
+  const [name, setName] = useState(initial?.name || '')
+  const [email, setEmail] = useState(initial?.email || '')
+  const [phone, setPhone] = useState(initial?.phone || '')
+  const [error, setError] = useState('')
+  const [sending, setSending] = useState(false)
+  const honeypot = useRef(null)
+  const firstField = useRef(null)
+
+  useEffect(() => {
+    firstField.current?.focus()
+    const onKey = (e) => { if (e.key === 'Escape' && !sending) onClose() }
+    window.addEventListener('keydown', onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prev
+    }
+  }, [onClose, sending])
+
+  async function submit(e) {
+    e.preventDefault()
+    if (sending) return
+    const cleanName = name.trim()
+    const cleanEmail = email.trim()
+    const cleanPhone = phone.trim()
+    if (cleanName.length < 2) {
+      setError(t('cl.gate.errName'))
+      return
+    }
+    if (!EMAIL_RE.test(cleanEmail)) {
+      setError(t('cl.gate.errEmail'))
+      return
+    }
+    if (!isValidPhone(cleanPhone)) {
+      setError(t('cl.gate.errPhone'))
+      return
+    }
+    setError('')
+    setSending(true)
+    try {
+      await submitBooking({
+        name: cleanName,
+        email: cleanEmail,
+        phone: cleanPhone,
+        interest: 'Content Library',
+        source: 'content_library',
+        intent: 'nurture',
+        message: `Content Library download: ${item.title}\nFile: ${item.name}\nDate: ${item.date}`,
+        website: honeypot.current?.value || '',
+      })
+      const gate = { name: cleanName, email: cleanEmail, phone: cleanPhone }
+      writeGate(gate)
+      onUnlocked(gate, item)
+    } catch (err) {
+      setError(getErrorMessage(err))
+      setSending(false)
+    }
+  }
+
+  /* Theme tokens live on #rw-app-shell — portal there so gold/ink resolve. */
+  const mount = typeof document !== 'undefined'
+    ? (document.getElementById('rw-app-shell') || document.body)
+    : null
+  if (!mount) return null
+
+  return createPortal(
+    <div className="rw-cl-gate" role="presentation" onMouseDown={(e) => { if (e.target === e.currentTarget && !sending) onClose() }}>
+      <div
+        className="rw-cl-gate-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="rw-cl-gate-title"
+      >
+        <button type="button" className="rw-cl-gate-close" onClick={onClose} disabled={sending} aria-label={t('cta.close')}>
+          <X size={18} strokeWidth={1.8} aria-hidden="true" />
+        </button>
+
+        <p className="rw-cl-gate-eyebrow" style={{ fontFamily: mono }}>{t('cl.gate.eyebrow')}</p>
+        <h2 id="rw-cl-gate-title" className="rw-cl-gate-title">{t('cl.gate.title')}</h2>
+        <p className="rw-cl-gate-lede">{t('cl.gate.lede')}</p>
+        <p className="rw-cl-gate-file">{item.title}</p>
+
+        <form className="rw-cl-gate-form" onSubmit={submit} noValidate>
+          <label>
+            <span>{t('field.name')}</span>
+            <input
+              ref={firstField}
+              type="text"
+              name="name"
+              autoComplete="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder={t('ph.fullName')}
+              required
+            />
+          </label>
+          <label>
+            <span>{t('field.phone')}</span>
+            <input
+              type="tel"
+              name="phone"
+              autoComplete="tel"
+              inputMode="numeric"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder={t('ph.phone')}
+              required
+            />
+          </label>
+          <label>
+            <span>{t('field.email')}</span>
+            <input
+              type="email"
+              name="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@email.com"
+              required
+            />
+          </label>
+
+          {/* Honeypot — leave empty */}
+          <input
+            ref={honeypot}
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="rw-cl-gate-hp"
+          />
+
+          {error && <p className="rw-cl-gate-error" role="alert">{error}</p>}
+
+          <p className="rw-cl-gate-note">{t('cl.gate.note')}</p>
+
+          <button type="submit" className="rw-cl-btn is-dl rw-cl-gate-submit" disabled={sending}>
+            <Download size={14} strokeWidth={1.8} aria-hidden="true" />
+            {sending ? t('cta.sending') : t('cl.gate.submit')}
+          </button>
+        </form>
+      </div>
+    </div>,
+    mount,
   )
 }
 
@@ -91,6 +264,8 @@ export default function ContentLibrary() {
   const [query, setQuery] = useState('')
   const [thumbs, setThumbs] = useState({})
   const [probing, setProbing] = useState(true)
+  const [gate, setGate] = useState(() => (typeof window !== 'undefined' ? readGate() : null))
+  const [pending, setPending] = useState(null)
 
   useEffect(() => {
     let alive = true
@@ -132,6 +307,20 @@ export default function ContentLibrary() {
       item.title.toLowerCase().includes(q) || item.date.includes(q) || item.name.toLowerCase().includes(q)
     ))
   }, [visibleCatalog, query])
+
+  function requestDownload(item) {
+    if (gate) {
+      startDownload(item)
+      return
+    }
+    setPending(item)
+  }
+
+  function handleUnlocked(nextGate, item) {
+    setGate(nextGate)
+    setPending(null)
+    startDownload(item)
+  }
 
   return (
     <>
@@ -178,7 +367,13 @@ export default function ContentLibrary() {
           <Reveal delay={60}>
             <div className="rw-cl-grid">
               {filtered.map((item) => (
-                <CarouselCard key={item.id} item={item} thumb={thumbs[item.id]} t={t} />
+                <CarouselCard
+                  key={item.id}
+                  item={item}
+                  thumb={thumbs[item.id]}
+                  t={t}
+                  onDownload={requestDownload}
+                />
               ))}
             </div>
           </Reveal>
@@ -186,6 +381,16 @@ export default function ContentLibrary() {
       </section>
 
       <Footer links={FOOTER_LINKS} />
+
+      {pending && (
+        <DownloadGateModal
+          item={pending}
+          t={t}
+          initial={gate}
+          onClose={() => setPending(null)}
+          onUnlocked={handleUnlocked}
+        />
+      )}
     </>
   )
 }

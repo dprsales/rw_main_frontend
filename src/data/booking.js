@@ -25,6 +25,7 @@ const LEAD_TYPE = {
   'Something else': 'contact',
   'Brokerage form': 'contact',
   'Template form': 'contact',
+  'Content Library': 'contact',
 }
 const DEFAULT_LEAD_TYPE = 'contact'
 
@@ -82,6 +83,13 @@ function toLead(form) {
   if (form.message?.trim()) notes.push(form.message.trim())
 
   const g = form.guidance || {}
+  const source = form.source || (g.who ? 'guided_finder' : (typeof window !== 'undefined' && /^\/assessment/.test(window.location.pathname) ? 'assessment' : 'site_cta'))
+  // Content Library = nurture track; assessment stays assessment; everything else is a sales enquiry.
+  const intent = form.intent
+    || (source === 'content_library' ? 'nurture' : null)
+    || (source === 'assessment' ? 'assessment' : null)
+    || 'enquiry'
+
   return {
     type: LEAD_TYPE[form.interest] || DEFAULT_LEAD_TYPE,
     name: form.name?.trim(),
@@ -89,7 +97,8 @@ function toLead(form) {
     phoneNumber: toPhoneDigits(form.phone),
     message: notes.join('\n'),
     // Structured copies of the same facts, for filtering in admin/CRM. All optional server-side.
-    source: form.source || (g.who ? 'guided_finder' : (typeof window !== 'undefined' && /^\/assessment/.test(window.location.pathname) ? 'assessment' : 'site_cta')),
+    source,
+    intent,
     // Branded page name for the CRM Source, e.g. "RW Realty Page".
     pageSource: pageSourceLabel(),
     ...(form.company?.trim() && { company: form.company.trim() }),
