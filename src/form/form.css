@@ -304,8 +304,26 @@
 .rw-form-panel--glow {
   border: 0;
   border-radius: 0;
+  background: transparent;
 }
 .rw-form-panel--glow > .rw-form-field-wrap { box-shadow: none; }
+
+/* BorderGlow around questionnaire / apply panels: same flat card as the form,
+   thin copper rim, no floating shadow stack (that rim was reading as a loose outline). */
+.rw-form-glow.border-glow-card {
+  border: 1px solid rgba(195, 155, 83, 0.55);
+  border-radius: 4px;
+  background: var(--card);
+  box-shadow: none;
+  transform: none;
+}
+.rw-form-glow .border-glow-inner {
+  overflow: visible;
+  border-radius: inherit;
+}
+.rw-form-glow.border-glow-card > .edge-light {
+  border-radius: inherit;
+}
 .rw-form-field-wrap {
   display: block;
   background: var(--card);

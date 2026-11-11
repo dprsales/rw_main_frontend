@@ -6,14 +6,14 @@ import { useReveal } from './useReveal'
 import { useLang } from '../i18n/LangProvider'
 import './form.css'
 
-/* Same cursor-tracked gold edge as CareersApply — replaces the flat copper spine. */
+/* Same cursor-tracked gold edge as CareersApply. Replaces the flat copper spine. */
 const FORM_GLOW = {
   backgroundColor: 'var(--card)',
-  glowColor: '41 82 71',
+  glowColor: '40 55 60',
   colors: ['#C39B53', '#E8C97A', '#A67C3D'],
   borderRadius: 4,
-  glowRadius: 18,
-  fillOpacity: 0.16,
+  glowRadius: 14,
+  fillOpacity: 0.1,
   animated: false,
 }
 
