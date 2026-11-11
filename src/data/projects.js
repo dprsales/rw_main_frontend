@@ -53,6 +53,9 @@ export const PROJECT_SLUGS = {
   'Trump Towers': 'trump-towers',
   'Western Marina': 'western-marina',
   'Brigade Gateway': 'brigade-gateway',
+  'IWA': 'iwa',
+  'iWA': 'iwa',
+  'Prestige Golden Grove': 'prestige-golden-grove',
 }
 
 /** Resolve a CDN path (or absolute URL) from the API to a loadable image URL. */
