@@ -5,6 +5,23 @@
 
 export const CDN_BASE = "https://dprstorage.b-cdn.net"
 
+/** One ZIP of every carousel pack — built by documents/carousels/build-all-carousels-zip.cjs */
+export const ALL_CAROUSELS_ZIP_URL = `${CDN_BASE}/carousel/library-all/all-carousels.zip`
+
+export const ALL_CAROUSELS_ITEM = {
+  id: 'library-all',
+  month: 'all',
+  date: 'library',
+  title: 'All carousels',
+  name: 'all-carousels.zip',
+  slug: 'library-all',
+  coverUrl: '',
+  downloadUrl: ALL_CAROUSELS_ZIP_URL,
+  slideCount: 0,
+  size: 0,
+  sizeLabel: 'Full library',
+}
+
 export const CAROUSEL_MONTHS = [
   {
     "id": "2026-10",
@@ -726,5 +743,6 @@ export function carouselCoverUrl(item) {
 }
 
 export function carouselDownloadUrl(item) {
+  if (item?.id === 'library-all') return ALL_CAROUSELS_ZIP_URL
   return item.downloadUrl
 }

@@ -8,6 +8,8 @@ import Reveal from '../components/Reveal'
 import Seo from '../components/Seo'
 import { useLang } from '../i18n/LangProvider'
 import {
+  ALL_CAROUSELS_ITEM,
+  ALL_CAROUSELS_ZIP_URL,
   CAROUSEL_MONTHS,
   CAROUSELS,
   carouselCoverUrl,
@@ -37,12 +39,11 @@ function writeGate(data) {
   try {
     sessionStorage.setItem(GATE_KEY, JSON.stringify(data))
   } catch {
-    /* private mode / quota — unlock still works in memory for this visit */
+    /* private mode / quota: unlock still works in memory for this visit */
   }
 }
 
-function startDownload(item) {
-  const href = carouselDownloadUrl(item)
+function startDownload(href) {
   const frame = document.createElement('iframe')
   frame.style.display = 'none'
   frame.setAttribute('aria-hidden', 'true')
@@ -51,7 +52,11 @@ function startDownload(item) {
   window.setTimeout(() => frame.remove(), 60_000)
 }
 
-/** Save who + which carousel for nurture (fire-and-forget after unlock). */
+function downloadTarget(item) {
+  return item?.id === 'library-all' ? ALL_CAROUSELS_ZIP_URL : carouselDownloadUrl(item)
+}
+
+/** Save who + which download for nurture (fire-and-forget after unlock). */
 function recordContentDownload(person, item, website = '') {
   return submitBooking({
     name: person.name,
@@ -94,7 +99,7 @@ function CarouselCard({ item, t, onDownload }) {
         <div className="rw-cl-actions">
           <button type="button" className="rw-cl-btn is-dl" onClick={() => onDownload(item)}>
             <Download size={14} strokeWidth={1.8} aria-hidden="true" />
-            {t('cl.download')}
+            {t('cl.downloadOne')}
           </button>
         </div>
       </div>
@@ -102,7 +107,7 @@ function CarouselCard({ item, t, onDownload }) {
   )
 }
 
-function DownloadGateModal({ item, t, initial, onClose, onUnlocked }) {
+function DownloadGateModal({ mode, item, t, initial, onClose, onUnlocked }) {
   const [name, setName] = useState(initial?.name || '')
   const [email, setEmail] = useState(initial?.email || '')
   const [phone, setPhone] = useState(initial?.phone || '')
@@ -110,6 +115,8 @@ function DownloadGateModal({ item, t, initial, onClose, onUnlocked }) {
   const [sending, setSending] = useState(false)
   const honeypot = useRef(null)
   const firstField = useRef(null)
+  const isAll = mode === 'all'
+  const target = isAll ? ALL_CAROUSELS_ITEM : item
 
   useEffect(() => {
     firstField.current?.focus()
@@ -125,7 +132,7 @@ function DownloadGateModal({ item, t, initial, onClose, onUnlocked }) {
 
   async function submit(e) {
     e.preventDefault()
-    if (sending) return
+    if (sending || !target) return
     const cleanName = name.trim()
     const cleanEmail = email.trim()
     const cleanPhone = phone.trim()
@@ -145,20 +152,19 @@ function DownloadGateModal({ item, t, initial, onClose, onUnlocked }) {
     setSending(true)
     try {
       const gate = { name: cleanName, email: cleanEmail, phone: cleanPhone }
-      await recordContentDownload(gate, item, honeypot.current?.value || '')
+      await recordContentDownload(gate, target, honeypot.current?.value || '')
       writeGate(gate)
-      onUnlocked(gate, item)
+      onUnlocked(gate, target)
     } catch (err) {
       setError(getErrorMessage(err))
       setSending(false)
     }
   }
 
-  /* Theme tokens live on #rw-app-shell — portal there so gold/ink resolve. */
   const mount = typeof document !== 'undefined'
     ? (document.getElementById('rw-app-shell') || document.body)
     : null
-  if (!mount) return null
+  if (!mount || !target) return null
 
   return createPortal(
     <div className="rw-cl-gate" role="presentation" onMouseDown={(e) => { if (e.target === e.currentTarget && !sending) onClose() }}>
@@ -172,10 +178,12 @@ function DownloadGateModal({ item, t, initial, onClose, onUnlocked }) {
           <X size={18} strokeWidth={1.8} aria-hidden="true" />
         </button>
 
-        <p className="rw-cl-gate-eyebrow" style={{ fontFamily: mono }}>{t('cl.gate.eyebrow')}</p>
+        <p className="rw-cl-gate-eyebrow" style={{ fontFamily: mono }}>
+          {isAll ? t('cl.gate.eyebrowAll') : t('cl.gate.eyebrowOne')}
+        </p>
         <h2 id="rw-cl-gate-title" className="rw-cl-gate-title">{t('cl.gate.title')}</h2>
         <p className="rw-cl-gate-lede">{t('cl.gate.lede')}</p>
-        <p className="rw-cl-gate-file">{item.title}</p>
+        <p className="rw-cl-gate-file">{isAll ? t('cl.downloadAll') : target.title}</p>
 
         <form className="rw-cl-gate-form" onSubmit={submit} noValidate>
           <label>
@@ -233,7 +241,7 @@ function DownloadGateModal({ item, t, initial, onClose, onUnlocked }) {
 
           <button type="submit" className="rw-cl-btn is-dl rw-cl-gate-submit" disabled={sending}>
             <Download size={14} strokeWidth={1.8} aria-hidden="true" />
-            {sending ? t('cta.sending') : t('cl.gate.submit')}
+            {sending ? t('cta.sending') : (isAll ? t('cl.gate.submitAll') : t('cl.gate.submitOne'))}
           </button>
         </form>
       </div>
@@ -247,7 +255,7 @@ export default function ContentLibrary() {
   const [query, setQuery] = useState('')
   const [month, setMonth] = useState('all')
   const [gate, setGate] = useState(() => (typeof window !== 'undefined' ? readGate() : null))
-  const [pending, setPending] = useState(null)
+  const [pending, setPending] = useState(null) // { mode: 'one'|'all', item? }
 
   const months = useMemo(() => {
     const present = new Set(CAROUSELS.map((c) => c.month))
@@ -276,19 +284,32 @@ export default function ContentLibrary() {
     ))
   }, [catalog, query])
 
-  function requestDownload(item) {
+  function runDownload(item) {
+    startDownload(downloadTarget(item))
+  }
+
+  function requestDownloadOne(item) {
     if (gate) {
-      startDownload(item)
+      runDownload(item)
       recordContentDownload(gate, item).catch(() => {})
       return
     }
-    setPending(item)
+    setPending({ mode: 'one', item })
+  }
+
+  function requestDownloadAll() {
+    if (gate) {
+      runDownload(ALL_CAROUSELS_ITEM)
+      recordContentDownload(gate, ALL_CAROUSELS_ITEM).catch(() => {})
+      return
+    }
+    setPending({ mode: 'all', item: ALL_CAROUSELS_ITEM })
   }
 
   function handleUnlocked(nextGate, item) {
     setGate(nextGate)
     setPending(null)
-    startDownload(item)
+    runDownload(item)
   }
 
   return (
@@ -342,9 +363,15 @@ export default function ContentLibrary() {
           </label>
         </div>
 
-        <p className="rw-cl-showing" style={{ ...note, fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.08em' }}>
-          {t('cl.showing', { n: filtered.length, total: catalog.length })}
-        </p>
+        <div className="rw-cl-dl-bar">
+          <p className="rw-cl-showing" style={{ ...note, fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.08em', margin: 0 }}>
+            {t('cl.showing', { n: filtered.length, total: catalog.length })}
+          </p>
+          <button type="button" className="rw-cl-btn is-dl rw-cl-dl-all" onClick={requestDownloadAll}>
+            <Download size={14} strokeWidth={1.8} aria-hidden="true" />
+            {t('cl.downloadAll')}
+          </button>
+        </div>
 
         {filtered.length === 0 ? (
           <p style={{ ...note, fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em', marginTop: 28 }}>
@@ -358,7 +385,7 @@ export default function ContentLibrary() {
                   key={item.id}
                   item={item}
                   t={t}
-                  onDownload={requestDownload}
+                  onDownload={requestDownloadOne}
                 />
               ))}
             </div>
@@ -370,7 +397,8 @@ export default function ContentLibrary() {
 
       {pending && (
         <DownloadGateModal
-          item={pending}
+          mode={pending.mode}
+          item={pending.item}
           t={t}
           initial={gate}
           onClose={() => setPending(null)}
