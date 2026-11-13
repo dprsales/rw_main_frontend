@@ -202,6 +202,13 @@ export const LogoLoop = memo(({
   const handleMouseLeave = useCallback(() => {
     if (effectiveHoverSpeed !== undefined) setIsHovered(false)
   }, [effectiveHoverSpeed])
+  const handleFocusCapture = useCallback(() => {
+    if (effectiveHoverSpeed !== undefined) setIsHovered(true)
+  }, [effectiveHoverSpeed])
+  const handleBlurCapture = useCallback((e) => {
+    if (effectiveHoverSpeed === undefined) return
+    if (!e.currentTarget.contains(e.relatedTarget)) setIsHovered(false)
+  }, [effectiveHoverSpeed])
 
   const renderLogoItem = useCallback((item, key) => {
     if (renderItem) {
@@ -249,7 +256,14 @@ export const LogoLoop = memo(({
 
   return (
     <div ref={containerRef} className={rootClassName} style={containerStyle} role="region" aria-label={ariaLabel}>
-      <div className="logoloop__track" ref={trackRef} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <div
+        className="logoloop__track"
+        ref={trackRef}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onFocusCapture={handleFocusCapture}
+        onBlurCapture={handleBlurCapture}
+      >
         {logoLists}
       </div>
     </div>

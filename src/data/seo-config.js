@@ -48,16 +48,16 @@ export const ROUTE_SEO = {
     description:
       'Browse verified apartments, villas and plots. Every listing is reviewed by the RW Realty team before it goes live.',
   },
-  '/list-property': {
+  '/listings': {
     title: 'List a Property with Team RW | RW Realty',
     description:
       'Buy, sell, or rent in Hyderabad with Team RW. List a property for free, or browse verified homes for sale and rent.',
   },
-  '/list-property/login': {
+  '/listings/login': {
     title: 'Listing Login | RW Realty',
     description: 'Sign in to manage your property listings with Team RW.',
   },
-  '/list-property/dashboard': {
+  '/listings/dashboard': {
     title: 'Listing Dashboard | RW Realty',
     description: 'Manage your submitted property listings and enquiries.',
   },

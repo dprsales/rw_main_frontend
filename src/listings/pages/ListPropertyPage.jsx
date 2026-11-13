@@ -140,7 +140,7 @@ export default function ListPropertyPage() {
     } catch (err) {
       if (err.status === 401) {
         setSubmitError('Your session expired. Please log in again — your details are saved.')
-        if (editing) navigate(`/list-property/login?next=${encodeURIComponent(`/list-property/edit/${id}`)}`)
+        if (editing) navigate(`/listings/login?next=${encodeURIComponent(`/listings/edit/${id}`)}`)
         else setScreen('landing')
       } else setSubmitError(err.message)
     } finally {
@@ -157,7 +157,7 @@ export default function ListPropertyPage() {
   }
 
   if (editing && ready && !user) {
-    return <Navigate to={`/list-property/login?next=${encodeURIComponent(`/list-property/edit/${id}`)}`} replace />
+    return <Navigate to={`/listings/login?next=${encodeURIComponent(`/listings/edit/${id}`)}`} replace />
   }
 
   return (
@@ -217,7 +217,7 @@ export default function ListPropertyPage() {
                   <button className="btn-primary mt-7 w-full" onClick={startWizard}>
                     {data.images?.length || data.locality ? 'Continue your draft →' : 'Start a new listing →'}
                   </button>
-                  <button className="btn-secondary mt-3 w-full" onClick={() => navigate('/list-property/dashboard')}>My listings</button>
+                  <button className="btn-secondary mt-3 w-full" onClick={() => navigate('/listings/dashboard')}>My listings</button>
                 </div>
               ) : (
                 <AuthCard data={data} update={update} onAuthed={startWizard} />
@@ -235,7 +235,7 @@ export default function ListPropertyPage() {
             <>
               <p className="font-serif text-3xl text-ink">Couldn't open this listing</p>
               <p className="mt-2 text-sm text-red-300">{loadError}</p>
-              <Link to="/list-property/dashboard" className="btn-primary mt-6">Back to my listings</Link>
+              <Link to="/listings/dashboard" className="btn-primary mt-6">Back to my listings</Link>
             </>
           ) : (
             <div className="card skeleton mx-auto h-64 max-w-3xl" />
@@ -246,7 +246,7 @@ export default function ListPropertyPage() {
       {screen === 'wizard' && (
         <div className="mx-auto max-w-[1280px] px-4 py-6 sm:px-8">
           <WizardStepper title={editing ? 'Edit your listing' : 'List your property'} currentStep={step} maxStep={maxStep}
-            onStepClick={goToStep} onBack={() => navigate('/list-property/dashboard')} />
+            onStepClick={goToStep} onBack={() => navigate('/listings/dashboard')} />
 
           {editing && editInfo && (
             <p className={`mt-3 rounded-md border px-4 py-2.5 text-xs leading-relaxed ${
@@ -274,7 +274,7 @@ export default function ListPropertyPage() {
       )}
 
       {screen === 'success' && submitted && (
-        <SuccessView listing={submitted} edited={editing} email={user?.email} onListAnother={listAnother} onDashboard={() => navigate('/list-property/dashboard')} />
+        <SuccessView listing={submitted} edited={editing} email={user?.email} onListAnother={listAnother} onDashboard={() => navigate('/listings/dashboard')} />
       )}
     </ListingsShell>
   )

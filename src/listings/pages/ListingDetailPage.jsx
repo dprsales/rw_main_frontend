@@ -81,7 +81,7 @@ export default function ListingDetailPage() {
         <div className="mx-auto max-w-xl px-5 py-24 text-center">
           <p className="font-serif text-4xl text-ink">This listing isn't available</p>
           <p className="mt-3 text-faded">It may have been sold, removed, or is still awaiting verification.</p>
-          <Link to="/list-property#listings" className="btn-primary mt-8">Browse listed properties</Link>
+          <Link to="/listings#listings" className="btn-primary mt-8">Browse listed properties</Link>
         </div>
       </ListingsShell>
     )
@@ -126,7 +126,7 @@ export default function ListingDetailPage() {
       <div className="mx-auto max-w-[1320px] px-4 pb-24 pt-4 sm:px-8 lg:pb-10">
         <nav className="mb-3 flex flex-wrap items-center gap-x-1.5 text-xs text-faded">
           <Link to="/realty" className="hover:text-gold-300">RW Realty</Link> <span>/</span>
-          <Link to="/list-property#listings" className="hover:text-gold-300">Listed properties</Link> <span>/</span>
+          <Link to="/listings#listings" className="hover:text-gold-300">Listed properties</Link> <span>/</span>
           <span className="text-ink">{[d.locality, project.city].filter(Boolean).join(', ')}</span>
         </nav>
 

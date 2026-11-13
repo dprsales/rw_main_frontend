@@ -22,7 +22,7 @@ const SITE_NAV = [
   { key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching' },
   { key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting' },
   { key: 'nav.projects', label: 'Projects in Hyderabad', to: '/project-hyderabad' },
-  { key: 'mega.listProperty', label: 'List or browse homes', to: '/list-property' },
+  { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/listings' },
   { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty' },
   { key: 'nav.portfolio', label: 'About', to: '/about' },
   { key: 'nav.careers', label: 'Careers', to: '/careers' },
@@ -91,7 +91,7 @@ const PROPERTY_COLUMNS = [
     headingKey: 'mega.resale',
     heading: 'Resale',
     items: [
-      { key: 'mega.listProperty', label: 'List or browse homes', to: '/list-property', descKey: 'mega.listDesc', desc: 'Resale and rental homes — list yours, or browse', icon: LayoutGrid },
+      { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/listings', descKey: 'mega.listDesc', desc: 'Resale and rental homes, list yours or browse', icon: LayoutGrid },
     ],
   },
 ]
@@ -244,7 +244,7 @@ function DesktopNav({ pathname, onBook }) {
         <button
           ref={propsTriggerRef}
           type="button"
-          className={`rw-dnav-link${pathname === '/project-hyderabad' || pathname.startsWith('/list-property') || pathname.startsWith('/realty/listings') ? ' is-active' : ''}`}
+          className={`rw-dnav-link${pathname === '/project-hyderabad' || pathname.startsWith('/listings') || pathname.startsWith('/list-property') || pathname.startsWith('/realty/listings') ? ' is-active' : ''}`}
           aria-expanded={open === 'props'}
           aria-controls="rw-props-mega"
           onClick={() => toggle('props')}

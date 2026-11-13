@@ -34,9 +34,26 @@ export const WAYS = [
 ]
 
 export const HOME_TESTIMONIALS = [
-  { text: 'Rajiv negotiates like the asset is his own. His deep understanding of local market dynamics gave us a very good perspective on the opportunities in Hyderabad.', name: 'SANDEEP KYLAS' },
-  { text: 'He always says, "do it with your passion and heart or else don’t do it." Having a mentor like him makes you sharper on tasks, skills, focus and life.', name: 'MALLAREDDY PUTLURI' },
-  { text: 'His expertise and guidance were instrumental in my professional growth, the best mentor I have come across.', name: 'MOHAMMED SHIRAZ' },
+  {
+    name: 'SUMANTH REDDY',
+    role: 'Chairman, National Association of Realtors India',
+  },
+  {
+    name: 'ARUN K GATTU',
+    role: 'VP Sales & Marketing',
+  },
+  {
+    name: 'AMARJEET JAT',
+    role: 'AGM Sales, Urbanrise',
+  },
+  {
+    name: 'BRIGADIER (DR) INDER SETHI',
+    role: 'Head of Direct Sales, Zuari Infra',
+  },
+  {
+    name: 'KRISHAN MALHOTRA',
+    role: 'AVP Sales, The Cascades Neopolis',
+  },
 ]
 
 export const MARQUEE_ITEMS = [
@@ -891,7 +908,7 @@ export const PROJECTS = [
   { name: 'Mirai Mist', area: 'Gandipet', status: 'Mandate' },
   { name: 'High9', area: 'Kollur', status: 'Under Construction' },
   { name: 'IWA', area: 'Puppalaguda', status: 'Mandate' },
-  { name: 'Prestige Clairmont', area: 'Neopolis, Kokapet', status: 'Mandate' },
+  { name: 'Prestige Clairemont', area: 'Neopolis, Kokapet', status: 'Mandate' },
   { name: 'Alekhya Rise', area: 'Kokapet', status: 'Mandate' },
   { name: 'DSR Ciel', area: 'Gopanpally', status: 'Mandate' },
   { name: 'Vantage', area: 'Manchirevula', status: 'Mandate' },

@@ -32,10 +32,10 @@ export default function ApprovedListingsSection({ limit = 6 }) {
             </h2>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link to="/list-property#listings" className="btn-secondary">
+            <Link to="/listings#listings" className="btn-secondary">
               {total ? t('listings.viewAll', { n: total }) : t('listings.viewAllEmpty')}
             </Link>
-            <Link to="/list-property" className="btn-primary">{t('listings.listCta')}</Link>
+            <Link to="/listings" className="btn-primary">{t('listings.listCta')}</Link>
           </div>
         </div>
 

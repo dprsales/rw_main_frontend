@@ -22,7 +22,7 @@ export default function ResetPasswordPage() {
     setLoading(true)
     try {
       await resetPassword(token, password)
-      navigate('/list-property/dashboard', { replace: true })
+      navigate('/listings/dashboard', { replace: true })
     } catch (err) {
       setError(err.message)
     } finally {
@@ -52,7 +52,7 @@ export default function ResetPasswordPage() {
               </button>
             </>
           )}
-          <Link to="/list-property" className="mt-5 block text-center text-xs text-gold-300 hover:underline">Back to log in</Link>
+          <Link to="/listings" className="mt-5 block text-center text-xs text-gold-300 hover:underline">Back to log in</Link>
         </form>
       </div>
     </ListingsShell>

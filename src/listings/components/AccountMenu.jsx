@@ -44,7 +44,7 @@ export default function AccountMenu() {
 
   if (!user) {
     return (
-      <Link to="/list-property/login" className="rw-cta rw-header-login">
+      <Link to="/listings/login" className="rw-cta rw-header-login">
         LOG IN
       </Link>
     )
@@ -69,13 +69,13 @@ export default function AccountMenu() {
             <strong>{user.name || 'My account'}</strong>
             <span>{user.email}</span>
           </div>
-          <Link role="menuitem" to="/list-property/dashboard" onClick={() => setOpen(false)}>My listings</Link>
-          <Link role="menuitem" to="/list-property" onClick={() => setOpen(false)}>Buy, sell, rent</Link>
+          <Link role="menuitem" to="/listings/dashboard" onClick={() => setOpen(false)}>My listings</Link>
+          <Link role="menuitem" to="/listings" onClick={() => setOpen(false)}>Buy, sell, rent</Link>
           <button
             type="button"
             role="menuitem"
             className="rw-header-account-logout"
-            onClick={() => { logout(); setOpen(false); navigate('/list-property') }}
+            onClick={() => { logout(); setOpen(false); navigate('/listings') }}
           >
             Log out
           </button>

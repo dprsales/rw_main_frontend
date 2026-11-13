@@ -56,6 +56,9 @@ export const PROJECT_SLUGS = {
   'IWA': 'iwa',
   'iWA': 'iwa',
   'Prestige Golden Grove': 'prestige-golden-grove',
+  'Prestige Clairemont': 'prestige-clairemont',
+  'Prestige Clairmont': 'prestige-clairemont',
+  'DSR Ciel': 'dsr-ciel',
 }
 
 /** Resolve a CDN path (or absolute URL) from the API to a loadable image URL. */

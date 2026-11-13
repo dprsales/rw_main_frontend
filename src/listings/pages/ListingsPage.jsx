@@ -219,7 +219,7 @@ export default function ListingsPage({ embedded = false }) {
               {activeCount > 0 && <button className="btn-secondary" onClick={clearAll}>Clear filters</button>}
               {embedded
                 ? <a href="#list-form" className="btn-primary">List your property</a>
-                : <Link to="/list-property" className="btn-primary">List your property</Link>}
+                : <Link to="/listings" className="btn-primary">List your property</Link>}
             </div>
           </div>
         )}
@@ -238,7 +238,7 @@ export default function ListingsPage({ embedded = false }) {
               <p className="font-serif text-2xl text-ink">Own a property or a project?</p>
               <p className="text-sm text-faded">List it free. Verified in 24 hours and shown to serious buyers.</p>
             </div>
-            <Link to="/list-property" className="btn-primary shrink-0">List your property →</Link>
+            <Link to="/listings" className="btn-primary shrink-0">List your property →</Link>
           </div>
         )}
       </div>

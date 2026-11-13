@@ -158,7 +158,7 @@ const WORK_LINKS = [
   { labelKey: 'nav.consulting', to: '/consulting', icon: 'consulting' },
   { labelKey: 'nav.mandate', to: '/realty', icon: 'mandate' },
   { labelKey: 'nav.projects', to: '/project-hyderabad', icon: 'projects' },
-  { labelKey: 'footer.listProperty', to: '/list-property', icon: 'market' },
+  { labelKey: 'footer.listProperty', to: '/listings', icon: 'market' },
 ]
 
 const EXPLORE_LINKS = [

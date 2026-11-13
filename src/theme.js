@@ -77,7 +77,7 @@ const LEGAL_LINKS = [
 ]
 
 const VENDOR_PARTNER_LINK = { label: 'Vendor Partner', to: '/vendorpartner', muted: true }
-const MARKET_LINK = { label: 'Buy, sell, rent', to: '/list-property', muted: true }
+const MARKET_LINK = { label: 'Buy, sell, rent', to: '/listings', muted: true }
 
 /** The interior pages - Coaching, Consulting, Realty, Careers, Portfolio. */
 export const FOOTER_LINKS = [

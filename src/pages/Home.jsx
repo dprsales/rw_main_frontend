@@ -4,9 +4,10 @@ import heroImage from '../assets/site/hero-rajiv.webp'
 import heroCoaching from '../assets/site/hero-slider-coaching.png'
 import heroConsulting from '../assets/site/hero-slider-consulting.jpg'
 import heroRealty from '../assets/site/hero-slider-realty.jpg'
-import wayCoachingPoster from '../assets/site/way-coaching.jpg'
-import wayConsultingPoster from '../assets/site/way-consulting.jpg'
-import wayMandatePoster from '../assets/site/way-mandate.jpg'
+import { Lottie } from 'lottie-react'
+import peopleGrowthLottie from '../utils/people-growth.json'
+import salesSystemLottie from '../utils/sales-system.json'
+import endToEndOwnershipLottie from '../utils/end-to-end-ownership.json'
 import hraLogo from '../assets/site/logo-hra.png'
 import narLogo from '../assets/site/logo-nar.png'
 import founderSignature from '../assets/site/founder-sign.png'
@@ -63,7 +64,66 @@ function BlogFeedSkeleton({ count = HOME_BLOG_COUNT }) {
   )
 }
 
-const TESTIMONIAL_KEYS = ['home.t1', 'home.t2', 'home.t3']
+const TESTIMONIAL_KEYS = ['home.t1', 'home.t2', 'home.t3', 'home.t4', 'home.t5']
+
+/** Compact trust strip: same LogoLoop pattern as orgs, one row, pause on hover/focus. */
+function VoicesStrip({ t }) {
+  const [reduced, setReduced] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const sync = () => setReduced(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
+
+  const logos = useMemo(
+    () => HOME_TESTIMONIALS.map((item, i) => ({
+      ...item,
+      quote: t(TESTIMONIAL_KEYS[i]),
+    })),
+    [t],
+  )
+
+  const renderCard = (item) => (
+    <blockquote className="rw-home-voice-card" tabIndex={0}>
+      <p className="rw-home-voice-quote">{item.quote}</p>
+      <footer className="rw-home-voice-meta">
+        <cite className="rw-home-voice-name">{item.name}</cite>
+        {item.role ? <span className="rw-home-voice-role">{item.role}</span> : null}
+      </footer>
+    </blockquote>
+  )
+
+  if (reduced) {
+    return (
+      <div className="rw-home-voices-static" role="region" aria-label={t('home.voices.aria')}>
+        {logos.map((item) => (
+          <div key={item.name} className="rw-home-voices-static-item">
+            {renderCard(item)}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  return (
+    <LogoLoop
+      logos={logos}
+      speed={28}
+      direction="left"
+      gap={20}
+      logoHeight={16}
+      hoverSpeed={0}
+      fadeOut
+      fadeOutColor="var(--bg)"
+      ariaLabel={t('home.voices.aria')}
+      className="rw-voices-loop"
+      renderItem={renderCard}
+    />
+  )
+}
 
 function HeroTitle({ lang, t, slide }) {
   const line1 = slide ? t(`home.slide.${slide.id}.line1`) : t('home.line1')
@@ -117,6 +177,57 @@ function HeroTitle({ lang, t, slide }) {
 }
 
 function WayMedia({ cover }) {
+  const lottieRef = useRef(null)
+  const [reduced, setReduced] = useState(false)
+
+  useEffect(() => {
+    if (!cover.lottie) return undefined
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const sync = () => setReduced(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [cover.lottie])
+
+  useEffect(() => {
+    if (!cover.lottie || reduced) return undefined
+    const onVisibility = () => {
+      const instance = lottieRef.current
+      if (!instance) return
+      if (document.hidden) instance.pause()
+      else instance.play()
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => document.removeEventListener('visibilitychange', onVisibility)
+  }, [cover.lottie, reduced])
+
+  if (cover.lottie) {
+    return (
+      <span className="rw-way-media is-lottie">
+        <span className="sr-only">{cover.alt}</span>
+        {reduced ? (
+          <Lottie
+            lottieRef={lottieRef}
+            src={cover.lottie}
+            loop={false}
+            autoplay={false}
+            className="rw-way-lottie"
+            aria-hidden
+          />
+        ) : (
+          <Lottie
+            lottieRef={lottieRef}
+            src={cover.lottie}
+            loop
+            autoplay
+            className="rw-way-lottie"
+            aria-hidden
+          />
+        )}
+      </span>
+    )
+  }
+
   return (
     <span className="rw-way-media">
       <img src={cover.src} alt={cover.alt} loading="lazy" decoding="async" />
@@ -127,15 +238,15 @@ function WayMedia({ cover }) {
 /** Infographic covers for the three service cards, in WAYS order. */
 const WAY_COVERS = [
   {
-    src: wayCoachingPoster,
+    lottie: peopleGrowthLottie,
     alt: 'People Growth: Listen, Advise, Negotiate, Close',
   },
   {
-    src: wayConsultingPoster,
+    lottie: salesSystemLottie,
     alt: 'Sales System: Audit, Design, Implement, Scale',
   },
   {
-    src: wayMandatePoster,
+    lottie: endToEndOwnershipLottie,
     alt: 'End-to-End Ownership: Leads through Closure',
   },
 ]
@@ -501,24 +612,21 @@ He helps developers and their sales teams<br />
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section id="testimonials" className="rw-pad rw-home-voices" style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px clamp(28px, 3vw, 40px)' }}>
-        <Reveal style={{ borderBottom: '1px solid var(--line)', paddingBottom: 22 }}>
-          <h2 style={sectionHeading}>{t('home.words')}</h2>
-        </Reveal>
-        <div className="rw-grid-3 rw-home-voices-grid">
-          {HOME_TESTIMONIALS.map((item, i) => (
-            <Reveal key={item.name} delay={i * 90} className="rw-home-voice">
-              <p className="rw-home-voice-quote">“{t(TESTIMONIAL_KEYS[i])}”</p>
-              <div className="rw-home-voice-name">{item.name}</div>
-            </Reveal>
-          ))}
+      {/* Testimonials: compact single-row strip (same density language as orgs LogoLoop). */}
+      <section id="testimonials" className="rw-home-voices" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'clamp(28px, 3.5vw, 44px) 40px' }}>
+          <Reveal style={{ marginBottom: 16 }}>
+            <h2 style={{ ...sectionHeading, fontSize: fs('clamp(22px, 2.4vw, 30px)') }}>{t('home.words')}</h2>
+          </Reveal>
+          <Reveal delay={60}>
+            <VoicesStrip t={t} />
+          </Reveal>
         </div>
       </section>
 
       <section id="support" className="rw-pad" style={{ ...container, padding: 'clamp(28px, 3.5vw, 44px) 40px var(--rw-sy-lg)' }}>
         <SectionHead
-          eyebrow={t('home.more.eyebrow')} tracking=".24em" titleWidth="12em"
+          titleWidth="12em"
           title={t('home.more.title')}
           aside={<SectionAside width="24em">{t('home.more.aside')}</SectionAside>}
         />

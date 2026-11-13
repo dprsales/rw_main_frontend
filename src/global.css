@@ -579,42 +579,85 @@ a:hover { color: var(--ink, #12100D); }
 }
 .rw-ways-section { border-bottom: 1px solid var(--copper); }
 
-/* Home testimonials: same responsive grid rhythm as services. */
-.rw-home-voices-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  column-gap: clamp(24px, 3vw, 44px);
-  row-gap: clamp(20px, 3vw, 28px);
-  align-items: start;
+/* Home testimonials: compact single-row strip (orgs LogoLoop density, not a tall grid). */
+.rw-voices-loop.logoloop { --logoloop-logoHeight: 16px; }
+.rw-voices-loop .logoloop__item {
+  font-size: inherit;
+  line-height: inherit;
+  align-self: stretch;
 }
-.rw-home-voice {
-  border-top: 1px solid var(--line);
-  padding: 28px 0 8px;
+.rw-voices-loop .logoloop__list { align-items: stretch; }
+.rw-home-voice-card {
+  box-sizing: border-box;
+  width: min(300px, 72vw);
+  height: 100%;
+  min-height: 148px;
+  margin: 0;
+  padding: 14px 16px 14px;
+  border: 1px solid var(--line);
+  background: var(--card);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
+  outline: none;
+}
+.rw-home-voice-card:focus-visible {
+  outline: 2px solid var(--copper);
+  outline-offset: 3px;
 }
 .rw-home-voice-quote {
   margin: 0;
+  flex: 1 1 auto;
   font-family: 'Jost', 'Poppins', system-ui, sans-serif;
   font-weight: 400;
-  font-size: clamp(16px, 1.35vw, 18px);
-  line-height: 1.55;
+  font-size: 14px;
+  line-height: 1.45;
   color: var(--ink);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+.rw-home-voice-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
 }
 .rw-home-voice-name {
+  display: block;
   font-family: 'Poppins', system-ui, sans-serif;
-  font-size: 12px;
+  font-size: 11px;
+  font-style: normal;
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--copper);
 }
-@media (max-width: 1000px) {
-  .rw-home-voices-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.rw-home-voice-role {
+  display: block;
+  font-family: 'Jost', 'Poppins', system-ui, sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--faded);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-@media (max-width: 700px) {
-  .rw-home-voices-grid { grid-template-columns: 1fr; }
+.rw-home-voices-static {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
 }
+.rw-home-voices-static-item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+.rw-home-voices-static .rw-home-voice-card { width: min(280px, 78vw); }
 
 .rw-way {
   position: relative;
@@ -662,6 +705,22 @@ a:hover { color: var(--ink, #12100D); }
   display: block;
   pointer-events: none;
   filter: saturate(0.82) brightness(0.96) contrast(0.98);
+}
+.rw-way-media.is-lottie {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0b0a09;
+}
+.rw-way-media .rw-way-lottie {
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none;
+}
+.rw-way-media .rw-way-lottie svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
 }
 
 .rw-way-body {
@@ -920,8 +979,11 @@ a:hover { color: var(--ink, #12100D); }
   .rw-econ-grid { grid-template-columns: 1fr; }
 }
 
-/* & MORE - support services as a chip cloud; pointing/tapping a pill reveals
-   its description below, the same hover-to-reveal idiom as the territory map. */
+/* Support services chip cloud: wrap on desktop; one-row rail on mobile. */
+.rw-support-cloud { min-width: 0; }
+.rw-chips-shell { min-width: 0; }
+.rw-chips-chrome,
+.rw-chips-progress { display: none; }
 .rw-chips { display: flex; flex-wrap: wrap; gap: clamp(9px, 1vw, 13px); }
 html[lang="te"] .rw-chip,
 html[lang="te"] .rw-chip-caption-label,
@@ -4005,12 +4067,145 @@ html[lang="te"] .rw-contact-row {
 
 /* --- Editorial detail ---------------------------------------------------- */
 @media (max-width: 700px) {
-  /* Ten chips and a caption; the reserved caption height is desktop-sized. */
-  .rw-chip-caption { min-height: 0; flex-direction: column; gap: 10px; }
+  /* Ten chips: rail + explicit scroll affordances (hint, arrows, progress). */
+  .rw-chips-shell {
+    position: relative;
+  }
+  .rw-chips-shell.is-overflow::before,
+  .rw-chips-shell.is-overflow::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 42px;
+    width: 28px;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+  .rw-chips-shell.is-overflow::before {
+    left: 0;
+    background: linear-gradient(to right, var(--bg) 18%, transparent 100%);
+  }
+  .rw-chips-shell.is-overflow::after {
+    right: 0;
+    background: linear-gradient(to left, var(--bg) 18%, transparent 100%);
+  }
+  .rw-chips-shell.can-left::before { opacity: 1; }
+  .rw-chips-shell.can-right::after { opacity: 1; }
+  .rw-chips {
+    flex-wrap: nowrap;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 36px 8px 2px;
+    margin-inline: 0;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .rw-chips::-webkit-scrollbar { display: none; }
+  .rw-chip {
+    flex: 0 0 auto;
+    max-width: calc(100% - 52px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 10px 14px;
+    font-size: 11px;
+    letter-spacing: .06em;
+    scroll-snap-align: start;
+  }
+  .rw-chips-chrome[hidden] { display: none !important; }
+  .rw-chips-chrome {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .rw-chips-nav {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--copper);
+    cursor: pointer;
+    transition: border-color .25s ease, background .25s ease, opacity .25s ease;
+  }
+  .rw-chips-nav:hover:not(:disabled),
+  .rw-chips-nav:focus-visible {
+    border-color: var(--copper);
+    background: color-mix(in srgb, var(--copper) 12%, transparent);
+    outline: none;
+  }
+  .rw-chips-nav:disabled {
+    opacity: .35;
+    cursor: default;
+  }
+  .rw-chips-nav.is-pulse {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--copper) 45%, transparent);
+    animation: rw-chips-pulse 1.8s ease-out infinite;
+  }
+  @keyframes rw-chips-pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--copper) 40%, transparent); }
+    70% { box-shadow: 0 0 0 10px transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rw-chips-nav.is-pulse { animation: none; }
+  }
+  .rw-chips-hint {
+    flex: 1 1 auto;
+    margin: 0;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--faded);
+  }
+  .rw-chips-progress[hidden] { display: none !important; }
+  .rw-chips-progress {
+    display: block;
+    margin-top: 10px;
+    height: 2px;
+    background: var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .rw-chips-progress > span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform-origin: left center;
+    background: var(--copper);
+    transition: transform .2s ease;
+  }
+  .rw-chip-caption {
+    min-height: 0;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 18px;
+    padding-top: 16px;
+  }
+  .rw-chip-caption-text {
+    font-size: clamp(16px, 4.2vw, 20px);
+    line-height: 1.45;
+  }
+  .rw-chip-caption-label { margin-bottom: 6px; }
   /* The mosaic rows are sized against the viewport, so they stay proportional. */
   .rw-glimpses { gap: 12px; }
   /* The strike rule reads as a mistake once "from"/"to" stack - the arrow already carries the replacement. */
   .rw-shift { gap: 4px 12px; }
+  #support.rw-pad {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
 }
 
 @media (max-width: 560px) {
@@ -4019,8 +4214,6 @@ html[lang="te"] .rw-contact-row {
   .rw-orgs { grid-template-columns: repeat(2, 1fr) !important; }
   /* The mosaic goes to a single column - at 2×2 on a phone each frame is barely 140px across. */
   .rw-glimpses { grid-template-columns: 1fr; grid-auto-rows: 58vw; }
-  /* An 18px chip with 24px of padding wraps to one per line, reading as a list of buttons, not a cloud. */
-  .rw-chip { padding: 10px 15px; letter-spacing: .06em; }
   .rw-team-grid { grid-template-columns: repeat(2, 1fr); }
 }
 

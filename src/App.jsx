@@ -43,7 +43,14 @@ const ListingDetailPage = lazy(() => import('./listings/pages/ListingDetailPage'
 
 function ListingsRedirect() {
   const { search } = useLocation()
-  return <Navigate to={{ pathname: '/list-property', search, hash: '#listings' }} replace />
+  return <Navigate to={{ pathname: '/listings', search, hash: '#listings' }} replace />
+}
+
+/** Old /list-property URLs stay indexed; send them to /listings. */
+function LegacyListPropertyRedirect() {
+  const { pathname, search, hash } = useLocation()
+  const next = pathname.replace(/^\/list-property/, '/listings') || '/listings'
+  return <Navigate to={`${next}${search}${hash}`} replace />
 }
 
 // Stop the browser (Safari especially) restoring the old scroll position on reload,
@@ -153,13 +160,15 @@ export default function App() {
           <Route path="/projects/:slug" element={<Project />} />
           <Route path="/realty/projects/:slug" element={<Project />} />
 
-          {/* Property listings — builders list, team approves by email, approved ones go live */}
-          <Route path="/list-property" element={<ListPropertyPage key="new" />} />
-          <Route path="/list-property/edit/:id" element={<ListPropertyPage key="edit" />} />
-          <Route path="/list-property/login" element={<LoginPage />} />
-          <Route path="/login" element={<Navigate to="/list-property/login" replace />} />
-          <Route path="/list-property/dashboard" element={<DashboardPage />} />
-          <Route path="/list-property/reset-password" element={<ResetPasswordPage />} />
+          {/* Property listings: builders list, team approves by email, approved ones go live */}
+          <Route path="/listings" element={<ListPropertyPage key="new" />} />
+          <Route path="/listings/edit/:id" element={<ListPropertyPage key="edit" />} />
+          <Route path="/listings/login" element={<LoginPage />} />
+          <Route path="/login" element={<Navigate to="/listings/login" replace />} />
+          <Route path="/listings/dashboard" element={<DashboardPage />} />
+          <Route path="/listings/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/list-property" element={<LegacyListPropertyRedirect />} />
+          <Route path="/list-property/*" element={<LegacyListPropertyRedirect />} />
           <Route path="/realty/listings" element={<ListingsRedirect />} />
           <Route path="/realty/listings/:slug" element={<ListingDetailPage />} />
 

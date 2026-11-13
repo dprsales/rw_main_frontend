@@ -29,7 +29,7 @@ export default function DashboardPage() {
 
   useEffect(() => { if (user) load() }, [user])
 
-  if (ready && !user) return <Navigate to="/list-property/login?next=%2Flist-property%2Fdashboard" replace />
+  if (ready && !user) return <Navigate to="/listings/login?next=%2Flistings%2Fdashboard" replace />
 
   const counts = {
     all: listings.length,
@@ -60,8 +60,8 @@ export default function DashboardPage() {
             <p className="mt-1 text-sm text-faded">{user?.name ? `${user.name} · ` : ''}{user?.email}</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link to="/list-property" className="btn-primary">+ Add property</Link>
-            <button className="btn-secondary" onClick={() => { logout(); navigate('/list-property') }}>Log out</button>
+            <Link to="/listings" className="btn-primary">+ Add property</Link>
+            <button className="btn-secondary" onClick={() => { logout(); navigate('/listings') }}>Log out</button>
           </div>
         </div>
 
@@ -110,7 +110,7 @@ export default function DashboardPage() {
             <div className="card p-10 text-center">
               <p className="font-serif text-2xl text-ink">No listings here yet</p>
               <p className="mt-1 text-sm text-faded">List your first property — it's free and verified within 24 hours.</p>
-              <Link to="/list-property" className="btn-primary mt-6">List a property</Link>
+              <Link to="/listings" className="btn-primary mt-6">List a property</Link>
             </div>
           )}
           {!loading && shown.map((l) => <ListingRow key={l._id} listing={l} onDelete={() => remove(l._id)} />)}
@@ -163,7 +163,7 @@ function ListingRow({ listing, onDelete }) {
         {listing.status === 'approved' && (
           <Link to={`/realty/listings/${listing.slug || listing._id}`} className="btn-secondary !px-4 !py-2 !text-xs">View live listing ↗</Link>
         )}
-        <Link to={`/list-property/edit/${listing._id}`} className="btn-primary !px-4 !py-2 !text-xs">
+        <Link to={`/listings/edit/${listing._id}`} className="btn-primary !px-4 !py-2 !text-xs">
           ✏️ Edit {listing.status === 'approved' ? 'live listing' : 'listing'}
         </Link>
         <button onClick={onDelete} className="ml-auto text-xs text-red-300 hover:underline">Delete</button>
