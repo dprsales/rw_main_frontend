@@ -19,7 +19,7 @@ import Header from '../components/Header'
 import { Skeleton } from 'boneyard-js/react'
 import { BookButton } from '../components/BookingModal'
 import CtaButton from '../components/CtaButton'
-import Marquee from '../components/Marquee'
+import LogoLoop from '../components/LogoLoop'
 import Reveal from '../components/Reveal'
 import FoldText from '../components/FoldText'
 import StrokeText from '../components/StrokeText'
@@ -28,7 +28,8 @@ import SupportCloud from '../components/SupportCloud'
 import { useParallax } from '../hooks/useParallax'
 import { useInView } from '../hooks/useInView'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
-import { BLOGS, HOME_TESTIMONIALS, MARQUEE_ITEMS, WAYS } from '../data/content'
+import { BLOGS, HOME_TESTIMONIALS, WAYS } from '../data/content'
+import { LOGO_MAX_H, LOGO_MAX_W, orgLogoLoopItems } from '../data/organisations'
 import { useLang } from '../i18n/LangProvider'
 import { HOME_FEATURED, featureFirst, fetchBlogsOnce } from '../data/blogs'
 import { HOME_FOOTER_LINKS, jost, mono, serif, text } from '../theme'
@@ -118,8 +119,7 @@ function HeroTitle({ lang, t, slide }) {
 function WayMedia({ cover }) {
   return (
     <span className="rw-way-media">
-      <img src={cover.src} alt={cover.alt} loading="lazy" />
-      {cover.overlay}
+      <img src={cover.src} alt={cover.alt} loading="lazy" decoding="async" />
     </span>
   )
 }
@@ -423,103 +423,100 @@ He helps developers and their sales teams<br />
 
       {/* Guided finder sits at the decision point: right before the three service cards it chooses between.
           The same questions also open first inside the booking modal, so every lead is qualified either way. */}
-      <GuidedFinder variant="inline" location="home" />
+      <GuidedFinder variant="inline" location="home" className="rw-finder--home" />
 
       {/* Three ways in */}
       <section id="services" className="rw-ways-section" style={sectionRule}>
         <div className="rw-pad" style={container}>
           <Reveal style={{ padding: '54px 0 4px', fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.26em', color: 'var(--faded)' }}>
             {t('home.ways')}
-            {/* THREE WAYS IN WHICH DEVELOPERS AND SALES LEADER STANDS TO BENEFIT  */}
           </Reveal>
-          <div className="rw-grid-3 rw-ways" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', columnGap: 44 }}>
-            {WAYS.map((way, i) => (
-              <Reveal
-                key={way.title}
-                as="button"
-                delay={i * 90}
-                type="button"
-                className="rw-way"
-                onClick={() => navigate(way.to)}
-                style={{
-                  textAlign: 'left', background: 'none', border: 'none',
-                  cursor: 'pointer', padding: 0, display: 'flex',
-                  flexDirection: 'column', color: 'var(--ink)',
-                }}
-              >
-                <WayMedia
-                  cover={{
-                    ...WAY_COVERS[i],
-                    alt: t(`home.way.alt.${i + 1}`),
-                    overlay: (
-                      <span className="rw-way-overlay-title">
-                        <span className="rw-way-numeral" style={{ fontFamily: serif }} aria-hidden>{way.k}</span>
-                        <span className="rw-way-service-name">{t(`home.slide.${['coaching', 'consulting', 'realty'][i]}.line1`)} {t(`home.slide.${['coaching', 'consulting', 'realty'][i]}.line2`)}</span>
+          <div className="rw-grid-3 rw-ways">
+            {WAYS.map((way, i) => {
+              const slideId = ['coaching', 'consulting', 'realty'][i]
+              return (
+                <Reveal
+                  key={way.title}
+                  as="button"
+                  delay={i * 90}
+                  type="button"
+                  className="rw-way"
+                  onClick={() => navigate(way.to)}
+                >
+                  <WayMedia
+                    cover={{
+                      ...WAY_COVERS[i],
+                      alt: t(`home.way.alt.${i + 1}`),
+                    }}
+                  />
+                  <span className="rw-way-body">
+                    <span className="rw-way-meta">
+                      <span className="rw-way-numeral" style={{ fontFamily: serif }} aria-hidden>{way.k}</span>
+                      <span className="rw-way-service-name">
+                        {t(`home.slide.${slideId}.line1`)} {t(`home.slide.${slideId}.line2`)}
                       </span>
-                    ),
-                  }}
-                />
-
-                <span className="rw-way-body">
-                  <span style={{ fontFamily: serif, fontSize: fs('clamp(24px,1.9vw,29px)'), lineHeight: 1.1, letterSpacing: '-.01em' }}>{t(`home.way.${i + 1}.title`)}</span>
-                  <span style={{ fontFamily: text, fontWeight: 300, fontSize: fs('17px'), lineHeight: 1.5, color: 'var(--faded)' }}>{t(`home.way.${i + 1}.line`)}</span>
-                </span>
-              </Reveal>
-            ))}
+                    </span>
+                    <span className="rw-way-title">{t(`home.way.${i + 1}.title`)}</span>
+                    <span className="rw-way-line">{t(`home.way.${i + 1}.line`)}</span>
+                  </span>
+                </Reveal>
+              )
+            })}
           </div>
         </div>
       </section>
 
-      {/* <Marquee items={MARQUEE_ITEMS} /> */}
-
-      {/* Glimpses - a teaser strip that links through to the portfolio */}
-      {/* <GlimpsesSection /> */}
-
-      {/* Cards link out to where each post already lives, so no article routes to maintain.
-          Hidden once loading settles with nothing to show. */}
-      {/* {(loadingBlogs || allBlogs.length > 0) && (
-      <section id="blogs" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
-        <SectionHead
-          eyebrow="WRITING" faded size="lg" titleWidth="13em" space={34}
-          title="Readings from a live market."
-          aside={<SectionCount>CLICK ANY POST TO READ ↗</SectionCount>}
-        />
-        <Skeleton loading={loadingBlogs} name="blog-feed" transition={300} fallback={<BlogFeedSkeleton />}>
-          <Gallery items={blogItems} />
-        </Skeleton>
-        {hasMoreBlogs && (
-          <Reveal style={{ display: 'flex', justifyContent: 'center', marginTop: 44 }}>
-            <button
-              type="button"
-              onClick={() => setVisibleCount((n) => n + HOME_BLOG_COUNT)}
-              style={{ ...ctaInk, cursor: 'pointer' }}
-            >
-              Load more
-              <span style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.1em', opacity: 0.7, marginLeft: 10 }}>
-                {blogItems.length} / {allBlogs.length}
-              </span>
-            </button>
+      {/* Organisations / partners trust strip (same logos as About). */}
+      <section id="organisations" className="rw-home-orgs" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px' }}>
+          <Reveal style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.22em', color: 'var(--faded)', marginBottom: 14 }}>
+            {t('home.orgs.eyebrow')}
           </Reveal>
-        )}
+          <Reveal delay={60} as="h2" style={{ ...sectionHeading, maxWidth: '16em', marginBottom: 'clamp(24px, 3vw, 36px)' }}>
+            {t('home.orgs.title')}
+          </Reveal>
+          <Reveal delay={100}>
+            <LogoLoop
+              logos={orgLogoLoopItems()}
+              speed={40}
+              direction="left"
+              gap={12}
+              hoverSpeed={0}
+              fadeOut
+              fadeOutColor="var(--chip)"
+              ariaLabel={t('home.orgs.aria')}
+              className="rw-logoloop"
+              renderItem={(item) => (
+                <div className={`rw-loop-tile${item.dark ? ' is-dark' : ''}`}>
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    draggable={false}
+                    style={{ maxWidth: `${LOGO_MAX_W * (item.scale || 1)}%`, maxHeight: `${LOGO_MAX_H * (item.scale || 1)}%` }}
+                  />
+                </div>
+              )}
+            />
+          </Reveal>
+        </div>
       </section>
-      )} */}
 
       {/* Testimonials */}
-      <section id="testimonials" className="rw-pad" style={{ ...container, padding: 'clamp(36px, 5vw, 56px) 40px clamp(20px, 2.5vw, 32px)' }}>
+      <section id="testimonials" className="rw-pad rw-home-voices" style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px clamp(28px, 3vw, 40px)' }}>
         <Reveal style={{ borderBottom: '1px solid var(--line)', paddingBottom: 22 }}>
           <h2 style={sectionHeading}>{t('home.words')}</h2>
         </Reveal>
-        <div className="rw-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', columnGap: 44 }}>
+        <div className="rw-grid-3 rw-home-voices-grid">
           {HOME_TESTIMONIALS.map((item, i) => (
-            <Reveal key={item.name} delay={i * 90} style={{ borderTop: '1px solid var(--line)', padding: '34px 0 8px', display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <p style={{ fontFamily: jost, fontWeight: 400, fontSize: fs('18px'), lineHeight: 1.55, color: 'var(--ink)' }}>“{t(TESTIMONIAL_KEYS[i])}”</p>
-              <div style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.06em', color: 'var(--copper)' }}>{item.name}</div>
+            <Reveal key={item.name} delay={i * 90} className="rw-home-voice">
+              <p className="rw-home-voice-quote">“{t(TESTIMONIAL_KEYS[i])}”</p>
+              <div className="rw-home-voice-name">{item.name}</div>
             </Reveal>
           ))}
         </div>
       </section>
 
-      <section id="support" className="rw-pad" style={{ ...container, padding: 'clamp(20px, 2.5vw, 32px) 40px var(--rw-sy-lg)' }}>
+      <section id="support" className="rw-pad" style={{ ...container, padding: 'clamp(28px, 3.5vw, 44px) 40px var(--rw-sy-lg)' }}>
         <SectionHead
           eyebrow={t('home.more.eyebrow')} tracking=".24em" titleWidth="12em"
           title={t('home.more.title')}

@@ -4,39 +4,12 @@ import hydMark from '../assets/site/hyd-01.svg'
 import Seo from '../components/Seo'
 import hraLogo from '../assets/site/logo-hra.png'
 import narLogo from '../assets/site/logo-nar.png'
-import anantha from '../assets/site/LOGOS/anantha.svg'
-import avani from '../assets/site/LOGOS/avani.svg'
-import blueFin from '../assets/site/LOGOS/blue-fin.svg'
-import cascadesNeopolis from '../assets/site/LOGOS/cascades-neopolis.svg'
-import celestial from '../assets/site/LOGOS/celestial.svg'
 import dezignShark from '../assets/site/LOGOS/dezign-shark.svg'
-import eInfra from '../assets/site/LOGOS/e-infra.svg'
-import gangothri from '../assets/site/LOGOS/gangothri.svg'
-import haneesh from '../assets/site/LOGOS/haneesh.svg'
 import happeningHyderabad from '../assets/site/LOGOS/happening-hyderabad.svg'
-import ira from '../assets/site/LOGOS/ira.svg'
-import kolla from '../assets/site/LOGOS/kolla.svg'
-import landmark from '../assets/site/LOGOS/landmark.svg'
-import navanaami from '../assets/site/LOGOS/navanaami.svg'
-import nesta from '../assets/site/LOGOS/nesta.svg'
-import promenadeVillas from '../assets/site/LOGOS/promenade-villas.svg'
-import radhaSpaces from '../assets/site/LOGOS/radha-spaces.svg'
-import skyMarq from '../assets/site/LOGOS/skyamarqdsr.png'
-import skyline from '../assets/site/LOGOS/skyline.png'
-import skyven from '../assets/site/LOGOS/skyven.png'
-import theTwins from '../assets/site/LOGOS/thetwinsdsr.png'
-import trumpTower from '../assets/site/LOGOS/trumptower.png'
-import vantage from '../assets/site/LOGOS/vantage.png'
-import rohas from '../assets/site/LOGOS/rohas.svg'
-import sriAditya from '../assets/site/LOGOS/sri-aditya.svg'
-import suchirindia from '../assets/site/LOGOS/suchirindia.svg'
-import tejase from '../assets/site/LOGOS/tejase.svg'
 import tgreraLogo from '../assets/site/LOGOS/tgrera.svg'
-import trilight from '../assets/site/LOGOS/trilight.svg'
-import vamsiram from '../assets/site/LOGOS/vamsiram.svg'
-import vamsiramHomes from '../assets/site/LOGOS/vamsiram-homes.svg'
-import vibrant from '../assets/site/LOGOS/vibrant.svg'
-import zuari from '../assets/site/LOGOS/zuari.svg'
+import {
+  LOGO_MAX_H, LOGO_MAX_W, LOGO_NEEDS_DARK, LOGO_SCALE, ORG_LOGOS, ORGS_WITH_LOGO,
+} from '../data/organisations'
 import CountUp from '../components/CountUp'
 import AboutSection from '../components/AboutSection'
 import ExperienceSection from '../components/ExperienceSection'
@@ -57,7 +30,7 @@ import { useLang } from '../i18n/LangProvider'
 import { associationRoleKey } from '../i18n/pages'
 import {
   ASSOCIATIONS,
-  ORGANISATIONS_WORKED, PORTFOLIO_TESTIMONIALS,
+  PORTFOLIO_TESTIMONIALS,
 } from '../data/content'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import { fs,
@@ -70,60 +43,6 @@ const ASSOC_LOGOS = [hraLogo, narLogo, tgreraLogo, dezignShark, happeningHyderab
 
 const ASSOC_ITEMS = ASSOCIATIONS
   .map((assoc, i) => ({ ...assoc, logo: ASSOC_LOGOS[i] }))
-
-/* Client logos keyed by name; names absent here fall back to a wordmark tile. */
-const ORG_LOGOS = {
-  'Vamsiram': vamsiram,
-  'Vamsiram Homes': vamsiramHomes,
-  'The Cascades Neopolis': cascadesNeopolis,
-  'The Trilight': trilight,
-  'Sri Aditya': sriAditya,
-  'Blue Fin Realty': blueFin,
-  'IRA': ira,
-  'Zuari Infraworld': zuari,
-  'Landmark Group': landmark,
-  'Suchirindia': suchirindia,
-  'Kolla': kolla,
-  // 'Nesta Developers': nesta,
-  // 'Tejase Developers': tejase,
-  'Haneesh Constructions': haneesh,
-  'Vibrant Developers': vibrant,
-  'Anantha Projects': anantha,
-  // 'Avani': avani,
-  'Gangothri': gangothri,
-  'Rohas Ventures': rohas,
-  'e-Infra': eInfra,
-  'Celestial': celestial,
-  'Navanaami': navanaami,
-  'Promenade Villas': promenadeVillas,
-  'Radha Spaces': radhaSpaces,
-  'SkyMarq by DSR': skyMarq,
-  'Skyline by Candeur': skyline,
-  'Skyven': skyven,
-  'The Twins by DSR': theTwins,
-  'Trump Tower': trumpTower,
-  'Vantage': vantage,
-}
-
-/* Optical-size correction for logos still on original bitmap canvases; tuned by eye. */
-const LOGO_SCALE = {}
-
-/* Capping width/height separately keeps wordmarks and monograms at comparable area. */
-const LOGO_MAX_W = 82
-const LOGO_MAX_H = 62
-
-/* Every logo is white artwork on transparency, so every tile runs dark. */
-const LOGO_NEEDS_DARK = new Set([
-  'Vamsiram', 'Vamsiram Homes', 'The Cascades Neopolis', 'The Trilight', 'Sri Aditya', 'Blue Fin Realty',
-  'IRA', 'Zuari Infraworld', 'Landmark Group', 'Suchirindia', 'Kolla',
-  'Nesta Developers', 'Tejase Developers', 'Haneesh Constructions',
-  'Vibrant Developers', 'Anantha Projects', 'Avani', 'Gangothri', 'Rohas Ventures', 'e-Infra',
-  'Celestial', 'Navanaami', 'Promenade Villas', 'Radha Spaces',
-  'SkyMarq by DSR', 'Skyline by Candeur', 'Skyven', 'The Twins by DSR', 'Trump Tower', 'Vantage',
-])
-
-/* Only organisations with a supplied logo are shown; rest appear once artwork arrives. */
-const ORGS_WITH_LOGO = ORGANISATIONS_WORKED.filter((org) => ORG_LOGOS[org])
 
 export default function Portfolio() {
   const tilt = useTilt({ max: 4 })

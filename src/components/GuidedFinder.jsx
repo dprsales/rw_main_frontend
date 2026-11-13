@@ -33,7 +33,7 @@ const FINDER_GLOW = {
  *   seed      { who } pre-answers Q1, e.g. from a service page link
  *   location  analytics label ('home' | 'start')
  */
-export default function GuidedFinder({ variant = 'inline', seed = {}, location = 'home' }) {
+export default function GuidedFinder({ variant = 'inline', seed = {}, location = 'home', className = '' }) {
   const { t } = useLang()
   const navigate = useNavigate()
   const finder = useFinder({ seed, location })
@@ -99,8 +99,13 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
     <section
       id="finder"
       ref={rootRef}
-      className={`rw-finder rw-pad ${variant === 'page' ? 'rw-finder--page' : ''}`}
-      style={{ padding: variant === 'page' ? '80px 40px clamp(80px,10vw,120px)' : 'clamp(72px,9vw,110px) 40px', borderTop: variant === 'inline' ? '1px solid var(--line)' : 'none' }}
+      className={`rw-finder rw-pad${variant === 'page' ? ' rw-finder--page' : ''}${className ? ` ${className}` : ''}`}
+      style={{
+        padding: variant === 'page'
+          ? '80px 40px clamp(80px,10vw,120px)'
+          : 'clamp(56px, 7vw, 88px) 40px',
+        borderTop: variant === 'inline' ? '1px solid var(--line)' : 'none',
+      }}
       aria-labelledby="finder-heading"
     >
       <div className="rw-finder-inner">

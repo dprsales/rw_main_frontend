@@ -203,7 +203,7 @@ export default {
   "realty.hero.fit": "See the mandate",
   "realty.role": "DIRECTOR OF SALES",
   "realty.scope.eyebrow": "WHAT THE MANDATE COVERS",
-  "realty.scope.title": "One team owns the whole funnel.",
+  "realty.scope.title": "One team owns the Entire funnel.",
   "realty.scope.aside": "Eight responsibilities we take off your plate from strategy and pricing through to closure and daily reporting.",
   "realty.scope.0": "Complete ownership of sales strategy, positioning & execution",
   "realty.scope.1": "A trained, dedicated sales team deployed onsite",
