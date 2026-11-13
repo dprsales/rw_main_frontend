@@ -204,6 +204,7 @@ function HeroCinematic() {
   const { targetRef, targetStyle, container: parallax } = useParallax()
   const [active, setActive] = useState(0)
   const [reduced, setReduced] = useState(false)
+  const [paused, setPaused] = useState(false)
   const touchX = useRef(null)
   const total = HERO_SLIDES.length
   const slide = HERO_SLIDES[active]
@@ -218,10 +219,10 @@ function HeroCinematic() {
   }, [])
 
   useEffect(() => {
-    if (reduced) return
+    if (reduced || paused) return
     const timer = setInterval(() => go(active + 1), 5000)
     return () => clearInterval(timer)
-  }, [active, reduced])
+  }, [active, reduced, paused])
 
   return (
     <section
@@ -229,6 +230,12 @@ function HeroCinematic() {
       className={`rw-hero${active > 0 ? ' rw-hero--night' : ''}`}
       aria-roledescription="carousel"
       aria-label={t('home.heroAria')}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) setPaused(false)
+      }}
       onTouchStart={(e) => { touchX.current = e.changedTouches[0].clientX }}
       onTouchEnd={(e) => {
         const start = touchX.current

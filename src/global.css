@@ -5,7 +5,11 @@
 ::selection { background: #C39B53; color: #fff; }
 
 /* iOS inflates text in landscape unless pinned, breaking every clamp() on the page. */
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: var(--rw-header-h, 74px);
+}
 
 /* Otherwise a single oversized logo or plate gives the whole page a horizontal scrollbar. */
 img, svg, video, canvas { max-width: 100%; }
@@ -1585,8 +1589,8 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   margin-top: 26px;
 }
 .rw-footer-social-btn {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1600,6 +1604,10 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   border-color: color-mix(in srgb, var(--copper) 55%, var(--line));
   color: var(--copper);
   background: color-mix(in srgb, var(--copper) 8%, transparent);
+}
+.rw-footer-social-btn:focus-visible {
+  outline: 2px solid var(--copper);
+  outline-offset: 2px;
 }
 
 .rw-footer-col-title {
@@ -1712,10 +1720,6 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   .rw-footer-col-title { margin-bottom: 10px; }
   .rw-footer-list a,
   .rw-footer-place { padding: 6px 0; }
-  .rw-footer-social-btn {
-    width: 36px;
-    height: 36px;
-  }
 }
 
 /* Phone: brand full width, then 2 link columns (standard footer pattern). */
@@ -1883,7 +1887,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   .rw-hire-track.is-moving { animation: none; }
 }
 
-/* Phone / tablet header: language + A A A + login + menu must fit without crushing. */
+/* Phone / tablet header: language + login + menu must fit without crushing. */
 @media (max-width: 900px) {
   .rw-header .rw-pad { gap: 14px !important; }
   .rw-header-tools { gap: 10px !important; }
@@ -1891,25 +1895,25 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 @media (max-width: 560px) {
   .rw-header .rw-pad { gap: 10px !important; }
   .rw-header-tools { gap: 8px !important; }
+  .rw-fs-control { display: none; }
   .rw-header-login.rw-cta {
     padding: 0 14px;
     font-size: 10px;
     letter-spacing: .09em;
-    height: 34px;
-    min-height: 34px;
+    height: 40px;
+    min-height: 40px;
   }
-  .rw-menu-btn { width: 36px !important; height: 36px !important; }
+  .rw-menu-btn { width: 40px !important; height: 40px !important; }
 }
 @media (max-width: 400px) {
-  .rw-header-tools { gap: 6px !important; }
-  .rw-fs-control { display: none; }
+  .rw-header-tools { gap: 8px !important; }
   .rw-lang-btn { font-size: 10px; }
   .rw-header-login.rw-cta {
     padding: 0 12px;
     letter-spacing: .08em;
-    height: 32px;
-    min-height: 32px;
-    font-size: 9.5px;
+    height: 40px;
+    min-height: 40px;
+    font-size: 10px;
   }
 }
 
