@@ -24,7 +24,7 @@ const SITE_NAV = [
   { key: 'nav.projects', label: 'Projects in Hyderabad', to: '/project-hyderabad' },
   { key: 'mega.listProperty', label: 'List or browse homes', to: '/list-property' },
   { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty' },
-  { key: 'nav.portfolio', label: 'Portfolio', to: '/realty/portfolio' },
+  { key: 'nav.portfolio', label: 'About', to: '/about' },
   { key: 'nav.careers', label: 'Careers', to: '/careers' },
   { key: 'nav.articles', label: 'Articles', to: '/articles' },
   { key: 'nav.contentLibrary', label: 'Content Library', to: '/content-library' },
@@ -257,7 +257,7 @@ function DesktopNav({ pathname, onBook }) {
         )}
       </div>
 
-      <Link to="/realty/portfolio" className={linkClass('/realty/portfolio')}>{t('nav.portfolio')}</Link>
+      <Link to="/about" className={linkClass('/about')}>{t('nav.portfolio')}</Link>
 
       <div
         ref={learnRef}

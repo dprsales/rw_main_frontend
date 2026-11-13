@@ -289,7 +289,7 @@ function HeroCinematic() {
 
           <div className="rw-hero-actions">
             <BookButton to="/form" className="rw-cta" style={ctaCopper}>{t('mega.bookStrategy')}</BookButton>
-            <Link to="/realty/portfolio" className="rw-inline-cta" style={{ ...ctaInline, color: '#F2EFE9' }}>
+            <Link to="/about" className="rw-inline-cta" style={{ ...ctaInline, color: '#F2EFE9' }}>
               {t('home.story')}
             </Link>
           </div>

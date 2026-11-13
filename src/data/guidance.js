@@ -136,10 +136,10 @@ export const OUTCOMES = {
   realty_portfolio: {
     key: 'realty_portfolio',
     name: 'RW Realty projects',
-    to: '/realty/portfolio',
+    to: '/about',
     formTrack: null,
     interest: 'Something else',
-    cta: 'Browse the projects',
+    cta: 'About Team RW',
   },
   strategy_call: {
     key: 'strategy_call',

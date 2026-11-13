@@ -80,7 +80,7 @@ export default function HiringModal() {
       setOpen(true)
     }
     if (!loaderBlocking()) {
-      const wait = pathname === '/' ? 400 : 200
+      const wait = 200
       const start = window.setTimeout(tryOpen, wait)
       return () => { window.clearTimeout(start); window.clearTimeout(failsafe) }
     }

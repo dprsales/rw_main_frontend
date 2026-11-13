@@ -9,7 +9,6 @@ import { LangProvider } from './i18n/LangProvider'
 import { ListingAuthProvider } from './listings/AuthContext'
 import { headerOffset } from './hooks/useSmoothScroll'
 import { useSiteVisitTracker } from './hooks/useSiteVisitTracker'
-import About from './pages/About'
 import Article from './pages/Article'
 import Articles from './pages/Articles'
 import Assessment from './pages/Assessment'
@@ -128,7 +127,8 @@ export default function App() {
           <Route path="/assessment" element={<Assessment />} />
           <Route path="/assesment" element={<Assessment />} />
           <Route path="/assessment/result" element={<AssessmentResult />} />
-          <Route path="/about" element={<About />} />
+          {/* Canonical About page (former Portfolio). Old portfolio URLs redirect here. */}
+          <Route path="/about" element={<Portfolio />} />
           <Route path="/articles" element={<Articles />} />
           <Route path="/articles/:slug" element={<Article />} />
           <Route path="/content-library" element={<ContentLibrary />} />
@@ -146,7 +146,7 @@ export default function App() {
           <Route path="/form" element={<Form />} />
           {/* Legacy /form/:track → redirected inside Form to /{track}/form */}
           <Route path="/form/:track" element={<Form />} />
-          <Route path="/realty/portfolio" element={<Portfolio />} />
+          <Route path="/realty/portfolio" element={<Navigate to="/about" replace />} />
           <Route path="/partner" element={<Partner />} />
           <Route path="/vendorpartner" element={<VendorPartner />} />
           {/* Project detail pages, keyed by API slug; both bare and realty-nested paths resolve here */}
@@ -169,7 +169,7 @@ export default function App() {
           <Route path="/services/luxury-sales-coach" element={<Navigate to="/coaching" replace />} />
           <Route path="/services/luxury-sales-consulting" element={<Navigate to="/consulting" replace />} />
           <Route path="/services/branding" element={<Navigate to="/consulting" replace />} />
-          <Route path="/portfolio" element={<Navigate to="/realty/portfolio" replace />} />
+          <Route path="/portfolio" element={<Navigate to="/about" replace />} />
           <Route path="/blogs" element={<Navigate to="/articles" replace />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />

@@ -102,7 +102,7 @@ export const HOME_FOOTER_LINKS = [
 /** A project detail page goes back to the Hyderabad projects list. */
 export const PROJECT_FOOTER_LINKS = [
   { label: '← Projects in Hyderabad', to: '/project-hyderabad' },
-  { label: 'Portfolio', to: '/realty/portfolio' },
+  { label: 'About', to: '/about' },
   MARKET_LINK,
   ...FOOTER_CONTACT,
   VENDOR_PARTNER_LINK,

@@ -1437,19 +1437,20 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 }
 .rw-dnav-book:hover { background: color-mix(in srgb, var(--copper) 16%, transparent); }
 
-/* Listing Log in — gold filled `.rw-cta`, sized with clamp so it scales with the header. */
+/* Listing Log in — gold pill, clamp sizing so it stays crisp from phone to desktop. */
 .rw-header-login.rw-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   box-sizing: border-box;
-  height: clamp(32px, 3.6vw, 40px);
+  min-width: max-content;
+  height: clamp(34px, 3.8vw, 40px);
   padding: 0 clamp(14px, 1.8vw, 22px);
   font-family: 'Poppins', system-ui, sans-serif;
-  font-size: clamp(11px, 1.05vw, 12px);
-  font-weight: 500;
-  letter-spacing: .12em;
+  font-size: clamp(10.5px, 1.05vw, 12px);
+  font-weight: 600;
+  letter-spacing: .11em;
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
@@ -1457,7 +1458,8 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   color: #16110a;
   background: var(--gold-gradient);
   border: 0 solid transparent;
-  border-radius: clamp(4px, 0.55vw, 8px);
+  border-radius: 999px;
+  box-shadow: 0 6px 16px -10px rgba(0, 0, 0, .55), inset 0 1px 0 rgba(255, 255, 255, .28);
 }
 .rw-header-account {
   display: inline-flex; align-items: center; flex-shrink: 0; white-space: nowrap; text-decoration: none;
@@ -1503,13 +1505,287 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   .rw-header-account { padding-right: 8px; }
 }
 
-/* Legal lives in the footer as quiet text, so the header can stay one action plus a future login. */
+/* --- Site footer (brand + columns + legal bar) ---------------------------- */
+.rw-footer {
+  position: relative;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+}
+.rw-footer.is-chip { background: var(--chip); }
+.rw-footer-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: clamp(56px, 7vw, 88px) 40px clamp(28px, 3vw, 36px);
+}
+.rw-footer-back {
+  margin-bottom: 28px;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 12px;
+  letter-spacing: .06em;
+}
+.rw-footer-back a { color: var(--faded); }
+.rw-footer-back a:hover { color: var(--copper); }
+
+.rw-footer-grid {
+  display: grid;
+  grid-template-columns: 1.35fr repeat(3, minmax(0, 1fr));
+  gap: clamp(36px, 4vw, 56px) clamp(28px, 3vw, 40px);
+  align-items: start;
+}
+.rw-footer-brand-mark {
+  display: inline-flex;
+  color: var(--ink);
+}
+.rw-footer-lede {
+  margin: 18px 0 0;
+  max-width: 28em;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(14px, 1.35vw, 15px);
+  line-height: 1.55;
+  color: var(--faded);
+}
+
+/* Footer Talk to Team RW: compact gold CTA, hugs content (never a full-width bar). */
+.rw-footer-cta.rw-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-top: 22px;
+  height: 46px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 999px;
+  color: #16110a;
+  background: var(--gold-gradient);
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+.rw-footer-cta-ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #16110a;
+  opacity: .88;
+}
+.rw-footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 26px;
+}
+.rw-footer-social-btn {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  background: transparent;
+  transition: border-color .25s, color .25s, background .25s;
+}
+.rw-footer-social-btn:hover {
+  border-color: color-mix(in srgb, var(--copper) 55%, var(--line));
+  color: var(--copper);
+  background: color-mix(in srgb, var(--copper) 8%, transparent);
+}
+
+.rw-footer-col-title {
+  margin: 0 0 14px;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.rw-footer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+.rw-footer-list a,
+.rw-footer-place {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: clamp(13px, 1.2vw, 14px);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: .01em;
+  color: var(--faded);
+  transition: color .2s;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.rw-footer-list a:hover { color: var(--ink); }
+.rw-footer-ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  margin-top: 0;
+  color: var(--copper);
+  flex-shrink: 0;
+  opacity: .92;
+}
+.rw-footer-list a:hover .rw-footer-ico {
+  opacity: 1;
+  color: var(--ink);
+}
+.rw-footer-place { color: var(--faded); cursor: default; }
+
+.rw-footer-bar {
+  margin-top: clamp(40px, 5vw, 56px);
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 28px;
+}
+.rw-footer-copy {
+  margin: 0;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: clamp(11px, 1.1vw, 12px);
+  letter-spacing: .04em;
+  color: var(--faded);
+}
 .rw-footer-legal {
-  display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 16px;
-  font-family: 'Poppins', system-ui, sans-serif; font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: clamp(10px, 1vw, 11px);
+  letter-spacing: .12em;
+  text-transform: uppercase;
 }
 .rw-footer-legal a { color: var(--faded); }
 .rw-footer-legal a:hover { color: var(--ink); }
+
+/* Laptop / large tablet: keep 4 columns, tighten gaps. */
+@media (max-width: 1200px) {
+  .rw-footer-grid {
+    gap: 32px 28px;
+  }
+}
+
+/* iPad / tablet: brand full width, link columns 2-up. */
+@media (max-width: 980px) {
+  .rw-footer-inner {
+    padding: clamp(44px, 6vw, 72px) 0 clamp(24px, 3vw, 32px);
+  }
+  .rw-footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 36px 28px;
+  }
+  .rw-footer-brand {
+    grid-column: 1 / -1;
+    max-width: 40em;
+  }
+}
+
+/* Large phone / small tablet. */
+@media (max-width: 720px) {
+  .rw-footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 18px;
+  }
+  .rw-footer-brand { max-width: none; }
+  .rw-footer-col-title { margin-bottom: 10px; }
+  .rw-footer-list a,
+  .rw-footer-place { padding: 6px 0; }
+  .rw-footer-social-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Phone: brand full width, then 2 link columns (standard footer pattern). */
+@media (max-width: 640px) {
+  .rw-footer-inner {
+    padding: 36px 0 22px;
+  }
+  .rw-footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 16px;
+  }
+  .rw-footer-brand {
+    grid-column: 1 / -1;
+    max-width: none;
+  }
+  .rw-footer-lede {
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  .rw-footer-cta.rw-cta {
+    margin-top: 16px;
+    height: 42px;
+    padding: 0 18px;
+    font-size: 10.5px;
+    letter-spacing: .1em;
+  }
+  .rw-footer-social { margin-top: 16px; gap: 8px; }
+  .rw-footer-col-title {
+    margin-bottom: 8px;
+    font-size: 10px;
+    letter-spacing: .14em;
+  }
+  .rw-footer-list { gap: 0; }
+  .rw-footer-list a,
+  .rw-footer-place {
+    padding: 5px 0;
+    gap: 8px;
+    font-size: 12.5px;
+    line-height: 1.3;
+  }
+  .rw-footer-ico { width: 14px; }
+  .rw-footer-col-contact {
+    grid-column: 1 / -1;
+  }
+  .rw-footer-bar {
+    margin-top: 28px;
+    padding-top: 16px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .rw-footer-legal { gap: 6px 14px; }
+}
+
+@media (max-width: 400px) {
+  .rw-footer-grid { gap: 18px 12px; }
+  .rw-footer-list a,
+  .rw-footer-place {
+    padding: 4px 0;
+    font-size: 12px;
+    gap: 7px;
+  }
+  .rw-footer-cta.rw-cta {
+    height: 40px;
+    padding: 0 16px;
+    gap: 8px;
+  }
+  .rw-footer-social { gap: 8px; }
+}
 
 /* Header glass on a pseudo-element so the header isn't a backdrop root (see Header.jsx). */
 .rw-header::before {
@@ -1607,15 +1883,20 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   .rw-hire-track.is-moving { animation: none; }
 }
 
-/* Phone header: language + A A A + login + menu must fit without crushing. */
+/* Phone / tablet header: language + A A A + login + menu must fit without crushing. */
+@media (max-width: 900px) {
+  .rw-header .rw-pad { gap: 14px !important; }
+  .rw-header-tools { gap: 10px !important; }
+}
 @media (max-width: 560px) {
   .rw-header .rw-pad { gap: 10px !important; }
   .rw-header-tools { gap: 8px !important; }
   .rw-header-login.rw-cta {
-    padding: 0 10px;
+    padding: 0 14px;
     font-size: 10px;
-    letter-spacing: .08em;
+    letter-spacing: .09em;
     height: 34px;
+    min-height: 34px;
   }
   .rw-menu-btn { width: 36px !important; height: 36px !important; }
 }
@@ -1623,7 +1904,13 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   .rw-header-tools { gap: 6px !important; }
   .rw-fs-control { display: none; }
   .rw-lang-btn { font-size: 10px; }
-  .rw-header-login.rw-cta { padding: 0 8px; letter-spacing: .06em; }
+  .rw-header-login.rw-cta {
+    padding: 0 12px;
+    letter-spacing: .08em;
+    height: 32px;
+    min-height: 32px;
+    font-size: 9.5px;
+  }
 }
 
 /* Telugu page CTAs are longer — allow wrap instead of clipping.
@@ -3786,15 +4073,15 @@ html[lang="te"] .rw-contact-row {
    target, so the hit area is padded to ~40px without moving the text. Two
    gates since neither alone covers it: width for phones/tablets, `pointer: coarse` for wide touch devices with a fine-pointer report. */
 @media (max-width: 900px), (pointer: coarse) {
-  .rw-footer-links a,
+  .rw-footer-list a,
+  .rw-footer-legal a,
+  .rw-footer-back a,
   .rw-inline-cta,
   .rw-nav-link {
-    display: inline-block;
+    display: inline-flex;
     padding-top: 10px;
     padding-bottom: 10px;
   }
-  /* The added padding already separates the links; the full desktop gap would spread the footer over half a screen. */
-  .rw-footer-links { gap: 6px 22px !important; }
 }
 
 /* Hover-to-reveal has a tap fallback, but the transforms fire on first tap and

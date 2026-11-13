@@ -34,7 +34,7 @@ export default function HiringBanner() {
                   {row.location ? <span className="rw-hire-meta"> · {row.location}</span> : null}
                   {row.line ? (
                     <span className="rw-hire-line">
-                      {' '}— {hireLineKey(row.title) ? t(hireLineKey(row.title)) : row.line}
+                      {' · '}{hireLineKey(row.title) ? t(hireLineKey(row.title)) : row.line}
                     </span>
                   ) : null}
                 </button>

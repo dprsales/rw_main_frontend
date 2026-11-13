@@ -20,7 +20,7 @@ const GLIMPSES = [
   { tag: 'FIG 04', alt: 'The Rajiv Williams team', placeholder: 'The team', caption: 'Hyderabad office', position: 'center 32%' },
 ]
 
-export default function GlimpsesSection({ showCta = true, linkTo = '/realty/portfolio' }) {
+export default function GlimpsesSection({ showCta = true, linkTo = '/about' }) {
   const frameStyle = { display: 'block', height: '100%', border: '1px solid var(--line)', overflow: 'hidden' }
 
   return (

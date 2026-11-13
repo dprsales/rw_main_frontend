@@ -40,6 +40,7 @@ import zuari from '../assets/site/LOGOS/zuari.svg'
 import CountUp from '../components/CountUp'
 import AboutSection from '../components/AboutSection'
 import ExperienceSection from '../components/ExperienceSection'
+import WhyTeamRwSection from '../components/WhyTeamRwSection'
 import Footer from '../components/Footer'
 import GlimpsesSection from '../components/GlimpsesSection'
 import Header from '../components/Header'
@@ -151,7 +152,7 @@ export default function Portfolio() {
 
   return (
     <>
-      <Seo route="/realty/portfolio" />
+      <Seo route="/about" />
       <Header />
 
       {/* Intro */}
@@ -201,6 +202,8 @@ export default function Portfolio() {
       {/* <GlimpsesSection showCta={false} linkTo={null} /> */}
 
       <AboutSection />
+
+      <WhyTeamRwSection />
 
       <ExperienceSection />
 

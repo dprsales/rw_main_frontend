@@ -38,10 +38,11 @@ export const ROUTE_SEO = {
       'Full ownership of sales strategy, a dedicated onsite team, and end-to-end funnel management for luxury residential projects across Hyderabad.',
   },
   '/realty/portfolio': {
-    title: 'Track Record of 31 Projects, ₹2,700 Cr | Rajiv Williams',
+    title: 'About Rajiv Williams & Team RW | Track Record, Hyderabad',
     description:
-      'Projects represented and mandated across Hyderabad’s luxury corridor, 27 developer partners, and recommendations from NAR India leadership.',
+      '16+ years, ₹2,700 Cr generated, 1,200 professionals coached. Why Team RW, the career track, team, voices, and Hyderabad luxury mandates.',
   },
+  /* Same page as above; /realty/portfolio redirects to /about. */
   '/realty/listings': {
     title: 'Verified Property Listings in Hyderabad | RW Realty',
     description:
@@ -96,9 +97,9 @@ export const ROUTE_SEO = {
       'Questions on luxury sales coaching, developer consulting, exclusive mandates, and the KRISAH assessment — grouped by the work.',
   },
   '/about': {
-    title: 'About Rajiv Williams | Luxury Sales Mentor, Hyderabad',
+    title: 'About Rajiv Williams & Team RW | Track Record, Hyderabad',
     description:
-      '16+ years, ₹2,700 Cr generated, and 1,200 professionals coached. From Dell to developer sales leadership to an independent mentoring practice.',
+      '16+ years, ₹2,700 Cr generated, 1,200 professionals coached. Why Team RW, the career track, team, voices, and Hyderabad luxury mandates.',
   },
   '/contact': {
     title: 'Contact Rajiv Williams, Hyderabad',

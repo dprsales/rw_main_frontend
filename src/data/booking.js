@@ -103,6 +103,7 @@ const PAGE_AREAS = [
   [/^\/content-library/, 'Content Library'],
   [/^\/contact/, 'Contact'],
   [/^\/about/, 'About'],
+  [/^\/realty\/portfolio/, 'About'],
   [/^\/assessment/, 'Assessment'],
 ]
 export function pageSourceLabel() {

@@ -488,7 +488,7 @@ export default function Project() {
           </h1>
           <p style={{ ...body, maxWidth: '32em' }}>The listing may have moved, or the connection dropped. Explore the full portfolio, or reach out and we’ll send the details directly.</p>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8 }}>
-            <Link to="/realty/portfolio" style={ctaInk}>View the portfolio</Link>
+            <Link to="/about" style={ctaInk}>About Team RW</Link>
             <BookButton to="/realty/form" interest="RW Realty mandate" specular>Request details</BookButton>
           </div>
         </div>

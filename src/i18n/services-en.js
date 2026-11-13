@@ -240,7 +240,7 @@ export default {
   "realty.case.book.sub": "Tell us about the launch and where sales ownership is currently split, and Team RW will walk you through how a mandate would work for it.",
   "realty.clients.eyebrow": "SELECTED CLIENTS",
   "realty.clients.title": "A few of the addresses.",
-  "realty.clients.portfolio": "VIEW FULL PORTFOLIO →",
+  "realty.clients.portfolio": "ABOUT TEAM RW →",
   "realty.clients.aria": "Selected clients",
   "realty.close.title": "Mandates are limited to a handful of projects at a time.",
   "realty.close.cta": "Tell us about your project",

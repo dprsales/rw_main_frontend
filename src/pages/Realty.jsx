@@ -242,7 +242,7 @@ export default function Realty() {
             eyebrow={t('realty.clients.eyebrow')} faded size="sm" space={30}
             title={t('realty.clients.title')}
             aside={(
-              <Link to="/realty/portfolio" className="rw-nav-link" style={headLink}>
+              <Link to="/about" className="rw-nav-link" style={headLink}>
                 {t('realty.clients.portfolio')}
               </Link>
             )}

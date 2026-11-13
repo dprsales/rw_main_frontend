@@ -240,7 +240,7 @@ export default {
  "realty.case.book.sub": "లాంచ్ గురించి, సేల్స్ యాజమాన్యం ప్రస్తుతం ఎక్కడ చీలిందో చెప్పండి. మాండేట్ ఎలా పని చేస్తుందో Team RW చెప్తుంది.",
  "realty.clients.eyebrow": "ఎంపిక చేసిన క్లయింట్లు",
  "realty.clients.title": "కొన్ని అడ్రసులు.",
- "realty.clients.portfolio": "పూర్తి పోర్ట్‌ఫోలియో చూడండి →",
+ "realty.clients.portfolio": "TEAM RW గురించి →",
  "realty.clients.aria": "ఎంపిక చేసిన క్లయింట్లు",
  "realty.close.title": "మాండేట్లు ఒకేసారి కొన్ని ప్రాజెక్టులకే పరిమితం.",
  "realty.close.cta": "మీ ప్రాజెక్ట్ గురించి చెప్పండి",
