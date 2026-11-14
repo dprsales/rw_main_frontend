@@ -28,7 +28,6 @@ const STATS = [
   { value: '24 hrs', label: 'Verification' },
   { value: '100%', label: 'Verified listings' },
   { value: 'Free', label: 'To list' },
-  { value: '3%', label: 'On successful sale' },
 ]
 
 function loadDraft() {
@@ -185,7 +184,7 @@ export default function ListPropertyPage() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-10 grid grid-cols-2 overflow-hidden rounded-lg border border-line sm:grid-cols-4">
+              <div className="mt-10 grid grid-cols-3 overflow-hidden rounded-lg border border-line">
                 {STATS.map((s, i) => (
                   <div key={s.label} className={`bg-panel px-4 py-5 ${i ? 'sm:border-l sm:border-line' : ''}`}>
                     <p className="font-serif text-2xl text-gold-300">{s.value}</p>
