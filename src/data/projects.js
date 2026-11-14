@@ -59,6 +59,8 @@ export const PROJECT_SLUGS = {
   'Prestige Clairemont': 'prestige-clairemont',
   'Prestige Clairmont': 'prestige-clairemont',
   'DSR Ciel': 'dsr-ciel',
+  'Alekhya Rise': 'alekhya-rise',
+  'Dukes Deevyashakti': 'dukes-deevyashakti',
 }
 
 /** Resolve a CDN path (or absolute URL) from the API to a loadable image URL. */

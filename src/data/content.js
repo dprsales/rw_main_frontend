@@ -910,6 +910,7 @@ export const PROJECTS = [
   { name: 'IWA', area: 'Puppalaguda', status: 'Mandate' },
   { name: 'Prestige Clairemont', area: 'Neopolis, Kokapet', status: 'Mandate' },
   { name: 'Alekhya Rise', area: 'Kokapet', status: 'Mandate' },
+  { name: 'Dukes Deevyashakti', area: 'Kokapet', status: 'Mandate' },
   { name: 'DSR Ciel', area: 'Gopanpally', status: 'Mandate' },
   { name: 'Vantage', area: 'Manchirevula', status: 'Mandate' },
   { name: 'Amora', area: 'Narsingi', status: 'Mandate' },
