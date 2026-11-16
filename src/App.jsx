@@ -34,6 +34,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
 import Faqs from './pages/Faqs'
 import ContentLibrary from './pages/ContentLibrary'
+import BrandConsulting from './pages/BrandConsulting'
 import BrandConsultingChecklist from './pages/BrandConsultingChecklist'
 
 const ListPropertyPage = lazy(() => import('./listings/pages/ListPropertyPage'))
@@ -127,6 +128,7 @@ export default function App() {
           {/* Checkout: selection → details → review → purchase request (UI only, no gateway wired). */}
           <Route path="/coaching/purchase" element={<CoachingPurchase />} />
           <Route path="/consulting" element={<Consulting />} />
+          <Route path="/consulting/brand-consulting" element={<BrandConsulting />} />
           <Route path="/project-hyderabad" element={<ProjectHyderabad />} />
           <Route path="/realty" element={<Realty />} />
           <Route path="/careers" element={<Careers />} />
@@ -182,7 +184,7 @@ export default function App() {
           <Route path="/services" element={<Navigate to="/" replace />} />
           <Route path="/services/luxury-sales-coach" element={<Navigate to="/coaching" replace />} />
           <Route path="/services/luxury-sales-consulting" element={<Navigate to="/consulting" replace />} />
-          <Route path="/services/branding" element={<Navigate to="/consulting" replace />} />
+          <Route path="/services/branding" element={<Navigate to="/consulting/brand-consulting" replace />} />
           <Route path="/portfolio" element={<Navigate to="/about" replace />} />
           <Route path="/blogs" element={<Navigate to="/articles" replace />} />
 

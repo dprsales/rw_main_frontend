@@ -98,7 +98,7 @@ export const ASSESSMENT_TRACKS = {
         id: 'servicesNeeded', type: 'check', required: true,
         title: 'Which consulting service are you looking for?',
         help: 'Choose as many as apply.',
-        options: ['End-to-end sales setup', 'Branding & visibility', 'Sales team hiring', 'Sales process consulting', 'Business growth strategy', 'Not sure (need guidance)'],
+        options: ['End-to-end sales setup', 'Sales team hiring', 'Sales process consulting', 'CRM structuring and configuration', 'Business growth strategy', 'Not sure (need guidance)'],
       },
       {
         id: 'biggestChallenge', type: 'pill', required: true,

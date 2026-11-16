@@ -10,6 +10,7 @@ const CRAWLABLE_LINKS = [
   { label: 'Home', to: '/' },
   { label: 'Luxury sales coaching', to: '/coaching' },
   { label: 'Developer sales consulting', to: '/consulting' },
+  { label: 'Brand consulting', to: '/consulting/brand-consulting' },
   { label: 'Projects in Hyderabad', to: '/project-hyderabad' },
   { label: 'Buy, sell, rent', to: '/listings' },
   { label: 'RW Realty mandates', to: '/realty' },

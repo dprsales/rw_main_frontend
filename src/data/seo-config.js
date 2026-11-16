@@ -32,6 +32,11 @@ export const ROUTE_SEO = {
     description:
       'A four-phase engagement of audit, process design, deployment and refinement that rebuilds a developer sales operation around conversion, not discounts.',
   },
+  '/consulting/brand-consulting': {
+    title: 'Brand Consulting for Real Estate Developers | Rajiv Williams',
+    description:
+      '16 years moving inventory across Hyderabad. Team Rajiv Williams brand consulting helps developers sell with the right brand language and buyer psychology.',
+  },
   '/realty': {
     title: 'RW Realty | Exclusive Luxury Sales Mandates, Hyderabad',
     description:

@@ -13,7 +13,7 @@ import { useLang } from '../i18n/LangProvider'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { mono } from '../theme'
 import {
-  ArrowRight, BookOpen, Building2, ChartNoAxesColumnIncreasing, ChevronDown, ChevronRight, CircleHelp, FileSignature, Handshake, LayoutGrid, Library, Target, Users,
+  ArrowRight, BookOpen, Building2, ChartNoAxesColumnIncreasing, ChevronDown, ChevronRight, CircleHelp, FileSignature, Handshake, LayoutGrid, Library, Sparkles, Target, Users,
 } from 'lucide-react'
 
 // Same wheel menu on every page: only route links belong here, not per-page scroll anchors.
@@ -21,6 +21,7 @@ const SITE_NAV = [
   { key: 'nav.home', label: 'Home', to: '/' },
   { key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching' },
   { key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting' },
+  { key: 'nav.brandConsulting', label: 'Brand Consulting', to: '/consulting/brand-consulting' },
   { key: 'nav.projects', label: 'Projects in Hyderabad', to: '/project-hyderabad' },
   { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/listings' },
   { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty' },
@@ -46,6 +47,7 @@ const MEGA_COLUMNS = [
     items: [
       { key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching', descKey: 'mega.coachingDesc', desc: '1:1 and team sales coaching', icon: Users },
       { key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting', descKey: 'mega.consultingDesc', desc: 'Sales structure & strategy for developers', icon: ChartNoAxesColumnIncreasing },
+      { key: 'nav.brandConsulting', label: 'Brand Consulting', to: '/consulting/brand-consulting', descKey: 'mega.brandConsultingDesc', desc: 'Branding, Marketing lead gen', icon: Sparkles },
       { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty', descKey: 'mega.mandateDesc', desc: 'RW runs your project sales mandate', icon: FileSignature },
     ],
   },

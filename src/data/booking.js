@@ -55,6 +55,7 @@ const LEAD_TYPE = {
   'Coaching': 'coaching',
   'Sales Consulting': 'contact',
   'Consulting': 'contact',
+  'Brand Consulting': 'contact',
   // A mandate enquiry is a developer lead, not a buyer's interest in a listing — `project` is for the latter.
   'Sales Mandates': 'contact',
   'RW Realty mandate': 'contact',
@@ -140,13 +141,16 @@ function toLead(form) {
     intent,
     // Branded page name for the CRM Source, e.g. "RW Realty Page".
     pageSource: pageSourceLabel(),
+    pageSource: form.pageSource || pageSourceLabel(),
     ...(form.company?.trim() && { company: form.company.trim() }),
+    ...(form.projectName?.trim() && { projectName: form.projectName.trim() }),
     ...(g.who && { visitorType: g.who }),
     ...(g.challenge && { challenge: Array.isArray(g.challenge) ? g.challenge.join(',') : g.challenge }),
     ...(g.challengeNote?.trim() && { challengeNote: g.challengeNote.trim() }),
     ...(g.goal && { goal: g.goal }),
-    ...(g.recommendedKey && { recommendedService: g.recommendedKey }),
-    ...(form.contentDownload && { contentDownload: form.contentDownload }),
+    ...((form.recommendedService || g.recommendedKey) && {
+      recommendedService: form.recommendedService || g.recommendedKey,
+    }),
     // Honeypot: real visitors never see this field; bots fill it and the server drops the request.
     ...(form.website && { website: form.website }),
   }

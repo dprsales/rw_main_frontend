@@ -157,6 +157,10 @@ export const submitTribhujaDigital = (data) =>
 export const submitBrandConsultingChecklist = (data) =>
   request('/brand-consulting-checklist', { method: 'POST', body: data })
 
+/** Public Brand Consulting brief. Own collection (not leads). Emails the team. */
+export const submitBrandConsultingEnquiry = (data) =>
+  request('/brand-consulting-enquiry', { method: 'POST', body: data })
+
 // 6. WHATSAPP — session confirmation, sent through the backend proxy
 
 // Sender identity shown to recipients; not secret.

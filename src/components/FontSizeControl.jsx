@@ -43,7 +43,9 @@ function applyDocumentScale(level) {
     // Keep the selector buttons and wheel navigation at their designed UI sizes.
     // The wheel has its own viewport-aware typography and should not be treated as
     // ordinary page copy (especially on desktop/laptop screens).
-    if (element.closest('.rw-fs-control, .rw-lang-switch, .rw-wheel-menu')) {
+    // Mega menu is chrome like the wheel: scale its type via em padding in CSS,
+    // but do not let the DOM pass crush item spacing when visitors bump A/A/A.
+    if (element.closest('.rw-fs-control, .rw-lang-switch, .rw-wheel-menu, .rw-mega')) {
       const record = scaledElements.get(element)
       if (record) {
         element.style.fontSize = record.inlineFontSize
