@@ -34,6 +34,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
 import Faqs from './pages/Faqs'
 import ContentLibrary from './pages/ContentLibrary'
+import BrandConsultingChecklist from './pages/BrandConsultingChecklist'
 
 const ListPropertyPage = lazy(() => import('./listings/pages/ListPropertyPage'))
 const DashboardPage = lazy(() => import('./listings/pages/DashboardPage'))
@@ -153,6 +154,10 @@ export default function App() {
           <Route path="/form" element={<Form />} />
           {/* Legacy /form/:track → redirected inside Form to /{track}/form */}
           <Route path="/form/:track" element={<Form />} />
+          {/* Internal URL only: not linked from menus. Enquiry lives under /form later. */}
+          <Route path="/site-visit-checklist/branding" element={<BrandConsultingChecklist />} />
+          <Route path="/brandingconsultingchecklist" element={<Navigate to="/site-visit-checklist/branding" replace />} />
+          <Route path="/forms/brandingconsultingchecklist" element={<Navigate to="/site-visit-checklist/branding" replace />} />
           <Route path="/realty/portfolio" element={<Navigate to="/about" replace />} />
           <Route path="/partner" element={<Partner />} />
           <Route path="/vendorpartner" element={<VendorPartner />} />

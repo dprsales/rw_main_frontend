@@ -153,6 +153,10 @@ export const submitSalesArchitecture = (data) =>
 export const submitTribhujaDigital = (data) =>
   request('/tribhujadigitalform', { method: 'POST', body: data })
 
+/** Internal site-visit branding checklist. Saves to DB only; no email. */
+export const submitBrandConsultingChecklist = (data) =>
+  request('/brand-consulting-checklist', { method: 'POST', body: data })
+
 // 6. WHATSAPP — session confirmation, sent through the backend proxy
 
 // Sender identity shown to recipients; not secret.
