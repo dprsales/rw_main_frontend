@@ -26,8 +26,9 @@ function prefillFromFinder(trackKey, finder) {
 }
 
 /**
- * Service forms live at `/coaching/form`, `/consulting/form`, `/realty/form`.
- * `/form` is the track picker. Legacy `/form/:track` redirects here.
+ * `/form` is the track picker. Service questionnaires live on landing pages
+ * at `/coaching#enquire`, `/consulting#enquire`, `/realty#enquire`.
+ * Legacy `/form/:track` redirects to those anchors.
  */
 export default function Form({ forcedTrack = null }) {
   const { track: trackParam } = useParams()
@@ -65,13 +66,13 @@ export default function Form({ forcedTrack = null }) {
     return () => window.removeEventListener('resize', measure)
   }, [])
 
-  // Legacy ?track= on bare /form → /{track}/form
+  // Legacy ?track= on bare /form → landing #enquire
   const legacy = params.get('track')?.toLowerCase()
   if (!forcedTrack && !trackParam && legacy && ASSESSMENT_TRACKS[legacy]) {
     return <Navigate to={formPathForTrack(legacy)} replace state={state} />
   }
 
-  // Legacy /form/:track → /{track}/form
+  // Legacy /form/:track → landing #enquire
   if (!forcedTrack && trackParam) {
     if (ASSESSMENT_TRACKS[key]) {
       return <Navigate to={formPathForTrack(key)} replace state={state} />
@@ -79,7 +80,7 @@ export default function Form({ forcedTrack = null }) {
     return <Navigate to="/form" replace />
   }
 
-  const seoRoute = valid ? formPathForTrack(valid) : '/form'
+  const seoRoute = valid ? `/${valid}` : '/form'
   const returnTo = formReturnPath(valid, from)
 
   return (

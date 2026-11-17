@@ -334,9 +334,17 @@ export default function Header() {
   }, [])
   const { pathname, search } = useLocation()
   const navigate = useNavigate()
-  const goBookStrategy = () => navigate(formPathForRoute(pathname), {
-    state: { from: `${pathname}${search}` },
-  })
+  const goBookStrategy = () => {
+    const target = formPathForRoute(pathname)
+    if (target.includes('#')) {
+      const [path, id] = target.split('#')
+      if (!path || path === pathname) {
+        scrollToId(id)
+        return
+      }
+    }
+    navigate(target, { state: { from: `${pathname}${search}` } })
+  }
 
   /* A route change means the menu's job is done. */
   useEffect(() => { setOpen(false) }, [pathname])

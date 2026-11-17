@@ -446,7 +446,7 @@ function HeroCinematic() {
               </p>
               <div className="rw-hero-actions">
                 <BookButton
-                  to={slide.id === 'coaching' ? '/coaching/form' : slide.id === 'consulting' ? '/consulting/form' : '/realty/form'}
+                  to={slide.id === 'coaching' ? '/coaching#enquire' : slide.id === 'consulting' ? '/consulting#enquire' : '/realty#enquire'}
                   className="rw-cta"
                   style={ctaCopper}
                 >

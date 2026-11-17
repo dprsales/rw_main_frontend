@@ -30,8 +30,10 @@ const FORM_GLOW = {
   glowColor: '41 82 71',
   colors: ['#C39B53', '#E8C97A', '#A67C3D'],
   borderRadius: 4,
-  glowRadius: 18,
+  glowRadius: 22,
   fillOpacity: 0.16,
+  coneSpread: 42,
+  edgeSensitivity: 22,
   animated: false,
 }
 
@@ -294,7 +296,12 @@ export default function VendorPartner() {
                 {error && (
                   <p style={{ ...note, color: 'var(--copper)', marginTop: 16 }}>{error}</p>
                 )}
-                <button className="rw-cta" style={{ ...ctaCopper, marginTop: 28 }} type="submit" disabled={status === 'sending'}>
+                <button
+                  className="rw-form-submit rw-cta"
+                  style={{ ...ctaCopper, marginTop: 28 }}
+                  type="submit"
+                  disabled={status === 'sending'}
+                >
                   {status === 'sending' ? t('sale.submitting') : t('vendor.send')}
                 </button>
               </form>

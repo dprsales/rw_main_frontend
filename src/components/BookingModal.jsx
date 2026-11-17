@@ -43,9 +43,25 @@ export function BookButton({ interest, role, jobId, roleOptions, guidance, sourc
   // `to` turns the CTA into a route navigation (e.g. the careers apply page) instead of the modal.
   const handleClick = () => {
     if (to) {
-      const isForm = typeof to === 'string' && /\/form\/?$/.test(to)
+      const isServiceForm = typeof to === 'string' && (
+        /\/form\/?$/.test(to)
+        || /#(enquire|apply)$/.test(to)
+      )
+      // Same landing page + #enquire: scroll in place instead of a full navigation.
+      if (typeof to === 'string' && to.includes('#')) {
+        const [path, id] = to.split('#')
+        if ((!path || path === location.pathname) && id) {
+          const el = document.getElementById(id)
+          if (el) {
+            const header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--rw-header-h')) || 74
+            const y = el.getBoundingClientRect().top + window.scrollY - header
+            window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
+            return
+          }
+        }
+      }
       navigate(to, {
-        state: isForm
+        state: isServiceForm
           ? { from: `${location.pathname}${location.search}`, ...state }
           : state,
       })

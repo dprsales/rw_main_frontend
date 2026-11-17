@@ -2,20 +2,21 @@
 import { createApplication, submitLead } from './api'
 import { labelFor } from './guidance'
 
-/** Track → service form URL (`/realty/form`, not `/form/realty`). */
+/** Track → landing page form anchor (`/realty#enquire`). Old `/realty/form` redirects there. */
 export function formPathForTrack(track) {
   if (track === 'coaching' || track === 'consulting' || track === 'realty') {
-    return `/${track}/form`
+    return `/${track}#enquire`
   }
   return '/form'
 }
 
 /**
- * Strategy-call CTAs go to the long service questionnaires (not the short booking modal).
+ * Strategy-call CTAs go to the landing-page questionnaire (not the booking modal).
  * Matched to the page the visitor is on; unknown routes land on the track picker.
  */
 export function formPathForRoute(pathname = '/') {
   const path = String(pathname || '/')
+  if (path.startsWith('/consulting/brand-consulting')) return '/consulting/brand-consulting#enquire'
   if (
     path.startsWith('/coaching')
     || path.startsWith('/assessment')

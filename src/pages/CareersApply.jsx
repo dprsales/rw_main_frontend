@@ -42,8 +42,10 @@ const FORM_GLOW = {
   glowColor: '41 82 71',
   colors: ['#C39B53', '#E8C97A', '#A67C3D'],
   borderRadius: 4,
-  glowRadius: 18,
+  glowRadius: 22,
   fillOpacity: 0.16,
+  coneSpread: 42,
+  edgeSensitivity: 22,
   animated: false,
 }
 

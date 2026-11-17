@@ -9,7 +9,7 @@ import Seo from '../components/Seo'
 import { BookButton } from '../components/BookingModal'
 import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
-import ClosingCTA from '../components/ClosingCTA'
+import ServiceLandingForm from '../components/ServiceLandingForm'
 import PullQuote from '../components/PullQuote'
 import { useLang } from '../i18n/LangProvider'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
@@ -158,7 +158,7 @@ export default function Consulting() {
 
           <Reveal delay={220} className="rw-hero-actions">
             <BookButton
-              to="/consulting/form"
+              to="/consulting#enquire"
               interest="Consulting"
               className="rw-cta rw-hero-book"
               style={ctaCopper}
@@ -249,9 +249,7 @@ export default function Consulting() {
         </div>
       </section>
 
-      <ClosingCTA id="apply" chip title={t('consult.close.title')}>
-        <CtaButton to="/consulting/form" live>{t('consult.close.cta')} <span className="rw-cta-arrow">→</span></CtaButton>
-      </ClosingCTA>
+      <ServiceLandingForm trackKey="consulting" />
 
       <Footer links={FOOTER_LINKS} />
     </>

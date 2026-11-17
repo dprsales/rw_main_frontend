@@ -35,7 +35,7 @@ export const ASSESSMENT_TRACKS = {
       {
         id: 'experience', type: 'pill', required: true,
         title: 'How long have you been in the real estate industry?',
-        options: ['> 1 year', '1–3 yrs', '3–5 yrs', '< 5 yrs'],
+        options: ['< 1 year', '1–3 yrs', '3–5 yrs', '> 5 yrs'],
       },
       {
         id: 'projectType', type: 'pill', required: true,

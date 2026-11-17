@@ -17,7 +17,7 @@ import Seo from '../components/Seo'
 import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import RiseText from '../components/RiseText'
-import ClosingCTA from '../components/ClosingCTA'
+import ServiceLandingForm from '../components/ServiceLandingForm'
 import SectionHead, { SectionAside } from '../components/SectionHead'
 import { useInView } from '../hooks/useInView'
 import { useLang } from '../i18n/LangProvider'
@@ -117,7 +117,7 @@ export default function Realty() {
             </Reveal>
 
             <Reveal delay={220} className="rw-realty-hero-actions">
-              <CtaButton to="/realty/form" className="rw-hero-book" style={ctaCopper}>
+              <CtaButton to="/realty#enquire" className="rw-hero-book" style={ctaCopper}>
                 {t('realty.hero.book')}
               </CtaButton>
               <CtaButton variant="secondary" href="#scope" arrow="→">
@@ -273,9 +273,7 @@ export default function Realty() {
         </div>
       </section>
 
-      <ClosingCTA title={t('realty.close.title')}>
-        <CtaButton to="/realty/form" live>{t('realty.close.cta')} <span className="rw-cta-arrow">→</span></CtaButton>
-      </ClosingCTA>
+      <ServiceLandingForm trackKey="realty" />
 
       <Footer chip links={FOOTER_LINKS} />
     </>

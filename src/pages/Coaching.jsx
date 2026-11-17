@@ -13,7 +13,7 @@ import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import AchieveGrid from '../components/AchieveGrid'
 import Bullet from '../components/Bullet'
-import ClosingCTA from '../components/ClosingCTA'
+import ServiceLandingForm from '../components/ServiceLandingForm'
 import PullQuote from '../components/PullQuote'
 import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
@@ -249,7 +249,7 @@ export default function Coaching() {
           </Reveal>
 
           <Reveal delay={300} className="rw-coaching-hero-actions">
-            <BookButton to="/coaching/form" interest="Coaching" className="rw-cta rw-coaching-hero-book" style={ctaCopper}>
+            <BookButton to="/coaching#enquire" interest="Coaching" className="rw-cta rw-coaching-hero-book" style={ctaCopper}>
               {t('coach.hero.book')} <span className="rw-cta-arrow">→</span>
             </BookButton>
             <button type="button" onClick={() => scrollToId('premium-programs')} className="rw-coaching-hero-explore">
@@ -362,9 +362,7 @@ export default function Coaching() {
         </div>
       </section>
 
-      <ClosingCTA title={t('coach.close.title')} titleStyle={{ maxWidth: '15em' }}>
-        <CtaButton to="/coaching/form" live>{t('coach.close.cta')} <span className="rw-cta-arrow">→</span></CtaButton>
-      </ClosingCTA>
+      <ServiceLandingForm trackKey="coaching" />
 
       <Footer links={FOOTER_LINKS} />
     </>

@@ -319,7 +319,7 @@ export default function BrandConsulting() {
               <a href="#enquire" className="rw-cta" style={ctaCopper}>
                 Enquire now
               </a>
-              <Link to="/about" className="rw-bc-secondary">
+              <Link to="/about" className="rw-cta-secondary">
                 About Team RW
               </Link>
             </div>
@@ -564,7 +564,7 @@ export default function BrandConsulting() {
                     Brand assets <span className="rw-form-req">*</span>
                   </legend>
                   <p className="rw-bc-hint rw-bc-hint--tight">
-                    Mark Have or Need for every asset. Scroll inside the list if needed.
+                    Mark Have or Need for every asset below.
                   </p>
                   <div
                     className="rw-bc-matrix"

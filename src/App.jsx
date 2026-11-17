@@ -149,12 +149,12 @@ export default function App() {
           <Route path="/partner/terms" element={<PartnerTerms />} />
           {/* /start is the guided finder on its own page; service pages link here with ?who= */}
           <Route path="/start" element={<Start />} />
-          {/* Service forms: /coaching/form, /consulting/form, /realty/form. /form is the track picker. */}
-          <Route path="/coaching/form" element={<Form forcedTrack="coaching" />} />
-          <Route path="/consulting/form" element={<Form forcedTrack="consulting" />} />
-          <Route path="/realty/form" element={<Form forcedTrack="realty" />} />
+          {/* Service forms live on landing pages at #enquire. Old /…/form URLs redirect there. */}
+          <Route path="/coaching/form" element={<Navigate to="/coaching#enquire" replace />} />
+          <Route path="/consulting/form" element={<Navigate to="/consulting#enquire" replace />} />
+          <Route path="/realty/form" element={<Navigate to="/realty#enquire" replace />} />
           <Route path="/form" element={<Form />} />
-          {/* Legacy /form/:track → redirected inside Form to /{track}/form */}
+          {/* Legacy /form/:track → landing #enquire (or track picker) */}
           <Route path="/form/:track" element={<Form />} />
           {/* Internal URL only: not linked from menus. Enquiry lives under /form later. */}
           <Route path="/site-visit-checklist/branding" element={<BrandConsultingChecklist />} />

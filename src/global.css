@@ -3942,16 +3942,30 @@ html[lang="te"] .rw-contact-row {
   gap: 9px;
   grid-column: 1 / -1;
   line-height: 1.45;
+  max-width: 100%;
+  min-width: 0;
 }
 .rw-career-consent input {
   accent-color: var(--copper);
   flex: 0 0 auto;
   margin: 2px 0 0;
 }
+.rw-career-consent > span {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
 .rw-career-consent a {
   color: var(--copper);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+@media (max-width: 720px) {
+  .rw-career-consent {
+    font-size: 13px;
+    line-height: 1.5;
+    gap: 10px;
+  }
 }
 
 .rw-career-modal-form input,

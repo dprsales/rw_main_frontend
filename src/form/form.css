@@ -191,6 +191,13 @@
   background: var(--bg);
   border-bottom: 1px solid var(--line);
 }
+/* Landing #enquire: sticky rail sat under the site header and painted over
+   fields while scrolling the long panel. Keep progress, drop stickiness. */
+.rw-form--embedded .rw-form-rail {
+  position: static;
+  z-index: auto;
+  top: auto !important;
+}
 .rw-form-rail-inner {
   display: flex;
   align-items: center;
@@ -240,7 +247,14 @@
 }
 
 /* --- Questionnaire --------------------------------------------------------- */
-.rw-form-body { max-width: 860px; margin: 0 auto; padding: clamp(56px,7vw,86px) 0 clamp(80px,10vw,120px); }
+/* Block padding only. Horizontal inset comes from .rw-form-pad on the same node;
+   a padding shorthand here was wiping left/right to 0 and pinning submit flush to the screen. */
+.rw-form-body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding-top: clamp(56px, 7vw, 86px);
+  padding-bottom: clamp(80px, 10vw, 120px);
+}
 
 .rw-form-preamble { text-align: center; padding-bottom: clamp(34px, 5vw, 50px); border-bottom: 1px solid var(--line); }
 .rw-form-thanks {
@@ -308,21 +322,46 @@
 }
 .rw-form-panel--glow > .rw-form-field-wrap { box-shadow: none; }
 
-/* BorderGlow around questionnaire / apply panels: same flat card as the form,
-   thin copper rim, no floating shadow stack (that rim was reading as a loose outline). */
+/* BorderGlow around questionnaire / apply panels.
+   Inset shell: transparent outer box + padding = glow bleed room, visual card on
+   .border-glow-inner. That way the edge wash paints inside the outer box and is
+   not flush-cut at the top/side border (the bug on tall landing embeds). */
 .rw-form-glow.border-glow-card {
-  border: 1px solid rgba(195, 155, 83, 0.55);
-  border-radius: 4px;
-  background: var(--card);
+  --rw-form-glow-pad: 28px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   box-shadow: none;
   transform: none;
+  isolation: auto;
+  overflow: visible;
+  padding: var(--rw-form-glow-pad);
+  /* Pull layout back so the visual card aligns with neighbouring content. */
+  margin: calc(var(--rw-form-glow-pad) * -1);
 }
 .rw-form-glow .border-glow-inner {
   overflow: visible;
-  border-radius: inherit;
+  border-radius: 4px;
+  background: var(--card);
+  border: 1px solid rgba(195, 155, 83, 0.55);
+  /* Soft rest rim so tall panels never look hard-cut when the cone is elsewhere. */
+  box-shadow: 0 0 28px -6px rgba(195, 155, 83, 0.28);
 }
+/* Align the tracked edge wash to the visual inner card; wash blooms into the pad. */
 .rw-form-glow.border-glow-card > .edge-light {
-  border-radius: inherit;
+  inset: var(--rw-form-glow-pad);
+  border-radius: 4px;
+  z-index: 2;
+}
+.rw-form-glow.border-glow-card > .edge-light::before {
+  inset: 0;
+  border-radius: 4px;
+}
+/* Mesh layers stay on the visual card face. */
+.rw-form-glow.border-glow-card::before,
+.rw-form-glow.border-glow-card::after {
+  inset: var(--rw-form-glow-pad);
+  border-radius: 4px;
 }
 .rw-form-field-wrap {
   display: block;
@@ -363,7 +402,8 @@
    from the right control, not from shrinking padding until chips look cheap. */
 .rw-form-body:has(.rw-form-panel--questions) {
   max-width: 1040px;
-  padding: clamp(28px, 3.4vw, 48px) 0 clamp(48px, 6vw, 72px);
+  padding-top: clamp(28px, 3.4vw, 48px);
+  padding-bottom: clamp(48px, 6vw, 72px);
 }
 .rw-form-body:has(.rw-form-panel--questions) .rw-form-preamble {
   padding-bottom: 22px;
@@ -1045,6 +1085,9 @@
   font-size: 12px;
   letter-spacing: .08em;
   color: var(--faded);
+  min-width: 0;
+  flex: 1 1 auto;
+  line-height: 1.45;
 }
 .rw-form-submit {
   display: inline-flex;
@@ -1063,6 +1106,8 @@
   box-sizing: border-box;
   cursor: pointer;
   transition: opacity .35s;
+  flex: 0 0 auto;
+  max-width: 100%;
 }
 /* Disabled reads as inert metal — the sweep only appears once the form is
    actually submittable. */
@@ -1077,6 +1122,107 @@
   font-family: var(--rw-sans);
   font-size: 14px;
   line-height: 1.55;
+}
+
+/* Phone / narrow: status above, full-width submit, readable wrap. */
+@media (max-width: 720px) {
+  .rw-form-submit-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .rw-form-left {
+    flex: 0 0 auto;
+    width: 100%;
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: .06em;
+    overflow-wrap: break-word;
+  }
+  .rw-form-submit,
+  .rw-form-submit.rw-cta,
+  .rw-form form > button.rw-cta[type='submit'] {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-height: 48px;
+    height: auto !important;
+    padding: 14px 18px !important;
+    white-space: normal !important;
+    text-align: center;
+    line-height: 1.35 !important;
+  }
+  .rw-form-submit-error {
+    font-size: 13px;
+  }
+  .rw-consent {
+    width: 100%;
+    max-width: 100%;
+  }
+  .rw-consent-title {
+    white-space: normal;
+    line-height: 1.4;
+  }
+  .rw-form-rail-inner {
+    gap: 10px 14px;
+  }
+  .rw-form-rail-label {
+    margin-left: 0;
+    flex: 1 1 100%;
+    text-align: left;
+    white-space: normal;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+  }
+  .rw-form--embedded .rw-form-rail-inner .rw-form-back[aria-hidden='true'] {
+    display: none;
+  }
+  .rw-step-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .rw-step-count {
+    order: -1;
+    flex: 0 0 auto;
+    width: 100%;
+    text-align: left;
+    white-space: normal;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+  }
+  .rw-step-back,
+  .rw-step-nav .rw-form-submit {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    height: auto;
+    min-height: 48px;
+    padding: 14px 18px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.35;
+  }
+}
+
+@media (max-width: 400px) {
+  .rw-form-submit,
+  .rw-form-submit.rw-cta,
+  .rw-form form > button.rw-cta[type='submit'] {
+    font-size: 12px;
+    letter-spacing: .08em;
+    padding: 12px 14px !important;
+  }
+  .rw-form-left {
+    font-size: 11px;
+  }
+  .rw-step-back,
+  .rw-step-nav .rw-form-submit {
+    font-size: 12px;
+    padding: 12px 14px;
+  }
 }
 
 /* --- Confirmation ---------------------------------------------------------- */
@@ -1393,7 +1539,56 @@
     white-space: nowrap;
   }
   .rw-stepper { margin-bottom: 34px; }
-  .rw-step-nav { justify-content: center; }
-  .rw-step-count { order: -1; flex-basis: 100%; }
-  .rw-step-back, .rw-step-nav .rw-form-submit { flex: 1 1 auto; }
+}
+
+/* Landing-page embed (Coaching / Consulting / Realty #enquire) */
+.rw-landing-form {
+  scroll-margin-top: calc(var(--rw-header-h, 76px) + 12px);
+  overflow: visible;
+}
+.rw-landing-form .rw-form,
+.rw-landing-form .rw-form-body {
+  overflow: visible;
+}
+.rw-landing-form .rw-form-body {
+  padding-top: clamp(28px, 4vw, 48px);
+  padding-bottom: clamp(48px, 7vw, 80px);
+}
+/* Tighter preamble. Gap above the glow card (not inside it) so the wash has air. */
+.rw-landing-form .rw-form-body:has(.rw-form-panel--questions) .rw-form-preamble {
+  padding-bottom: 16px;
+  border-bottom: 0;
+}
+.rw-landing-form .rw-form-body:has(.rw-form-panel--questions) .rw-form-time {
+  margin-top: 12px;
+}
+.rw-landing-form .rw-form-body:has(.rw-form-panel--questions) .rw-form-questions {
+  /* Margin lives on the glow wrapper instead, so the gold rim starts after the gap. */
+  margin-top: 0;
+}
+.rw-landing-form .rw-form-glow.border-glow-card {
+  /* Keep air under the preamble; negative margin only cancels the glow pad. */
+  margin-top: calc(24px - var(--rw-form-glow-pad));
+  margin-inline: calc(var(--rw-form-glow-pad) * -1);
+  margin-bottom: calc(var(--rw-form-glow-pad) * -1);
+}
+
+/* Phone: glow pad must not exceed .rw-form-pad inset, or the card (and submit under it) clips. */
+@media (max-width: 720px) {
+  .rw-form-glow.border-glow-card {
+    --rw-form-glow-pad: 18px;
+  }
+  .rw-landing-form .rw-form-body:has(.rw-form-panel--questions) .rw-form-submit-bar {
+    margin-top: 16px;
+  }
+}
+@media (max-width: 560px) {
+  .rw-form-glow.border-glow-card {
+    --rw-form-glow-pad: 14px;
+  }
+}
+@media (max-width: 400px) {
+  .rw-form-glow.border-glow-card {
+    --rw-form-glow-pad: 12px;
+  }
 }

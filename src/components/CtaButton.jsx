@@ -4,7 +4,10 @@ import SpecularButton from './SpecularButton'
 import { ctaCopper } from '../styles'
 
 function isFormPath(path) {
-  return typeof path === 'string' && /\/form\/?$/.test(path)
+  return typeof path === 'string' && (
+    /\/form\/?$/.test(path)
+    || /#(enquire|apply)$/.test(path)
+  )
 }
 
 function withFromState(to, state, pathname, search) {
