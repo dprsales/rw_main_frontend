@@ -113,6 +113,7 @@ const CURATED_SALES_HEADS = [
   'Finance & Account Manager',
   'Management Trainee',
   'Telecaller Executive',
+  'Digital Marketing Executive',
   'GM - CRM',
   'VP - Customer Experience & Post-Sales Operations',
   'Head of CRM & Customer Experience',
@@ -140,7 +141,7 @@ function withCuratedSalesHeads(roles) {
   const merged = (roles || []).map((role) => {
     const curated = CAREER_ROLES.find((item) => item.title === role.title)
     if (!curated?.description) return role
-    if (role.title !== 'Telecaller Executive') return role
+    if (role.title !== 'Telecaller Executive' && role.title !== 'Digital Marketing Executive') return role
     return {
       ...role,
       description: curated.description,

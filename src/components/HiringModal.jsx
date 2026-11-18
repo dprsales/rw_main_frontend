@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import hireFinanceBanner from '../assets/site/hiring-finance-account-manager.jpg'
 import hireTraineeBanner from '../assets/site/hiring-management-trainee.jpg'
 import hireTelecallerBanner from '../assets/site/hiring-telecaller-executive.jpg'
+import hireDigitalBanner from '../assets/site/digital-maketing-exe.jpg'
 import CtaButton from './CtaButton'
 import { activeHiringCampaigns, showHiringRail } from '../data/content'
 import { careerRolePath } from '../data/jobs'
@@ -15,6 +16,7 @@ const POSTERS = {
   finance: hireFinanceBanner,
   trainee: hireTraineeBanner,
   telecaller: hireTelecallerBanner,
+  digital: hireDigitalBanner,
 }
 
 export function openHiringModal(title) {

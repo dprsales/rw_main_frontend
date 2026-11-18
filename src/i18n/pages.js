@@ -265,6 +265,7 @@ export const pages = {
     'hire.line.finance': 'Billing, payroll, P&L, and the books.',
     'hire.line.trainee': 'Ops, sales support, and real estate training.',
     'hire.line.telecaller': 'Inbound and outbound calls. Qualify leads. Site visits.',
+    'hire.line.digital': 'Plan campaigns. Social, leads, and performance.',
     'hire.apply': 'Apply',
     ...servicesEn,
     ...contentPagesEn,
@@ -302,6 +303,7 @@ const HIRE_LINE_KEYS = {
   'Finance & Account Manager': 'hire.line.finance',
   'Management Trainee': 'hire.line.trainee',
   'Telecaller Executive': 'hire.line.telecaller',
+  'Digital Marketing Executive': 'hire.line.digital',
 }
 
 const SEO_ROUTES = {

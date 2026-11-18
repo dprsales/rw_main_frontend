@@ -68,6 +68,13 @@ export const MARQUEE_ITEMS = [
    hide themselves. Add another object to rotate; empty the array to take the rail down. */
 export const HIRING_CAMPAIGNS = [
   {
+    title: 'Digital Marketing Executive',
+    location: 'Hyderabad',
+    line: 'Plan campaigns. Social, leads, and performance.',
+    until: '2026-12-31',
+    poster: 'digital',
+  },
+  {
     title: 'Telecaller Executive',
     location: 'Hyderabad',
     line: 'Inbound and outbound calls. Qualify leads. Site visits.',
@@ -560,10 +567,19 @@ export const CAREER_ROLES = [
     type: 'FULL-TIME · HYDERABAD',
     category: 'Marketing',
     level: 'Junior – Mid',
-    experience: '1–4 years',
+    experience: '3–5+ years',
     location: 'Hyderabad',
-    description: 'Plan and run digital campaigns across paid, social, and content channels to grow qualified enquiries.',
-    requirements: ['Hands-on experience with digital ad platforms', 'Strong analytical skills and campaign reporting', 'Understanding of SEO and social media marketing'],
+    description: 'Plan and execute digital campaigns, manage social media platforms, generate and nurture leads, and track campaign performance for Team RW in Hyderabad.',
+    requirements: [
+      'Plan and execute digital campaigns',
+      'Manage social media platforms',
+      'Generate and nurture leads',
+      'Track campaign performance',
+      '3–5+ years experience',
+      'Real estate experience preferred',
+      'Creative and analytical mindset',
+      'High energy and a growth mindset',
+    ],
   },
   {
     title: 'Content Strategist',
