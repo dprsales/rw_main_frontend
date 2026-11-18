@@ -1562,11 +1562,12 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 /* Shown from 1100px up; below that the wheel menu (☰) is the only nav. */
 .rw-dnav, .rw-dnav-book { display: none; }
 @media (min-width: 1100px) {
-  .rw-dnav { display: flex; align-items: center; gap: clamp(22px, 2.6vw, 40px); }
+  .rw-dnav { display: flex; align-items: center; gap: clamp(14px, 1.8vw, 28px); }
   .rw-dnav-book { display: inline-flex; }
   .rw-menu-btn.rw-menu-btn { display: none !important; }
 }
 .rw-dnav-link {
+  position: relative;
   display: inline-flex; align-items: center; gap: 5px;
   background: none; border: 0; padding: 6px 0; cursor: pointer;
   font: inherit; font-family: 'Poppins', system-ui, sans-serif; font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
@@ -1574,13 +1575,22 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   border-bottom: 1px solid transparent;
   transition: color .2s ease, border-color .2s ease;
 }
-.rw-dnav-link:hover, .rw-dnav-link[aria-expanded="true"] { color: var(--ink); }
+.rw-dnav-link:hover { color: var(--ink); }
+.rw-dnav-link.is-current { color: var(--ink); }
 .rw-dnav-link.is-active { color: var(--ink); border-bottom-color: var(--copper); }
+/* Open mega: gold label + underline. Current page keeps colour, not a second bar. */
+.rw-dnav-link[aria-expanded="true"] {
+  color: var(--copper);
+  border-bottom-color: var(--copper);
+}
 .rw-dnav-caret {
   flex-shrink: 0; color: var(--copper); transform-origin: center;
   transition: transform .22s ease;
 }
-.rw-dnav-link[aria-expanded="true"] .rw-dnav-caret { transform: rotate(180deg); }
+.rw-dnav-link[aria-expanded="true"] .rw-dnav-caret {
+  color: var(--copper);
+  transform: rotate(180deg);
+}
 .rw-dnav-book {
   align-items: center; cursor: pointer;
   font: inherit; font-family: 'Poppins', system-ui, sans-serif; font-size: 12px; letter-spacing: .14em; color: var(--ink);
@@ -2124,31 +2134,152 @@ html[lang="te"] .sy-root .btn-secondary {
 .rw-hire-modal-actions .rw-cta,
 .rw-hire-modal-actions .rw-cta-secondary { min-width: 160px; }
 
-/* static: both megas position against the sticky header, so they centre on the page. */
+/* Services and Learn megas centre on the header. */
 .rw-dnav-mega-wrap { position: static; }
-/* padding-top bridges the gap under the trigger so hover doesn't drop on the way down. */
+/* padding-top bridges the gap under the trigger so hover doesn't drop, and hosts the caret tip. */
 .rw-mega {
+  --rw-mega-caret-x: 50%;
+  --mega-gold: #CCAA61;
+  --mega-charcoal: #0B0A09;
   position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-  width: min(1120px, calc(100vw - 80px)); padding-top: 18px;
+  width: min(1180px, calc(100vw - 32px)); padding-top: 16px;
+  overflow: visible;
+}
+.rw-mega-services { width: min(900px, calc(100vw - 40px)); }
+.rw-mega-learn { width: min(440px, calc(100vw - 40px)); }
+/* Upward peak on the panel top edge, under the open trigger. */
+.rw-mega::before {
+  content: "";
+  position: absolute;
+  left: var(--rw-mega-caret-x);
+  top: 16px;
+  z-index: 5;
+  width: 12px;
+  height: 12px;
+  box-sizing: border-box;
+  background: color-mix(in srgb, var(--bg) 90%, #0a0908);
+  border-top: 1px solid color-mix(in srgb, var(--copper) 55%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--copper) 55%, transparent);
+  transform: translate(-50%, -50%) rotate(45deg);
+  pointer-events: none;
+}
+.rw-mega-services::before,
+.rw-mega-learn::before {
+  background: #0c0b0a;
+  border-top-color: color-mix(in srgb, var(--mega-gold) 55%, transparent);
+  border-left-color: color-mix(in srgb, var(--mega-gold) 55%, transparent);
 }
 .rw-mega-panel {
-  /* The first column carries the longest descriptions (and the expanding sub-item). */
-  display: grid; grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 1fr));
-  max-height: min(78vh, 720px); overflow-y: auto;
-  border-radius: 12px;
+  position: relative;
+  display: grid; grid-template-columns: minmax(0, 1.15fr) repeat(2, minmax(0, 1fr));
+  max-height: min(78vh, 720px); overflow: auto;
+  border-radius: 14px;
   /* Frosted glass. The fade-in animation lives HERE, not on .rw-mega: an ancestor with an
      opacity animation becomes a backdrop root and silently switches the blur off. */
-  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  background: color-mix(in srgb, var(--bg) 90%, #0a0908);
   backdrop-filter: blur(32px) saturate(160%); -webkit-backdrop-filter: blur(32px) saturate(160%);
   animation: rw-mega-in .22s ease both;
-  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, .55), inset 0 1px 0 color-mix(in srgb, var(--ink) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--copper) 40%, transparent);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, .58), 0 0 0 1px color-mix(in srgb, var(--ink) 6%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ink) 10%, transparent);
 }
+/* Grow your sales | hover submenu | Start here. */
+.rw-mega-panel.is-services {
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.28fr) minmax(0, 0.9fr);
+  min-height: 0;
+  max-height: min(78vh, 620px);
+  overflow: hidden;
+  align-items: stretch;
+  background:
+    radial-gradient(ellipse 80% 70% at 0% 110%, color-mix(in srgb, var(--mega-gold) 8%, transparent), transparent 52%),
+    #0c0b0a;
+  border-color: color-mix(in srgb, var(--mega-gold) 26%, transparent);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, .52), inset 0 1px 0 color-mix(in srgb, var(--ink) 8%, transparent);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  animation: rw-mega-services-in .2s ease both;
+}
+@keyframes rw-mega-services-in { from { translate: 0 -5px; } to { translate: 0 0; } }
+.rw-mega-panel.is-single { grid-template-columns: minmax(0, 1fr); width: min(420px, 100%); margin-inline: auto; }
+.rw-mega-learn .rw-mega-panel.is-single { width: 100%; margin-inline: 0; }
+.rw-mega-panel.is-learn {
+  background:
+    radial-gradient(ellipse 80% 70% at 0% 110%, color-mix(in srgb, var(--mega-gold) 8%, transparent), transparent 52%),
+    #0c0b0a;
+  border-color: color-mix(in srgb, var(--mega-gold) 26%, transparent);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, .52), inset 0 1px 0 color-mix(in srgb, var(--ink) 8%, transparent);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  animation: rw-mega-services-in .2s ease both;
+  overflow: hidden;
+}
+.rw-mega-learn .rw-mega-col {
+  padding: 28px 22px 24px;
+  gap: 4px;
+}
+.rw-mega-learn .rw-mega-stack { padding: 0; }
 @keyframes rw-mega-in { from { opacity: 0; translate: 0 -6px; } to { opacity: 1; translate: 0 0; } }
-.rw-mega-col { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 26px 16px 22px; }
-/* Hairline between columns, inset from the panel's top and bottom edges. */
+@keyframes rw-mega-panel-swap { from { opacity: 0; translate: 0 4px; } to { opacity: 1; translate: 0 0; } }
+
+.rw-mega-hero {
+  position: relative;
+  min-height: 100%;
+  overflow: hidden;
+  border-radius: 13px 0 0 13px;
+  background:
+    radial-gradient(ellipse 80% 70% at 20% 80%, color-mix(in srgb, var(--copper) 14%, transparent), transparent 60%),
+    color-mix(in srgb, var(--bg) 94%, #0a0908);
+}
+.rw-mega-hero-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 58% 78%;
+}
+.rw-mega-hero-scrim {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, #0a0908 28%, transparent) 0%, color-mix(in srgb, #0a0908 55%, transparent) 42%, color-mix(in srgb, #0a0908 88%, transparent) 78%, #0a0908 100%),
+    linear-gradient(90deg, color-mix(in srgb, var(--copper) 16%, transparent), transparent 58%);
+}
+.rw-mega-hero.is-copy-only .rw-mega-hero-img,
+.rw-mega-hero.is-copy-only .rw-mega-hero-scrim { display: none; }
+.rw-mega-hero-copy {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; justify-content: flex-start;
+  gap: 10px; min-height: 300px; height: 100%;
+  padding: 26px 20px 24px;
+}
+.rw-mega-services .rw-mega-hero-copy {
+  /* Building sits in the lower image; copy stays in the open sky above. */
+  max-width: 22ch;
+}
+.rw-mega-hero.is-copy-only .rw-mega-hero-copy {
+  justify-content: center;
+  min-height: 0;
+  max-width: none;
+}
+.rw-mega-hero-eyebrow {
+  margin: 0;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 11px; font-weight: 500; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--mega-gold, var(--copper));
+}
+.rw-mega-hero-title {
+  margin: 0;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: clamp(20px, 1.55vw, 26px); font-weight: 600; line-height: 1.22; letter-spacing: .01em;
+  color: var(--ink);
+}
+.rw-mega-hero-desc {
+  margin: 0;
+  max-width: 28ch;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 13px; line-height: 1.5;
+  color: color-mix(in srgb, var(--ink) 72%, transparent);
+}
+
+.rw-mega-col { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 22px 16px 20px; min-width: 0; }
 .rw-mega-col + .rw-mega-col::before {
-  content: ""; position: absolute; left: 0; top: 26px; bottom: 22px; width: 1px;
+  content: ""; position: absolute; left: 0; top: 22px; bottom: 20px; width: 1px;
   background: color-mix(in srgb, var(--ink) 12%, transparent);
 }
 .rw-mega-head {
@@ -2156,19 +2287,315 @@ html[lang="te"] .sy-root .btn-secondary {
   font-family: 'Poppins', system-ui, sans-serif; font-weight: 500; margin: 0 0 10px; padding: 0 12px;
   font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--copper);
 }
+.rw-mega-sect-icon {
+  color: var(--copper); flex-shrink: 0; width: 18px; height: 18px;
+}
+
+/* Grow your sales | hover submenu | Start here. Quiet rail, list, one gold action. */
+.rw-mega-col-label {
+  margin: 0 0 18px;
+  padding: 0 2px;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 10px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--mega-gold, var(--copper));
+}
+.rw-mega-cats {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 28px 18px 24px 22px;
+  min-width: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.rw-mega-cat-block { display: flex; flex-direction: column; gap: 6px; }
+.rw-mega-cat {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) 14px;
+  align-items: center;
+  column-gap: 12px;
+  width: 100%;
+  min-height: 0;
+  padding: 12px 10px;
+  border-radius: 6px;
+  border: 0;
+  border-left: 1px solid transparent;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  font: inherit;
+  transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+.rw-mega-cat-nub {
+  position: absolute;
+  left: 18px;
+  width: calc(100% - 36px);
+  top: 0;
+  height: 44px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--mega-gold, var(--copper)) 10%, transparent);
+  box-shadow: inset 2px 0 0 var(--mega-gold, var(--copper));
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+.rw-mega-cat:hover {
+  background: transparent;
+  border-left-color: transparent;
+}
+.rw-mega-cat:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--mega-gold, var(--copper)) 55%, transparent);
+  outline-offset: 2px;
+}
+.rw-mega-cat.is-active {
+  background: transparent;
+  border-left-color: transparent;
+  box-shadow: none;
+}
+.rw-mega-cat .rw-mega-title { color: color-mix(in srgb, var(--ink) 48%, transparent); }
+.rw-mega-cat:hover .rw-mega-title { color: color-mix(in srgb, var(--ink) 88%, transparent); }
+.rw-mega-cat.is-active .rw-mega-title { color: #f4f1ec; }
+.rw-mega-cat .rw-mega-icon { color: var(--mega-gold, var(--copper)); opacity: .35; }
+.rw-mega-cat:hover .rw-mega-icon { opacity: .7; }
+.rw-mega-cat.is-active .rw-mega-icon { opacity: .95; }
+.rw-mega-cat .rw-mega-go {
+  color: var(--mega-gold, var(--copper));
+  opacity: 0;
+  width: 14px;
+  height: 14px;
+  transition: opacity .18s ease, translate .18s ease;
+}
+.rw-mega-cat:hover .rw-mega-go,
+.rw-mega-cat.is-active .rw-mega-go { opacity: .9; }
+.rw-mega-cat.is-active .rw-mega-go { translate: 2px 0; }
+.rw-mega-services .rw-mega-cat .rw-mega-title { font-size: 14.5px; font-weight: 500; letter-spacing: .03em; }
+.rw-mega-services .rw-mega-cat .rw-mega-desc { display: none; }
+.rw-mega-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  height: 100%;
+  padding: 28px 8px 24px 8px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.rw-mega-content::before,
+.rw-mega-start::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 28px; bottom: 24px; width: 1px;
+  background: color-mix(in srgb, var(--mega-gold, var(--copper)) 12%, transparent);
+}
+.rw-mega-content .rw-mega-col-label { padding-left: 14px; }
+.rw-mega-content-head { display: flex; flex-direction: column; gap: 8px; padding: 0 2px; }
+.rw-mega-content-title {
+  margin: 0;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: clamp(17px, 1.3vw, 22px); font-weight: 600; line-height: 1.3; letter-spacing: .01em;
+  color: var(--ink);
+}
+.rw-mega-content-desc {
+  margin: 0;
+  max-width: 42ch;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 13px; line-height: 1.5;
+  color: color-mix(in srgb, var(--ink) 70%, transparent);
+}
+.rw-mega-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-content: start;
+  padding: 0 8px;
+}
+.rw-mega-stack .rw-mega-item {
+  position: relative;
+  grid-template-columns: 20px minmax(0, 1fr) 14px;
+  min-height: 0;
+  padding: 13px 8px;
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 7%, transparent);
+  background: transparent;
+  box-shadow: none;
+  transition: background .22s ease;
+}
+.rw-mega-stack .rw-mega-item::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 28px;
+  bottom: -1px;
+  height: 1px;
+  background: var(--mega-gold, var(--copper));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .32s cubic-bezier(.22, 1, .36, 1);
+  pointer-events: none;
+}
+.rw-mega-stack .rw-mega-item:last-child { border-bottom: 0; }
+.rw-mega-stack .rw-mega-item:hover,
+.rw-mega-stack .rw-mega-item:focus-visible,
+.rw-mega-stack .rw-mega-item.is-active {
+  background: color-mix(in srgb, var(--mega-gold, var(--copper)) 5%, transparent);
+  border-color: color-mix(in srgb, var(--ink) 7%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--ink) 7%, transparent);
+}
+.rw-mega-stack .rw-mega-item:hover::after,
+.rw-mega-stack .rw-mega-item:focus-visible::after,
+.rw-mega-stack .rw-mega-item.is-active::after {
+  transform: scaleX(1);
+}
+.rw-mega-stack .rw-mega-item:last-child:hover,
+.rw-mega-stack .rw-mega-item:last-child:focus-visible {
+  border-bottom-color: color-mix(in srgb, var(--ink) 7%, transparent);
+}
+.rw-mega-stack .rw-mega-icon { width: 16px; height: 16px; opacity: .8; }
+.rw-mega-stack .rw-mega-title { font-size: 14px; font-weight: 500; letter-spacing: .02em; }
+.rw-mega-stack .rw-mega-desc { font-size: 12px; color: color-mix(in srgb, var(--ink) 55%, transparent); }
+.rw-mega-stack .rw-mega-go {
+  opacity: 0;
+  width: 14px;
+  height: 14px;
+  color: var(--mega-gold, var(--copper));
+  transition: opacity .18s ease, translate .18s ease;
+}
+.rw-mega-stack .rw-mega-item:hover .rw-mega-go,
+.rw-mega-stack .rw-mega-item:focus-visible .rw-mega-go { opacity: 1; translate: 2px 0; }
+.rw-mega-explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 4px 2px 0;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 12px;
+  font-style: italic;
+  letter-spacing: .04em;
+  color: color-mix(in srgb, var(--ink) 70%, transparent);
+  transition: color .18s ease;
+}
+.rw-mega-explore svg {
+  color: var(--mega-gold, var(--copper));
+  transition: translate .18s ease;
+}
+.rw-mega-explore:hover { color: var(--mega-gold, var(--copper)); }
+.rw-mega-explore:hover svg { translate: 3px 0; }
+.rw-mega-explore:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--mega-gold, var(--copper)) 55%, transparent);
+  outline-offset: 3px;
+}
+.rw-mega-services .rw-mega-start {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 28px 22px 24px 18px;
+  min-width: 0;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.rw-mega-start-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.rw-mega-services .rw-mega-start .rw-mega-item {
+  grid-template-columns: 18px minmax(0, 1fr);
+  min-height: 0;
+  padding: 10px 6px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.rw-mega-services .rw-mega-start .rw-mega-item .rw-mega-go { display: none; }
+.rw-mega-services .rw-mega-start .rw-mega-item.is-featured {
+  grid-template-columns: 18px minmax(0, 1fr);
+  margin-bottom: 8px;
+  padding: 14px 14px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--mega-gold, var(--copper)) 22%, transparent);
+  background: color-mix(in srgb, var(--mega-gold, var(--copper)) 6%, transparent);
+}
+.rw-mega-services .rw-mega-start .rw-mega-item:hover,
+.rw-mega-services .rw-mega-start .rw-mega-item:focus-visible {
+  background: color-mix(in srgb, var(--mega-gold, var(--copper)) 8%, transparent);
+  border-color: transparent;
+}
+.rw-mega-services .rw-mega-start .rw-mega-item.is-featured:hover,
+.rw-mega-services .rw-mega-start .rw-mega-item.is-featured:focus-visible {
+  border-color: color-mix(in srgb, var(--mega-gold, var(--copper)) 40%, transparent);
+  background: color-mix(in srgb, var(--mega-gold, var(--copper)) 10%, transparent);
+}
+.rw-mega-services .rw-mega-start .rw-mega-icon { width: 16px; height: 16px; }
+.rw-mega-services .rw-mega-start .rw-mega-title { font-size: 13.5px; letter-spacing: .03em; }
+.rw-mega-services .rw-mega-start .rw-mega-desc { font-size: 12px; }
+.rw-mega-services .rw-mega-cta.rw-cta {
+  width: 100%;
+  margin: auto 0 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rw-mega-cat-nub { transition: none; }
+  .rw-mega-stack .rw-mega-item::after { transition: none; }
+}
+.rw-mega-services .rw-mega-icon { color: var(--mega-gold, var(--copper)); }
+.rw-mega-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 4px 0 8px 8px;
+  animation: rw-mega-panel-swap .18s ease both;
+}
+.rw-mega-services.is-touch { width: min(400px, calc(100vw - 24px)); }
+.rw-mega-services.is-touch .rw-mega-panel.is-services {
+  grid-template-columns: minmax(0, 1fr);
+  max-height: min(78vh, 720px);
+  overflow: auto;
+}
+.rw-mega-services.is-touch .rw-mega-content { display: none; }
+.rw-mega-services.is-touch .rw-mega-start::before { display: none; }
+.rw-mega-services.is-touch .rw-mega-start {
+  border-top: 1px solid color-mix(in srgb, var(--mega-gold, var(--copper)) 12%, transparent);
+}
+.rw-mega-services.is-touch .rw-mega-cat {
+  min-height: 3.2em;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rw-mega-content,
+  .rw-mega-accordion { animation: none; }
+  .rw-mega-cat { transition: none; }
+}
 /* Item: icon | title + description | chevron.
    Padding uses em so A/A/A text scaling still leaves breathing room. */
 .rw-mega-item {
-  display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; align-items: center; column-gap: 14px;
-  min-height: 3.25em;
-  padding: 0.85em 1em; border-radius: 10px; color: var(--ink);
-  background: color-mix(in srgb, var(--ink) 3.5%, transparent);
-  border: 1px solid transparent;
+  display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; column-gap: 12px;
+  min-height: 3.15em;
+  padding: 0.8em 0.9em; border-radius: 10px; color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
+  box-shadow: none;
   transition: background .18s ease, border-color .18s ease, box-shadow .18s ease;
 }
+.rw-mega-item:not(:has(.rw-mega-icon)) {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+.rw-mega-item.is-compact {
+  min-height: 3.15em;
+  padding: 0.8em 0.9em;
+}
+.rw-mega-item .rw-mega-go { align-self: center; }
 .rw-mega-item:hover {
   background: color-mix(in srgb, var(--copper) 12%, transparent);
-  border-color: color-mix(in srgb, var(--copper) 22%, transparent);
+  border-color: color-mix(in srgb, var(--copper) 28%, transparent);
 }
 .rw-mega-item:focus-visible {
   background: color-mix(in srgb, var(--copper) 12%, transparent);
@@ -2176,18 +2603,21 @@ html[lang="te"] .sy-root .btn-secondary {
   outline: 2px solid color-mix(in srgb, var(--copper) 55%, transparent);
   outline-offset: 2px;
 }
-.rw-mega-item.is-active {
-  background: color-mix(in srgb, var(--copper) 18%, transparent);
-  border-color: color-mix(in srgb, var(--copper) 34%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--copper) 16%, transparent);
+/* One active recipe for open parent, path match, and hover-selected child. */
+.rw-mega-item.is-active,
+.rw-mega-parent.is-open > .rw-mega-row > .rw-mega-item,
+.rw-mega-deep.is-open > .rw-mega-row > .rw-mega-item {
+  background: color-mix(in srgb, var(--copper) 16%, transparent);
+  border-color: color-mix(in srgb, var(--copper) 38%, transparent);
+  box-shadow: none;
 }
 .rw-mega-item:hover .rw-mega-title,
 .rw-mega-item:focus-visible .rw-mega-title,
 .rw-mega-item.is-active .rw-mega-title { color: #f4f1ec; }
 .rw-mega-icon {
   color: var(--copper);
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
   align-self: center;
 }
@@ -2217,71 +2647,36 @@ html[lang="te"] .sy-root .btn-secondary {
 .rw-mega-item:focus-visible .rw-mega-go,
 .rw-mega-item.is-active .rw-mega-go { color: var(--copper); translate: 2px 0; }
 
-/* Accordion parent: the chevron expands its children in place, pushing the rows below down. */
+/* Nested submenu: same-width column to the right of Grow (no floating skinny panel). */
 button.rw-mega-item {
   width: 100%; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
 }
+.rw-mega-parent,
+.rw-mega-deep { position: relative; }
 .rw-mega-row { position: relative; }
-/* No chevron column inside the link here (the chevron is its own button), so no empty gap. */
-.rw-mega-row > .rw-mega-item { grid-template-columns: 28px minmax(0, 1fr); padding-right: 52px; }
+.rw-mega-row > .rw-mega-item { grid-template-columns: 26px minmax(0, 1fr); padding-right: 48px; width: 100%; }
+.rw-mega-row > .rw-mega-item:not(:has(.rw-mega-icon)) { grid-template-columns: minmax(0, 1fr); }
 .rw-mega-chevron {
   position: absolute; top: 50%; right: 8px; translate: 0 -50%;
   display: grid; place-items: center; width: 34px; height: 34px; border-radius: 6px;
   border: 0; background: none; cursor: pointer; color: color-mix(in srgb, var(--ink) 70%, transparent);
-  transition: color .2s ease, background .2s ease;
+  transition: color .2s ease, background .2s ease, translate .2s ease;
 }
 .rw-mega-chevron:hover, .rw-mega-chevron:focus-visible { color: var(--copper); background: color-mix(in srgb, var(--copper) 12%, transparent); }
-.rw-mega-chevron > svg { transition: transform .22s ease; }
 .rw-mega-parent.is-open > .rw-mega-row > .rw-mega-chevron,
-.rw-mega-nested.is-open > .rw-mega-row > .rw-mega-chevron { color: var(--copper); }
+.rw-mega-deep.is-open > .rw-mega-row > .rw-mega-chevron { color: var(--copper); }
 .rw-mega-parent.is-open > .rw-mega-row > .rw-mega-chevron > svg,
-.rw-mega-nested.is-open > .rw-mega-row > .rw-mega-chevron > svg { transform: rotate(-90deg); }
-.rw-mega-parent.is-open > .rw-mega-row > .rw-mega-item {
-  background: color-mix(in srgb, var(--copper) 20%, transparent);
-  border-color: color-mix(in srgb, var(--copper) 28%, transparent);
+.rw-mega-deep.is-open > .rw-mega-row > .rw-mega-chevron > svg { translate: 2px 0; }
+.rw-mega-subpane { background: transparent; }
+.rw-mega-deep-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
 }
-/* Peers (Builder, Resell, Rent) are equal rows. A second level lives inside its parent, never on the same line. */
-.rw-mega-children {
-  display: flex; flex-direction: column; gap: 6px;
-  margin: 8px 8px 4px; padding: 0;
-  animation: rw-sub-in .2s ease both;
-}
-.rw-mega-child {
-  position: relative; grid-template-columns: minmax(0, 1fr);
-  padding: 0.75em 0.9em; border-radius: 10px;
-  background: color-mix(in srgb, var(--ink) 5%, transparent);
-  border: 1px solid transparent;
-}
-.rw-mega-child:has(.rw-mega-go) { grid-template-columns: minmax(0, 1fr) auto; }
-.rw-mega-children > .rw-mega-child:hover,
-.rw-mega-children > .rw-mega-child:focus-visible,
-.rw-mega-children > .rw-mega-child.is-active { background: color-mix(in srgb, var(--copper) 16%, transparent); }
-.rw-mega-item.rw-mega-child.is-soon { cursor: default; }
-.rw-mega-item.rw-mega-child.is-soon:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
-.rw-mega-nested {
-  border-radius: 8px; background: color-mix(in srgb, var(--ink) 6%, transparent);
-}
-.rw-mega-nested > .rw-mega-row > .rw-mega-item {
-  grid-template-columns: minmax(0, 1fr); padding: 10px 40px 10px 12px; background: none;
-}
-.rw-mega-nested.is-open { background: color-mix(in srgb, var(--copper) 14%, transparent); }
-.rw-mega-nested.is-open > .rw-mega-row > .rw-mega-item { background: none; }
-/* Grandchildren stay inside the open parent, so they cannot be read as the next choice. */
-.rw-mega-children-deep {
-  margin: 0 8px 8px 12px; padding: 2px 0 2px 10px;
-  border-left: 1px solid color-mix(in srgb, var(--copper) 45%, transparent);
-}
-.rw-mega-children-deep .rw-mega-child {
-  padding: 4px 2px; border-radius: 0; background: none;
-}
-.rw-mega-children-deep .rw-mega-child:hover { background: none; }
-.rw-mega-children-deep .rw-mega-desc { display: none; }
-.rw-mega-children-deep .rw-mega-title {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  font-size: 13px; font-weight: 400; white-space: nowrap;
-}
-.rw-mega-children-deep .rw-mega-soon { margin-left: auto; padding: 1px 7px; flex-shrink: 0; }
-@keyframes rw-sub-in { from { opacity: 0; translate: 0 -4px; } to { opacity: 1; translate: 0 0; } }
+.rw-mega-deep-list .rw-mega-item { width: 100%; }
 
 .rw-mega-item.is-soon {
   cursor: default;
@@ -2303,16 +2698,17 @@ button.rw-mega-item {
   color: var(--copper); border: 1px solid var(--copper); border-radius: 100px;
 }
 .rw-mega-book {
-  display: flex; align-items: center; justify-content: center; gap: 14px;
-  margin: 18px 14px 0; padding: 15px 18px; cursor: pointer;
-  font: inherit; font-family: 'Poppins', system-ui, sans-serif; font-size: 13px; font-weight: 500; letter-spacing: .16em; color: var(--ink);
-  background: none; border: 1px solid var(--copper); border-radius: 6px;
-  transition: background .2s ease;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  margin: 14px 4px 0; padding: 14px 16px; cursor: pointer;
+  font: inherit; font-family: 'Poppins', system-ui, sans-serif; font-size: 13px; font-weight: 500; letter-spacing: .14em; color: var(--ink);
+  background: none; border: 1px solid var(--copper); border-radius: 8px;
+  transition: background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
-.rw-mega-book svg { color: var(--copper); transition: translate .2s ease; }
+.rw-mega-book svg { color: var(--copper); transition: translate .2s ease, color .2s ease; }
 .rw-mega-book:hover { background: color-mix(in srgb, var(--copper) 16%, transparent); }
 .rw-mega-book:hover svg { translate: 3px 0; }
-@media (prefers-reduced-motion: reduce) { .rw-mega-panel, .rw-mega-children { animation: none; } }
+.rw-mega-start .rw-mega-cta { margin-top: 16px; }
+@media (prefers-reduced-motion: reduce) { .rw-mega-panel { animation: none; } }
 
 /* Whole-site text-size control (the three A's in the header). Small is the default
    site size; Medium and Large are progressive increases. Keep them baseline-aligned. */
@@ -2368,6 +2764,13 @@ html[lang="te"] .rw-wheel-hint {
 html[lang="te"] .rw-dnav { gap: clamp(14px, 1.8vw, 28px); }
 html[lang="te"] .rw-dnav-book { letter-spacing: .03em; white-space: nowrap; font-size: 11px; padding: 10px 12px; }
 html[lang="te"] .rw-mega-book { font-size: 12px; letter-spacing: .02em; white-space: normal; }
+html[lang="te"] .rw-mega-cta.rw-cta {
+  white-space: normal !important;
+  height: auto !important;
+  min-height: 48px;
+  padding: 12px 16px !important;
+  line-height: 1.3;
+}
 html[lang="te"] .rw-modal-card h2,
 html[lang="te"] .rw-modal-card p,
 html[lang="te"] .rw-modal-eyebrow,

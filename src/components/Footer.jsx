@@ -156,8 +156,9 @@ const ICONS = {
 const WORK_LINKS = [
   { labelKey: 'nav.coaching', to: '/coaching', icon: 'coaching' },
   { labelKey: 'nav.consulting', to: '/consulting', icon: 'consulting' },
+  { labelKey: 'nav.brandConsulting', to: '/consulting/brand-consulting', icon: 'consulting' },
   { labelKey: 'nav.mandate', to: '/realty', icon: 'mandate' },
-  { labelKey: 'nav.projects', to: '/project-hyderabad', icon: 'projects' },
+  { labelKey: 'nav.advisory', to: '/project-hyderabad', icon: 'projects' },
   { labelKey: 'footer.listProperty', to: '/listings', icon: 'market' },
 ]
 

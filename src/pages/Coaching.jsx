@@ -70,7 +70,12 @@ function ProgramCard({ program, index, labels }) {
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- keyboard users get the same list via focus and the toggle
-    <article ref={cardRef} className={`rw-program${open ? ' is-open' : ''}`} onClick={onCardClick}>
+    <article
+      id={['program-luxury-sales-mastery', 'program-high-ticket-sales', 'program-one-to-one'][index]}
+      ref={cardRef}
+      className={`rw-program${open ? ' is-open' : ''}`}
+      onClick={onCardClick}
+    >
       <div className="rw-program-media">
         <img src={PROGRAM_COVERS[index]?.src} alt={program.alt} loading="lazy" />
         <span className="rw-program-numeral" style={{ fontFamily: serif }} aria-hidden>{program.k}</span>

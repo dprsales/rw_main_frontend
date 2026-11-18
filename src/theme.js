@@ -91,7 +91,9 @@ export const FOOTER_LINKS = [
 /** Home has no "back to home"; it leads on the email and points onward instead. */
 export const HOME_FOOTER_LINKS = [
   EMAIL_LINK, PHONE_LINK, HH_LINK, ...SOCIAL_LINKS,
-  { label: 'RW Realty →', to: '/realty', muted: true },
+  { label: 'Sales Coaching →', to: '/coaching', muted: true },
+  { label: 'Sales Consulting →', to: '/consulting', muted: true },
+  { label: 'Sales Mandate →', to: '/realty', muted: true },
   { ...MARKET_LINK, label: 'Buy, sell, rent →' },
   { label: 'Careers →', to: '/careers', muted: true },
   { label: 'Channel Partners →', to: '/partner', muted: true },

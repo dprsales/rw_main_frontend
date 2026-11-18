@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { gsap } from 'gsap'
 import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import CrawlableNav from './CrawlableNav'
@@ -8,67 +9,89 @@ import Wordmark from './Wordmark'
 import FontSizeControl from './FontSizeControl'
 import LangSwitch from './LangSwitch'
 import AccountMenu from '../listings/components/AccountMenu'
+import CtaButton from './CtaButton'
 import { formPathForRoute } from '../data/booking'
 import { useLang } from '../i18n/LangProvider'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { mono } from '../theme'
 import {
-  ArrowRight, BookOpen, Building2, ChartNoAxesColumnIncreasing, ChevronDown, ChevronRight, CircleHelp, FileSignature, Handshake, LayoutGrid, Library, Sparkles, Target, Users,
+  ArrowRight, BookOpen, Building2, ChartNoAxesColumnIncreasing, ChevronDown, ChevronRight, CircleHelp,
+  FileSignature, Gem, Handshake, House, Layers, Library, Package, Target, Users,
 } from 'lucide-react'
 
-// Same wheel menu on every page: only route links belong here, not per-page scroll anchors.
+// Wheel: Realty holds Mandate + Advisory; Branding under Consulting; programmes under Coaching.
 const SITE_NAV = [
   { key: 'nav.home', label: 'Home', to: '/' },
   { key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching' },
   { key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting' },
-  { key: 'nav.brandConsulting', label: 'Brand Consulting', to: '/consulting/brand-consulting' },
-  { key: 'nav.projects', label: 'Projects in Hyderabad', to: '/project-hyderabad' },
-  { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/listings' },
+  { key: 'nav.brandConsulting', label: 'Branding & Marketing', to: '/consulting/brand-consulting' },
+  { key: 'nav.realty', label: 'Realty', to: '/realty' },
   { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty' },
+  { key: 'nav.advisory', label: 'Investment Advisory', to: '/project-hyderabad' },
+  { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/listings' },
   { key: 'nav.portfolio', label: 'About', to: '/about' },
   { key: 'nav.careers', label: 'Careers', to: '/careers' },
+  { key: 'nav.contact', label: 'Contact', to: '/contact' },
   { key: 'nav.articles', label: 'Articles', to: '/articles' },
   { key: 'nav.contentLibrary', label: 'Content Library', to: '/content-library' },
   { key: 'nav.faqs', label: 'FAQs', to: '/faqs' },
   { key: 'nav.partners', label: 'Channel Partners', to: '/partner' },
   { key: 'nav.krisah', label: 'KRISAH Assessment', to: '/assessment' },
-  // { label: 'Find your fit', to: '/start' },
   { key: 'nav.bookCall', label: 'Talk to Team RW', book: true },
 ]
 
 /**
- * Desktop/laptop inline nav (approved wireframe Option B): a few top-level links plus
- * one "Work with RW" glass mega menu. Tablet and phone keep the wheel menu instead.
+ * Services mega: Grow your sales | hover submenu | Start here.
+ * Coaching programmes, Consulting → Branding, Realty → Mandate + Advisory.
+ * Team Sales Coaching links to /coaching (no separate programme section yet).
  */
-const MEGA_COLUMNS = [
+const MEGA_GROWTH_ITEMS = [
   {
-    headingKey: 'mega.grow',
-    heading: 'Grow your sales',
-    items: [
-      { key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching', descKey: 'mega.coachingDesc', desc: '1:1 and team sales coaching', icon: Users },
-      { key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting', descKey: 'mega.consultingDesc', desc: 'Sales structure & strategy for developers', icon: ChartNoAxesColumnIncreasing },
-      { key: 'nav.brandConsulting', label: 'Brand Consulting', to: '/consulting/brand-consulting', descKey: 'mega.brandConsultingDesc', desc: 'Branding, Marketing lead gen', icon: Sparkles },
-      { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty', descKey: 'mega.mandateDesc', desc: 'RW runs your project sales mandate', icon: FileSignature },
+    key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching', descKey: 'mega.coachingDesc',
+    panelTitleKey: 'mega.coachingPanelTitle', panelDescKey: 'mega.coachingPanelDesc', icon: Users,
+    children: [
+      { key: 'nav.programMastery', label: 'Luxury Sales Mastery', to: '/coaching#program-luxury-sales-mastery', descKey: 'mega.programMasteryDesc', icon: Gem },
+      { key: 'nav.programHighTicket', label: 'High Ticket Sales Mastery', to: '/coaching#program-high-ticket-sales', descKey: 'mega.programHighTicketDesc', icon: Layers },
+      { key: 'nav.programOneToOne', label: 'One-to-One Mentoring', to: '/coaching#program-one-to-one', descKey: 'mega.programOneToOneDesc', icon: Users },
+      { key: 'nav.programTeam', label: 'Team Sales Coaching', to: '/coaching', descKey: 'mega.programTeamDesc', icon: Users },
     ],
   },
   {
-    headingKey: 'mega.partners',
-    heading: 'Partners',
-    items: [
-      { key: 'nav.partners', label: 'Channel Partners', to: '/partner', descKey: 'mega.partnerDesc', desc: 'Partner with RW', icon: Handshake },
+    key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting', descKey: 'mega.consultingDesc',
+    panelTitleKey: 'mega.consultingPanelTitle', panelDescKey: 'mega.consultingPanelDesc', icon: ChartNoAxesColumnIncreasing,
+    children: [
+      { key: 'nav.brandConsulting', label: 'Branding & Marketing', to: '/consulting/brand-consulting', descKey: 'mega.brandConsultingDesc', icon: Library },
     ],
   },
   {
-    headingKey: 'mega.startHere',
-    heading: 'Start here',
-    items: [
-      { key: 'nav.krisah', label: 'KRISAH Assessment', to: '/assessment', descKey: 'mega.krisahDesc', desc: 'Find your sales strengths', icon: Target },
+    key: 'nav.realty', label: 'Realty', to: '/realty', descKey: 'mega.realtyDesc',
+    panelTitleKey: 'mega.realtyPanelTitle', panelDescKey: 'mega.realtyPanelDesc', icon: Building2,
+    children: [
+      { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty', descKey: 'mega.mandateDesc', icon: FileSignature },
+      { key: 'nav.advisory', label: 'Investment Advisory', to: '/project-hyderabad', descKey: 'mega.advisoryDesc', icon: Target },
+      { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/listings', descKey: 'mega.listDesc', icon: House },
     ],
-    book: true,
   },
 ]
-const MEGA_PATHS = MEGA_COLUMNS.flatMap((col) => col.items.map((item) => item.to).filter(Boolean))
-/** Learn mega: Articles + Content Library + FAQs — keeps the top bar uncrowded. */
+
+const MEGA_START_ITEMS = [
+  { key: 'nav.krisah', label: 'KRISAH Assessment', to: '/assessment', descKey: 'mega.krisahDesc', icon: Target, featured: true },
+  { key: 'nav.partners', label: 'Channel Partners', to: '/partner', descKey: 'mega.partnerDesc', icon: Handshake, compact: true },
+  { key: 'mega.vendors', label: 'Vendors / Partners', to: '/vendorpartner', descKey: 'mega.vendorDesc', icon: Package, compact: true },
+]
+
+const MEGA_COLUMNS = [
+  { headingKey: 'mega.salesGrowth', heading: 'Sales Growth', items: MEGA_GROWTH_ITEMS },
+  { headingKey: 'mega.getStarted', heading: 'Get Started', items: MEGA_START_ITEMS, book: true },
+]
+function collectMegaPaths(items) {
+  return items.flatMap((item) => [
+    item.to,
+    ...(item.children ? collectMegaPaths(item.children) : []),
+  ].filter(Boolean)).map((to) => String(to).split('#')[0])
+}
+const MEGA_PATHS = [...new Set(MEGA_COLUMNS.flatMap((col) => collectMegaPaths(col.items)))]
+
 const LEARN_COLUMNS = [
   {
     headingKey: 'mega.learn',
@@ -81,59 +104,118 @@ const LEARN_COLUMNS = [
   },
 ]
 const LEARN_PATHS = LEARN_COLUMNS.flatMap((col) => col.items.map((item) => item.to).filter(Boolean))
-const PROPERTY_COLUMNS = [
-  {
-    headingKey: 'mega.builder',
-    heading: 'Builder',
-    items: [
-      { key: 'nav.projects', label: 'Projects in Hyderabad', to: '/project-hyderabad', descKey: 'mega.projectsDesc', desc: 'Projects that Team RW has associated with', icon: Building2 },
-    ],
-  },
-  {
-    headingKey: 'mega.resale',
-    heading: 'Resale',
-    items: [
-      { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/listings', descKey: 'mega.listDesc', desc: 'Resale and rental homes, list yours or browse', icon: LayoutGrid },
-    ],
-  },
-]
 
-function MegaPanel({ id, columns, pathname, onClose, onBook }) {
-  const { t } = useLang()
+function pathActive(pathname, to) {
+  if (!to) return false
+  const [path, hash] = String(to).split('#')
+  if (hash) {
+    return pathname === path && typeof window !== 'undefined' && window.location.hash === `#${hash}`
+  }
+  return pathname === path || (path !== '/' && pathname.startsWith(`${path}/`))
+}
+
+function serviceKeyForPath(pathname) {
+  const match = MEGA_GROWTH_ITEMS.find((item) => (
+    collectMegaPaths([item]).some((p) => pathActive(pathname, p))
+  ))
+  return match?.key || MEGA_GROWTH_ITEMS[0].key
+}
+
+function renderMegaItemBody(item, t) {
+  const Icon = item.icon
   return (
-    <div id={id} className="rw-mega">
-      <div className="rw-mega-panel">
+    <>
+      {Icon && <Icon className="rw-mega-icon" size={22} strokeWidth={1.5} aria-hidden="true" />}
+      <span className="rw-mega-text">
+        <span className="rw-mega-title">{t(item.key)}</span>
+        {!item.compact && item.descKey && <span className="rw-mega-desc">{t(item.descKey)}</span>}
+      </span>
+    </>
+  )
+}
+
+function MegaLinkItem({ item, pathname, onClose, active = false, showGo = true }) {
+  const { t } = useLang()
+  if (item.soon) {
+    return (
+      <div className="rw-mega-item is-soon" aria-disabled="true">
+        {renderMegaItemBody(item, t)}
+      </div>
+    )
+  }
+  return (
+    <Link
+      to={item.to}
+      onClick={onClose}
+      className={`rw-mega-item${item.compact ? ' is-compact' : ''}${item.featured ? ' is-featured' : ''}${pathActive(pathname, item.to) || active ? ' is-active' : ''}`}
+    >
+      {renderMegaItemBody(item, t)}
+      {showGo && <ChevronRight className="rw-mega-go" size={16} strokeWidth={1.75} aria-hidden="true" />}
+    </Link>
+  )
+}
+
+/** Keep the panel caret under the open Services / Learn trigger. */
+function useMegaCaret(triggerRef) {
+  const shellRef = useRef(null)
+  useEffect(() => {
+    const shell = shellRef.current
+    const trigger = triggerRef?.current
+    if (!shell || !trigger) return undefined
+    const sync = () => {
+      const sr = shell.getBoundingClientRect()
+      const tr = trigger.getBoundingClientRect()
+      if (!sr.width) return
+      const x = Math.min(Math.max(tr.left + tr.width / 2 - sr.left, 18), sr.width - 18)
+      shell.style.setProperty('--rw-mega-caret-x', `${Math.round(x)}px`)
+    }
+    sync()
+    window.addEventListener('resize', sync)
+    return () => window.removeEventListener('resize', sync)
+  }, [triggerRef])
+  return shellRef
+}
+
+/** Learn (and other flat megas): same quiet list as Services. */
+function FlatMegaPanel({ id, columns, pathname, onClose, onBook, triggerRef }) {
+  const { t } = useLang()
+  const shellRef = useMegaCaret(triggerRef)
+  const stackRef = useRef(null)
+
+  useLayoutEffect(() => {
+    const stack = stackRef.current
+    if (!stack) return undefined
+    const items = stack.querySelectorAll('.rw-mega-item')
+    if (!items.length) return undefined
+    const mm = gsap.matchMedia()
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.fromTo(
+        items,
+        { opacity: 0.001, y: 10 },
+        { opacity: 1, y: 0, duration: 0.45, stagger: 0.05, ease: 'expo.out', overwrite: true },
+      )
+    })
+    return () => mm.revert()
+  }, [id])
+
+  return (
+    <div id={id} ref={shellRef} className="rw-mega rw-mega-learn">
+      <div className={`rw-mega-panel is-learn${columns.length === 1 ? ' is-single' : ''}`}>
         {columns.map((col) => (
           <div key={col.heading} className="rw-mega-col">
-            <p className="rw-mega-head">
+            <p className="rw-mega-col-label">
               {t(col.headingKey)}
               {col.soon && <span className="rw-mega-soon">{t('mega.soon')}</span>}
             </p>
-            {col.items.map((item) => {
-              const Icon = item.icon
-              const body = (
-                <>
-                  {Icon && <Icon className="rw-mega-icon" size={24} strokeWidth={1.5} aria-hidden="true" />}
-                  <span className="rw-mega-text">
-                    <span className="rw-mega-title">{t(item.key)}</span>
-                    <span className="rw-mega-desc">{t(item.descKey)}</span>
-                  </span>
-                  {item.to && !item.soon && <ChevronRight className="rw-mega-go" size={18} strokeWidth={1.75} aria-hidden="true" />}
-                </>
-              )
-              if (item.soon) {
-                return <div key={item.label} className="rw-mega-item is-soon" aria-disabled="true">{body}</div>
-              }
-              return (
-                <Link key={item.to} to={item.to} onClick={onClose} className={`rw-mega-item${pathname === item.to ? ' is-active' : ''}`}>
-                  {body}
-                </Link>
-              )
-            })}
+            <div ref={stackRef} className="rw-mega-stack">
+              {col.items.map((item) => (
+                <MegaLinkItem key={item.key || item.to} item={item} pathname={pathname} onClose={onClose} />
+              ))}
+            </div>
             {col.book && (
-              <button type="button" className="rw-mega-book" onClick={() => { onClose(); onBook() }}>
-                {t('mega.bookStrategy')} <ArrowRight size={18} strokeWidth={1.6} aria-hidden="true" />
-              </button>
+              <CtaButton className="rw-mega-cta" onClick={() => { onClose(); onBook() }}>
+                {t('mega.bookStrategy')}
+              </CtaButton>
             )}
           </div>
         ))}
@@ -142,14 +224,214 @@ function MegaPanel({ id, columns, pathname, onClose, onBook }) {
   )
 }
 
+/** Prefer hover popovers on fine pointers; accordion on touch / coarse. */
+function useMegaHoverMode() {
+  const [hoverMode, setHoverMode] = useState(() => (
+    typeof window !== 'undefined'
+      && window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  ))
+  useEffect(() => {
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)')
+    const sync = () => setHoverMode(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
+  return hoverMode
+}
+
+/**
+ * One Services mega. Hover Coaching, Consulting, or Realty to swap the middle
+ * column in place. No flyout to the right of the panel.
+ */
+function ServicesMegaPanel({ id, pathname, onClose, onBook, triggerRef }) {
+  const { t } = useLang()
+  const hoverMode = useMegaHoverMode()
+  const shellRef = useMegaCaret(triggerRef)
+  const catsRef = useRef(null)
+  const nubRef = useRef(null)
+  const stackRef = useRef(null)
+  const nubReady = useRef(false)
+  const defaultKey = serviceKeyForPath(pathname)
+  const [activeKey, setActiveKey] = useState(defaultKey)
+  const panelId = `${id}-panel`
+  const active = MEGA_GROWTH_ITEMS.find((item) => item.key === activeKey) || MEGA_GROWTH_ITEMS[0]
+  const childItems = active.children || []
+
+  useEffect(() => {
+    setActiveKey(defaultKey)
+  }, [defaultKey, id])
+
+  useLayoutEffect(() => {
+    const cats = catsRef.current
+    const nub = nubRef.current
+    const row = cats?.querySelector('.rw-mega-cat.is-active')
+    if (!cats || !nub || !row) return undefined
+    const cr = cats.getBoundingClientRect()
+    const rr = row.getBoundingClientRect()
+    const y = rr.top - cr.top + cats.scrollTop
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!nubReady.current || reduced) {
+      gsap.set(nub, { y, height: rr.height })
+      nubReady.current = true
+      return undefined
+    }
+    gsap.to(nub, { y, height: rr.height, duration: 0.42, ease: 'expo.out', overwrite: true })
+    return undefined
+  }, [activeKey, hoverMode])
+
+  useLayoutEffect(() => {
+    const stack = stackRef.current
+    if (!stack || !hoverMode) return undefined
+    const items = stack.querySelectorAll('.rw-mega-item')
+    if (!items.length) return undefined
+    const mm = gsap.matchMedia()
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.fromTo(
+        items,
+        { opacity: 0.001, y: 10 },
+        { opacity: 1, y: 0, duration: 0.45, stagger: 0.05, ease: 'expo.out', overwrite: true },
+      )
+    })
+    return () => mm.revert()
+  }, [activeKey, hoverMode])
+
+  const selectService = (key) => setActiveKey(key)
+
+  const onServiceKeyDown = (e, index) => {
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp' && e.key !== 'Home' && e.key !== 'End') return
+    e.preventDefault()
+    const last = MEGA_GROWTH_ITEMS.length - 1
+    let next = index
+    if (e.key === 'ArrowDown') next = index === last ? 0 : index + 1
+    if (e.key === 'ArrowUp') next = index === 0 ? last : index - 1
+    if (e.key === 'Home') next = 0
+    if (e.key === 'End') next = last
+    const nextKey = MEGA_GROWTH_ITEMS[next].key
+    selectService(nextKey)
+    document.getElementById(`${id}-svc-${nextKey}`)?.focus()
+  }
+
+  const serviceBody = (service) => {
+    const Icon = service.icon
+    return (
+      <>
+        {Icon && <Icon className="rw-mega-icon" size={18} strokeWidth={1.4} aria-hidden="true" />}
+        <span className="rw-mega-text">
+          <span className="rw-mega-title">{t(service.key)}</span>
+          <span className="rw-mega-desc">{t(service.descKey)}</span>
+        </span>
+        <ChevronRight className="rw-mega-go" size={15} strokeWidth={1.6} aria-hidden="true" />
+      </>
+    )
+  }
+
+  return (
+    <div
+      id={id}
+      ref={shellRef}
+      className={`rw-mega rw-mega-services${hoverMode ? '' : ' is-touch'}`}
+    >
+      <div className="rw-mega-panel is-services">
+        <div ref={catsRef} className="rw-mega-cats" role="none">
+          <p className="rw-mega-col-label">{t('mega.grow')}</p>
+          {hoverMode && <div ref={nubRef} className="rw-mega-cat-nub" aria-hidden="true" />}
+          {MEGA_GROWTH_ITEMS.map((service, index) => {
+            const isActive = service.key === active.key
+            const accId = `${id}-acc-${service.key}`
+            const catClass = `rw-mega-cat${isActive ? ' is-active' : ''}`
+            const catProps = {
+              id: `${id}-svc-${service.key}`,
+              className: catClass,
+              'aria-expanded': isActive,
+              'aria-controls': hoverMode ? panelId : accId,
+              onMouseEnter: () => { if (hoverMode) selectService(service.key) },
+              onFocus: () => selectService(service.key),
+              onKeyDown: (e) => onServiceKeyDown(e, index),
+            }
+            return (
+              <div key={service.key} className={`rw-mega-cat-block${isActive ? ' is-active' : ''}`}>
+                {hoverMode ? (
+                  <Link
+                    {...catProps}
+                    to={service.to}
+                    onClick={onClose}
+                  >
+                    {serviceBody(service)}
+                  </Link>
+                ) : (
+                  <button
+                    {...catProps}
+                    type="button"
+                    onClick={() => selectService(service.key)}
+                  >
+                    {serviceBody(service)}
+                  </button>
+                )}
+
+                {!hoverMode && isActive && (
+                  <div id={accId} className="rw-mega-accordion" role="region" aria-labelledby={`${id}-svc-${service.key}`}>
+                    {(service.children || []).map((item) => (
+                      <MegaLinkItem key={item.key || item.to} item={item} pathname={pathname} onClose={onClose} />
+                    ))}
+                    <Link to={service.to} className="rw-mega-explore" onClick={onClose}>
+                      {t('mega.explore')} {t(service.key)}
+                      <ArrowRight size={16} strokeWidth={1.6} aria-hidden="true" />
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
+
+        {hoverMode && (
+          <div
+            id={panelId}
+            className="rw-mega-content"
+            role="region"
+            aria-labelledby={`${id}-svc-${active.key}`}
+            key={active.key}
+          >
+            <p className="rw-mega-col-label">{t(active.key)}</p>
+            <div ref={stackRef} className="rw-mega-stack">
+              {childItems.map((item) => (
+                <MegaLinkItem key={item.key || item.to} item={item} pathname={pathname} onClose={onClose} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="rw-mega-start" role="none">
+          <p className="rw-mega-col-label">{t('mega.startHere')}</p>
+          <div className="rw-mega-start-list">
+            {MEGA_START_ITEMS.map((item) => (
+              <MegaLinkItem key={item.key || item.to} item={item} pathname={pathname} onClose={onClose} />
+            ))}
+          </div>
+          <CtaButton
+            className="rw-mega-cta"
+            onClick={() => { onClose(); onBook() }}
+          >
+            {t('mega.bookStrategy')}
+          </CtaButton>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function MegaPanel({ id, columns, pathname, onClose, onBook, triggerRef }) {
+  return <FlatMegaPanel id={id} columns={columns} pathname={pathname} onClose={onClose} onBook={onBook} triggerRef={triggerRef} />
+}
+
+/** Top bar: Home, Services, About, Learn, Careers. */
 function DesktopNav({ pathname, onBook }) {
   const { t } = useLang()
   const [open, setOpen] = useState(null)
   const workRef = useRef(null)
-  const propsRef = useRef(null)
   const learnRef = useRef(null)
   const workTriggerRef = useRef(null)
-  const propsTriggerRef = useRef(null)
   const learnTriggerRef = useRef(null)
   const hoverOpenedRef = useRef(false)
   const closeTimerRef = useRef(null)
@@ -163,14 +445,10 @@ function DesktopNav({ pathname, onBook }) {
 
   useEffect(() => {
     if (!open) return
-    const wraps = [workRef.current, propsRef.current, learnRef.current].filter(Boolean)
+    const wraps = [workRef.current, learnRef.current].filter(Boolean)
     const onKey = (e) => {
       if (e.key !== 'Escape') return
-      const trigger = open === 'work'
-        ? workTriggerRef.current
-        : open === 'learn'
-          ? learnTriggerRef.current
-          : propsTriggerRef.current
+      const trigger = open === 'learn' ? learnTriggerRef.current : workTriggerRef.current
       if (wraps.some((el) => el.contains(document.activeElement))) trigger?.focus()
       setOpen(null)
     }
@@ -192,7 +470,7 @@ function DesktopNav({ pathname, onBook }) {
   const leave = () => {
     clearTimeout(openTimerRef.current)
     hoverOpenedRef.current = false
-    closeTimerRef.current = setTimeout(() => setOpen(null), 180)
+    closeTimerRef.current = setTimeout(() => setOpen(null), 220)
   }
   const toggle = (id) => {
     clearTimeout(openTimerRef.current)
@@ -200,14 +478,26 @@ function DesktopNav({ pathname, onBook }) {
     setOpen((was) => (was === id ? null : id))
   }
   const close = () => setOpen(null)
-  const linkClass = (to) => `rw-dnav-link${pathname === to ? ' is-active' : ''}`
+  const megaOpen = open === 'work' || open === 'learn'
+  const linkClass = (to) => {
+    const current = pathname === to
+    return `rw-dnav-link${current ? ' is-current' : ''}${current && !megaOpen ? ' is-active' : ''}`
+  }
   const blurUnlessSibling = (e, selfRef) => {
     const related = e.relatedTarget
     if (!related) return
-    const wraps = [workRef.current, propsRef.current, learnRef.current]
+    const wraps = [workRef.current, learnRef.current]
     if (!wraps.some((el) => el?.contains(related))) setOpen(null)
     else if (!selfRef.current?.contains(related)) {/* switching megas handled by enter */}
   }
+
+  const servicesActive = MEGA_PATHS.some((p) => pathActive(pathname, p))
+    || pathname.startsWith('/listings')
+    || pathname.startsWith('/list-property')
+    || pathname.startsWith('/realty/listings')
+    || pathname.startsWith('/projects/')
+    || pathname.startsWith('/realty/projects/')
+  const learnActive = LEARN_PATHS.includes(pathname)
 
   return (
     <nav className="rw-dnav" aria-label={t('ui.main')}>
@@ -215,7 +505,7 @@ function DesktopNav({ pathname, onBook }) {
 
       <div
         ref={workRef}
-        className="rw-dnav-mega-wrap"
+        className={`rw-dnav-mega-wrap${open === 'work' ? ' is-open' : ''}`}
         onMouseEnter={() => enter('work')}
         onMouseLeave={leave}
         onBlur={(e) => blurUnlessSibling(e, workRef)}
@@ -223,7 +513,7 @@ function DesktopNav({ pathname, onBook }) {
         <button
           ref={workTriggerRef}
           type="button"
-          className={`rw-dnav-link${MEGA_PATHS.includes(pathname) ? ' is-active' : ''}`}
+          className={`rw-dnav-link${servicesActive ? ' is-current' : ''}${open === 'work' || (servicesActive && !megaOpen) ? ' is-active' : ''}`}
           aria-expanded={open === 'work'}
           aria-controls="rw-mega"
           onClick={() => toggle('work')}
@@ -232,30 +522,7 @@ function DesktopNav({ pathname, onBook }) {
         </button>
 
         {open === 'work' && (
-          <MegaPanel id="rw-mega" columns={MEGA_COLUMNS} pathname={pathname} onClose={close} onBook={onBook} />
-        )}
-      </div>
-
-      <div
-        ref={propsRef}
-        className="rw-dnav-mega-wrap"
-        onMouseEnter={() => enter('props')}
-        onMouseLeave={leave}
-        onBlur={(e) => blurUnlessSibling(e, propsRef)}
-      >
-        <button
-          ref={propsTriggerRef}
-          type="button"
-          className={`rw-dnav-link${pathname === '/project-hyderabad' || pathname.startsWith('/listings') || pathname.startsWith('/list-property') || pathname.startsWith('/realty/listings') ? ' is-active' : ''}`}
-          aria-expanded={open === 'props'}
-          aria-controls="rw-props-mega"
-          onClick={() => toggle('props')}
-        >
-          {t('nav.properties')} <ChevronDown className="rw-dnav-caret" size={14} strokeWidth={1.75} aria-hidden="true" />
-        </button>
-
-        {open === 'props' && (
-          <MegaPanel id="rw-props-mega" columns={PROPERTY_COLUMNS} pathname={pathname} onClose={close} />
+          <ServicesMegaPanel id="rw-mega" pathname={pathname} onClose={close} onBook={onBook} triggerRef={workTriggerRef} />
         )}
       </div>
 
@@ -263,7 +530,7 @@ function DesktopNav({ pathname, onBook }) {
 
       <div
         ref={learnRef}
-        className="rw-dnav-mega-wrap"
+        className={`rw-dnav-mega-wrap${open === 'learn' ? ' is-open' : ''}`}
         onMouseEnter={() => enter('learn')}
         onMouseLeave={leave}
         onBlur={(e) => blurUnlessSibling(e, learnRef)}
@@ -271,7 +538,7 @@ function DesktopNav({ pathname, onBook }) {
         <button
           ref={learnTriggerRef}
           type="button"
-          className={`rw-dnav-link${LEARN_PATHS.includes(pathname) ? ' is-active' : ''}`}
+          className={`rw-dnav-link${learnActive ? ' is-current' : ''}${open === 'learn' || (learnActive && !megaOpen) ? ' is-active' : ''}`}
           aria-expanded={open === 'learn'}
           aria-controls="rw-learn-mega"
           onClick={() => toggle('learn')}
@@ -280,7 +547,7 @@ function DesktopNav({ pathname, onBook }) {
         </button>
 
         {open === 'learn' && (
-          <MegaPanel id="rw-learn-mega" columns={LEARN_COLUMNS} pathname={pathname} onClose={close} />
+          <MegaPanel id="rw-learn-mega" columns={LEARN_COLUMNS} pathname={pathname} onClose={close} triggerRef={learnTriggerRef} />
         )}
       </div>
 

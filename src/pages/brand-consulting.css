@@ -1,9 +1,8 @@
 /* Public Brand Consulting enquiry: hero + brand brief form. */
 
 .rw-bc {
-  --bc-gold: #cdab63;
-  background: var(--bg, #0b0a09);
-  color: var(--ink, #f2efe9);
+  background: var(--bg);
+  color: var(--ink);
   min-height: 100vh;
 }
 
@@ -60,7 +59,7 @@
 .rw-bc-eyebrow {
   margin: 0;
   max-width: 40rem;
-  color: var(--bc-gold);
+  color: var(--copper);
   font-size: clamp(11px, 1vw, 14px);
   font-weight: 400;
   letter-spacing: 0.16em;
@@ -75,7 +74,7 @@
   font-size: clamp(2.15rem, 5.2vw, 4.2rem);
   line-height: 1.06;
   letter-spacing: -0.01em;
-  color: #f4f1ec;
+  color: var(--ink);
 }
 
 .rw-bc-title span {
@@ -84,7 +83,7 @@
 
 .rw-bc-title-italic {
   font-style: italic;
-  color: var(--bc-gold);
+  color: var(--copper);
   margin-top: 0.12em;
 }
 
@@ -93,7 +92,7 @@
   max-width: 36em;
   font-size: clamp(16px, 1.5vw, 19px);
   line-height: 1.62;
-  color: #e7e3dc;
+  color: color-mix(in srgb, var(--ink) 88%, transparent);
 }
 
 .rw-bc-proof {
@@ -101,7 +100,7 @@
   max-width: 36em;
   font-size: clamp(15px, 1.35vw, 17px);
   line-height: 1.55;
-  color: rgba(232, 201, 122, 0.92);
+  color: color-mix(in srgb, var(--ink) 72%, transparent);
 }
 
 .rw-bc-hero-actions {
@@ -143,8 +142,8 @@
   padding-top: clamp(12px, 2.5vw, 24px);
   padding-bottom: clamp(36px, 6vw, 64px);
   background:
-    radial-gradient(ellipse 55% 35% at 18% 0%, rgba(166, 124, 61, 0.07), transparent 55%),
-    var(--bg, #0b0a09);
+    radial-gradient(ellipse 55% 35% at 18% 0%, color-mix(in srgb, var(--copper) 10%, transparent), transparent 55%),
+    var(--bg);
 }
 
 .rw-bc-shell {
@@ -156,17 +155,17 @@
 .rw-bc-panel {
   /* Site palette only: --bg / --card / --chip / --line / --copper / --ink. */
   --bc-surface: var(--card);
-  --bc-block: color-mix(in srgb, var(--bg) 72%, var(--card));
+  --bc-block: transparent;
   --bc-control: var(--chip);
   --bc-line: var(--line);
   --bc-line-soft: color-mix(in srgb, var(--line) 70%, transparent);
   --bc-ink: var(--ink);
   --bc-muted: color-mix(in srgb, var(--ink) 62%, transparent);
   background: var(--bc-surface);
-  border: 1px solid color-mix(in srgb, var(--copper) 28%, var(--line));
+  border: 1px solid var(--line);
   border-radius: 12px;
-  padding: clamp(18px, 2.8vw, 28px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  padding: clamp(20px, 3vw, 32px);
+  box-shadow: none;
   scroll-margin-top: calc(var(--rw-header-h, 76px) + 12px);
 }
 
@@ -289,28 +288,35 @@
   background: var(--bc-surface);
 }
 
-/* Same fill on every step so open vs field-heavy sections match. */
+/* Flat sections inside the panel (no nested cards). */
 .rw-bc-block {
-  margin: 0 0 16px;
-  padding: 16px 16px 18px;
-  border: 1px solid var(--bc-line-soft);
-  border-radius: 10px;
-  background: var(--bc-block);
+  margin: 0 0 22px;
+  padding: 0 0 20px;
+  border: 0;
+  border-bottom: 1px solid var(--bc-line-soft);
+  border-radius: 0;
+  background: transparent;
   min-width: 0;
+}
+
+.rw-bc-block:last-of-type {
+  margin-bottom: 8px;
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 .rw-bc-block-title {
   display: block;
   width: 100%;
   margin: 0 0 14px;
-  padding: 0 0 10px;
+  padding: 0;
   font-family: 'Poppins', system-ui, sans-serif;
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--copper);
-  border-bottom: 1px solid var(--bc-line-soft);
+  border-bottom: 0;
 }
 
 .rw-bc-hint {
@@ -433,7 +439,7 @@
 }
 
 .rw-bc-matrix-row:hover {
-  background: rgba(205, 171, 99, 0.05);
+  background: color-mix(in srgb, var(--copper) 8%, transparent);
 }
 
 .rw-bc-matrix-name {
@@ -581,7 +587,7 @@
 }
 
 .rw-bc-alert a {
-  color: #e8c97a;
+  color: var(--copper);
 }
 
 .rw-bc-hp {
@@ -600,7 +606,7 @@
   gap: 14px 20px;
   margin-top: 16px;
   padding-top: 14px;
-  border-top: 1px solid rgba(242, 239, 233, 0.08);
+  border-top: 1px solid var(--bc-line-soft);
 }
 
 .rw-bc-consent {
@@ -617,12 +623,12 @@
   margin-top: 2px;
   width: 18px;
   height: 18px;
-  accent-color: var(--bc-gold);
+  accent-color: var(--copper);
   flex-shrink: 0;
 }
 
 .rw-bc-consent a {
-  color: #e8c97a;
+  color: var(--copper);
 }
 
 .rw-bc-submit {
@@ -672,7 +678,8 @@
   }
 
   .rw-bc-block {
-    padding: 14px 12px 16px;
+    margin-bottom: 18px;
+    padding: 0 0 16px;
   }
 
   .rw-bc-footer {

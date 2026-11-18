@@ -5,22 +5,22 @@
  */
 import { Link } from 'react-router-dom'
 
-/** Mirrors SITE_NAV in Header.jsx, minus the booking action (not a URL). */
+/** Mirrors primary IA + secondary routes in Header.jsx SITE_NAV (minus booking). */
 const CRAWLABLE_LINKS = [
   { label: 'Home', to: '/' },
-  { label: 'Luxury sales coaching', to: '/coaching' },
-  { label: 'Developer sales consulting', to: '/consulting' },
-  { label: 'Brand consulting', to: '/consulting/brand-consulting' },
-  { label: 'Projects in Hyderabad', to: '/project-hyderabad' },
+  { label: 'Coaching', to: '/coaching' },
+  { label: 'Business Consulting', to: '/consulting' },
+  { label: 'Branding and Marketing', to: '/consulting/brand-consulting' },
+  { label: 'Sales Mandate', to: '/realty' },
+  { label: 'Investment Advisory', to: '/project-hyderabad' },
   { label: 'Buy, sell, rent', to: '/listings' },
-  { label: 'RW Realty mandates', to: '/realty' },
+  { label: 'Careers', to: '/careers' },
+  { label: 'Contact', to: '/contact' },
   { label: 'About Rajiv Williams and Team RW', to: '/about' },
   { label: 'Why Team RW', to: '/about#why-team-rw' },
-  { label: 'Contact', to: '/contact' },
   { label: 'Privacy Policy', to: '/privacy-policy' },
   { label: 'Terms of Use', to: '/terms' },
   { label: 'Channel Partner Terms', to: '/partner/terms' },
-  { label: 'Careers', to: '/careers' },
   { label: 'Articles', to: '/articles' },
   { label: 'Content Library', to: '/content-library' },
   { label: 'FAQs', to: '/faqs' },
