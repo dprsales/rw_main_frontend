@@ -1,13 +1,148 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import PageIntro from '../components/PageIntro'
 import Seo from '../components/Seo'
-import { BookButton } from '../components/BookingModal'
 import Reveal from '../components/Reveal'
+import CtaButton from '../components/CtaButton'
 import hydMark from '../assets/site/hyd-05.svg'
 import { useLang } from '../i18n/LangProvider'
 import { EMAIL, FOOTER_LINKS, PHONE, WHATSAPP, mono, serif } from '../theme'
 import { fs, container, eyebrowFaded, sectionRule } from '../styles'
+import { CAREERS_INTEREST, INTERESTS, isValidPhone, submitBooking } from '../data/booking'
+
+const emptyForm = () => ({
+  name: '',
+  email: '',
+  phone: '',
+  interest: '',
+  message: '',
+  website: '',
+  privacyConsent: false,
+})
+
+const CONTACT_INTERESTS = INTERESTS.filter((item) => item !== CAREERS_INTEREST)
+
+function ContactForm() {
+  const { t } = useLang()
+  const [form, setForm] = useState(emptyForm)
+  const [status, setStatus] = useState('idle')
+  const [error, setError] = useState('')
+
+  const set = (key) => (e) => {
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    setForm((current) => ({ ...current, [key]: value }))
+    if (status === 'error') {
+      setStatus('idle')
+      setError('')
+    }
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    if (status === 'sending') return
+    if (!isValidPhone(form.phone)) {
+      setError(t('contact.form.phoneErr'))
+      setStatus('error')
+      return
+    }
+    if (!form.privacyConsent) {
+      setError(t('contact.form.consentErr'))
+      setStatus('error')
+      return
+    }
+
+    setStatus('sending')
+    setError('')
+    try {
+      await submitBooking({
+        ...form,
+        source: 'contact',
+      })
+      setStatus('sent')
+      setForm(emptyForm())
+    } catch {
+      setError(t('contact.form.error'))
+      setStatus('error')
+    }
+  }
+
+  if (status === 'sent') {
+    return (
+      <div className="rw-contact-form is-done">
+        <p className="rw-contact-form-eyebrow">{t('contact.form.thanksTitle')}</p>
+        <p className="rw-contact-form-thanks">{t('contact.form.thanks')}</p>
+      </div>
+    )
+  }
+
+  return (
+    <form className="rw-contact-form" onSubmit={onSubmit} noValidate>
+      <p className="rw-contact-form-eyebrow">{t('contact.form.eyebrow')}</p>
+
+      <label className="rw-contact-field">
+        <span>{t('field.name')} *</span>
+        <input required value={form.name} onChange={set('name')} placeholder={t('ph.fullName')} autoComplete="name" />
+      </label>
+      <label className="rw-contact-field">
+        <span>{t('field.email')} *</span>
+        <input required type="email" value={form.email} onChange={set('email')} placeholder="you@company.com" autoComplete="email" />
+      </label>
+      <label className="rw-contact-field">
+        <span>{t('field.phone')} *</span>
+        <input
+          required
+          type="tel"
+          inputMode="numeric"
+          autoComplete="tel"
+          value={form.phone}
+          onChange={set('phone')}
+          placeholder={t('ph.phone')}
+        />
+      </label>
+      <label className="rw-contact-field">
+        <span>{t('field.interest')}</span>
+        <select value={form.interest} onChange={set('interest')}>
+          <option value="">{t('ph.selectOne')}</option>
+          {CONTACT_INTERESTS.map((item) => (
+            <option key={item} value={item}>{item}</option>
+          ))}
+        </select>
+      </label>
+      <label className="rw-contact-field rw-contact-field--wide">
+        <span>{t('field.message')}</span>
+        <textarea value={form.message} onChange={set('message')} rows={4} placeholder={t('ph.message')} />
+      </label>
+
+      <label className="rw-contact-hp" aria-hidden="true">
+        Website
+        <input type="text" name="website" tabIndex={-1} autoComplete="off" value={form.website} onChange={set('website')} />
+      </label>
+
+      <label className="rw-contact-consent" htmlFor="contact-privacy">
+        <input
+          id="contact-privacy"
+          type="checkbox"
+          checked={form.privacyConsent}
+          onChange={set('privacyConsent')}
+        />
+        <span>
+          {t('contact.form.consent')}{' '}
+          <Link to="/privacy-policy" target="_blank" rel="noreferrer">{t('footer.privacy')}</Link>
+        </span>
+      </label>
+
+      {status === 'error' && error && (
+        <p className="rw-contact-form-error">{error}</p>
+      )}
+
+      <CtaButton type="submit" disabled={status === 'sending'} style={{ width: '100%' }}>
+        {status === 'sending' ? t('cta.sending') : t('contact.form.send')}
+      </CtaButton>
+    </form>
+  )
+}
 
 export default function Contact() {
   const { t } = useLang()
@@ -33,27 +168,33 @@ export default function Contact() {
         headline={headline}
         lede={t('contact.lede')}
         intro={t('contact.intro')}
-        cta={<BookButton to="/form" interest="General enquiry" specular>{t('cta.bookCall')}</BookButton>}
       />
 
       <section style={{ ...sectionRule, background: 'var(--chip)', position: 'relative', overflow: 'hidden' }}>
         <img src={hydMark} alt="" aria-hidden className="rw-watermark is-right" />
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px', position: 'relative', zIndex: 1 }}>
-          <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>{t('contact.reach')}</Reveal>
-
-          <div style={{ maxWidth: 560 }}>
-            {rows.map((row) => (
-              <div key={row.key} className="rw-contact-row" style={{ display: 'flex', alignItems: 'baseline', gap: 20, borderTop: '1px solid var(--line)', padding: '18px 0' }}>
-                <span className="rw-contact-label" style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)', width: 110, flexShrink: 0 }}>
-                  {row.label}
-                </span>
-                {row.href ? (
-                  <a href={row.href} style={{ fontFamily: serif, fontSize: fs('19px'), color: 'var(--ink)' }}>{row.value}</a>
-                ) : (
-                  <span style={{ fontFamily: serif, fontSize: fs('19px'), color: 'var(--ink)' }}>{row.value}</span>
-                )}
+          <div className="rw-contact-layout">
+            <div>
+              <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>{t('contact.reach')}</Reveal>
+              <div style={{ maxWidth: 560 }}>
+                {rows.map((row) => (
+                  <div key={row.key} className="rw-contact-row" style={{ display: 'flex', alignItems: 'baseline', gap: 20, borderTop: '1px solid var(--line)', padding: '18px 0' }}>
+                    <span className="rw-contact-label" style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)', width: 110, flexShrink: 0 }}>
+                      {row.label}
+                    </span>
+                    {row.href ? (
+                      <a href={row.href} style={{ fontFamily: serif, fontSize: fs('19px'), color: 'var(--ink)' }}>{row.value}</a>
+                    ) : (
+                      <span style={{ fontFamily: serif, fontSize: fs('19px'), color: 'var(--ink)' }}>{row.value}</span>
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            <Reveal>
+              <ContactForm />
+            </Reveal>
           </div>
         </div>
       </section>

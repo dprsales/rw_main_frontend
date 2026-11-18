@@ -425,7 +425,7 @@ function MegaPanel({ id, columns, pathname, onClose, onBook, triggerRef }) {
   return <FlatMegaPanel id={id} columns={columns} pathname={pathname} onClose={onClose} onBook={onBook} triggerRef={triggerRef} />
 }
 
-/** Top bar: Home, Services, About, Learn, Careers. */
+/** Top bar: Home, Services, About, Learn, Careers, Contact. */
 function DesktopNav({ pathname, onBook }) {
   const { t } = useLang()
   const [open, setOpen] = useState(null)
@@ -552,6 +552,7 @@ function DesktopNav({ pathname, onBook }) {
       </div>
 
       <Link to="/careers" className={linkClass('/careers')}>{t('nav.careers')}</Link>
+      <Link to="/contact" className={linkClass('/contact')}>{t('nav.contact')}</Link>
     </nav>
   )
 }
