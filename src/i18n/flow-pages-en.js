@@ -52,6 +52,7 @@ export default {
   "careers.empty.body": "Strong profiles are kept on file and called first when a seat opens.",
   "careers.empty.cta": "SEND YOUR PROFILE",
   "careers.role.fulltime": "Full-time",
+  "careers.role.internship": "Internship",
   "careers.role.freelance": "Freelance",
   "careers.role.remote": "Remote",
   "careers.role.hyd": "Hyderabad",

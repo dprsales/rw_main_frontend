@@ -56,6 +56,7 @@ function levelRank(level = '') {
   if (l.includes('head')) return 8
   if (l.includes('senior manager')) return 7
   if (l.includes('manager')) return 6
+  if (l.includes('intern')) return 0
   if (l.includes('entry') || l.includes('trainee')) return 1
   if (l.includes('junior')) return 2
   if (l.includes('mid') && l.includes('senior')) return 4
@@ -66,9 +67,17 @@ function levelRank(level = '') {
 function roleOrder(role) {
   const hiring = activeHiringCampaigns().findIndex((row) => row.title === role.title)
   if (hiring !== -1) return hiring
+  if (role.title === 'Social Media Intern') return 10
   const pinned = CRM_PRIORITY_TITLES.indexOf(role.title)
   if (pinned !== -1) return 20 + pinned
   return 100 + levelRank(role.level)
+}
+
+function roleEngagement(role, t) {
+  if (role.category === 'Freelancer') return t('careers.role.freelance')
+  const blob = `${role.type || ''} ${role.level || ''} ${role.title || ''}`.toLowerCase()
+  if (blob.includes('intern')) return t('careers.role.internship')
+  return t('careers.role.fulltime')
 }
 const bySeniority = (roles) => [...roles].sort((a, b) => roleOrder(a) - roleOrder(b))
 
@@ -390,7 +399,7 @@ export default function Careers() {
                       </div>
                       <div className="rw-role-summary">
                         <div className="rw-role-meta">
-                          <span><RoleIcon type="briefcase" /> {role.category === 'Freelancer' ? t('careers.role.freelance') : t('careers.role.fulltime')}</span>
+                          <span><RoleIcon type="briefcase" /> {roleEngagement(role, t)}</span>
                           <span><RoleIcon type="location" /> {role.location || (role.category === 'Freelancer' ? t('careers.role.remote') : t('careers.role.hyd'))}</span>
                         </div>
                         <p>{role.description}</p>

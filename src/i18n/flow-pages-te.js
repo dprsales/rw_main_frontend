@@ -52,6 +52,7 @@ export default {
  "careers.empty.body": "బలమైన ప్రొఫైళ్లు ఫైల్‌లో ఉంచి, సీటు ఖాళీ అయినప్పుడు ముందు కాల్ చేస్తాం.",
  "careers.empty.cta": "మీ ప్రొఫైల్ పంపండి",
  "careers.role.fulltime": "ఫుల్-టైమ్",
+ "careers.role.internship": "ఇంటర్న్‌షిప్",
  "careers.role.freelance": "ఫ్రీలాన్స్",
  "careers.role.remote": "రిమోట్",
  "careers.role.hyd": "హైదరాబాద్",
