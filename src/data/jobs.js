@@ -112,6 +112,7 @@ const CURATED_SALES_HEADS = [
   'Senior Vice President',
   'Finance & Account Manager',
   'Management Trainee',
+  'Telecaller Executive',
   'GM - CRM',
   'VP - Customer Experience & Post-Sales Operations',
   'Head of CRM & Customer Experience',
@@ -136,5 +137,15 @@ function withCuratedSalesHeads(roles) {
     const keep = CURATED_SALES_HEADS.includes(role.title) || role.category === 'Freelancer'
     return keep && !have.has(roleIdentity(role))
   })
-  return extra.length ? [...roles, ...extra] : roles
+  const merged = (roles || []).map((role) => {
+    const curated = CAREER_ROLES.find((item) => item.title === role.title)
+    if (!curated?.description) return role
+    if (role.title !== 'Telecaller Executive') return role
+    return {
+      ...role,
+      description: curated.description,
+      requirements: curated.requirements?.length ? curated.requirements : role.requirements,
+    }
+  })
+  return extra.length ? [...merged, ...extra] : merged
 }

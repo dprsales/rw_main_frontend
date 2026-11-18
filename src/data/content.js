@@ -68,6 +68,13 @@ export const MARQUEE_ITEMS = [
    hide themselves. Add another object to rotate; empty the array to take the rail down. */
 export const HIRING_CAMPAIGNS = [
   {
+    title: 'Telecaller Executive',
+    location: 'Hyderabad',
+    line: 'Inbound and outbound calls. Qualify leads. Site visits.',
+    until: '2026-12-31',
+    poster: 'telecaller',
+  },
+  {
     title: 'Finance & Account Manager',
     location: 'Hyderabad',
     line: 'Billing, payroll, P&L, and the books.',
@@ -667,6 +674,26 @@ export const CAREER_ROLES = [
     location: 'Hyderabad',
     description: 'Support day-to-day business operations, assist the sales and marketing teams, coordinate with clients and team members, and learn real estate sales and management.',
     requirements: ['Support day-to-day business operations', 'Assist the sales and marketing teams', 'Coordinate with clients and team members', 'Learn real estate sales and management', 'Real estate exposure preferred, not required', 'Good communication and interpersonal skills', 'High energy and a growth mindset'],
+  },
+  {
+    title: 'Telecaller Executive',
+    type: 'FULL-TIME · HYDERABAD',
+    category: 'Sales',
+    level: 'Junior',
+    experience: '1+ years',
+    location: 'Hyderabad',
+    description: 'This role is open to female candidates only. Handle inbound and outbound calls, qualify leads, follow up with prospects, and schedule property site visits for Team RW in Hyderabad.',
+    requirements: [
+      'This opening is for female candidates only',
+      'Handle inbound and outbound calls',
+      'Qualify leads',
+      'Follow up with prospects',
+      'Schedule property site visits',
+      '1+ years experience',
+      'Real estate experience preferred',
+      'Strong communication skills',
+      'Energetic and enthusiastic personality',
+    ],
   },
   {
     title: 'Web Developer',

@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { Link, useLocation } from 'react-router-dom'
 import hireFinanceBanner from '../assets/site/hiring-finance-account-manager.jpg'
 import hireTraineeBanner from '../assets/site/hiring-management-trainee.jpg'
+import hireTelecallerBanner from '../assets/site/hiring-telecaller-executive.jpg'
 import CtaButton from './CtaButton'
 import { activeHiringCampaigns, showHiringRail } from '../data/content'
 import { careerRolePath } from '../data/jobs'
@@ -13,6 +14,7 @@ const SLIDE_MS = 5000
 const POSTERS = {
   finance: hireFinanceBanner,
   trainee: hireTraineeBanner,
+  telecaller: hireTelecallerBanner,
 }
 
 export function openHiringModal(title) {
@@ -46,6 +48,7 @@ export default function HiringModal() {
   const { pathname } = useLocation()
   const [open, setOpen] = useState(false)
   const [index, setIndex] = useState(0)
+  const [paused, setPaused] = useState(false)
   const row = campaigns[index] || campaigns[0]
   const href = row ? careerRolePath(row.title) : '/careers'
 
@@ -61,6 +64,7 @@ export default function HiringModal() {
         const hit = campaigns.findIndex((item) => item.title === title)
         if (hit >= 0) setIndex(hit)
       }
+      setPaused(false)
       setOpen(true)
     }
     window.addEventListener(HIRE_OPEN, onOpen)
@@ -89,12 +93,12 @@ export default function HiringModal() {
   }, [campaigns, pathname])
 
   useEffect(() => {
-    if (!open || campaigns.length < 2) return
+    if (!open || paused || campaigns.length < 2) return
     const id = window.setInterval(() => {
       setIndex((n) => (n + 1) % campaigns.length)
     }, SLIDE_MS)
     return () => window.clearInterval(id)
-  }, [open, campaigns.length])
+  }, [open, paused, campaigns.length])
 
   useEffect(() => {
     if (!open) return
@@ -118,7 +122,7 @@ export default function HiringModal() {
       <div className="rw-hire-modal-card">
         <button type="button" className="rw-hire-modal-x" onClick={close} aria-label="Close">×</button>
         <Link className="rw-hire-modal-poster" to={href} onClick={close}>
-          <img key={row.title} src={posterFor(row)} alt={`${row.title} — apply now`} />
+          <img key={row.title} src={posterFor(row)} alt={`${row.title}, apply now`} />
         </Link>
         {campaigns.length > 1 && (
           <div className="rw-hire-modal-dots" role="group" aria-label="Hiring slides">
@@ -129,7 +133,7 @@ export default function HiringModal() {
                 className={`rw-hire-dot${i === index ? ' is-on' : ''}`}
                 aria-label={`Show ${item.title}`}
                 aria-current={i === index ? 'true' : undefined}
-                onClick={() => setIndex(i)}
+                onClick={() => { setPaused(true); setIndex(i) }}
               />
             ))}
           </div>

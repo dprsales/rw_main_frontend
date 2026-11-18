@@ -18,7 +18,7 @@ import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHe
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { useInView } from '../hooks/useInView'
 import { useLang } from '../i18n/LangProvider'
-import { CAREER_CATEGORIES, CAREER_PROCESS, CAREER_REASONS, CAREER_ROLES } from '../data/content'
+import { CAREER_CATEGORIES, CAREER_PROCESS, CAREER_REASONS, CAREER_ROLES, activeHiringCampaigns } from '../data/content'
 import { CAREERS_INTEREST } from '../data/booking'
 import { CRM_PRIORITY_TITLES, careerRolePath, fetchRoles } from '../data/jobs'
 import { FOOTER_LINKS, mono, serif } from '../theme'
@@ -64,8 +64,10 @@ function levelRank(level = '') {
   return 99
 }
 function roleOrder(role) {
+  const hiring = activeHiringCampaigns().findIndex((row) => row.title === role.title)
+  if (hiring !== -1) return hiring
   const pinned = CRM_PRIORITY_TITLES.indexOf(role.title)
-  if (pinned !== -1) return pinned
+  if (pinned !== -1) return 20 + pinned
   return 100 + levelRank(role.level)
 }
 const bySeniority = (roles) => [...roles].sort((a, b) => roleOrder(a) - roleOrder(b))

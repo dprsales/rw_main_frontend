@@ -1036,6 +1036,9 @@ export default function CareersApply() {
       <section style={{ ...sectionRule, background: 'var(--chip)', borderBottom: '1px solid var(--line)' }}>
         <div className="rw-pad" style={{ maxWidth: 880, margin: '0 auto', padding: 'clamp(40px,6vw,70px) 40px' }}>
           <Link to="/careers" style={{ ...eyebrow, fontSize: fs('12px'), color: 'var(--faded)', textDecoration: 'none' }}>{t('apply.back')}</Link>
+          {slugRole?.description ? (
+            <p style={{ ...note, marginTop: 18, maxWidth: '40em' }}>{slugRole.description}</p>
+          ) : null}
 
           {status === 'done' ? (
             /* Wrapped rather than put on the Reveal itself: Reveal keeps its own
