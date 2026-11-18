@@ -252,9 +252,10 @@ export default function Footer({ links = [], chip = false }) {
 
         <div className="rw-footer-grid">
           <div className="rw-footer-brand">
-            <Link to="/" className="rw-footer-brand-mark" aria-label="Rajiv Williams home">
+            <Link to="/" className="rw-footer-brand-mark" aria-label="Team Rajiv Williams home">
               <Wordmark size={52} />
             </Link>
+            <p className="rw-footer-brand-name">{t('brand.legalName')}</p>
             <p className="rw-footer-lede">{t('footer.lede')}</p>
             <BookButton interest="Footer" className="rw-footer-cta rw-cta">
               <span className="rw-footer-cta-ico" aria-hidden>

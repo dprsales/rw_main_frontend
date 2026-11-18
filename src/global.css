@@ -1698,6 +1698,15 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   display: inline-flex;
   color: var(--ink);
 }
+.rw-footer-brand-name {
+  margin: 12px 0 0;
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-weight: 500;
+  font-size: clamp(18px, 1.8vw, 22px);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: var(--ink);
+}
 .rw-footer-lede {
   margin: 18px 0 0;
   max-width: 28em;
@@ -4536,6 +4545,32 @@ html[lang="te"] .rw-contact-row {
    and leaves the footer's smaller mark alone rather than scaling it up. `width: auto` reflows to hold the aspect ratio. */
 @media (max-width: 700px) { .rw-wordmark { max-height: 56px; } }
 @media (max-width: 420px) { .rw-wordmark { max-height: 46px; } }
+
+/* Visible legal name for Meta WhatsApp / FBM display-name checks (must match WABA name). */
+.rw-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink);
+  text-decoration: none;
+  min-width: 0;
+}
+.rw-header-brand .rw-brand-name {
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-weight: 500;
+  font-size: clamp(15px, 1.35vw, 18px);
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  white-space: nowrap;
+  color: var(--ink);
+}
+@media (max-width: 520px) {
+  .rw-header-brand .rw-brand-name {
+    font-size: 13px;
+    white-space: normal;
+    max-width: 7.5rem;
+  }
+}
 
 /* --- The wheel menu ------------------------------------------------------ */
 /* The close button clears the notch/status bar on a phone and stops colliding with the wheel's first option. */

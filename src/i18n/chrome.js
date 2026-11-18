@@ -141,6 +141,7 @@ export const chrome = {
     'footer.listingsGo': 'Browse listings \u2192',
     'footer.listProperty': 'Buy, sell, rent',
     'footer.listPropertyGo': 'Buy, sell, rent \u2192',
+    'brand.legalName': 'Team Rajiv Williams',
     'footer.lede': 'Luxury sales coaching, consulting, and exclusive mandates. Built in Hyderabad for teams that sell at the top of the market.',
     'footer.cta': 'Talk to Team RW',
     'footer.col.work': 'Work with RW',
@@ -148,7 +149,7 @@ export const chrome = {
     'footer.col.contact': 'Contact',
     'footer.whatsapp': 'WhatsApp Team RW',
     'footer.place': 'Hyderabad, Telangana, India',
-    'footer.copy': '\u00a9 2026 Rajiv Williams. All rights reserved.',
+    'footer.copy': '\u00a9 2026 Team Rajiv Williams. All rights reserved.',
   },
   te: {
     'nav.home': '\u0c39\u0c4b\u0c2e\u0c4d',
@@ -298,7 +299,8 @@ export const chrome = {
     'footer.col.contact': '\u0c38\u0c02\u0c2a\u0c4d\u0c30\u0c26\u0c3f\u0c02\u0c1a\u0c02\u0c21\u0c3f',
     'footer.whatsapp': 'Team RW WhatsApp',
     'footer.place': 'Hyderabad, Telangana, India',
-    'footer.copy': '\u00a9 2026 Rajiv Williams. \u0c05\u0c28\u0c4d\u0c28\u0c3f \u0c39\u0c15\u0c4d\u0c15\u0c41\u0c32\u0c41 \u0c30\u0c15\u0c4d\u0c37\u0c3f\u0c24\u0c02.',
+    'brand.legalName': 'Team Rajiv Williams',
+    'footer.copy': '\u00a9 2026 Team Rajiv Williams. \u0c05\u0c28\u0c4d\u0c28\u0c3f \u0c39\u0c15\u0c4d\u0c15\u0c41\u0c32\u0c41 \u0c30\u0c15\u0c4d\u0c37\u0c3f\u0c24\u0c02.',
   },
 }
 

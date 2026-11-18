@@ -8,7 +8,7 @@ export default function Wordmark({ size = 72 }) {
   return (
     <img
       src={lockup}
-      alt="Rajiv Williams"
+      alt="Team Rajiv Williams"
       className="rw-wordmark"
       style={{ height: size, width: 'auto', display: 'block' }}
     />

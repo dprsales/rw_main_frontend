@@ -675,8 +675,9 @@ export default function Header() {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24,
         }}
       >
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 13, color: 'var(--ink)' }}>
+        <Link to="/" className="rw-header-brand" aria-label="Team Rajiv Williams home">
           <Wordmark />
+          <span className="rw-brand-name">{t('brand.legalName')}</span>
         </Link>
 
         {/* Desktop/laptop only (CSS hides it below 1100px, where the wheel menu takes over). */}
