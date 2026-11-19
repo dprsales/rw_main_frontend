@@ -26,11 +26,11 @@
     linear-gradient(
       100deg,
       rgba(11, 10, 9, 0.95) 0%,
-      rgba(11, 10, 9, 0.92) 44%,
-      rgba(11, 10, 9, 0.74) 68%,
-      rgba(11, 10, 9, 0.3) 100%
+      rgba(11, 10, 9, 0.88) 42%,
+      rgba(11, 10, 9, 0.55) 68%,
+      rgba(11, 10, 9, 0.35) 100%
     ),
-    url('../assets/site/sales-consulting-hero.png') center / cover no-repeat;
+    url('../assets/site/brand-consulting-hero.png') 72% center / cover no-repeat;
 }
 
 .rw-bc-hero::after {
@@ -654,7 +654,7 @@
   .rw-bc-hero::before {
     background:
       linear-gradient(rgba(11, 10, 9, 0.9), rgba(11, 10, 9, 0.82)),
-      url('../assets/site/sales-consulting-hero.png') 58% center / cover no-repeat;
+      url('../assets/site/brand-consulting-hero.png') 68% center / cover no-repeat;
   }
 
   .rw-bc-hero-copy {

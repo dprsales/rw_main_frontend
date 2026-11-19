@@ -1,15 +1,15 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Seo from '../components/Seo'
 import Reveal from '../components/Reveal'
-import PageIntro from '../components/PageIntro'
 import BorderGlow from '../components/BorderGlow'
 import { getErrorMessage, submitVendorPartner } from '../data/api'
-import { FOOTER_LINKS, serif, WHATSAPP } from '../theme'
+import { FOOTER_LINKS, mono, serif, text, WHATSAPP } from '../theme'
 import { ctaCopper, eyebrow, fs, note, sectionHeading, sectionRule } from '../styles'
 import { useLang } from '../i18n/LangProvider'
 import '../form/form.css'
+import './vendor-partner.css'
 
 const INDUSTRIES = [
   'Advertising', 'Animation', 'Architects', 'Bags', 'Content', 'Customized Chocolates',
@@ -117,10 +117,6 @@ function FileDrop({ title, hint, required, accept, file, onSelect, imageOnly, wi
 
 export default function VendorPartner() {
   const { t } = useLang()
-  const headline = useMemo(() => [
-    { text: t('vendor.h1.a') },
-    { text: t('vendor.h1.b'), italic: true, copper: true },
-  ], [t])
   const [values, setValues] = useState({ industry: '' })
   const [profileImage, setProfileImage] = useState(null)
   const [brochure, setBrochure] = useState(null)
@@ -186,11 +182,20 @@ export default function VendorPartner() {
     <>
       <Seo route="/vendorpartner" />
       <Header />
-      <PageIntro
-        eyebrow={t('vendor.eyebrow')}
-        headline={headline}
-        lede={t('vendor.lede')}
-      />
+      <section className="rw-vp-hero" aria-labelledby="vp-hero-title">
+        <div className="rw-vp-hero-copy rw-pad">
+          <p className="rw-vp-eyebrow" style={{ fontFamily: mono }}>
+            {t('vendor.eyebrow')}
+          </p>
+          <h1 id="vp-hero-title" className="rw-vp-title" style={{ fontFamily: serif }}>
+            <span>{t('vendor.h1.a').trim()}</span>
+            <span className="rw-vp-title-italic">{t('vendor.h1.b')}</span>
+          </h1>
+          <p className="rw-vp-lede" style={{ fontFamily: text }}>
+            {t('vendor.lede')}
+          </p>
+        </div>
+      </section>
 
       <section style={{ ...sectionRule, background: 'var(--chip)', borderBottom: '1px solid var(--line)' }}>
         <div className="rw-pad" style={{ maxWidth: 860, margin: '0 auto', padding: 'var(--rw-sy) 40px' }}>

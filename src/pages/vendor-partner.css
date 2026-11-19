@@ -1,0 +1,149 @@
+/* Vendor Partner page: Brand Consulting–scale hero + form below. */
+
+.rw-vp-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--bg, #0b0a09);
+  padding-top: calc(var(--rw-header-h, 76px) + env(safe-area-inset-top, 0px));
+}
+
+.rw-vp-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      100deg,
+      rgba(11, 10, 9, 0.95) 0%,
+      rgba(11, 10, 9, 0.88) 42%,
+      rgba(11, 10, 9, 0.55) 68%,
+      rgba(11, 10, 9, 0.35) 100%
+    ),
+    url('../assets/site/vendor-partner-hero.png') 78% center / cover no-repeat;
+}
+
+.rw-vp-hero::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 120px;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(rgba(11, 10, 9, 0), var(--bg, #0b0a09));
+}
+
+.rw-vp-hero-copy {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: clamp(48px, 7vw, 80px) 0 clamp(28px, 4vw, 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.rw-vp-eyebrow {
+  margin: 0;
+  max-width: 40rem;
+  color: var(--copper);
+  font-size: clamp(11px, 1vw, 14px);
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  line-height: 1.7;
+  text-transform: uppercase;
+}
+
+.rw-vp-title {
+  margin: clamp(18px, 2.4vw, 26px) 0 0;
+  max-width: 15em;
+  font-weight: 400;
+  font-size: clamp(2.15rem, 5.2vw, 4.2rem);
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.rw-vp-title span {
+  display: block;
+}
+
+.rw-vp-title-italic {
+  font-style: italic;
+  color: var(--copper);
+  margin-top: 0.12em;
+}
+
+.rw-vp-lede {
+  margin: clamp(16px, 2vw, 22px) 0 0;
+  max-width: 36em;
+  font-size: clamp(16px, 1.5vw, 19px);
+  line-height: 1.62;
+  color: color-mix(in srgb, var(--ink) 88%, transparent);
+}
+
+@media (max-width: 900px) {
+  .rw-vp-hero::before {
+    background:
+      linear-gradient(rgba(11, 10, 9, 0.9), rgba(11, 10, 9, 0.82)),
+      url('../assets/site/vendor-partner-hero.png') 72% center / cover no-repeat;
+  }
+
+  .rw-vp-hero-copy {
+    padding-top: 40px;
+    padding-bottom: 24px;
+  }
+
+  .rw-vp-title {
+    max-width: 13em;
+  }
+
+  .rw-vp-lede {
+    max-width: 30em;
+  }
+}
+
+@media (max-width: 560px) {
+  .rw-vp-hero-copy {
+    padding-top: 28px;
+    padding-bottom: 20px;
+  }
+
+  .rw-vp-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+
+  .rw-vp-title {
+    max-width: 11em;
+    font-size: clamp(1.9rem, 9vw, 2.75rem);
+  }
+
+  .rw-vp-lede {
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+}
+
+@media (max-height: 700px) and (orientation: landscape) {
+  .rw-vp-hero-copy {
+    padding-top: 24px;
+    padding-bottom: 18px;
+  }
+
+  .rw-vp-title {
+    font-size: clamp(1.7rem, 5vw, 2.4rem);
+  }
+
+  .rw-vp-lede {
+    margin-top: 12px;
+    font-size: 15px;
+  }
+}

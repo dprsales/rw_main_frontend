@@ -126,7 +126,11 @@ function ImagesBlock({ items, emptyKey, t }) {
     <>
       <div className="rw-side-grid">
         {items.map((item, i) => (
-          <Reveal key={item.id || item.src || i} delay={(i % 3) * 50}>
+          <Reveal
+            key={item.id || item.src || i}
+            delay={(i % 6) * 40}
+            className="rw-side-item"
+          >
             <button
               type="button"
               className="rw-side-card"
@@ -135,6 +139,13 @@ function ImagesBlock({ items, emptyKey, t }) {
             >
               <figure className="rw-side-figure">
                 <img src={item.src} alt={item.alt || item.title || ''} loading="lazy" decoding="async" />
+                <span className="rw-side-zoom" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <circle cx="11" cy="11" r="6.5" />
+                    <path d="M16.2 16.2 20 20" strokeLinecap="round" />
+                    <path d="M11 8.5v5M8.5 11h5" strokeLinecap="round" />
+                  </svg>
+                </span>
                 {(item.title || item.caption) && (
                   <figcaption className="rw-side-caption">
                     {item.title ? <span className="rw-side-title">{item.title}</span> : null}
