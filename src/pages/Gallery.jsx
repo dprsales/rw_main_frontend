@@ -21,28 +21,31 @@ import { FOOTER_LINKS, mono } from '../theme'
 import { container, eyebrow, fs, note } from '../styles'
 
 function VideoCard({ video, featured, t }) {
-  const [playing, setPlaying] = useState(false)
-  const views = formatViewCount(video.views)
-  const meta = video.likes
-    ? t('gallery.metaLikes', { views, likes: video.likes })
-    : t('gallery.metaViews', { views })
+  const [embedSrc, setEmbedSrc] = useState('')
+  const hasViews = Number.isFinite(video.views)
+  const views = hasViews ? formatViewCount(video.views) : ''
+  const meta = hasViews
+    ? (video.likes
+      ? t('gallery.metaLikes', { views, likes: video.likes })
+      : t('gallery.metaViews', { views }))
+    : ''
 
   return (
     <article className={`rw-yt-card${featured ? ' is-featured' : ''}`}>
       <div className="rw-yt-frame">
-        {playing ? (
+        {embedSrc ? (
           <iframe
             title={video.title}
-            src={youtubeEmbedUrl(video.id)}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            src={embedSrc}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
             allowFullScreen
-            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
           />
         ) : (
           <button
             type="button"
             className="rw-yt-poster"
-            onClick={() => setPlaying(true)}
+            onClick={() => setEmbedSrc(youtubeEmbedUrl(video.id, { autoplay: true }))}
             aria-label={t('gallery.play', { title: video.title })}
           >
             <img src={youtubeThumbUrl(video.id)} alt="" loading="lazy" decoding="async" />
@@ -61,7 +64,7 @@ function VideoCard({ video, featured, t }) {
             {video.title}
           </a>
         </h3>
-        <p className="rw-yt-meta">{meta}</p>
+        {meta ? <p className="rw-yt-meta">{meta}</p> : null}
       </div>
     </article>
   )

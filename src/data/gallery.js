@@ -5,58 +5,63 @@
 
 import { cdn } from './api'
 
+/* Ordered by YouTube views (highest first). Featured = first / long. */
 export const GALLERY_VIDEOS = [
   {
-    id: 'CTpEfcr75Cw',
-    title: 'Why Real Estate Sales Are Failing in 2025',
-    views: 2283,
+    id: 'PBkZL6vEG_I',
+    title: 'Hyderabad real estate future trends and where to invest',
+    views: 204085,
     long: true,
   },
   {
-    id: '1ecMsauChwo',
-    title: 'Struggling with Rejection on Sales Calls?',
-    views: 1680,
+    id: 'G98oAxBOFmI',
+    title: 'PVR Developers with Rajiv Williams at TREDA Property Show 2021',
+    views: 11528,
   },
   {
-    id: '4wrRC5QtlnY',
-    title: 'If conversions are low, the real issue is inside the process',
-    views: 1437,
+    id: 'Qvc4VFeDIU0',
+    title: 'Hyderabad real estate present situation and where to invest',
+    views: 8157,
   },
   {
-    id: 'VsNn1C6EQRI',
-    title: 'Sales Leadership and Revenue Systems',
-    views: 1416,
+    id: 'cuUIFfK5CAw',
+    title: 'Land rates in Hyderabad after 5 years: Rajiv Williams interview',
+    views: 3696,
   },
   {
-    id: 'paoZ7WJlVu4',
-    title: 'Why Your Revenue Feels Emotional',
-    views: 1184,
+    id: 'ifFX7VviGKM',
+    title: 'Musi revival project required? Insights Podcast 04 by Giridhari Homes',
+    views: 1455,
   },
   {
-    id: 'y7g168G7l4U',
-    title: 'Best Negotiation Techniques',
-    views: 1076,
+    id: 'cRI4pNmt-v0',
+    title: 'PVR Developers with Rajiv Williams at TREDA Property Show 2019',
+    views: 1194,
   },
   {
-    id: 'QBGhlYtCdFE',
-    title: 'How to Handle "Price Is Too High" Objections',
-    views: 1064,
-    likes: 24,
+    id: 'kkEWiubmfMg',
+    title: 'Donald Trump impact on Hyderabad real estate and land rates',
+    views: 1171,
   },
   {
-    id: 'ILHklE5qf3E',
-    title: "If your sales calls feel chaotic, it's the structure",
-    views: 1049,
+    id: 'nb_1F_oWIqU',
+    title: 'Exclusive interview with Rajiv Williams on KrunchTV',
+    views: 1141,
   },
   {
-    id: 'Mr3vNiiTmdo',
-    title: 'Founder Doing Sales? Build Sales Systems',
-    views: 1034,
+    id: 'Wmn7DzXjvXM',
+    title: 'Exploring Miyapur to Bachupally X Roads and latest developments in Miyapur',
+    views: 1117,
   },
   {
-    id: 'FUmQPBfwaF0',
-    title: 'Real Estate Marketing Is Getting Out of Hand',
-    views: 666,
+    id: 'qNgZS3hAEQI',
+    title: 'Realty Radar with Rajiv Williams exclusive promo',
+    views: 435,
+  },
+  {
+    id: 'NtPhVzYLOm0',
+    title: 'Real Estate Mentor: Miyapur Bachupally overview',
+    views: 44,
   },
 ]
 
@@ -91,8 +96,16 @@ export function youtubeWatchUrl(id) {
   return `https://www.youtube.com/watch?v=${id}`
 }
 
-export function youtubeEmbedUrl(id) {
-  return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`
+export function youtubeEmbedUrl(id, { autoplay = true } = {}) {
+  // Use youtube.com (not nocookie). Autoplay only after the poster click so sound is allowed.
+  const params = new URLSearchParams({
+    rel: '0',
+    modestbranding: '1',
+    playsinline: '1',
+    enablejsapi: '1',
+  })
+  if (autoplay) params.set('autoplay', '1')
+  return `https://www.youtube.com/embed/${id}?${params.toString()}`
 }
 
 export function youtubeThumbUrl(id) {
