@@ -34,6 +34,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
 import Faqs from './pages/Faqs'
 import ContentLibrary from './pages/ContentLibrary'
+import Gallery from './pages/Gallery'
 import BrandConsulting from './pages/BrandConsulting'
 import BrandConsultingChecklist from './pages/BrandConsultingChecklist'
 
@@ -142,6 +143,7 @@ export default function App() {
           <Route path="/articles" element={<Articles />} />
           <Route path="/articles/:slug" element={<Article />} />
           <Route path="/content-library" element={<ContentLibrary />} />
+          <Route path="/gallery" element={<Gallery />} />
           <Route path="/faqs" element={<Faqs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />

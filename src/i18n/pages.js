@@ -264,7 +264,7 @@ export const pages = {
     'hire.show': 'Show {title}',
     'hire.line.finance': 'Billing, payroll, P&L, and the books.',
     'hire.line.trainee': 'Ops, sales support, and real estate training.',
-    'hire.line.telecaller': 'Inbound and outbound calls. Qualify leads. Site visits.',
+    'hire.line.presales': 'Call and qualify leads. Site visits. CRM follow-up.',
     'hire.line.digital': 'Plan campaigns. Social, leads, and performance.',
     'hire.apply': 'Apply',
     ...servicesEn,
@@ -302,7 +302,7 @@ const ASSOC_ROLE_KEYS = {
 const HIRE_LINE_KEYS = {
   'Finance & Account Manager': 'hire.line.finance',
   'Management Trainee': 'hire.line.trainee',
-  'Telecaller Executive': 'hire.line.telecaller',
+  'Pre Sales Executive': 'hire.line.presales',
   'Digital Marketing Executive': 'hire.line.digital',
 }
 
@@ -317,6 +317,7 @@ const SEO_ROUTES = {
   '/realty/portfolio': 'portfolio',
   '/articles': 'articles',
   '/content-library': 'contentLibrary',
+  '/gallery': 'gallery',
   '/faqs': 'faqs',
   '/careers': 'careers',
   '/careers/apply': 'careersApply',

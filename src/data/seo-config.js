@@ -96,6 +96,11 @@ export const ROUTE_SEO = {
     description:
       'Browse Team RW sales carousels for learning. Share your details once, then download the PDFs you need.',
   },
+  '/gallery': {
+    title: 'Sales Video Gallery | Rajiv Williams',
+    description:
+      'Watch Rajiv Williams on real estate sales, rejection, objections, negotiation, and revenue systems. YouTube talks for sales teams and founders.',
+  },
   '/faqs': {
     title: 'FAQs | Coaching, Consulting, Mandates | Rajiv Williams',
     description:

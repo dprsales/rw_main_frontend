@@ -112,7 +112,7 @@ const CURATED_SALES_HEADS = [
   'Senior Vice President',
   'Finance & Account Manager',
   'Management Trainee',
-  'Telecaller Executive',
+  'Pre Sales Executive',
   'Digital Marketing Executive',
   'Social Media Intern',
   'GM - CRM',
@@ -133,16 +133,25 @@ function roleIdentity(role) {
   return `${(role.title || '').toLowerCase()}|${(role.category || '').toLowerCase()}`
 }
 
+/** Roles retired from the careers page even if the live jobs feed still lists them. */
+const HIDDEN_ROLE_TITLES = new Set(['Telecaller Executive'])
+
+const CURATED_COPY_TITLES = new Set([
+  'Pre Sales Executive',
+  'Digital Marketing Executive',
+  'Social Media Intern',
+])
+
 function withCuratedSalesHeads(roles) {
-  const have = new Set((roles || []).map(roleIdentity))
+  const listed = (roles || []).filter((role) => !HIDDEN_ROLE_TITLES.has(role.title))
+  const have = new Set(listed.map(roleIdentity))
   const extra = CAREER_ROLES.filter((role) => {
     const keep = CURATED_SALES_HEADS.includes(role.title) || role.category === 'Freelancer'
     return keep && !have.has(roleIdentity(role))
   })
-  const merged = (roles || []).map((role) => {
+  const merged = listed.map((role) => {
     const curated = CAREER_ROLES.find((item) => item.title === role.title)
-    if (!curated?.description) return role
-    if (role.title !== 'Telecaller Executive' && role.title !== 'Digital Marketing Executive' && role.title !== 'Social Media Intern') return role
+    if (!curated?.description || !CURATED_COPY_TITLES.has(role.title)) return role
     return {
       ...role,
       description: curated.description,

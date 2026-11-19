@@ -110,6 +110,12 @@ const ICONS = {
       <path d="M8.2 11.5h3.6" />
     </Icon>
   ),
+  gallery: (
+    <Icon>
+      <rect x="3.5" y="5" width="13" height="10" rx="1.5" />
+      <path d="M8.2 8.2v3.6L11.8 10 8.2 8.2Z" fill="currentColor" stroke="none" />
+    </Icon>
+  ),
   library: (
     <Icon>
       <path d="M4.5 4.5h3.2A2.2 2.2 0 0 1 10 6.7v8.8A2 2 0 0 0 8 15H4.5V4.5Z" />
@@ -167,6 +173,7 @@ const EXPLORE_LINKS = [
   { labelKey: 'nav.careers', to: '/careers', icon: 'careers' },
   { labelKey: 'nav.partners', to: '/partner', icon: 'partners' },
   { labelKey: 'footer.vendor', to: '/vendorpartner', icon: 'vendor' },
+  { labelKey: 'nav.gallery', to: '/gallery', icon: 'gallery' },
   { labelKey: 'nav.contentLibrary', to: '/content-library', icon: 'library' },
   { labelKey: 'nav.articles', to: '/articles', icon: 'articles' },
   { labelKey: 'nav.faqs', to: '/faqs', icon: 'faqs' },

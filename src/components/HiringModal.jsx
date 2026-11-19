@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { Link, useLocation } from 'react-router-dom'
 import hireFinanceBanner from '../assets/site/hiring-finance-account-manager.jpg'
 import hireTraineeBanner from '../assets/site/hiring-management-trainee.jpg'
-import hireTelecallerBanner from '../assets/site/hiring-telecaller-executive.jpg'
+import hirePresalesBanner from '../assets/site/presales.jpg'
 import hireDigitalBanner from '../assets/site/digital-maketing-exe.jpg'
 import CtaButton from './CtaButton'
 import { activeHiringCampaigns, showHiringRail } from '../data/content'
@@ -15,7 +15,7 @@ const SLIDE_MS = 5000
 const POSTERS = {
   finance: hireFinanceBanner,
   trainee: hireTraineeBanner,
-  telecaller: hireTelecallerBanner,
+  presales: hirePresalesBanner,
   digital: hireDigitalBanner,
 }
 

@@ -103,6 +103,7 @@ const PAGE_AREAS = [
   [/^\/partner/, 'Partner'],
   [/^\/templates/, 'Templates'],
   [/^\/content-library/, 'Content Library'],
+  [/^\/gallery/, 'Gallery'],
   [/^\/contact/, 'Contact'],
   [/^\/about/, 'About'],
   [/^\/realty\/portfolio/, 'About'],

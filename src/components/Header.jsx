@@ -16,7 +16,7 @@ import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { mono } from '../theme'
 import {
   ArrowRight, BookOpen, Building2, ChartNoAxesColumnIncreasing, ChevronDown, ChevronRight, CircleHelp,
-  FileSignature, Gem, Handshake, House, Layers, Library, Package, Target, Users,
+  FileSignature, Film, Gem, Handshake, House, Layers, Library, Package, Target, Users,
 } from 'lucide-react'
 
 // Wheel: Realty holds Mandate + Advisory; Branding under Consulting; programmes under Coaching.
@@ -31,6 +31,7 @@ const SITE_NAV = [
   { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/listings' },
   { key: 'nav.portfolio', label: 'About', to: '/about' },
   { key: 'nav.careers', label: 'Careers', to: '/careers' },
+  { key: 'nav.gallery', label: 'Gallery', to: '/gallery' },
   { key: 'nav.contact', label: 'Contact', to: '/contact' },
   { key: 'nav.articles', label: 'Articles', to: '/articles' },
   { key: 'nav.contentLibrary', label: 'Content Library', to: '/content-library' },
@@ -97,6 +98,7 @@ const LEARN_COLUMNS = [
     headingKey: 'mega.learn',
     heading: 'Learn',
     items: [
+      { key: 'nav.gallery', label: 'Gallery', to: '/gallery', descKey: 'mega.galleryDesc', desc: 'YouTube talks and Team RW floor stills', icon: Film },
       { key: 'nav.articles', label: 'Articles', to: '/articles', descKey: 'mega.articlesDesc', desc: 'Readings on luxury sales and teams', icon: BookOpen },
       { key: 'nav.contentLibrary', label: 'Content Library', to: '/content-library', descKey: 'mega.contentLibraryDesc', desc: 'Sales carousels to preview and download', icon: Library },
       { key: 'nav.faqs', label: 'FAQs', to: '/faqs', descKey: 'mega.faqsDesc', desc: 'Answers on coaching, consulting, mandates', icon: CircleHelp },
@@ -425,7 +427,7 @@ function MegaPanel({ id, columns, pathname, onClose, onBook, triggerRef }) {
   return <FlatMegaPanel id={id} columns={columns} pathname={pathname} onClose={onClose} onBook={onBook} triggerRef={triggerRef} />
 }
 
-/** Top bar: Home, Services, About, Learn, Careers, Contact. */
+/** Top bar: Home, Services, About, Learn, Careers, Contact. Gallery lives under Learn. */
 function DesktopNav({ pathname, onBook }) {
   const { t } = useLang()
   const [open, setOpen] = useState(null)
