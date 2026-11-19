@@ -183,7 +183,7 @@ function ProjectHero({ hero, details, name }) {
           <div className="rw-projx-main">
 
             <Link
-              to="/project-hyderabad"
+              to="/investmentadvisory"
               className="rw-nav-link rw-projx-in"
               style={{
                 fontFamily: mono,

@@ -1,0 +1,260 @@
+/*
+  ONE locked article layout (end-user reading page):
+  - Everything shares the same 1320 site content rail
+  - Title, cover, body, related: same left/right edges
+  - Cover: full rail width, natural height, never cropped
+  - No floating skinny column, no full-viewport bleed mismatch
+*/
+
+.rw-article-page {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: clamp(28px, 4vw, 48px) clamp(20px, 4vw, 40px) clamp(72px, 10vw, 120px);
+  box-sizing: border-box;
+}
+
+.rw-article-crumb {
+  margin: 0 0 18px;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faded);
+}
+
+.rw-article-crumb a {
+  color: var(--copper);
+  text-decoration: none;
+}
+
+.rw-article-crumb a:hover,
+.rw-article-crumb a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.rw-article-status {
+  margin: 0;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--faded);
+}
+
+.rw-article-title {
+  margin: 0;
+  font-family: 'Jost', 'Poppins', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.9rem, 3.8vw, 2.75rem);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.rw-article-deck {
+  margin: 14px 0 0;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(16px, 1.4vw, 18px);
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--ink) 78%, transparent);
+}
+
+.rw-article-byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin: 18px 0 0;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--faded);
+}
+
+.rw-article-byline strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.rw-article-byline-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(242, 239, 233, 0.35);
+}
+
+/* Cover matches text rail width exactly */
+.rw-article-hero {
+  width: 100%;
+  margin: 24px 0 0;
+}
+
+.rw-article-hero figure {
+  margin: 0;
+  width: 100%;
+  border: 1px solid rgba(242, 239, 233, 0.1);
+  background: #0a0908;
+  overflow: hidden;
+}
+
+.rw-article-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.rw-article-body {
+  width: 100%;
+  margin: 28px 0 0;
+}
+
+.rw-article-section + .rw-article-section {
+  margin-top: 2rem;
+}
+
+.rw-article-heading {
+  margin: 0 0 0.75rem;
+  font-family: 'Jost', 'Poppins', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.2rem, 2vw, 1.4rem);
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.rw-article-p {
+  margin: 0;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(16px, 1.2vw, 18px);
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--ink) 90%, transparent);
+}
+
+.rw-article-p + .rw-article-p {
+  margin-top: 1.15em;
+}
+
+.rw-article-footer {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rw-article-footer a {
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--copper);
+  text-decoration: none;
+}
+
+.rw-article-footer a:hover,
+.rw-article-footer a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.rw-article-related {
+  width: 100%;
+  margin: 48px 0 0;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+
+.rw-article-related-label {
+  margin: 0 0 16px;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--copper);
+}
+
+.rw-article-related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.rw-article-related-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(242, 239, 233, 0.1);
+  background: #100e0c;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.rw-article-related-card:hover,
+.rw-article-related-card:focus-visible {
+  border-color: rgba(195, 155, 83, 0.5);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.rw-article-related-card:focus-visible {
+  outline: 2px solid rgba(195, 155, 83, 0.9);
+  outline-offset: 2px;
+}
+
+.rw-article-related-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: #0a0908;
+}
+
+.rw-article-related-card span {
+  display: block;
+  padding: 0 14px 16px;
+  font-family: 'Jost', 'Poppins', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+@media (max-width: 900px) {
+  .rw-article-related-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .rw-article-page {
+    padding-top: 24px;
+    padding-bottom: 64px;
+  }
+
+  .rw-article-title {
+    font-size: clamp(1.65rem, 7vw, 2.1rem);
+  }
+
+  .rw-article-related-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rw-article-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

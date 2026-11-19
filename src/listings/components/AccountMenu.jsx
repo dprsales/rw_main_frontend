@@ -70,7 +70,7 @@ export default function AccountMenu() {
             <span>{user.email}</span>
           </div>
           <Link role="menuitem" to="/listings/dashboard" onClick={() => setOpen(false)}>My listings</Link>
-          <Link role="menuitem" to="/listings" onClick={() => setOpen(false)}>Buy, sell, rent</Link>
+          <Link role="menuitem" to="/listings" onClick={() => setOpen(false)}>Buy, Sell, Rent</Link>
           <button
             type="button"
             role="menuitem"

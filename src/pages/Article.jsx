@@ -1,16 +1,44 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Seo from '../components/Seo'
 import { cdn, getBlogBySlug, getErrorMessage } from '../data/api'
-import { FOOTER_LINKS, mono, serif } from '../theme'
-import { fs, container, note } from '../styles'
+import { fetchBlogsOnce } from '../data/blogs'
+import { FOOTER_LINKS } from '../theme'
+import './article.css'
+
+function paragraphsFrom(raw) {
+  return String(raw || '')
+    .replace(/\r\n/g, '\n')
+    .split(/\n{2,}/)
+    .map((block) => block.replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+}
+
+function normalizeTitle(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+}
+
+function formatArticleDate(value) {
+  if (!value) return ''
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+  return new Intl.DateTimeFormat('en-IN', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(date)
+}
 
 export default function Article() {
   const { slug } = useParams()
   const [post, setPost] = useState(null)
   const [failed, setFailed] = useState('')
+  const [related, setRelated] = useState([])
 
   useEffect(() => {
     let alive = true
@@ -22,8 +50,27 @@ export default function Article() {
     return () => { alive = false }
   }, [slug])
 
+  useEffect(() => {
+    let alive = true
+    fetchBlogsOnce()
+      .then((cards) => {
+        if (!alive) return
+        setRelated(
+          (cards || [])
+            .filter((card) => card.slug && card.slug !== slug && String(card.href || '').startsWith('/articles/'))
+            .slice(0, 3),
+        )
+      })
+      .catch(() => { if (alive) setRelated([]) })
+    return () => { alive = false }
+  }, [slug])
+
   const title = post?.metaTitle || post?.title
   const cover = cdn(post?.imageurl)
+  const pageTitleKey = normalizeTitle(post?.title)
+  const published = formatArticleDate(post?.createdAt)
+  const deck = post?.metaDescription?.trim() || ''
+  const sections = useMemo(() => post?.sections || [], [post])
 
   return (
     <>
@@ -35,53 +82,94 @@ export default function Article() {
       />
       <Header />
 
-      <section className="rw-pad" style={{ ...container, padding: 'clamp(28px,4vw,48px) 40px clamp(80px,10vw,120px)' }}>
-        <p style={{ ...note, fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.1em', marginBottom: 24 }}>
-          <Link to="/articles" style={{ color: 'var(--copper)', textDecoration: 'none' }}>ARTICLES</Link>
+      <main className="rw-article-page">
+        <p className="rw-article-crumb">
+          <Link to="/articles">Articles</Link>
         </p>
 
         {failed && (
-          <p style={{ ...note, fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em' }}>
-            {failed === 'Post not found' ? 'This article is not published.' : 'The article could not be loaded. Try again in a moment.'}
+          <p className="rw-article-status">
+            {failed === 'Post not found'
+              ? 'This article is not published.'
+              : 'The article could not be loaded. Try again in a moment.'}
           </p>
         )}
 
         {post && (
-          <article>
-            <h1 style={{ fontFamily: serif, fontSize: fs('40px'), lineHeight: 1.15, margin: '0 0 20px' }}>
-              {post.title}
-            </h1>
-            {cover && (
-              <img
-                src={cover}
-                alt={post.title}
-                style={{ width: '100%', maxHeight: 480, objectFit: 'cover', marginBottom: 36 }}
-              />
-            )}
-            {(post.sections || []).map((section, index) => (
-              <section key={`${section.title || 'section'}-${index}`} style={{ marginBottom: 28 }}>
-                {section.title && (
-                  <h2 style={{ fontFamily: serif, fontSize: fs('24px'), lineHeight: 1.3, margin: '0 0 12px' }}>
-                    {section.title}
-                  </h2>
-                )}
-                {section.description && (
-                  <p style={{ fontSize: fs('17px'), lineHeight: 1.7, color: 'var(--ink)', whiteSpace: 'pre-wrap' }}>
-                    {section.description}
-                  </p>
-                )}
-              </section>
-            ))}
-            {post.posturl && (
-              <p style={{ fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.08em', marginTop: 40 }}>
-                <a href={post.posturl} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--copper)' }}>
+          <>
+            <h1 className="rw-article-title">{post.title}</h1>
+            {deck ? <p className="rw-article-deck">{deck}</p> : null}
+            <div className="rw-article-byline">
+              <strong>Team Rajiv Williams</strong>
+              {published ? (
+                <>
+                  <span className="rw-article-byline-dot" aria-hidden="true" />
+                  <span>{published}</span>
+                </>
+              ) : null}
+              {post.posturl ? (
+                <>
+                  <span className="rw-article-byline-dot" aria-hidden="true" />
+                  <span>From LinkedIn</span>
+                </>
+              ) : null}
+            </div>
+
+            {cover ? (
+              <div className="rw-article-hero">
+                <figure>
+                  <img src={cover} alt="" />
+                </figure>
+              </div>
+            ) : null}
+
+            <div className="rw-article-body">
+              {sections.map((section, index) => {
+                const paras = paragraphsFrom(section.description)
+                const sectionTitle = section.title?.trim() || ''
+                const hideDuplicateHeading =
+                  index === 0 && sectionTitle && normalizeTitle(sectionTitle) === pageTitleKey
+
+                return (
+                  <section key={`${section.title || 'section'}-${index}`} className="rw-article-section">
+                    {sectionTitle && !hideDuplicateHeading ? (
+                      <h2 className="rw-article-heading">{sectionTitle}</h2>
+                    ) : null}
+                    {paras.map((para, pIndex) => (
+                      <p key={`${index}-${pIndex}`} className="rw-article-p">
+                        {para}
+                      </p>
+                    ))}
+                  </section>
+                )
+              })}
+            </div>
+
+            <footer className="rw-article-footer">
+              <Link to="/articles">← All articles</Link>
+              {post.posturl ? (
+                <a href={post.posturl} target="_blank" rel="noopener noreferrer">
                   Open on LinkedIn
                 </a>
-              </p>
+              ) : null}
+            </footer>
+
+            {related.length > 0 && (
+              <aside className="rw-article-related" aria-label="More reading">
+                <p className="rw-article-related-label">More reading</p>
+                <div className="rw-article-related-grid">
+                  {related.map((card) => (
+                    <Link key={card.slug} to={card.href} className="rw-article-related-card">
+                      {card.src ? <img src={card.src} alt="" loading="lazy" /> : null}
+                      <span>{card.title}</span>
+                    </Link>
+                  ))}
+                </div>
+              </aside>
             )}
-          </article>
+          </>
         )}
-      </section>
+      </main>
 
       <Footer links={FOOTER_LINKS} />
     </>

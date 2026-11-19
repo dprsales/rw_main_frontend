@@ -77,7 +77,7 @@ const LEGAL_LINKS = [
 ]
 
 const VENDOR_PARTNER_LINK = { label: 'Vendor Partner', to: '/vendorpartner', muted: true }
-const MARKET_LINK = { label: 'Buy, sell, rent', to: '/listings', muted: true }
+const MARKET_LINK = { label: 'Buy, Sell, Rent', to: '/listings', muted: true }
 
 /** The interior pages - Coaching, Consulting, Realty, Careers, Portfolio. */
 export const FOOTER_LINKS = [
@@ -94,7 +94,7 @@ export const HOME_FOOTER_LINKS = [
   { label: 'Sales Coaching →', to: '/coaching', muted: true },
   { label: 'Sales Consulting →', to: '/consulting', muted: true },
   { label: 'Sales Mandate →', to: '/realty', muted: true },
-  { ...MARKET_LINK, label: 'Buy, sell, rent →' },
+  { ...MARKET_LINK, label: 'Buy, Sell, Rent →' },
   { label: 'Careers →', to: '/careers', muted: true },
   { label: 'Channel Partners →', to: '/partner', muted: true },
   { ...VENDOR_PARTNER_LINK, label: 'Vendor Partner →' },
@@ -103,7 +103,7 @@ export const HOME_FOOTER_LINKS = [
 
 /** A project detail page goes back to the Hyderabad projects list. */
 export const PROJECT_FOOTER_LINKS = [
-  { label: '← Projects in Hyderabad', to: '/project-hyderabad' },
+  { label: '← Projects in Hyderabad', to: '/investmentadvisory' },
   { label: 'About', to: '/about' },
   MARKET_LINK,
   ...FOOTER_CONTACT,

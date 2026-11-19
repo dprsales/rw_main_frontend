@@ -16,7 +16,11 @@ export function formPathForTrack(track) {
  */
 export function formPathForRoute(pathname = '/') {
   const path = String(pathname || '/')
-  if (path.startsWith('/consulting/brand-consulting')) return '/consulting/brand-consulting#enquire'
+  if (
+    path === '/brandingconsulting'
+    || path.startsWith('/brandingconsulting#')
+    || path.startsWith('/consulting/brand-consulting')
+  ) return '/brandingconsulting#enquire'
   if (
     path.startsWith('/coaching')
     || path.startsWith('/assessment')
@@ -27,6 +31,7 @@ export function formPathForRoute(pathname = '/') {
     path.startsWith('/realty')
     || path.startsWith('/project')
     || path.startsWith('/project-hyderabad')
+    || path.startsWith('/investmentadvisory')
   ) return formPathForTrack('realty')
   return '/form'
 }
@@ -96,9 +101,13 @@ export function guidanceSummary(g) {
 // so the team sees e.g. "RW Realty Page" with no internal jargon.
 const PAGE_AREAS = [
   [/^\/coaching/, 'Coaching'],
+  [/^\/brandingconsultingchecklist/, 'Brand Checklist'],
+  [/^\/brandingconsulting/, 'Brand Consulting'],
   [/^\/consulting/, 'Consulting'],
   [/^\/(realty|projects)/, 'Realty'],
-  [/^\/project-hyderabad/, 'Properties'],
+  [/^\/investmentadvisory/, 'Investment Advisory'],
+  [/^\/project-hyderabad/, 'Investment Advisory'],
+  [/^\/hiring/, 'Careers'],
   [/^\/careers/, 'Careers'],
   [/^\/partner/, 'Partner'],
   [/^\/templates/, 'Templates'],

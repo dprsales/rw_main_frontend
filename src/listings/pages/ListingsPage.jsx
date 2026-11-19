@@ -110,7 +110,7 @@ export default function ListingsPage({ embedded = false }) {
         <div className="relative mx-auto max-w-[1440px] px-4 pb-5 pt-7 sm:px-8 sm:pt-9">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
             <div>
-              <p className="eyebrow">{embedded ? 'Buy, sell, rent' : 'RW Realty · Verified projects'}</p>
+              <p className="eyebrow">{embedded ? 'Buy, Sell, Rent' : 'RW Realty · Verified projects'}</p>
               {embedded ? (
                 <h2 className="mt-2 font-serif text-4xl font-normal leading-[1.05] text-ink sm:text-5xl">
                   Listed properties

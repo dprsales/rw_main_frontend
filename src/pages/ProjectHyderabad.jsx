@@ -18,7 +18,7 @@ export default function ProjectHyderabad() {
 
   return (
     <>
-      <Seo route="/project-hyderabad" />
+      <Seo route="/investmentadvisory" />
       <Header />
 
       <PageIntro

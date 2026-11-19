@@ -24,11 +24,11 @@ const SITE_NAV = [
   { key: 'nav.home', label: 'Home', to: '/' },
   { key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching' },
   { key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting' },
-  { key: 'nav.brandConsulting', label: 'Branding & Marketing', to: '/consulting/brand-consulting' },
+  { key: 'nav.brandConsulting', label: 'Branding & Marketing', to: '/brandingconsulting' },
   { key: 'nav.realty', label: 'Realty', to: '/realty' },
   { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty' },
-  { key: 'nav.advisory', label: 'Investment Advisory', to: '/project-hyderabad' },
-  { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/listings' },
+  { key: 'nav.advisory', label: 'Investment Advisory', to: '/investmentadvisory' },
+  { key: 'mega.listProperty', label: 'Buy, Sell, Rent', to: '/listings' },
   { key: 'nav.portfolio', label: 'About', to: '/about' },
   { key: 'nav.careers', label: 'Careers', to: '/careers' },
   { key: 'nav.gallery', label: 'Gallery', to: '/gallery' },
@@ -61,7 +61,7 @@ const MEGA_GROWTH_ITEMS = [
     key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting', descKey: 'mega.consultingDesc',
     panelTitleKey: 'mega.consultingPanelTitle', panelDescKey: 'mega.consultingPanelDesc', icon: ChartNoAxesColumnIncreasing,
     children: [
-      { key: 'nav.brandConsulting', label: 'Branding & Marketing', to: '/consulting/brand-consulting', descKey: 'mega.brandConsultingDesc', icon: Library },
+      { key: 'nav.brandConsulting', label: 'Branding & Marketing', to: '/brandingconsulting', descKey: 'mega.brandConsultingDesc', icon: Library },
     ],
   },
   {
@@ -69,8 +69,8 @@ const MEGA_GROWTH_ITEMS = [
     panelTitleKey: 'mega.realtyPanelTitle', panelDescKey: 'mega.realtyPanelDesc', icon: Building2,
     children: [
       { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty', descKey: 'mega.mandateDesc', icon: FileSignature },
-      { key: 'nav.advisory', label: 'Investment Advisory', to: '/project-hyderabad', descKey: 'mega.advisoryDesc', icon: Target },
-      { key: 'mega.listProperty', label: 'Buy, sell, rent', to: '/listings', descKey: 'mega.listDesc', icon: House },
+      { key: 'nav.advisory', label: 'Investment Advisory', to: '/investmentadvisory', descKey: 'mega.advisoryDesc', icon: Target },
+      { key: 'mega.listProperty', label: 'Buy, Sell, Rent', to: '/listings', descKey: 'mega.listDesc', icon: House },
     ],
   },
 ]

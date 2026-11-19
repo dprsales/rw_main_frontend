@@ -22,8 +22,14 @@ export const ROUTE_SEO = {
     description:
       '1,200 sales professionals coached across 16 years. Luxury real estate sales coaching in Hyderabad for developers, sales leadership, and top closers.',
   },
+  '/investmentadvisory': {
+    title: 'Investment Advisory | Projects in Hyderabad | Rajiv Williams',
+    description:
+      'Browse luxury and premium homes across Hyderabad by area. Open a project for a closer look, or talk to an expert.',
+  },
+  /* Legacy path; app redirects to /investmentadvisory. */
   '/project-hyderabad': {
-    title: 'Projects in Hyderabad | Rajiv Williams',
+    title: 'Investment Advisory | Projects in Hyderabad | Rajiv Williams',
     description:
       'Browse luxury and premium homes across Hyderabad by area. Open a project for a closer look, or talk to an expert.',
   },
@@ -32,6 +38,12 @@ export const ROUTE_SEO = {
     description:
       'A four-phase engagement of audit, process design, deployment and refinement that rebuilds a developer sales operation around conversion, not discounts.',
   },
+  '/brandingconsulting': {
+    title: 'Brand Consulting for Real Estate Developers | Rajiv Williams',
+    description:
+      '16 years moving inventory across Hyderabad. Team Rajiv Williams brand consulting helps developers sell with the right brand language and buyer psychology.',
+  },
+  /* Legacy path; app redirects to /brandingconsulting. */
   '/consulting/brand-consulting': {
     title: 'Brand Consulting for Real Estate Developers | Rajiv Williams',
     description:

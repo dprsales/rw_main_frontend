@@ -130,7 +130,7 @@ export default function Consulting() {
     { v: '260', l: t('consult.stat.2') },
   ], [t])
 
-  if (hash === '#investment-advisory') return <Navigate to="/project-hyderabad" replace />
+  if (hash === '#investment-advisory') return <Navigate to="/investmentadvisory" replace />
 
   return (
     <>
