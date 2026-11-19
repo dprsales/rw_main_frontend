@@ -24,7 +24,7 @@ const SITE_NAV = [
   { key: 'nav.home', label: 'Home', to: '/' },
   { key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching' },
   { key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting' },
-  { key: 'nav.brandConsulting', label: 'Branding & Marketing', to: '/brandingconsulting' },
+  { key: 'nav.brandConsulting', label: 'Branding & Marketing', to: '/brandconsulting' },
   { key: 'nav.realty', label: 'Realty', to: '/realty' },
   { key: 'nav.mandate', label: 'Sales Mandate', to: '/realty' },
   { key: 'nav.advisory', label: 'Investment Advisory', to: '/investmentadvisory' },
@@ -61,7 +61,7 @@ const MEGA_GROWTH_ITEMS = [
     key: 'nav.consulting', label: 'Sales Consulting', to: '/consulting', descKey: 'mega.consultingDesc',
     panelTitleKey: 'mega.consultingPanelTitle', panelDescKey: 'mega.consultingPanelDesc', icon: ChartNoAxesColumnIncreasing,
     children: [
-      { key: 'nav.brandConsulting', label: 'Branding & Marketing', to: '/brandingconsulting', descKey: 'mega.brandConsultingDesc', icon: Library },
+      { key: 'nav.brandConsulting', label: 'Branding & Marketing', to: '/brandconsulting', descKey: 'mega.brandConsultingDesc', icon: Library },
     ],
   },
   {
