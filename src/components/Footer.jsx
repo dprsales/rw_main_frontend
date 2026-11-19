@@ -162,7 +162,7 @@ const ICONS = {
 const WORK_LINKS = [
   { labelKey: 'nav.coaching', to: '/coaching', icon: 'coaching' },
   { labelKey: 'nav.consulting', to: '/consulting', icon: 'consulting' },
-  { labelKey: 'nav.brandConsulting', to: '/brandingconsulting', icon: 'consulting' },
+  { labelKey: 'nav.brandConsulting', to: '/brandconsulting', icon: 'consulting' },
   { labelKey: 'nav.mandate', to: '/realty', icon: 'mandate' },
   { labelKey: 'nav.advisory', to: '/investmentadvisory', icon: 'projects' },
   { labelKey: 'footer.listProperty', to: '/listings', icon: 'market' },

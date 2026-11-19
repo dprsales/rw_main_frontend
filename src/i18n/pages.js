@@ -315,6 +315,7 @@ const SEO_ROUTES = {
   '/realty': 'realty',
   '/investmentadvisory': 'projects',
   '/project-hyderabad': 'projects',
+  '/brandconsulting': 'consulting',
   '/brandingconsulting': 'consulting',
   '/realty/portfolio': 'portfolio',
   '/hiring': 'careers',

@@ -10,7 +10,7 @@ const CRAWLABLE_LINKS = [
   { label: 'Home', to: '/' },
   { label: 'Coaching', to: '/coaching' },
   { label: 'Business Consulting', to: '/consulting' },
-  { label: 'Branding and Marketing', to: '/brandingconsulting' },
+  { label: 'Branding and Marketing', to: '/brandconsulting' },
   { label: 'Sales Mandate', to: '/realty' },
   { label: 'Investment Advisory', to: '/investmentadvisory' },
   { label: 'Buy, sell, rent', to: '/listings' },

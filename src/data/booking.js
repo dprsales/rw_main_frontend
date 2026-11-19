@@ -17,10 +17,12 @@ export function formPathForTrack(track) {
 export function formPathForRoute(pathname = '/') {
   const path = String(pathname || '/')
   if (
-    path === '/brandingconsulting'
+    path === '/brandconsulting'
+    || path.startsWith('/brandconsulting#')
+    || path === '/brandingconsulting'
     || path.startsWith('/brandingconsulting#')
     || path.startsWith('/consulting/brand-consulting')
-  ) return '/brandingconsulting#enquire'
+  ) return '/brandconsulting#enquire'
   if (
     path.startsWith('/coaching')
     || path.startsWith('/assessment')
@@ -101,7 +103,9 @@ export function guidanceSummary(g) {
 // so the team sees e.g. "RW Realty Page" with no internal jargon.
 const PAGE_AREAS = [
   [/^\/coaching/, 'Coaching'],
+  [/^\/brandconsultingchecklist/, 'Brand Checklist'],
   [/^\/brandingconsultingchecklist/, 'Brand Checklist'],
+  [/^\/brandconsulting/, 'Brand Consulting'],
   [/^\/brandingconsulting/, 'Brand Consulting'],
   [/^\/consulting/, 'Consulting'],
   [/^\/(realty|projects)/, 'Realty'],

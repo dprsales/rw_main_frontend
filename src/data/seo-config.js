@@ -38,12 +38,17 @@ export const ROUTE_SEO = {
     description:
       'A four-phase engagement of audit, process design, deployment and refinement that rebuilds a developer sales operation around conversion, not discounts.',
   },
+  '/brandconsulting': {
+    title: 'Brand Consulting for Real Estate Developers | Rajiv Williams',
+    description:
+      '16 years moving inventory across Hyderabad. Team Rajiv Williams brand consulting helps developers sell with the right brand language and buyer psychology.',
+  },
+  /* Legacy paths; app redirects to /brandconsulting. */
   '/brandingconsulting': {
     title: 'Brand Consulting for Real Estate Developers | Rajiv Williams',
     description:
       '16 years moving inventory across Hyderabad. Team Rajiv Williams brand consulting helps developers sell with the right brand language and buyer psychology.',
   },
-  /* Legacy path; app redirects to /brandingconsulting. */
   '/consulting/brand-consulting': {
     title: 'Brand Consulting for Real Estate Developers | Rajiv Williams',
     description:

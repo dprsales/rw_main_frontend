@@ -129,8 +129,8 @@ export default function App() {
           {/* Checkout: selection → details → review → purchase request (UI only, no gateway wired). */}
           <Route path="/coaching/purchase" element={<CoachingPurchase />} />
           <Route path="/consulting" element={<Consulting />} />
-          {/* Clean shareable URLs (same style as /vendorpartner, /brandingconsultingchecklist). */}
-          <Route path="/brandingconsulting" element={<BrandConsulting />} />
+          {/* Clean shareable URLs (same style as /vendorpartner, /brandconsultingchecklist). */}
+          <Route path="/brandconsulting" element={<BrandConsulting />} />
           <Route path="/investmentadvisory" element={<ProjectHyderabad />} />
           <Route path="/realty" element={<Realty />} />
           <Route path="/careers" element={<Careers />} />
@@ -161,15 +161,17 @@ export default function App() {
           {/* Legacy /form/:track → landing #enquire (or track picker) */}
           <Route path="/form/:track" element={<Form />} />
           {/* Shared with Branding & Marketing clients on site visits; not in main menus. */}
-          <Route path="/brandingconsultingchecklist" element={<BrandConsultingChecklist />} />
-          <Route path="/site-visit-checklist/branding" element={<Navigate to="/brandingconsultingchecklist" replace />} />
-          <Route path="/forms/brandingconsultingchecklist" element={<Navigate to="/brandingconsultingchecklist" replace />} />
+          <Route path="/brandconsultingchecklist" element={<BrandConsultingChecklist />} />
+          <Route path="/site-visit-checklist/branding" element={<Navigate to="/brandconsultingchecklist" replace />} />
+          <Route path="/forms/brandingconsultingchecklist" element={<Navigate to="/brandconsultingchecklist" replace />} />
+          <Route path="/brandingconsultingchecklist" element={<Navigate to="/brandconsultingchecklist" replace />} />
           <Route path="/realty/portfolio" element={<Navigate to="/about" replace />} />
           <Route path="/partner" element={<Partner />} />
           <Route path="/vendorpartner" element={<VendorPartner />} />
-          {/* Legacy nested / &amp; URLs → clean name-based paths */}
-          <Route path="/consulting/brand-consulting" element={<Navigate to="/brandingconsulting" replace />} />
-          <Route path="/consulting/brand&marketing" element={<Navigate to="/brandingconsulting" replace />} />
+          {/* Legacy nested / spelling URLs → clean name-based paths */}
+          <Route path="/brandingconsulting" element={<Navigate to="/brandconsulting" replace />} />
+          <Route path="/consulting/brand-consulting" element={<Navigate to="/brandconsulting" replace />} />
+          <Route path="/consulting/brand&marketing" element={<Navigate to="/brandconsulting" replace />} />
           <Route path="/project-hyderabad" element={<Navigate to="/investmentadvisory" replace />} />
           {/* Project detail pages, keyed by API slug; both bare and realty-nested paths resolve here */}
           <Route path="/projects/:slug" element={<Project />} />
@@ -192,7 +194,7 @@ export default function App() {
           <Route path="/services" element={<Navigate to="/" replace />} />
           <Route path="/services/luxury-sales-coach" element={<Navigate to="/coaching" replace />} />
           <Route path="/services/luxury-sales-consulting" element={<Navigate to="/consulting" replace />} />
-          <Route path="/services/branding" element={<Navigate to="/brandingconsulting" replace />} />
+          <Route path="/services/branding" element={<Navigate to="/brandconsulting" replace />} />
           <Route path="/portfolio" element={<Navigate to="/about" replace />} />
           <Route path="/blogs" element={<Navigate to="/articles" replace />} />
 

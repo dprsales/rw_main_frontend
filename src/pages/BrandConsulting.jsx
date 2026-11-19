@@ -139,7 +139,7 @@ export default function BrandConsulting() {
   const markStarted = () => {
     if (startedRef.current) return
     startedRef.current = true
-    track('lead_started', { source: 'site_cta', interest: INTEREST, page: '/brandingconsulting' })
+    track('lead_started', { source: 'site_cta', interest: INTEREST, page: '/brandconsulting' })
   }
 
   const applyField = (key, value) => {
@@ -277,7 +277,7 @@ export default function BrandConsulting() {
       track('lead_submitted', {
         source: 'brand_consulting_enquiry',
         interest: INTEREST,
-        page: '/brandingconsulting',
+        page: '/brandconsulting',
       })
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (err) {
@@ -286,7 +286,7 @@ export default function BrandConsulting() {
       track('lead_submission_failed', {
         source: 'brand_consulting_enquiry',
         interest: INTEREST,
-        page: '/brandingconsulting',
+        page: '/brandconsulting',
         errorCategory: errorCategory(err),
       })
       requestAnimationFrame(() => errorRef.current?.focus())
@@ -295,7 +295,7 @@ export default function BrandConsulting() {
 
   return (
     <>
-      <Seo route="/brandingconsulting" />
+      <Seo route="/brandconsulting" />
       <Header />
 
       <main className="rw-bc">

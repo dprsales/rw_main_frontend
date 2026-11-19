@@ -61,7 +61,7 @@ export const chrome = {
     'mega.bookStrategy': 'Talk to Team RW',
     'mega.coachingDesc': '1:1 and team sales coaching',
     'mega.consultingDesc': 'Structure and strategy for developers',
-    'mega.brandConsultingDesc': 'Brand, marketing and lead gen',
+    'mega.brandConsultingDesc': 'Branding, Marketing & Lead Generation',
     'mega.realtyDesc': 'Mandates and investment advisory',
     'mega.mandateDesc': 'RW runs your project sales mandate',
     'mega.advisoryDesc': 'Hyderabad projects, with a clearer view',
