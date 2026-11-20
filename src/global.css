@@ -4564,11 +4564,10 @@ html[lang="te"] .rw-contact-row {
   white-space: nowrap;
   color: var(--ink);
 }
-@media (max-width: 520px) {
+/* Keep legal name on desktop/tablet; hide on phone so the mark has room. */
+@media (max-width: 700px) {
   .rw-header-brand .rw-brand-name {
-    font-size: 13px;
-    white-space: normal;
-    max-width: 7.5rem;
+    display: none;
   }
 }
 

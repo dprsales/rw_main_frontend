@@ -10,8 +10,8 @@ function initials(user) {
 
 /**
  * Header account control — one action only.
- * Logged out: gold filled `.rw-cta` (size/padding from `.rw-header-login` clamps).
- * Logged in: compact avatar menu. "List property" stays in Properties nav.
+ * Logged out: gold CTA to list (auth happens on that path). Avoids a generic "Log in" that feels odd on a marketing site.
+ * Logged in: compact avatar menu.
  */
 export default function AccountMenu() {
   const { user, ready, logout } = useListingAuth()
@@ -37,15 +37,19 @@ export default function AccountMenu() {
   if (!ready) {
     return (
       <span className="rw-cta rw-header-login" style={{ opacity: 0.35, pointerEvents: 'none' }} aria-hidden>
-        LOG IN
+        List a property
       </span>
     )
   }
 
   if (!user) {
     return (
-      <Link to="/listings/login" className="rw-cta rw-header-login">
-        LOG IN
+      <Link
+        to="/listings/login?next=%2Flistings"
+        className="rw-cta rw-header-login"
+        aria-label="List a property"
+      >
+        List a property
       </Link>
     )
   }

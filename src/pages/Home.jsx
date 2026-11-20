@@ -331,8 +331,10 @@ function HeroCinematic() {
 
   useEffect(() => {
     if (reduced || paused) return
-    const timer = setInterval(() => go(active + 1), 5000)
-    return () => clearInterval(timer)
+    // First slide stays longer on load so visitors can read it before the carousel moves.
+    const delay = active === 0 ? 9000 : 5000
+    const timer = setTimeout(() => go(active + 1), delay)
+    return () => clearTimeout(timer)
   }, [active, reduced, paused])
 
   return (
