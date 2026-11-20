@@ -2,9 +2,9 @@
  * Simple coaching programme landings linked from /coaching cards and the header submenu.
  * Paths match the shareable URLs Team RW asked for (improve copy/layout later).
  */
-import goalsImage from '../assets/site/whiteboard-goals.png'
-import luxuryImage from '../assets/site/plate-desk.png'
-import mentoringImage from '../assets/site/plate-reading.png'
+import luxuryImage from '../assets/site/hero-luxury-sales.jpg'
+import highTicketImage from '../assets/site/hero-high-ticket-sales.jpg'
+import mentoringImage from '../assets/site/hero-one-to-one.jpg'
 import { COACHING_PROGRAMS } from './content'
 
 export const COACHING_PROGRAM_PATHS = [
@@ -13,7 +13,7 @@ export const COACHING_PROGRAM_PATHS = [
   '/one-to-one',
 ]
 
-const COVERS = [luxuryImage, goalsImage, mentoringImage]
+const COVERS = [luxuryImage, highTicketImage, mentoringImage]
 
 const EXTRAS = [
   {
@@ -21,8 +21,8 @@ const EXTRAS = [
     slug: 'luxarysales',
     eyebrow: 'Sales Coaching · Programme I',
     titleLines: ['Luxury Sales', 'Mastery'],
-    /* Keep the face in the clear zone below the sticky header. */
-    objectPosition: '78% 26%',
+    /* Couple + model sit centre-right; keep them clear of the sticky header. */
+    objectPosition: '68% 42%',
     proof: 'For developers and luxury real-estate sales professionals who sell on trust, not discounts.',
     focus: [
       'How luxury buyers decide and what they actually trust',
@@ -36,7 +36,7 @@ const EXTRAS = [
     slug: 'highticketsales',
     eyebrow: 'Sales Coaching · Programme II',
     titleLines: ['High Ticket', 'Sales Mastery'],
-    objectPosition: '82% 24%',
+    objectPosition: '62% 40%',
     proof: 'For developers and real-estate sales professionals who need cleaner conversion and stronger closes.',
     focus: [
       'Client psychology that drives yes or no',
@@ -50,7 +50,7 @@ const EXTRAS = [
     slug: 'one-to-one',
     eyebrow: 'Sales Coaching · Programme III',
     titleLines: ['One-to-One', 'Mentoring'],
-    objectPosition: '84% 22%',
+    objectPosition: '58% 38%',
     proof: 'For CXOs, senior leadership, and ambitious sales professionals who need personal guidance.',
     focus: [
       'A personal read of where you are stuck',

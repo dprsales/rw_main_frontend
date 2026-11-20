@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import goalsImage from '../assets/site/whiteboard-goals.png'
-import luxuryImage from '../assets/site/plate-desk.png'
-import mentoringImage from '../assets/site/plate-reading.png'
+import luxuryImage from '../assets/site/hero-luxury-sales.jpg'
+import highTicketImage from '../assets/site/hero-high-ticket-sales.jpg'
+import mentoringImage from '../assets/site/hero-one-to-one.jpg'
 import monogram from '../assets/site/rw-logo-ccr.png'
 import signature from '../assets/site/gold2.png'
 import hydMark from '../assets/site/hyd-03.svg'
@@ -37,7 +37,7 @@ const OUTCOME_ICONS = [BarChart3, UsersRound, Trophy]
 /** Covers for COACHING_PROGRAMS, matched by index. */
 const PROGRAM_COVERS = [
   { src: luxuryImage },
-  { src: goalsImage },
+  { src: highTicketImage },
   { src: mentoringImage },
 ]
 
@@ -279,7 +279,7 @@ export default function Coaching() {
         </div>
       </section>
 
-      <section id="premium-programs" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
+      {/* <section id="premium-programs" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
         <CenteredHead
           eyebrow={t('coach.programs.eyebrow')}
           title={<><span style={{ color: 'var(--copper)' }}>{t('coach.programs.title.a')}</span>{t('coach.programs.title.b')}</>}
@@ -294,7 +294,7 @@ export default function Coaching() {
           ))}
         </div>
 
-      </section>
+      </section> */}
 
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
