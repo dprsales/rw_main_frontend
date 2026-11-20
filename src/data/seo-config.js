@@ -22,6 +22,21 @@ export const ROUTE_SEO = {
     description:
       '1,200 sales professionals coached across 16 years. Luxury real estate sales coaching in Hyderabad for developers, sales leadership, and top closers.',
   },
+  '/luxarysales': {
+    title: 'Luxury Sales Mastery | Sales Coaching | Rajiv Williams',
+    description:
+      'Luxury buyer psychology, premium positioning, and high-value closing for developers and luxury real-estate sales professionals in Hyderabad.',
+  },
+  '/highticketsales': {
+    title: 'High Ticket Sales Mastery | Sales Coaching | Rajiv Williams',
+    description:
+      'High-ticket conversion, objection handling, negotiation, and closing for developers and real-estate sales professionals in Hyderabad.',
+  },
+  '/one-to-one': {
+    title: 'One-to-One Mentoring | Sales Coaching | Rajiv Williams',
+    description:
+      'Personalised one-to-one mentoring with Rajiv Williams for CXOs, senior leadership, and ambitious sales professionals.',
+  },
   '/investmentadvisory': {
     title: 'Investment Advisory | Projects in Hyderabad | Rajiv Williams',
     description:

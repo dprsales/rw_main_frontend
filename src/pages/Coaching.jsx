@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import goalsImage from '../assets/site/whiteboard-goals.png'
 import luxuryImage from '../assets/site/plate-desk.png'
 import mentoringImage from '../assets/site/plate-reading.png'
@@ -19,6 +20,7 @@ import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHe
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { useLang } from '../i18n/LangProvider'
 import { ACHIEVE, ASSESSMENT_AREAS, COACHING_PROGRAMS, COACHING_TESTIMONIALS, CURRICULUM } from '../data/content'
+import { coachingProgramPathByIndex } from '../data/coachingProgramPages'
 import { track } from '../data/analytics'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import { fs,
@@ -53,9 +55,12 @@ const PROGRAM_ICONS = [
  * change height.
  */
 function ProgramCard({ program, index, labels }) {
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const cardRef = useRef(null)
   const listId = `program-${index}-included`
+  const href = coachingProgramPathByIndex(index)
+  const anchorId = ['program-luxury-sales-mastery', 'program-high-ticket-sales', 'program-one-to-one'][index]
 
   useEffect(() => {
     if (!open) return
@@ -66,12 +71,15 @@ function ProgramCard({ program, index, labels }) {
     return () => { document.removeEventListener('pointerdown', onDown); document.removeEventListener('keydown', onKey) }
   }, [open])
 
-  const onCardClick = (e) => { if (!e.target.closest('button, a')) setOpen((v) => !v) }
+  const onCardClick = (e) => {
+    if (e.target.closest('button, a')) return
+    navigate(href)
+  }
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- keyboard users get the same list via focus and the toggle
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- keyboard users open the landing via the title link
     <article
-      id={['program-luxury-sales-mastery', 'program-high-ticket-sales', 'program-one-to-one'][index]}
+      id={anchorId}
       ref={cardRef}
       className={`rw-program${open ? ' is-open' : ''}`}
       onClick={onCardClick}
@@ -99,17 +107,24 @@ function ProgramCard({ program, index, labels }) {
 
       <div className="rw-program-body">
         {program.audience && <span className="rw-program-kicker" style={{ fontFamily: mono }}>{program.audience}</span>}
-        <h3 className="rw-program-title" style={{ fontFamily: serif }}>{program.title}</h3>
+        <h3 className="rw-program-title" style={{ fontFamily: serif }}>
+          <Link to={href} onClick={(e) => e.stopPropagation()}>{program.title}</Link>
+        </h3>
         <p className="rw-program-desc" style={{ fontFamily: text }}>{program.description}</p>
-        {program.features?.length > 0 && (
-          <button
-            type="button" className="rw-program-toggle" style={{ fontFamily: mono }}
-            aria-expanded={open} aria-controls={listId} onClick={() => setOpen((v) => !v)}
-          >
-            {open ? labels.hide : labels.show}
-            <ChevronDown size={14} strokeWidth={1.8} aria-hidden />
-          </button>
-        )}
+        <div className="rw-program-cta">
+          <Link to={href} className="rw-program-start" style={{ fontFamily: mono }} onClick={(e) => e.stopPropagation()}>
+            Open programme <span aria-hidden="true">→</span>
+          </Link>
+          {program.features?.length > 0 && (
+            <button
+              type="button" className="rw-program-toggle" style={{ fontFamily: mono }}
+              aria-expanded={open} aria-controls={listId} onClick={() => setOpen((v) => !v)}
+            >
+              {open ? labels.hide : labels.show}
+              <ChevronDown size={14} strokeWidth={1.8} aria-hidden />
+            </button>
+          )}
+        </div>
       </div>
     </article>
   )
@@ -264,6 +279,35 @@ export default function Coaching() {
         </div>
       </section>
 
+      <section id="premium-programs" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
+        <CenteredHead
+          eyebrow={t('coach.programs.eyebrow')}
+          title={<><span style={{ color: 'var(--copper)' }}>{t('coach.programs.title.a')}</span>{t('coach.programs.title.b')}</>}
+          intro={t('coach.programs.intro')}
+        />
+
+        <div className="rw-grid-3 rw-programs">
+          {programs.map((program, i) => (
+            <Reveal key={program.title} delay={i * 90} className="rw-program-wrap">
+              <ProgramCard program={program} index={i} labels={programLabels} />
+            </Reveal>
+          ))}
+        </div>
+
+      </section>
+
+      <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
+          <SectionHead
+            eyebrow={t('coach.achieve.eyebrow')} titleWidth="11em"
+            title={t('coach.achieve.title')}
+            aside={<SectionAside>{t('coach.achieve.aside')}</SectionAside>}
+          />
+
+          <AchieveGrid items={achieve} className="rw-achieve-grid" arrows numberPrefix="#" />
+        </div>
+      </section>
+
       <section id="assessment" className="rw-pad" style={{ ...container, padding: 'clamp(64px, 8vw, 96px) 40px' }}>
         <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 64, alignItems: 'center' }}>
           <Reveal>
@@ -296,35 +340,6 @@ export default function Coaching() {
             ))}
           </div>
         </div>
-      </section>
-
-      <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
-          <SectionHead
-            eyebrow={t('coach.achieve.eyebrow')} titleWidth="11em"
-            title={t('coach.achieve.title')}
-            aside={<SectionAside>{t('coach.achieve.aside')}</SectionAside>}
-          />
-
-          <AchieveGrid items={achieve} className="rw-achieve-grid" arrows numberPrefix="#" />
-        </div>
-      </section>
-
-      <section id="premium-programs" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
-        <CenteredHead
-          eyebrow={t('coach.programs.eyebrow')}
-          title={<><span style={{ color: 'var(--copper)' }}>{t('coach.programs.title.a')}</span>{t('coach.programs.title.b')}</>}
-          intro={t('coach.programs.intro')}
-        />
-
-        <div className="rw-grid-3 rw-programs">
-          {programs.map((program, i) => (
-            <Reveal key={program.title} delay={i * 90} className="rw-program-wrap">
-              <ProgramCard program={program} index={i} labels={programLabels} />
-            </Reveal>
-          ))}
-        </div>
-
       </section>
 
       <section id="curriculum" className="rw-pad" style={{ ...sectionRule, background: 'var(--chip)' }}>

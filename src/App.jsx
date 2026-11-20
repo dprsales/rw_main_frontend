@@ -16,6 +16,7 @@ import AssessmentResult from './pages/AssessmentResult'
 import Careers from './pages/Careers'
 import CareersApply from './pages/CareersApply'
 import Coaching from './pages/Coaching'
+import CoachingProgram from './pages/CoachingProgram'
 import CoachingResult from './pages/CoachingResult'
 import CoachingPurchase from './pages/CoachingPurchase'
 import Consulting from './pages/Consulting'
@@ -123,6 +124,11 @@ export default function App() {
           <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/coaching" element={<Coaching />} />
+          {/* Programme landings (Three Ways In). Spelling /luxarysales kept as the share URL. */}
+          <Route path="/luxarysales" element={<CoachingProgram />} />
+          <Route path="/luxurysales" element={<Navigate to="/luxarysales" replace />} />
+          <Route path="/highticketsales" element={<CoachingProgram />} />
+          <Route path="/one-to-one" element={<CoachingProgram />} />
           {/* KRISAH returns here after the assessment — the route maps to a score scenario. */}
           <Route path="/coaching/result" element={<CoachingResult />} />
           <Route path="/coaching/result/:scenario" element={<CoachingResult />} />

@@ -27,6 +27,11 @@ export function formPathForRoute(pathname = '/') {
     path.startsWith('/coaching')
     || path.startsWith('/assessment')
     || path.startsWith('/result')
+    || path.startsWith('/luxarysales')
+    || path.startsWith('/luxurysales')
+    || path.startsWith('/highticketsales')
+    || path === '/one-to-one'
+    || path.startsWith('/one-to-one/')
   ) return formPathForTrack('coaching')
   if (path.startsWith('/consulting')) return formPathForTrack('consulting')
   if (
@@ -103,6 +108,10 @@ export function guidanceSummary(g) {
 // so the team sees e.g. "RW Realty Page" with no internal jargon.
 const PAGE_AREAS = [
   [/^\/coaching/, 'Coaching'],
+  [/^\/luxarysales/, 'Coaching'],
+  [/^\/luxurysales/, 'Coaching'],
+  [/^\/highticketsales/, 'Coaching'],
+  [/^\/one-to-one/, 'Coaching'],
   [/^\/brandconsultingchecklist/, 'Brand Checklist'],
   [/^\/brandingconsultingchecklist/, 'Brand Checklist'],
   [/^\/brandconsulting/, 'Brand Consulting'],

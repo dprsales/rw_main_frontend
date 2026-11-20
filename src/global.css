@@ -5435,6 +5435,8 @@ body.rw-faqs-page [class*="fb_"] {
 }
 .rw-program-kicker { font-size: 11px; letter-spacing: .14em; line-height: 1.6; text-transform: uppercase; color: var(--copper); }
 .rw-program-title { margin: 0; font-weight: 400; font-size: clamp(25px, 2vw, 30px); line-height: 1.1; letter-spacing: -.01em; }
+.rw-program-title a { color: inherit; text-decoration: none; }
+.rw-program-title a:hover { color: var(--copper); }
 .rw-program-desc { margin: 0; font-weight: 400; font-size: 16px; line-height: 1.5; color: var(--faded); }
 .rw-program-rule { display: block; width: 72px; height: 1px; background: var(--gold-gradient); opacity: .8; }
 .rw-program-features { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 12px; }
@@ -5447,7 +5449,14 @@ body.rw-faqs-page [class*="fb_"] {
 }
 .rw-program-outcome { margin: 4px 0 0; font-weight: 400; font-size: 15px; line-height: 1.55; color: var(--faded); }
 .rw-program-session { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--faded); }
-.rw-program-cta { width: 100%; margin-top: auto; gap: 10px; }
+.rw-program-cta {
+  width: 100%;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
 .rw-program-start {
   margin-top: auto;
   align-self: flex-start;
@@ -5512,7 +5521,6 @@ body.rw-faqs-page [class*="fb_"] {
 .rw-program-toggle svg { transition: transform .35s ease; }
 .rw-program.is-open .rw-program-toggle svg { transform: rotate(180deg); }
 .rw-program-toggle:focus-visible { outline: 1px solid var(--copper); outline-offset: 4px; }
-.rw-program-cta { margin-top: auto; }
 
 /* Legal pages. Same dark shell as About and Contact. Confirm markers stay visible.
    Fonts follow the brand pack: Cormorant Garamond for titles, Poppins Book for body,

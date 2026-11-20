@@ -44,17 +44,15 @@ const SITE_NAV = [
 /**
  * Services mega: Grow your sales | hover submenu | Start here.
  * Coaching programmes, Consulting → Branding, Realty → Mandate + Advisory.
- * Team Sales Coaching links to /coaching (no separate programme section yet).
  */
 const MEGA_GROWTH_ITEMS = [
   {
     key: 'nav.coaching', label: 'Sales Coaching', to: '/coaching', descKey: 'mega.coachingDesc',
     panelTitleKey: 'mega.coachingPanelTitle', panelDescKey: 'mega.coachingPanelDesc', icon: Users,
     children: [
-      { key: 'nav.programMastery', label: 'Luxury Sales Mastery', to: '/coaching#program-luxury-sales-mastery', descKey: 'mega.programMasteryDesc', icon: Gem },
-      { key: 'nav.programHighTicket', label: 'High Ticket Sales Mastery', to: '/coaching#program-high-ticket-sales', descKey: 'mega.programHighTicketDesc', icon: Layers },
-      { key: 'nav.programOneToOne', label: 'One-to-One Mentoring', to: '/coaching#program-one-to-one', descKey: 'mega.programOneToOneDesc', icon: Users },
-      { key: 'nav.programTeam', label: 'Team Sales Coaching', to: '/coaching', descKey: 'mega.programTeamDesc', icon: Users },
+      { key: 'nav.programOneToOne', label: 'One-to-One Mentoring', to: '/one-to-one', descKey: 'mega.programOneToOneDesc', icon: Users },
+      { key: 'nav.programMastery', label: 'Luxury Sales Mastery', to: '/luxarysales', descKey: 'mega.programMasteryDesc', icon: Gem },
+      { key: 'nav.programHighTicket', label: 'High Ticket Sales Mastery', to: '/highticketsales', descKey: 'mega.programHighTicketDesc', icon: Layers },
     ],
   },
   {

@@ -9,6 +9,9 @@ import { Link } from 'react-router-dom'
 const CRAWLABLE_LINKS = [
   { label: 'Home', to: '/' },
   { label: 'Coaching', to: '/coaching' },
+  { label: 'One-to-One Mentoring', to: '/one-to-one' },
+  { label: 'Luxury Sales Mastery', to: '/luxarysales' },
+  { label: 'High Ticket Sales Mastery', to: '/highticketsales' },
   { label: 'Business Consulting', to: '/consulting' },
   { label: 'Branding and Marketing', to: '/brandconsulting' },
   { label: 'Sales Mandate', to: '/realty' },
