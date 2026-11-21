@@ -306,7 +306,7 @@
 .rw-pur-line strong, .rw-pur-line b { color: var(--ink); font-weight: 400; text-align: right; }
 
 /* --- Status ------------------------------------------------------------------ */
-.rw-pur-status { text-align: center; padding: clamp(70px, 9vw, 110px) 0 clamp(60px, 8vw, 90px); max-width: 720px; margin: 0 auto; }
+.rw-pur-status { text-align: center; padding: var(--rw-sy-lg) 0 var(--rw-sy); max-width: 720px; margin: 0 auto; }
 .rw-pur-ring {
   width: 64px;
   height: 64px;

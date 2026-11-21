@@ -17,7 +17,7 @@ export default function TeamSection() {
 
   return (
     <section id="team" style={{ ...sectionRule, background: 'var(--chip)' }}>
-      <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+      <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
         <SectionHead
           eyebrow={t('portfolio.team.eyebrow')} faded size="lg" titleWidth="14em"
           space="clamp(30px,3.4vw,44px)"

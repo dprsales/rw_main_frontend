@@ -7,7 +7,7 @@ import { fs, body, container, eyebrow, sectionHeadingLg } from '../styles'
 export default function AboutSection() {
   const { t } = useLang()
   return (
-    <section id="about" className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,120px) 40px' }}>
+    <section id="about" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
       <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.9fr 1.1fr', gap: 'clamp(32px,6vw,90px)', alignItems: 'start' }}>
         <div>
           <Reveal style={{ ...eyebrow, letterSpacing: '.24em', marginBottom: 22 }}>{t('portfolio.about.eyebrow')}</Reveal>

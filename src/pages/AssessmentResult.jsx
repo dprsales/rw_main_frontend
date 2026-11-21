@@ -84,7 +84,7 @@ export default function AssessmentResult() {
       {/* Welcome band — this is where KRISAH's back button lands */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', position: 'relative', overflow: 'hidden' }}>
         <img src={goldWatermark} alt="" aria-hidden className="rw-watermark is-right" />
-        <div className="rw-pad" style={{ ...container, maxWidth: 880, padding: 'clamp(80px,10vw,110px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+        <div className="rw-pad" style={{ ...container, maxWidth: 880, padding: 'var(--rw-sy) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrow, marginBottom: 20 }}>{t('result.eyebrow')}</Reveal>
           <Reveal as="h1" delay={80} style={{ ...sectionHeading, fontSize: fs('clamp(30px,4.2vw,52px)'), lineHeight: 1.1 }}>
             {t('result.title')}
@@ -110,7 +110,7 @@ export default function AssessmentResult() {
       </section>
 
       {/* The sixteen areas — the curated list ships with the write-up */}
-      <section id="capture" className="rw-pad" style={{ ...container, ...sectionRule, padding: 'clamp(80px,10vw,110px) 40px' }}>
+      <section id="capture" className="rw-pad" style={{ ...container, ...sectionRule, padding: 'var(--rw-sy) 40px' }}>
         <SectionHead
           eyebrow={t('result.after.eyebrow')} titleWidth="14em"
           title={t('result.after.title')}
@@ -175,7 +175,7 @@ export default function AssessmentResult() {
 
       {/* Not ready to book? */}
       <section style={{ ...sectionRule, background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, maxWidth: 880, padding: 'clamp(70px,9vw,100px) 40px', textAlign: 'center' }}>
+        <div className="rw-pad" style={{ ...container, maxWidth: 880, padding: 'var(--rw-sy) 40px', textAlign: 'center' }}>
           <Reveal style={{ marginBottom: 22, display: 'flex', justifyContent: 'center' }}>
             <img
               src={goldLockup}

@@ -239,7 +239,7 @@ export default function AssessmentForm({
           </Reveal>
         </section>
 
-        <section className="rw-form-pad rw-form-wrap" style={{ padding: '10px 40px clamp(80px,10vw,120px)' }}>
+        <section className="rw-form-pad rw-form-wrap" style={{ padding: '10px 40px var(--rw-sy)' }}>
           <div className="rw-form-tracks">
             {TRACK_ORDER.map((key, i) => {
               const item = ASSESSMENT_TRACKS[key]

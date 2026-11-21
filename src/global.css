@@ -17,14 +17,12 @@ img, svg, video, canvas { max-width: 100%; }
 /* `svh` is the small-viewport height, so a phone's address bar leaves no dead space. */
 .rw-app-shell { min-height: 100vh; min-height: 100svh; }
 
-/* SECTION RHYTHM - the vertical padding every page section uses. It follows the
-   viewport's height as well as its width, so a short 1366x768 laptop no longer gets
-   the full 110-130px band top and bottom (a third of the screen between sections),
-   while large desktops keep the same generous breathing room as before. */
+/* SECTION RHYTHM - vertical padding between page bands. Kept denser so stacked
+   sections do not read as empty half-screens on laptops. */
 :root {
-  --rw-sy-lg: clamp(64px, min(9vw, 13vh), 120px);
-  --rw-sy: clamp(56px, min(8vw, 11.5vh), 104px);
-  --rw-sy-sm: clamp(48px, min(6.5vw, 9vh), 84px);
+  --rw-sy-lg: clamp(40px, min(5.5vw, 8vh), 72px);
+  --rw-sy: clamp(32px, min(4.5vw, 6.5vh), 56px);
+  --rw-sy-sm: clamp(24px, min(3.5vw, 5vh), 40px);
   /* Telugu scale (1 = English). Indic glyphs read heavier at the same px. */
   --rw-te: 1;
   --rw-te-display: 1;
@@ -1811,7 +1809,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
 .rw-footer-inner {
   max-width: 1320px;
   margin: 0 auto;
-  padding: clamp(56px, 7vw, 88px) 40px clamp(28px, 3vw, 36px);
+  padding: var(--rw-sy-lg) 40px clamp(24px, 3vw, 32px);
 }
 .rw-footer-back {
   margin-bottom: 28px;
@@ -4908,7 +4906,7 @@ html[lang="te"] .rw-contact-row {
 .rw-projx-render {
   position: absolute; z-index: 1; pointer-events: none;
   right: max(40px, calc((100% - 1320px) / 2 + 40px));
-  top: clamp(64px, 8vw, 96px); bottom: clamp(36px, 5vw, 72px);
+  top: var(--rw-sy); bottom: clamp(36px, 5vw, 72px);
   /* Right half only. A wide scene crops from the left instead of covering the type. */
   width: min(58%, 860px);
 }
@@ -5789,7 +5787,7 @@ body.rw-faqs-page [class*="fb_"] {
   border-left-color: var(--copper);
 }
 .rw-faqs-cat:focus-visible { outline: 1px solid var(--copper); outline-offset: 3px; }
-.rw-faqs-section { padding: 72px 0; scroll-margin-top: 120px; }
+.rw-faqs-section { padding: var(--rw-sy) 0; scroll-margin-top: 120px; }
 .rw-faqs-section:first-child { padding-top: 8px; }
 .rw-faqs-title {
   margin: 0 0 28px;
@@ -5906,7 +5904,7 @@ body.rw-faqs-page [class*="fb_"] {
   }
   .rw-faqs-chip.is-active { border-color: var(--copper); color: var(--copper); }
   .rw-faqs-title { font-size: 28px; }
-  .rw-faqs-section { padding: 56px 0; }
+  .rw-faqs-section { padding: var(--rw-sy-sm) 0; }
   .rw-faqs-q { font-size: 17px; }
 }
 @media (max-width: 767px) {

@@ -102,8 +102,8 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
       className={`rw-finder rw-pad${variant === 'page' ? ' rw-finder--page' : ''}${className ? ` ${className}` : ''}`}
       style={{
         padding: variant === 'page'
-          ? '80px 40px clamp(80px,10vw,120px)'
-          : 'clamp(56px, 7vw, 88px) 40px',
+          ? 'var(--rw-sy-lg) 40px var(--rw-sy)'
+          : 'var(--rw-sy-lg) 40px',
         borderTop: variant === 'inline' ? '1px solid var(--line)' : 'none',
       }}
       aria-labelledby="finder-heading"

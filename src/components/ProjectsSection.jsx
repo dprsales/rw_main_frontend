@@ -301,7 +301,7 @@ export default function ProjectsSection({ id = 'projects' }) {
 
   return (
     <section id={id} style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
-      <div className="rw-pad" style={{ ...container, padding: 'clamp(58px, 6vw, 80px) 40px' }}>
+      <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
         <div className="rw-influence-head">
           <div className="rw-influence-heading">
             <div style={{ ...eyebrowFaded, marginBottom: 14 }}>{t('projects.map.eyebrow')}</div>

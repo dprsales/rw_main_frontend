@@ -50,7 +50,7 @@ export default function ExperienceSection() {
 
   return (
     <section id="experience" style={{ ...sectionRule, background: 'var(--chip)' }}>
-      <div className="rw-pad" style={{ ...container, padding: 'clamp(90px,11vw,120px) 40px' }}>
+      <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
         <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.34fr .66fr', gap: 48 }}>
           {/* Pinned while the track scrolls past — the heading stays as context. */}
           <div className="rw-sticky-aside">

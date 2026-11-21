@@ -131,7 +131,7 @@ export const ROUTE_SEO = {
   '/gallery': {
     title: 'Sales Video Gallery | Rajiv Williams',
     description:
-      'Watch Rajiv Williams on real estate sales, rejection, objections, negotiation, and revenue systems. YouTube talks for sales teams and founders.',
+      'Watch talks on real estate sales, rejection, objections, negotiation, and revenue systems. Videos and images from Team RW.',
   },
   '/faqs': {
     title: 'FAQs | Coaching, Consulting, Mandates | Rajiv Williams',

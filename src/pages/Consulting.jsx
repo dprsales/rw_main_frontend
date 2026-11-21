@@ -240,7 +240,7 @@ export default function Consulting() {
 
       <section style={{ ...sectionRule, position: 'relative', overflow: 'hidden' }}>
         <img src={hydMark} alt="" aria-hidden className="rw-watermark is-right" />
-        <div className="rw-pad" style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(90px,12vw,130px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+        <div className="rw-pad" style={{ maxWidth: 900, margin: '0 auto', padding: 'var(--rw-sy-lg) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal>
             <PullQuote name="SANDEEP KYLAS">
               {t('consult.test')}

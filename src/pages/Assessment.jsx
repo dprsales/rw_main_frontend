@@ -118,7 +118,7 @@ export default function Assessment() {
           }}
         />
         <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(11,10,9,.55) 0%, rgba(11,10,9,.22) 45%, rgba(11,10,9,.62) 100%)' }} />
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(64px,8vw,96px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrow, marginBottom: 16 }}>{t('assess.team')}</Reveal>
           <Reveal as="p" className="rw-te-display" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12 }}>
             {t('assess.stand.a')}
@@ -134,7 +134,7 @@ export default function Assessment() {
 
       {/* The session + how it runs — one section keeps the page tight */}
       <section id="how" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <div className="rw-grid-2 rw-assessment-session-grid">
             <Reveal delay={120} className="rw-assessment-session-content">
               <div style={{ ...eyebrow, fontSize: fs('clamp(14px,1vw,18px)'), marginBottom: 20 }}>{t('assess.session.eyebrow')}</div>
@@ -184,7 +184,7 @@ export default function Assessment() {
       {/* What the report shows — six dimensions + a sample report card */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)', position: 'relative', overflow: 'hidden' }}>
         <img src={goldWatermark} alt="" aria-hidden className="rw-watermark is-left" />
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px', position: 'relative' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px', position: 'relative' }}>
           <SectionHead
             eyebrow={t('assess.report.eyebrow')} titleWidth="12em"
             title={t('assess.report.title')}
@@ -247,7 +247,7 @@ export default function Assessment() {
       </section>
 
       {/* What happens after */}
-      <section className="rw-pad" style={{ ...container, ...sectionRule, padding: 'clamp(80px,10vw,110px) 40px' }}>
+      <section className="rw-pad" style={{ ...container, ...sectionRule, padding: 'var(--rw-sy) 40px' }}>
         <CenteredHead
           eyebrow={t('assess.after.eyebrow')}
           title={<><span style={{ color: 'var(--copper)' }}>{t('assess.after.a')}</span>{t('assess.after.b')}</>}
@@ -274,7 +274,7 @@ export default function Assessment() {
             pointerEvents: 'none', userSelect: 'none',
           }}
         />
-        <div className="rw-pad" style={{ maxWidth: 720, margin: '0 auto', padding: 'clamp(70px,9vw,100px) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+        <div className="rw-pad" style={{ maxWidth: 720, margin: '0 auto', padding: 'var(--rw-sy) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrow, marginBottom: 24 }}>{t('assess.note.eyebrow')}</Reveal>
           <Reveal delay={100}>
             <PullQuote size="clamp(21px,2.6vw,28px)" lineHeight={1.5}>

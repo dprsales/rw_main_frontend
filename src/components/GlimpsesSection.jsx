@@ -24,7 +24,7 @@ export default function GlimpsesSection({ showCta = true, linkTo = '/about' }) {
   const frameStyle = { display: 'block', height: '100%', border: '1px solid var(--line)', overflow: 'hidden' }
 
   return (
-    <section className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+    <section className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
       <SectionHead
         eyebrow="GLIMPSES" size="sm" space={30}
         title="Where the work happens."

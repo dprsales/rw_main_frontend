@@ -126,7 +126,7 @@ export default function LegalPage({ route, eyebrow, title, lede, blocks }) {
           )}
         />
         <section style={{ ...sectionRule }}>
-          <article className="rw-pad" style={{ ...container, padding: 'clamp(28px,4vw,48px) 40px clamp(80px,10vw,120px)' }}>
+          <article className="rw-pad" style={{ ...container, padding: 'clamp(28px,4vw,48px) 40px var(--rw-sy)' }}>
             <div className="rw-legal">
               <nav className="rw-legal-contents" aria-label="On this page">
                 {sections.map((section) => {

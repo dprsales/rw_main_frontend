@@ -282,7 +282,7 @@ export default function Portfolio() {
       </section>
 
       <ClosingCTA
-        pad="clamp(90px,12vw,130px)" titleStyle={{ fontStyle: 'italic' }}
+        pad="var(--rw-sy-lg)" titleStyle={{ fontStyle: 'italic' }}
         title={t('portfolio.close')}
       >
         <BookButton to="/realty/form" specular>{t('portfolio.book')}</BookButton>

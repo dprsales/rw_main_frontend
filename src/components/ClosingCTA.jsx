@@ -11,7 +11,7 @@ export default function ClosingCTA({
   title,
   titleStyle,
   width = 900,
-  pad = 'clamp(90px,11vw,120px)',
+  pad = 'var(--rw-sy-lg)',
   children,
 }) {
   return (

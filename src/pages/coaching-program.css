@@ -137,7 +137,7 @@
   width: 100%;
   max-width: var(--cp-max);
   margin: 0 auto;
-  padding: clamp(56px, 7vw, 80px) 40px;
+  padding: var(--rw-sy) 40px;
 }
 
 .rw-cp-section.is-chip {
@@ -260,7 +260,7 @@
   width: 100%;
   max-width: var(--cp-max);
   margin: 0 auto;
-  padding: clamp(48px, 7vw, 72px) 40px;
+  padding: var(--rw-sy-lg) 40px;
   border-top: 1px solid var(--line);
 }
 

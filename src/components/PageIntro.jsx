@@ -16,7 +16,7 @@ export default function PageIntro({
   introStyle,
   cta,
   extra,
-  padding = '80px 40px 30px',
+  padding = 'clamp(48px, 6vw, 72px) 40px 24px',
   image,
   imageAlt = '',
 }) {

@@ -14,6 +14,10 @@ export const GALLERY_VIDEOS = [
     long: true,
   },
   {
+    id: '7cWmf_thsrc',
+    title: 'Does Hyderabad deserve ₹177 crore per acre? Sandip Patnaik',
+  },
+  {
     id: 'G98oAxBOFmI',
     title: 'PVR Developers with Rajiv Williams at TREDA Property Show 2021',
     views: 11528,

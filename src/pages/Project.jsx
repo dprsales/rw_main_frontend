@@ -61,7 +61,7 @@ function Section({ id, eyebrow: kicker, title, intro, chip = false, bleed = fals
     : { fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(30px,3.4vw,46px)'), letterSpacing: '-.015em', lineHeight: 1.08, color: 'var(--ink)', maxWidth: '15em' }
   return (
     <section id={id} style={{ ...sectionRule, ...(chip ? { background: 'var(--chip)' } : {}) }}>
-      <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,11vw,140px) 40px' }}>
+      <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
         {(kicker || title) && (
           <Reveal style={{ marginBottom: 'clamp(36px,5vw,64px)' }}>
             {kicker && <div style={{ ...eyebrow, marginBottom: 18 }}>{kicker}</div>}
@@ -696,7 +696,7 @@ function ProjectBody({ data, name }) {
             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(11,10,9,.72), rgba(11,10,9,.86))' }} />
           </div>
         )}
-        <div className="rw-pad" style={{ position: 'relative', zIndex: 1, maxWidth: 900, margin: '0 auto', padding: 'clamp(100px,14vw,180px) 40px', textAlign: 'center' }}>
+        <div className="rw-pad" style={{ position: 'relative', zIndex: 1, maxWidth: 900, margin: '0 auto', padding: 'var(--rw-sy-lg) 40px', textAlign: 'center' }}>
           <Reveal as="h2" style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(34px,5vw,68px)'), lineHeight: 1.04, letterSpacing: '-.02em', color: '#F2EFE9', maxWidth: '15em', margin: '0 auto' }}>
 Let’s connect and discover if {name} feels like home.
 </Reveal>

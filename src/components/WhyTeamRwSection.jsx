@@ -11,7 +11,7 @@ export default function WhyTeamRwSection() {
 
   return (
     <section id="why-team-rw" style={{ ...sectionRule, background: 'var(--card)' }}>
-      <div className="rw-pad" style={{ ...container, padding: 'clamp(80px,10vw,110px) 40px' }}>
+      <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
         <Reveal as="h2" style={{ ...sectionHeading, fontSize: fs('clamp(28px,3.4vw,44px)'), lineHeight: 1.05, maxWidth: '12em' }}>
           {t('about.whyTitle')}
         </Reveal>
