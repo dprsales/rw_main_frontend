@@ -297,7 +297,7 @@ export default function Coaching() {
       </section> */}
 
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px' }}>
           <SectionHead
             eyebrow={t('coach.achieve.eyebrow')} titleWidth="11em"
             title={t('coach.achieve.title')}
@@ -308,29 +308,47 @@ export default function Coaching() {
         </div>
       </section>
 
-      <section id="assessment" className="rw-pad" style={{ ...container, padding: 'clamp(64px, 8vw, 96px) 40px' }}>
-        <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 64, alignItems: 'center' }}>
+      <ServiceLandingForm trackKey="coaching" />
+
+      <section id="curriculum" className="rw-pad" style={{ ...sectionRule, background: 'var(--chip)' }}>
+        <div style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px' }}>
+          <SectionHead
+            eyebrow={t('coach.syllabus.eyebrow')} titleWidth="15em"
+            title={t('coach.syllabus.title')}
+            aside={<SectionAside width="24em">{t('coach.syllabus.aside')}</SectionAside>}
+          />
+
+          <SyllabusCloud categories={curriculum} hint={t('coach.syllabus.hint')} />
+        </div>
+      </section>
+
+      <section
+        id="assessment"
+        className="rw-pad"
+        style={{ ...container, padding: 'clamp(32px, 4vw, 52px) 40px', borderBottom: '1px solid var(--line)' }}
+      >
+        <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 48, alignItems: 'center' }}>
           <Reveal>
-            <div style={{ ...eyebrow, marginBottom: 18 }}>{t('coach.assess.eyebrow')}</div>
+            <div style={{ ...eyebrow, marginBottom: 14 }}>{t('coach.assess.eyebrow')}</div>
             <h2 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(28px,3.6vw,42px)'), lineHeight: 1.1, color: 'var(--ink)', maxWidth: '14em' }}>
               {t('coach.assess.title')}
             </h2>
-            <p style={{ ...note, marginTop: 22, fontSize: fs('16px'), lineHeight: 1.6, maxWidth: '34em' }}>
+            <p style={{ ...note, marginTop: 18, fontSize: fs('16px'), lineHeight: 1.6, maxWidth: '34em' }}>
               {t('coach.assess.lede')}
             </p>
-            <div style={{ marginTop: 32 }}>
+            <div style={{ marginTop: 24 }}>
               <CtaButton to="/assessment" live onClick={() => track('assessment_page_click', { location: 'coaching-assessment-section' })}>
                 {t('coach.assess.cta')} <span className="rw-cta-arrow">→</span>
               </CtaButton>
             </div>
           </Reveal>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <Reveal>
               <div style={{ ...eyebrow, marginBottom: 4 }}>{t('coach.assess.measures')}</div>
             </Reveal>
             {assessmentAreas.map((area, i) => (
-              <Reveal key={area.n} delay={i * 70} style={{ display: 'flex', gap: 18, borderTop: '1px solid var(--line)', paddingTop: 12 }}>
+              <Reveal key={area.n} delay={i * 70} style={{ display: 'flex', gap: 18, borderTop: '1px solid var(--line)', paddingTop: 10 }}>
                 <span style={{ fontFamily: serif, fontSize: fs('22px'), color: 'var(--copper)', lineHeight: 1, flexShrink: 0, width: 28 }}>{area.n}</span>
                 <div>
                   <div style={{ fontFamily: serif, fontSize: fs('18px'), color: 'var(--ink)', lineHeight: 1.3 }}>{area.title}</div>
@@ -342,23 +360,11 @@ export default function Coaching() {
         </div>
       </section>
 
-      <section id="curriculum" className="rw-pad" style={{ ...sectionRule, background: 'var(--chip)' }}>
-        <div style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
-          <SectionHead
-            eyebrow={t('coach.syllabus.eyebrow')} titleWidth="15em"
-            title={t('coach.syllabus.title')}
-            aside={<SectionAside width="24em">{t('coach.syllabus.aside')}</SectionAside>}
-          />
-
-          <SyllabusCloud categories={curriculum} hint={t('coach.syllabus.hint')} />
-        </div>
-      </section>
-
-      <section style={{ background: 'var(--bg)', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ background: 'var(--chip)', borderBottom: '1px solid var(--line)', position: 'relative', overflow: 'hidden' }}>
         <img src={hydMark} alt="" aria-hidden className="rw-watermark rw-coaching-testimonial-mark is-left" />
-        <div className="rw-pad rw-coaching-testimonials" style={{ maxWidth: 1200, margin: '0 auto', padding: 'var(--rw-sy) 40px', position: 'relative', zIndex: 1 }}>
+        <div className="rw-pad rw-coaching-testimonials" style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(28px, 3.5vw, 44px) 40px', position: 'relative', zIndex: 1 }}>
           {testimonials.map((row, i) => (
-            <Reveal key={row.name} delay={i * 90} style={{ padding: '30px 0', textAlign: 'center' }}>
+            <Reveal key={row.name} delay={i * 90} style={{ padding: '14px 0', textAlign: 'center' }}>
               <PullQuote as="p" size="clamp(16px,1.5vw,20px)" lineHeight={1.5} space={16} name={row.name}>
                 “{row.text}”
               </PullQuote>
@@ -367,8 +373,8 @@ export default function Coaching() {
         </div>
       </section>
 
-      <section style={{ background: 'var(--chip)', borderTop: '1px solid var(--line)' }}>
-        <div className="rw-pad" style={{ maxWidth: 900, margin: '0 auto', padding: 'var(--rw-sy) 40px', textAlign: 'center' }}>
+      <section style={{ background: 'var(--bg)' }}>
+        <div className="rw-pad" style={{ maxWidth: 900, margin: '0 auto', padding: 'clamp(32px, 4vw, 52px) 40px', textAlign: 'center' }}>
           <Reveal>
             <PullQuote as="p" size="clamp(26px,3.6vw,44px)" lineHeight={1.2}>
               {t('coach.quote')}
@@ -376,13 +382,11 @@ export default function Coaching() {
             <img
               src={signature}
               alt="Rajiv Williams"
-              style={{ display: 'block', width: 'min(220px, 70%)', height: 'auto', margin: '30px auto 0' }}
+              style={{ display: 'block', width: 'min(220px, 70%)', height: 'auto', margin: '20px auto 0' }}
             />
           </Reveal>
         </div>
       </section>
-
-      <ServiceLandingForm trackKey="coaching" />
 
       <Footer links={FOOTER_LINKS} />
     </>

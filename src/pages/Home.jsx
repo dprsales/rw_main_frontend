@@ -523,7 +523,7 @@ export default function Home() {
 
       {/* Philosophy */}
       {/* <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ maxWidth: 1000, margin: '0 auto', padding: 'clamp(80px,11vw,130px) 40px', textAlign: 'center' }}>
+        <div className="rw-pad" style={{ maxWidth: 1000, margin: '0 auto', padding: 'var(--rw-sy-lg) 40px', textAlign: 'center' }}>
           <Reveal as="h2" style={{ ...sectionHeadingLg, fontSize: fs('clamp(30px,4.2vw,56px)'), lineHeight: 1.1 }}>
 He helps developers and their sales teams<br />
             <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>sell homes in Hyderabad.</span>
@@ -626,7 +626,7 @@ He helps developers and their sales teams<br />
         </div>
       </section>
 
-      <section id="support" className="rw-pad" style={{ ...container, padding: 'clamp(28px, 3.5vw, 44px) 40px var(--rw-sy-lg)' }}>
+      <section id="support" className="rw-pad" style={{ ...container, padding: 'clamp(28px, 3.5vw, 44px) 40px clamp(32px, 4vw, 48px)' }}>
         <SectionHead
           titleWidth="12em"
           title={t('home.more.title')}
