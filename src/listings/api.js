@@ -52,15 +52,12 @@ async function request(path, { method = 'GET', body, auth = false, signal } = {}
   return data
 }
 
-// ---------- listing accounts ----------
+// ---------- listing accounts (passwordless: email + Gmail OTP) ----------
 export const checkEmail = (email) => request('/listing-auth/check-email', { method: 'POST', body: { email } })
-export const register = (payload) => request('/listing-auth/register', { method: 'POST', body: payload })
-export const login = (email, password) =>
-  request('/listing-auth/login', { method: 'POST', body: { email, password } })
-export const forgotPassword = (email) =>
-  request('/listing-auth/forgot-password', { method: 'POST', body: { email } })
-export const resetPassword = (token, password) =>
-  request('/listing-auth/reset-password', { method: 'POST', body: { token, password } })
+export const requestOtp = (payload) =>
+  request('/listing-auth/request-otp', { method: 'POST', body: payload })
+export const verifyOtp = (email, code) =>
+  request('/listing-auth/verify-otp', { method: 'POST', body: { email, code } })
 export const getMe = () => request('/listing-auth/me', { auth: true })
 export const updateMe = (payload) =>
   request('/listing-auth/me', { method: 'PATCH', body: payload, auth: true })

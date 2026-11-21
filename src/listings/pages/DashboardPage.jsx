@@ -223,7 +223,7 @@ function ProfilePanel() {
         <button className="btn-primary" disabled={state.saving}>{state.saving ? <><span className="spinner" /> Saving…</> : 'Save changes'}</button>
         {state.saved && <span className="text-sm text-emerald-300">✓ Saved</span>}
       </div>
-      <p className="mt-6 text-xs text-faded">To change your password, log out and use “Forgot password?” on the login page.</p>
+      <p className="mt-6 text-xs text-faded">Sign-in uses a one-time code emailed to you. No password to change.</p>
     </form>
   )
 }

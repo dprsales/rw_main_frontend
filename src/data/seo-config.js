@@ -92,7 +92,7 @@ export const ROUTE_SEO = {
   },
   '/listings/login': {
     title: 'Listing Login | RW Realty',
-    description: 'Sign in to manage your property listings with Team RW.',
+    description: 'Sign in with a one-time email code to manage your property listings with Team RW.',
   },
   '/listings/dashboard': {
     title: 'Listing Dashboard | RW Realty',

@@ -1,59 +1,43 @@
-import { useState } from 'react'
-import { checkEmail, forgotPassword } from '../api'
+import { useEffect, useRef, useState } from 'react'
+import { checkEmail, requestOtp } from '../api'
 import { useListingAuth } from '../AuthContext'
 import { ErrorNote } from './ui'
 
 const EMAIL_RX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
-function PasswordInput({ value, onChange, placeholder, autoComplete, autoFocus }) {
-  const [show, setShow] = useState(false)
-  return (
-    <div className="flex overflow-hidden rounded-md border border-line bg-night focus-within:border-gold-500">
-      <input
-        type={show ? 'text' : 'password'}
-        className="w-full bg-transparent px-3.5 py-3 text-sm text-ink outline-none placeholder:text-faded/70"
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        autoComplete={autoComplete}
-        autoFocus={autoFocus}
-      />
-      <button type="button" onClick={() => setShow((s) => !s)} className="px-3.5 text-xs text-faded hover:text-gold-300">
-        {show ? 'Hide' : 'Show'}
-      </button>
-    </div>
-  )
-}
-
-function strength(pw) {
-  let s = 0
-  if (pw.length >= 8) s++
-  if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) s++
-  if (/\d/.test(pw)) s++
-  if (/[^A-Za-z0-9]/.test(pw) || pw.length >= 12) s++
-  return s
-}
-
 /**
- * Replaces the old "mobile number + OTP" card:
- *   1. email + city           → check if the email already has an account
- *   2a. new email             → create password (+ name, optional mobile)
- *   2b. existing email        → enter password (or reset it by email)
+ * Passwordless listing auth (email + Gmail code):
+ *   1. email (+ city / sell-rent for listing mode)
+ *   2a. new email   → name + optional mobile → send code
+ *   2b. existing    → send code
+ *   3. enter 6-digit code from email
  */
 export default function AuthCard({ data, update, onAuthed, mode = 'listing' }) {
   const accountMode = mode === 'account'
-  const { register, login } = useListingAuth()
-  const [stage, setStage] = useState('email') // email | create | login | forgot
-  const [password, setPassword] = useState('')
-  const [confirm, setConfirm] = useState('')
+  const { verifyOtp } = useListingAuth()
+  const [stage, setStage] = useState('email') // email | details | code
+  const [isNew, setIsNew] = useState(false)
   const [name, setName] = useState('')
   const [mobile, setMobile] = useState('')
+  const [code, setCode] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
+  const [resendIn, setResendIn] = useState(0)
+  const codeRef = useRef(null)
 
   const email = (data.email || '').trim().toLowerCase()
   const canContinue = EMAIL_RX.test(email) && (accountMode || (data.listingType && data.city?.trim()))
+
+  useEffect(() => {
+    if (resendIn <= 0) return undefined
+    const t = setTimeout(() => setResendIn((n) => n - 1), 1000)
+    return () => clearTimeout(t)
+  }, [resendIn])
+
+  useEffect(() => {
+    if (stage === 'code') codeRef.current?.focus()
+  }, [stage])
 
   const run = async (fn) => {
     if (loading) return
@@ -69,44 +53,58 @@ export default function AuthCard({ data, update, onAuthed, mode = 'listing' }) {
     }
   }
 
+  const sendCode = async ({ forNew }) => {
+    const res = await requestOtp({
+      email,
+      name: forNew ? name.trim() : undefined,
+      mobile: forNew && mobile ? mobile : undefined,
+      city: (data.city || '').trim() || undefined,
+    })
+    setNotice(res.message)
+    setCode('')
+    setStage('code')
+    setResendIn(30)
+  }
+
   const onContinue = (e) => {
     e.preventDefault()
     if (!canContinue) return
     run(async () => {
       const { exists } = await checkEmail(email)
-      setPassword('')
-      setConfirm('')
-      setStage(exists ? 'login' : 'create')
+      setIsNew(!exists)
+      if (exists) {
+        await sendCode({ forNew: false })
+      } else {
+        setStage('details')
+      }
     })
   }
 
-  const onCreate = (e) => {
+  const onDetails = (e) => {
     e.preventDefault()
-    if (password.length < 8) return setError('Password must be at least 8 characters.')
-    if (password !== confirm) return setError('Passwords do not match.')
+    if (!name.trim()) return setError('Please enter your name.')
     if (mobile && !/^\d{10}$/.test(mobile)) return setError('Mobile must be a 10 digit number.')
     run(async () => {
-      await register({ email, password, name: name.trim(), mobile, city: (data.city || '').trim() || undefined })
-      onAuthed()
+      await sendCode({ forNew: true })
     })
   }
 
-  const onLogin = (e) => {
+  const onVerify = (e) => {
     e.preventDefault()
-    if (!password) return setError('Please enter your password.')
+    if (!/^\d{6}$/.test(code)) return setError('Enter the 6-digit code from your email.')
     run(async () => {
-      await login(email, password)
+      await verifyOtp(email, code)
       onAuthed()
     })
   }
 
-  const onForgot = () =>
+  const onResend = () => {
+    if (resendIn > 0) return
     run(async () => {
-      const res = await forgotPassword(email)
-      setNotice(res.message)
+      await sendCode({ forNew: isNew })
     })
+  }
 
-  const pwScore = strength(password)
   const header = (title, sub) => (
     <>
       <p className="eyebrow">{accountMode ? 'My account' : 'Upload property · free'}</p>
@@ -114,10 +112,20 @@ export default function AuthCard({ data, update, onAuthed, mode = 'listing' }) {
       <p className="mb-6 mt-1 text-sm text-faded">{sub}</p>
     </>
   )
+
   const emailLine = (
     <p className="mb-5 flex items-center justify-between gap-2 rounded-md border border-line bg-night/50 px-3 py-2.5 text-sm">
       <span className="truncate text-ink">{email}</span>
-      <button type="button" className="shrink-0 text-xs font-medium text-gold-300 hover:underline" onClick={() => { setStage('email'); setError(''); setNotice('') }}>
+      <button
+        type="button"
+        className="shrink-0 text-xs font-medium text-gold-300 hover:underline"
+        onClick={() => {
+          setStage('email')
+          setError('')
+          setNotice('')
+          setCode('')
+        }}
+      >
         Change
       </button>
     </p>
@@ -128,105 +136,139 @@ export default function AuthCard({ data, update, onAuthed, mode = 'listing' }) {
       {stage === 'email' && (
         <form onSubmit={onContinue} noValidate>
           {accountMode
-            ? header('Log in', 'Use your email and password to open your dashboard. New here? We will help you create an account.')
-            : header('Upload your property', 'Create a free account, then add photos and details. No marketing fee upfront.')}
+            ? header('Log in', 'We email you a one-time code. No password to remember.')
+            : header('Upload your property', 'Enter your details, then we email you a login code. No password to set.')}
 
-          {!accountMode && (<>
-          <label className="field-label">I want to</label>
-          <div className="mb-5 flex gap-3">
-            {['Sell', 'Rent / Lease'].map((opt) => (
-              <button key={opt} type="button" onClick={() => update('listingType', opt === 'Sell' ? 'Sale' : 'Rent')}
-                className={`toggle-btn ${(data.listingType === 'Rent') === (opt !== 'Sell') ? 'active' : ''}`}>
-                {opt}
-              </button>
-            ))}
-          </div>
-
-          </>)}
+          {!accountMode && (
+            <>
+              <label className="field-label">I want to</label>
+              <div className="mb-5 flex gap-3">
+                {['Sell', 'Rent / Lease'].map((opt) => (
+                  <button
+                    key={opt}
+                    type="button"
+                    onClick={() => update('listingType', opt === 'Sell' ? 'Sale' : 'Rent')}
+                    className={`toggle-btn ${(data.listingType === 'Rent') === (opt !== 'Sell') ? 'active' : ''}`}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
 
           <label className="field-label" htmlFor="sy-email">Email address</label>
-          <input id="sy-email" type="email" className="field-input mb-5" placeholder="you@example.com" autoComplete="email"
-            value={data.email || ''} onChange={(e) => update('email', e.target.value)} />
+          <input
+            id="sy-email"
+            type="email"
+            className="field-input mb-5"
+            placeholder="you@example.com"
+            autoComplete="email"
+            value={data.email || ''}
+            onChange={(e) => update('email', e.target.value)}
+          />
 
-          {!accountMode && (<>
-          <label className="field-label" htmlFor="sy-city">City</label>
-          <input id="sy-city" className="field-input mb-6" placeholder="e.g. Hyderabad" value={data.city || ''}
-            onChange={(e) => update('city', e.target.value)} />
-          </>)}
+          {!accountMode && (
+            <>
+              <label className="field-label" htmlFor="sy-city">City</label>
+              <input
+                id="sy-city"
+                className="field-input mb-6"
+                placeholder="e.g. Hyderabad"
+                value={data.city || ''}
+                onChange={(e) => update('city', e.target.value)}
+              />
+            </>
+          )}
 
           <ErrorNote>{error}</ErrorNote>
           <button type="submit" className="btn-primary mt-4 w-full" disabled={!canContinue || loading}>
             {loading ? <><span className="spinner" /> Checking…</> : 'Continue →'}
           </button>
-          <p className="mt-4 text-center text-[11px] text-faded">By continuing you agree to our terms. Your details are kept private.</p>
+          <p className="mt-4 text-center text-[11px] text-faded">
+            By continuing you agree to our terms. Your details are kept private.
+          </p>
         </form>
       )}
 
-      {stage === 'create' && (
-        <form onSubmit={onCreate} noValidate>
-          {header('Create your password', 'New here — set a password so you can log in any time to track your listings.')}
+      {stage === 'details' && (
+        <form onSubmit={onDetails} noValidate>
+          {header('Almost there', 'Tell us who you are. We will email a login code to finish.')}
           {emailLine}
 
           <label className="field-label">Full name</label>
-          <input className="field-input mb-4" placeholder="Your name or company" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} />
+          <input
+            className="field-input mb-4"
+            placeholder="Your name or company"
+            autoComplete="name"
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-          <label className="field-label">Mobile <span className="font-normal text-faded">(optional)</span></label>
+          <label className="field-label">
+            Mobile <span className="font-normal text-faded">(optional)</span>
+          </label>
           <div className="mb-4 flex overflow-hidden rounded-md border border-line bg-night focus-within:border-gold-500">
             <span className="flex items-center border-r border-line px-3 text-sm text-faded">+91</span>
-            <input className="w-full bg-transparent px-3.5 py-3 text-sm text-ink outline-none placeholder:text-faded/70" inputMode="numeric"
-              maxLength={10} placeholder="10 digit number" value={mobile} onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))} />
+            <input
+              className="w-full bg-transparent px-3.5 py-3 text-sm text-ink outline-none placeholder:text-faded/70"
+              inputMode="numeric"
+              maxLength={10}
+              placeholder="10 digit number"
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
+            />
           </div>
-
-          <label className="field-label">Create password</label>
-          <PasswordInput value={password} onChange={setPassword} placeholder="At least 8 characters" autoComplete="new-password" autoFocus />
-          <div className="mb-4 mt-2 flex gap-1">
-            {[0, 1, 2, 3].map((i) => (
-              <span key={i} className={`h-1 flex-1 rounded-full ${i < pwScore ? (pwScore < 2 ? 'bg-red-400' : pwScore < 3 ? 'bg-amber-400' : 'bg-emerald-400') : 'bg-chip'}`} />
-            ))}
-          </div>
-
-          <label className="field-label">Confirm password</label>
-          <PasswordInput value={confirm} onChange={setConfirm} placeholder="Re-enter password" autoComplete="new-password" />
-          {confirm && confirm !== password && <p className="mt-1.5 text-xs text-red-300">Passwords do not match</p>}
 
           <ErrorNote>{error}</ErrorNote>
-          <button type="submit" className="btn-primary mt-5 w-full" disabled={loading || password.length < 8 || password !== confirm}>
-            {loading ? <><span className="spinner" /> Creating account…</> : 'Create account & continue →'}
+          <button type="submit" className="btn-primary mt-5 w-full" disabled={loading || !name.trim()}>
+            {loading ? <><span className="spinner" /> Sending code…</> : 'Email me a login code →'}
           </button>
         </form>
       )}
 
-      {stage === 'login' && (
-        <form onSubmit={onLogin} noValidate>
-          {header('Welcome back', 'Log in with the password you created.')}
+      {stage === 'code' && (
+        <form onSubmit={onVerify} noValidate>
+          {header(
+            isNew ? 'Check your email' : 'Welcome back',
+            `Enter the 6-digit code we sent to your inbox. No password needed.`,
+          )}
           {emailLine}
 
-          <label className="field-label">Password</label>
-          <PasswordInput value={password} onChange={setPassword} placeholder="Your password" autoComplete="current-password" autoFocus />
-          <div className="mt-2 text-right">
-            <button type="button" onClick={() => { setStage('forgot'); setError(''); setNotice('') }} className="text-xs text-gold-300 hover:underline">
-              Forgot password?
-            </button>
-          </div>
+          {notice && (
+            <p className="mb-4 rounded-md border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-sm text-emerald-300">
+              {notice}
+            </p>
+          )}
+
+          <label className="field-label" htmlFor="sy-otp">Login code</label>
+          <input
+            ref={codeRef}
+            id="sy-otp"
+            className="field-input mb-2 tracking-[0.35em] text-center text-lg font-medium"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            maxLength={6}
+            placeholder="••••••"
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+          />
+          <p className="mb-4 text-xs text-faded">Code expires in 10 minutes. Check spam if you do not see it.</p>
 
           <ErrorNote>{error}</ErrorNote>
-          <button type="submit" className="btn-primary mt-5 w-full" disabled={loading || !password}>
-            {loading ? <><span className="spinner" /> Logging in…</> : 'Log in & continue →'}
+          <button type="submit" className="btn-primary mt-2 w-full" disabled={loading || code.length !== 6}>
+            {loading ? <><span className="spinner" /> Verifying…</> : 'Verify & continue →'}
+          </button>
+          <button
+            type="button"
+            className="btn-secondary mt-3 w-full"
+            disabled={loading || resendIn > 0}
+            onClick={onResend}
+          >
+            {resendIn > 0 ? `Resend code in ${resendIn}s` : 'Resend code'}
           </button>
         </form>
-      )}
-
-      {stage === 'forgot' && (
-        <div>
-          {header('Reset your password', "We'll email you a secure link to set a new password.")}
-          {emailLine}
-          <ErrorNote>{error}</ErrorNote>
-          {notice && <p className="mb-2 rounded-md border border-emerald-400/30 bg-emerald-400/10 px-3 py-2 text-sm text-emerald-300">{notice}</p>}
-          <button type="button" className="btn-primary mt-3 w-full" disabled={loading} onClick={onForgot}>
-            {loading ? <><span className="spinner" /> Sending…</> : 'Email me a reset link'}
-          </button>
-          <button type="button" className="btn-secondary mt-3 w-full" onClick={() => setStage('login')}>Back to log in</button>
-        </div>
       )}
     </div>
   )
