@@ -86,7 +86,7 @@ export default function Realty() {
           <div className="rw-realty-hero-copy">
             <Reveal style={{ ...eyebrow, marginBottom: 30 }}>{t('realty.hero.eyebrow')}</Reveal>
 
-            <h1 className="rw-realty-hero-title" style={{ ...pageHeading, fontSize: undefined, lineHeight: 1, maxWidth: '14em' }}>
+            <h1 className="rw-realty-hero-title" style={{ ...pageHeading, fontSize: undefined, lineHeight: undefined, maxWidth: '12em' }}>
               <RiseText lines={headline} step={0.12} />
             </h1>
 
@@ -163,6 +163,8 @@ export default function Realty() {
           </div>
         </div>
       </section>
+
+      <ServiceLandingForm trackKey="realty" />
 
       <section id="why" className="rw-pad rw-why-section" style={{ ...container, padding: 'var(--rw-sy-lg) 40px', position: 'relative', overflow: 'hidden' }}>
         <img src={skylineImage} alt="" aria-hidden className="rw-why-watermark" />
@@ -272,8 +274,6 @@ export default function Realty() {
           </Reveal>
         </div>
       </section>
-
-      <ServiceLandingForm trackKey="realty" />
 
       <Footer chip links={FOOTER_LINKS} />
     </>

@@ -158,7 +158,7 @@ export const OUTCOMES = {
 
 export const RULES = [
   { id: 'R1', who: 'investor', challenge: '*', goal: '*', outcome: 'realty_portfolio',
-    reason: 'You want to buy. Start with the RW Realty projects we sell.' },
+    reason: 'You want to buy. Start with the RW Realty projects Team RW represents.' },
   { id: 'R2', who: 'unsure', challenge: '*', goal: '*', outcome: 'strategy_call',
     reason: "A short call will help us pick the right fit together." },
 
@@ -189,9 +189,9 @@ export const RULES = [
   { id: 'R12', who: 'developer', challenge: '*', goal: 'fix_process', outcome: 'consulting',
     reason: 'Let us look at how sales is run - team, process, and tools. That is consulting.' },
   { id: 'R13', who: 'developer', challenge: '*', goal: 'hand_over', outcome: 'realty',
-    reason: 'You build. We sell. That is a sales mandate.' },
+    reason: 'You build. Team RW sells. That is a sales mandate.' },
   { id: 'R14', who: 'developer', challenge: '*', goal: 'unsure', outcome: 'strategy_call',
-    reason: 'Consulting, or we sell for you - a short call will make it clear.',
+    reason: 'Consulting with Rajiv, or a Team RW mandate. A short call will make it clear.',
     candidates: ['consulting', 'realty'] },
 ]
 

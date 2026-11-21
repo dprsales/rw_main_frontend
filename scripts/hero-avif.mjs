@@ -4,9 +4,9 @@ import path from 'path'
 
 const dir = path.resolve('src/assets/site')
 const jobs = [
-  ['hero-slider-coaching.jpg', 'hero-slider-coaching'],
-  ['hero-slider-consulting.jpg', 'hero-slider-consulting'],
-  ['hero-slider-realty.jpg', 'hero-slider-realty'],
+  ['hero-slider-coaching.jpeg', 'hero-slider-coaching'],
+  ['hero-slider-consulting.png', 'hero-slider-consulting'],
+  ['hero-slider-realty.png', 'hero-slider-realty'],
 ]
 
 for (const [src, base] of jobs) {

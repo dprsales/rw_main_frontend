@@ -22,7 +22,7 @@ export const FAQ_SECTIONS = [
     to: '/consulting',
     more: 'Explore Sales Consulting',
     items: [
-      { q: 'Do you advise us, or do you sell the inventory?', a: 'Consulting advises. Team RW audits the sales machine, designs what is missing, puts it into daily use, and tunes it on live numbers. Selling the project is a mandate, on Realty.' },
+      { q: 'Do you advise us, or do you sell the inventory?', a: 'Rajiv consults: he audits the sales machine, designs what is missing, and tunes it on live numbers. Team RW supports deployment where needed. Selling the project is a Team RW mandate on Realty.' },
       { q: 'What do you actually change?', a: 'We replace random conversions, discount-led closing, dependence on one star, and a pipeline nobody can see.' },
       { q: 'Do you also handle marketing, hiring, & channel partners?', a: 'Yes, beyond the four phases. Brand and performance marketing, PR, channel-partner activation, sales hiring, and team structure.' },
       { q: 'Can you name a developer you have worked with?', a: 'No. The public result only. A launch stuck at 22% sold, channel partners rebuilt from 40 dormant to 260 active, absorption tripled in ninety days, and revenue up 5×.' },
@@ -37,7 +37,7 @@ export const FAQ_SECTIONS = [
     to: '/realty',
     more: 'Explore Sales Mandate',
     items: [
-      { q: 'You build, we sell. Is that the deal?', a: 'Yes. An exclusive mandate. Team RW owns the sale from strategy to closure.' },
+      { q: 'You build, Team RW sells. Is that the deal?', a: 'Yes. An exclusive mandate. Team RW owns the sale from strategy to closure. Rajiv coaches and consults; the mandate floor is Team RW.' },
       { q: 'Does our own sales team stay?', a: 'Team RW puts its own trained team on site and owns the funnel. The mandate exists so the number is not split across brokers, an in-house team, and an agency. Where that split sits today is walked through when you discuss the mandate.' },
       { q: 'Who runs it day to day?', a: 'Priyanka Panda, Director of Sales. 8+ years in luxury branding, positioning, and high-value closures.' },
       { q: 'Will you discount to move stock?', a: 'No. Price is defended. The work is judged on absorption, the price realised, and sales on a construction schedule.' },
@@ -52,7 +52,7 @@ export const FAQ_SECTIONS = [
     to: '/assessment',
     more: 'Explore KRISAH Assessment',
     items: [
-      { q: 'Who is this for?', a: 'People looking at Sales Coaching or Sales Consulting with Team RW. It is not a general test for every role.' },
+      { q: 'Who is this for?', a: 'People looking at Sales Coaching or Sales Consulting with Rajiv. It is not a general test for every role.' },
       { q: 'How long does it take?', a: 'Twenty questions. Give yourself one uninterrupted sitting.' },
       { q: 'Do I get a report?', a: 'Yes. Inside KRISAH, after you answer, you get a report based on those answers.' },
       { q: 'Where does the interview run?', a: 'On KRISAH’s platform, in a new tab. Nothing is installed and yours to access.' },

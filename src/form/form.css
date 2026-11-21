@@ -189,7 +189,7 @@
   position: sticky;
   z-index: 40;
   background: var(--bg);
-  border-bottom: 1px solid var(--line);
+  /* Bottom edge is .rw-form-bar only. A border-bottom here doubled the line. */
 }
 /* Landing #enquire: sticky rail sat under the site header and painted over
    fields while scrolling the long panel. Keep progress, drop stickiness. */

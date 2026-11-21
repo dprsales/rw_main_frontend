@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import heroImage from '../assets/site/hero-rajiv.webp'
-import heroCoaching from '../assets/site/hero-slider-coaching.png'
-import heroConsulting from '../assets/site/hero-slider-consulting.jpg'
-import heroRealty from '../assets/site/hero-slider-realty.jpg'
+import heroCoaching from '../assets/site/hero-slider-coaching.jpeg'
+import heroConsulting from '../assets/site/hero-slider-consulting.png'
+import heroRealty from '../assets/site/hero-slider-realty.png'
 import { Lottie } from 'lottie-react'
 import peopleGrowthLottie from '../utils/people-growth.json'
 import salesSystemLottie from '../utils/sales-system.json'
@@ -149,7 +149,7 @@ function HeroTitle({ lang, t, slide }) {
         stagger={0.02}
         trigger="mount"
         fillMode="wipe"
-        fontSize={90}
+        fontSize={78}
         fontWeight={400}
         letterSpacing={-1}
         className="rw-hero-stroke-line"
@@ -165,12 +165,12 @@ function HeroTitle({ lang, t, slide }) {
         stagger={0.02}
         trigger="mount"
         fillMode="wipe"
-        fontSize={90}
+        fontSize={78}
         fontWeight={400}
         letterSpacing={-1}
         reverse
         className="stroke-text--italic rw-hero-stroke-line"
-        style={{ marginTop: '.05em' }}
+        style={{ marginTop: 0 }}
       />
     </>
   )
@@ -304,7 +304,7 @@ const HERO_SLIDES = [
     eyebrow: 'END-TO-END SALES MANDATE',
     line1: 'Sales',
     line2: 'Mandates',
-    lede: 'We take ownership of the sale—from strategy to closure.',
+    lede: 'Team RW takes ownership of the sale, from strategy to closure.',
     to: '/realty',
     cta: 'Explore Sales Mandate',
   },
@@ -540,10 +540,18 @@ He helps developers and their sales teams<br />
 
       {/* Three ways in */}
       <section id="services" className="rw-ways-section" style={sectionRule}>
-        <div className="rw-pad" style={container}>
-          <Reveal style={{ padding: '54px 0 4px', fontFamily: mono, fontSize: fs('12px'), letterSpacing: '.26em', color: 'var(--faded)' }}>
-            {t('home.ways')}
-          </Reveal>
+        <div className="rw-pad" style={{ ...container, paddingTop: 'clamp(40px, 5vw, 64px)' }}>
+          <SectionHead
+            eyebrow={t('home.ways.eyebrow')}
+            tracking=".24em"
+            titleWidth="14em"
+            title={(
+              <>
+                {t('home.ways.title.a')}
+                <span style={{ color: 'var(--copper)', fontStyle: 'italic' }}>{t('home.ways.title.b')}</span>
+              </>
+            )}
+          />
           <div className="rw-grid-3 rw-ways">
             {WAYS.map((way, i) => {
               const slideId = ['coaching', 'consulting', 'realty'][i]
@@ -566,7 +574,8 @@ He helps developers and their sales teams<br />
                     <span className="rw-way-meta">
                       <span className="rw-way-numeral" style={{ fontFamily: serif }} aria-hidden>{way.k}</span>
                       <span className="rw-way-service-name">
-                        {t(`home.slide.${slideId}.line1`)} {t(`home.slide.${slideId}.line2`)}
+                        {t(`home.slide.${slideId}.line1`)}{' '}
+                        <span className="rw-way-service-accent">{t(`home.slide.${slideId}.line2`)}</span>
                       </span>
                     </span>
                     <span className="rw-way-title">{t(`home.way.${i + 1}.title`)}</span>

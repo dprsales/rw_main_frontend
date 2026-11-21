@@ -14,7 +14,7 @@ import PullQuote from '../components/PullQuote'
 import { useLang } from '../i18n/LangProvider'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { ECOSYSTEM } from '../data/content'
-import { FOOTER_LINKS, mono, serif, text } from '../theme'
+import { FOOTER_LINKS, jost, mono, serif, text } from '../theme'
 import { fs, ctaCopper,
   container, eyebrow,
   note, sectionHeading, sectionRule,
@@ -148,7 +148,7 @@ export default function Consulting() {
             <span className="rw-consulting-hero-title-italic">{t('consult.hero.title.2')}</span>
           </Reveal>
 
-          <Reveal as="p" delay={150} className="rw-consulting-hero-subhead" style={{ fontFamily: text }}>
+          <Reveal as="p" delay={150} className="rw-consulting-hero-subhead">
             {t('consult.hero.sub')}
           </Reveal>
 
@@ -178,26 +178,6 @@ export default function Consulting() {
         </div>
       </section>
 
-      <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
-          <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56 }}>
-            <Reveal style={{ ...eyebrow, fontSize: fs('clamp(15px,1.6vw,19px)'), letterSpacing: '.22em' }}>{t('consult.mission.eyebrow')}</Reveal>
-            <Reveal delay={100}>
-              <h2 style={{ ...sectionHeading, fontSize: fs('clamp(28px,3.4vw,42px)'), lineHeight: 1.24, maxWidth: '19em' }}>
-                {t('consult.mission')}
-              </h2>
-            </Reveal>
-          </div>
-
-          <Reveal delay={200} className="rw-mission-quote">
-            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: fs('clamp(26px,3vw,38px)'), lineHeight: 1.3, color: 'var(--ink)', maxWidth: '20em' }}>
-              {t('consult.mission.quote')}
-            </p>
-            <img src={signature} alt="Rajiv Williams" className="rw-mission-signature" />
-          </Reveal>
-        </div>
-      </section>
-
       <section id="model" style={{ ...sectionRule, background: 'var(--chip)', overflow: 'hidden' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
           <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56, marginBottom: 'clamp(56px,7vw,90px)' }}>
@@ -215,6 +195,28 @@ export default function Consulting() {
             hideLabel={t('consult.phase.hide')}
             showLabel={t('consult.phase.show')}
           />
+        </div>
+      </section>
+
+      <ServiceLandingForm trackKey="consulting" />
+
+      <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
+          <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56 }}>
+            <Reveal style={{ ...eyebrow, fontSize: fs('clamp(15px,1.6vw,19px)'), letterSpacing: '.22em' }}>{t('consult.mission.eyebrow')}</Reveal>
+            <Reveal delay={100}>
+              <h2 style={{ fontFamily: jost, fontWeight: 400, letterSpacing: '-.01em', color: 'var(--ink)', fontSize: fs('clamp(17px,1.65vw,20px)'), lineHeight: 1.5, maxWidth: '36em' }}>
+                {t('consult.mission')}
+              </h2>
+            </Reveal>
+          </div>
+
+          <Reveal delay={200} className="rw-mission-quote">
+            <p style={{ fontFamily: serif, fontStyle: 'italic', fontSize: fs('clamp(22px,2.4vw,30px)'), lineHeight: 1.35, color: 'var(--ink)', maxWidth: '22em' }}>
+              {t('consult.mission.quote')}
+            </p>
+            <img src={signature} alt="Rajiv Williams" className="rw-mission-signature" />
+          </Reveal>
         </div>
       </section>
 
@@ -248,8 +250,6 @@ export default function Consulting() {
           </Reveal>
         </div>
       </section>
-
-      <ServiceLandingForm trackKey="consulting" />
 
       <Footer links={FOOTER_LINKS} />
     </>

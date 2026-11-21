@@ -24,7 +24,7 @@ export const ASSESSMENT_TRACKS = {
 
       time: 'About 2 minutes',
     },
-    confirm: 'Team RW will review your coaching brief and get back to you shortly.',
+    confirm: 'Your coaching brief reaches Rajiv\'s desk. The team will get back to you shortly.',
     questions: [
       ...CONTACT_QUESTIONS,
       {
@@ -80,17 +80,17 @@ export const ASSESSMENT_TRACKS = {
     numeral: 'II',
     label: 'Consulting',
     cardTitle: 'Business & Sales Consulting',
-    cardBody: 'Expert guidance on sales setup, branding, hiring and process, tailored to where your business stands today.',
+    cardBody: 'Consulting with Rajiv on sales setup, process, and leadership. Brand and hiring delivery sits with Team RW where needed.',
     cardCta: 'Share your business details',
     intro: {
       eyebrow: 'RAJIV WILLIAMS CONSULTING',
       title: 'Tell us about your business',
       lines: [
-        'A short brief on your business, challenges, and where you want guidance — so Team RW can reply with clarity.',
+        'A short brief on your business, challenges, and where you want Rajiv\'s guidance, so the team can reply with clarity.',
       ],
       time: 'About 2 minutes',
     },
-    confirm: 'We’ve received your consulting details. Team RW will review them and get back to you shortly.',
+    confirm: 'We\'ve received your consulting details. The team will get them to Rajiv and reply shortly.',
     questions: [
       ...CONTACT_QUESTIONS,
       { id: 'orgName', type: 'input', inputType: 'text', required: true, title: 'Please state the name of your organisation' },
@@ -160,10 +160,10 @@ export const ASSESSMENT_TRACKS = {
     numeral: 'III',
     label: 'Realty',
     cardTitle: 'Realty Services',
-    cardBody: 'Hand us your project. We recommend and execute the right sales and marketing strategy to move your inventory.',
+    cardBody: 'Hand Team RW your project. They recommend and run the sales and marketing strategy to move your inventory under a mandate.',
     cardCta: 'Share your project details',
     intro: {
-      eyebrow: 'RAJIV WILLIAMS REALTY SERVICES',
+      eyebrow: 'TEAM RW REALTY SERVICES',
       title: 'Tell us about your project',
       lines: [
         'A few details on your project help Team RW see whether a mandate fit is right.',

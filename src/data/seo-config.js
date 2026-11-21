@@ -15,7 +15,7 @@ export const ROUTE_SEO = {
   '/': {
     title: 'Luxury Real Estate Sales Mentor in Hyderabad | Rajiv Williams',
     description:
-      '₹2,700 Cr generated, 1,200 professionals coached, 16 years in Hyderabad luxury real estate. Coaching, consulting, and exclusive sales mandates.',
+      '₹2,700 Cr generated, 1,200 professionals coached, 16 years in Hyderabad luxury real estate. Rajiv coaches and consults. Team RW delivers sales mandates and brand work.',
   },
   '/coaching': {
     title: 'Luxury Real Estate Sales Coaching in Hyderabad | Rajiv Williams',
@@ -51,33 +51,33 @@ export const ROUTE_SEO = {
   '/consulting': {
     title: 'Real Estate Sales Consulting for Developers, senior sales leadership & top closers. | Rajiv Williams',
     description:
-      'A four-phase engagement of audit, process design, deployment and refinement that rebuilds a developer sales operation around conversion, not discounts.',
+      'Sales consulting with Rajiv Williams: audit, process design, deployment support, and refinement so a developer sales operation converts without living on discounts.',
   },
   '/brandconsulting': {
     title: 'Brand Consulting for Real Estate Developers | Rajiv Williams',
     description:
-      '16 years moving inventory across Hyderabad. Team Rajiv Williams brand consulting helps developers sell with the right brand language and buyer psychology.',
+      '16 years in Hyderabad inventory. Team RW brand consulting helps developers sell with the right brand language and buyer psychology. Rajiv is the face of the brand.',
   },
   /* Legacy paths; app redirects to /brandconsulting. */
   '/brandingconsulting': {
     title: 'Brand Consulting for Real Estate Developers | Rajiv Williams',
     description:
-      '16 years moving inventory across Hyderabad. Team Rajiv Williams brand consulting helps developers sell with the right brand language and buyer psychology.',
+      '16 years in Hyderabad inventory. Team RW brand consulting helps developers sell with the right brand language and buyer psychology. Rajiv is the face of the brand.',
   },
   '/consulting/brand-consulting': {
     title: 'Brand Consulting for Real Estate Developers | Rajiv Williams',
     description:
-      '16 years moving inventory across Hyderabad. Team Rajiv Williams brand consulting helps developers sell with the right brand language and buyer psychology.',
+      '16 years in Hyderabad inventory. Team RW brand consulting helps developers sell with the right brand language and buyer psychology. Rajiv is the face of the brand.',
   },
   '/realty': {
     title: 'RW Realty | Exclusive Luxury Sales Mandates, Hyderabad',
     description:
-      'Full ownership of sales strategy, a dedicated onsite team, and end-to-end funnel management for luxury residential projects across Hyderabad.',
+      'Team RW takes full ownership of sales strategy, a dedicated onsite team, and end-to-end funnel management for luxury residential projects across Hyderabad.',
   },
   '/realty/portfolio': {
     title: 'About Rajiv Williams & Team RW | Track Record, Hyderabad',
     description:
-      '16+ years, ₹2,700 Cr generated, 1,200 professionals coached. Why Team RW, the career track, team, voices, and Hyderabad luxury mandates.',
+      '16+ years, ₹2,700 Cr generated, 1,200 professionals coached. Rajiv leads coaching and consulting. Team RW runs mandates and brand delivery.',
   },
   /* Same page as above; /realty/portfolio redirects to /about. */
   '/realty/listings': {
@@ -121,7 +121,7 @@ export const ROUTE_SEO = {
   '/articles': {
     title: 'Articles on Luxury Real Estate Sales | Rajiv Williams',
     description:
-      'Writing from Rajiv Williams on luxury sales, sales teams, and mandates in Hyderabad.',
+      'Writing from Rajiv Williams on luxury sales, sales teams, and how Team RW runs mandates in Hyderabad.',
   },
   '/content-library': {
     title: 'Sales Carousel Content Library | Rajiv Williams',
@@ -141,12 +141,12 @@ export const ROUTE_SEO = {
   '/about': {
     title: 'About Rajiv Williams & Team RW | Track Record, Hyderabad',
     description:
-      '16+ years, ₹2,700 Cr generated, 1,200 professionals coached. Why Team RW, the career track, team, voices, and Hyderabad luxury mandates.',
+      '16+ years, ₹2,700 Cr generated, 1,200 professionals coached. Rajiv leads coaching and consulting. Team RW runs mandates and brand delivery.',
   },
   '/contact': {
     title: 'Contact Rajiv Williams, Hyderabad',
     description:
-      'Speak to Rajiv Williams about coaching, developer consulting, or an exclusive sales mandate. Based in Hyderabad, Telangana, India.',
+      'Coaching or consulting with Rajiv Williams, or a Team RW sales mandate. Based in Hyderabad, Telangana, India.',
   },
   '/privacy-policy': {
     title: 'Privacy Policy | Team RW · Rajiv Williams',

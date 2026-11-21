@@ -28,9 +28,9 @@ export const HERO_COPY =
 
 /** The three services. `title` carries the positioning line; the service name reads from `kicker` and the CTA. */
 export const WAYS = [
-  { k: 'I', kicker: 'Sales Coaching', title: 'Your ticket size is a ceiling you built. Break it.', line: 'For developers, senior sales leadership, and top sales closers done with volume games.', to: '/coaching' },
-  { k: 'II', kicker: 'Sales Consulting', title: 'Right product, wrong velocity. That is fixable.', line: 'Advisory on the part of the business the brochure never fixes.', to: '/consulting' },
-  { k: 'III', kicker: 'Sales Mandate', title: 'You build. We sell, end to end.', line: 'Full ownership of sales strategy, a dedicated onsite team, and end-to-end funnel management.', to: '/realty' },
+  { k: 'I', kicker: 'Sales Coaching', title: 'Your ticket size is a ceiling you built. Break it.', line: 'Coaching with Rajiv for developers, senior sales leadership, and top closers done with volume games.', to: '/coaching' },
+  { k: 'II', kicker: 'Sales Consulting', title: 'Right product, wrong velocity. That is fixable.', line: 'Consulting with Rajiv on the part of the business the brochure never fixes.', to: '/consulting' },
+  { k: 'III', kicker: 'Sales Mandate', title: 'You build. Team RW sells, end to end.', line: 'Team RW owns sales strategy, puts a dedicated team onsite, and runs the funnel to closure.', to: '/realty' },
 ]
 
 export const HOME_TESTIMONIALS = [
@@ -341,7 +341,7 @@ export const CREDENTIALS = ['TGRERA Licensed Realtor', "Member, Hyderabad Realto
 /* Why the room is worth joining. Deliberately four, for two even rows at every breakpoint. */
 export const CAREER_REASONS = [
   { title: 'Premium inventory only', body: 'You sell what the market already respects, luxury and high-ticket projects carried on exclusive mandates, not a scattered listing sheet.' },
-  { title: 'Trained, not thrown in', body: 'The coaching practice runs in-house first. Every person on the floor is taken through the same frameworks Rajiv runs with developer sales teams.' },
+  { title: 'Trained, not thrown in', body: 'Rajiv\'s coaching frameworks run in-house first. Every person on the Team RW floor is trained on the same method before they touch a live mandate.' },
   { title: 'Earnings without a ceiling', body: 'A fixed base plus an incentive structure written against closings. Higher ticket sizes mean the same effort is worth more.' },
   { title: 'Access to the top of the market', body: 'HNI and NRI buyers, developer leadership, and channel networks, all in the room from your first quarter.' },
 ]
@@ -805,7 +805,7 @@ export const EXPERIENCE = [
 /* The four stages of the track, most recent first. `dense` phases render as a
  * compact two-column grid - the eight advisory mandates would otherwise dominate by sheer count. */
 export const EXPERIENCE_PHASES = [
-  { key: 'practice', label: 'The practice today', note: 'Independent mentoring & mandate work' },
+  { key: 'practice', label: 'The practice today', note: 'Independent coaching & consulting' },
   { key: 'advisory', label: 'Mentoring & advisory', note: 'Retained across eight developer and design businesses', dense: true },
   { key: 'leadership', label: 'Developer sales leadership', note: 'Owning the number, not advising on it' },
   { key: 'foundations', label: 'Enterprise foundations', note: 'Where the process discipline came from' },

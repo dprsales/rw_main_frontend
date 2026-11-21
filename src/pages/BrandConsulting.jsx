@@ -309,11 +309,11 @@ export default function BrandConsulting() {
               <span className="rw-bc-title-italic">for developers who sell on trust</span>
             </h1>
             <p className="rw-bc-lede" style={{ fontFamily: text }}>
-              16 years of extensive expertise in selling inventory across Hyderabad.
-              We speak the real estate language and we understand the psychology required to move your inventory.
+              16 years of market craft behind the brand. Rajiv is the face.
+              Team RW delivers the brand and marketing work that helps developers sell on trust.
             </p>
             <p className="rw-bc-proof" style={{ fontFamily: text }}>
-              Team Rajiv Williams brand consulting has helped various developers move hundreds of crores of inventory.
+              Team RW brand consulting has helped developers move hundreds of crores of inventory with clearer language and buyer psychology.
             </p>
             <div className="rw-bc-hero-actions">
               <a href="#enquire" className="rw-cta" style={ctaCopper}>
