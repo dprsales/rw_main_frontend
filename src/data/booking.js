@@ -73,6 +73,7 @@ const LEAD_TYPE = {
   'Sales Mandates': 'contact',
   'RW Realty mandate': 'contact',
   'Looking for a home': 'project',
+  'Investment Advisory': 'project',
   [CAREERS_INTEREST]: 'contact',
   'Something else': 'contact',
   'Brokerage form': 'contact',

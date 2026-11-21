@@ -1372,12 +1372,146 @@ html[lang="te"] .rw-chip-caption-text { line-height: 1.55; }
 }
 .rw-index-head > span:last-child { color: var(--copper); opacity: .75; }
 
-/* The territory map says what the roster can't: the work isn't spread thin
-   across Hyderabad, it's massed in a handful of west-corridor micro-markets. */
+/* Wide project cards: full image in 16:9 well, name on the right. 3 cols
+   so the image stays readable (no crop, stretch, or zoom). */
+.rw-proj-grid {
+  list-style: none;
+  margin: clamp(28px, 3.5vw, 44px) 0 0;
+  padding: clamp(20px, 2.4vw, 32px) 0 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px 14px;
+}
+.rw-proj-card {
+  display: grid;
+  grid-template-columns: minmax(148px, 1.05fr) minmax(0, 1fr);
+  align-items: stretch;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  background: var(--chip);
+  border: 1px solid var(--line);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.rw-proj-card:hover,
+.rw-proj-card:focus-visible {
+  border-color: color-mix(in srgb, var(--copper) 55%, var(--line));
+  background: color-mix(in srgb, var(--copper) 6%, var(--chip));
+  outline: none;
+}
+.rw-proj-card.is-disabled {
+  opacity: 0.72;
+  cursor: default;
+}
+.rw-proj-card.is-disabled:hover,
+.rw-proj-card.is-disabled:focus-visible {
+  border-color: var(--line);
+  background: var(--chip);
+}
+.rw-proj-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  flex-shrink: 0;
+  background:
+    linear-gradient(155deg, #1a1612 0%, #2a241c 52%, #14110e 100%);
+  border-right: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+}
+.rw-proj-card-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+}
+.rw-proj-card-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 26px;
+  color: var(--copper);
+  opacity: 0.55;
+}
+.rw-proj-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 14px;
+  min-width: 0;
+  overflow: hidden;
+}
+.rw-proj-card-name {
+  font-size: clamp(15px, 0.4vw + 13px, 17px);
+  line-height: 1.25;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.rw-proj-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faded);
+}
+.rw-proj-card-meta > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.rw-proj-card-status {
+  color: var(--copper);
+  flex-shrink: 0;
+}
+.rw-proj-card-soon {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--faded);
+  opacity: 0.8;
+}
+.rw-proj-grid-empty {
+  margin: 28px 0 0;
+  color: var(--faded);
+  font-size: 15px;
+}
+@media (max-width: 900px) {
+  .rw-proj-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .rw-proj-grid {
+    grid-template-columns: 1fr;
+  }
+  .rw-proj-card {
+    grid-template-columns: minmax(132px, 1.1fr) minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rw-proj-card {
+    transition: none;
+  }
+}
+
+/* Legacy territory map styles kept unused (map removed from section). */
 .rw-territory {
   display: grid;
-  /* Panel widened from 300px: the height-capped map only renders ~610px of content,
-     so the slack is better spent on the project cards than on empty map gutter. */
   grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
   gap: clamp(28px, 4vw, 64px);
   align-items: center;
@@ -3012,13 +3146,12 @@ html[lang="te"] .rw-hire-go {
 }
 html[lang="te"] .rw-contact-label {
   letter-spacing: .04em !important;
-  width: 132px !important;
   line-height: 1.45;
   white-space: normal;
 }
 html[lang="te"] .rw-contact-row {
   align-items: flex-start;
-  gap: 16px 24px;
+  grid-template-columns: minmax(108px, 132px) minmax(0, 1fr);
 }
 @media (min-width: 1100px) and (max-width: 1280px) {
   html[lang="te"] .rw-dnav { gap: clamp(10px, 1.15vw, 16px); }
@@ -3030,8 +3163,7 @@ html[lang="te"] .rw-contact-row {
     line-height: 1.34;
   }
   html[lang="te"] .rw-hire-tag { font-size: 10px; }
-  html[lang="te"] .rw-contact-row { flex-wrap: wrap; }
-  html[lang="te"] .rw-contact-label { width: 100% !important; }
+  html[lang="te"] .rw-contact-row { grid-template-columns: 1fr; }
 }
 
 /* Fullscreen wheel navigation. */
@@ -3375,6 +3507,23 @@ html[lang="te"] .rw-contact-row {
   max-width: 360px;
   min-width: 0;
   justify-self: end;
+}
+/* Investment Advisory: gold wash on the hero visual (call note: gold layer, not flat black). */
+.rw-advisory-intro .rw-intro-visual {
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--copper) 35%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, #E8C97A 12%, transparent),
+    0 24px 48px rgba(0, 0, 0, 0.35);
+}
+.rw-advisory-intro .rw-intro-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #C39B53 28%, transparent) 0%, transparent 42%),
+    linear-gradient(180deg, transparent 55%, rgba(11, 10, 9, 0.45) 100%);
 }
 .rw-intro-image {
   display: block;
@@ -6178,27 +6327,67 @@ html[data-lang='te'] .rw-cl-gate-title {
   .rw-cl-gate-card { padding: 24px 18px 20px; }
 }
 
-/* Contact page: details + form */
+/* Contact page: skyline band + form first, reach channels second. */
+.rw-contact-band {
+  background: var(--chip);
+}
+.rw-contact-skyline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  opacity: 0.22;
+  pointer-events: none;
+  user-select: none;
+}
+.rw-contact-skyline-wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--chip) 92%, transparent) 0%,
+      color-mix(in srgb, var(--chip) 55%, transparent) 42%,
+      color-mix(in srgb, var(--chip) 78%, transparent) 100%
+    );
+}
 .rw-contact-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 440px);
-  gap: clamp(36px, 5vw, 72px);
+  grid-template-columns: minmax(280px, 1.15fr) minmax(240px, 0.85fr);
+  gap: clamp(32px, 4.5vw, 64px);
   align-items: start;
 }
 .rw-contact-form {
+  position: relative;
   display: grid;
   gap: 14px;
   padding: clamp(22px, 2.6vw, 30px);
   background: var(--card);
   border: 1px solid var(--line);
 }
+.rw-contact-form-head {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 2px;
+}
 .rw-contact-form-eyebrow {
-  margin: 0 0 4px;
+  margin: 0;
   font-family: 'Poppins', system-ui, sans-serif;
   font-size: 12px;
   letter-spacing: .16em;
   text-transform: uppercase;
   color: var(--copper);
+}
+.rw-contact-form-note {
+  margin: 0;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--faded);
+  max-width: 36em;
 }
 .rw-contact-form-thanks {
   margin: 0;
@@ -6232,6 +6421,11 @@ html[data-lang='te'] .rw-cl-gate-title {
   font-size: 16px;
   padding: 12px 14px;
   outline: none;
+}
+.rw-contact-field input:focus,
+.rw-contact-field select:focus,
+.rw-contact-field textarea:focus {
+  border-color: color-mix(in srgb, var(--copper) 55%, var(--line));
 }
 .rw-contact-field select { appearance: none; }
 .rw-contact-field textarea { resize: vertical; min-height: 108px; }
@@ -6269,8 +6463,59 @@ html[data-lang='te'] .rw-cl-gate-title {
   font-size: 12px;
   color: #E5726A;
 }
+.rw-contact-reach {
+  min-width: 0;
+  padding-top: 4px;
+}
+.rw-contact-reach-note {
+  margin: 0 0 22px;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--faded);
+  max-width: 28em;
+}
+.rw-contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.rw-contact-row {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 16px 20px;
+  align-items: baseline;
+  border-bottom: 1px solid var(--line);
+  padding: 16px 0;
+}
+.rw-contact-label {
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--faded);
+}
+.rw-contact-value {
+  font-size: clamp(17px, 1.2vw + 14px, 19px);
+  line-height: 1.35;
+  color: var(--ink);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+a.rw-contact-value:hover,
+a.rw-contact-value:focus-visible {
+  color: var(--copper);
+  outline: none;
+}
 @media (max-width: 900px) {
   .rw-contact-layout { grid-template-columns: 1fr; }
+  .rw-contact-reach { padding-top: 8px; }
+}
+@media (max-width: 520px) {
+  .rw-contact-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
 }
 
 /* Gallery · section tabs + YouTube / side blocks */

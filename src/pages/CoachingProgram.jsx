@@ -10,8 +10,8 @@ import { ctaCopper } from '../styles'
 import './coaching-program.css'
 
 /**
- * Shared simple landing for Luxury / High Ticket / One-to-One.
- * Hero → included → outcome → enquire CTA. Expand with deeper content later.
+ * Shared landing for Luxury / High Ticket / One-to-One.
+ * Hero (short) → who/session → process steps → enquire.
  */
 export default function CoachingProgram() {
   const { pathname } = useLocation()
@@ -19,12 +19,14 @@ export default function CoachingProgram() {
 
   if (!program) return <Navigate to="/coaching" replace />
 
-  const seoRoute = program.path
   const enquireTo = '/coaching#enquire'
+  const process = program.process || []
+  /* Same coaching form for all three; preselect this programme on the goal field. */
+  const enquireState = { prefill: { goal: program.title } }
 
   return (
     <>
-      <Seo route={seoRoute} />
+      <Seo route={program.path} />
       <Header />
 
       <main className="rw-cp">
@@ -44,14 +46,19 @@ export default function CoachingProgram() {
                   <span key={line} className="rw-cp-title-gold">{line}</span>
                 ))}
               </h1>
-              <p className="rw-cp-lede" style={{ fontFamily: text }}>{program.description}</p>
-              <p className="rw-cp-proof" style={{ fontFamily: text }}>{program.proof}</p>
+              <p className="rw-cp-lede" style={{ fontFamily: text }}>{program.lede || program.description}</p>
               <div className="rw-cp-actions">
-                <BookButton to={enquireTo} interest="Coaching" className="rw-cta" style={ctaCopper}>
+                <BookButton
+                  to={enquireTo}
+                  state={enquireState}
+                  interest="Coaching"
+                  className="rw-cta"
+                  style={ctaCopper}
+                >
                   Enquire about this programme <span className="rw-cta-arrow">→</span>
                 </BookButton>
                 <Link to="/coaching#premium-programs" className="rw-cp-secondary">
-                  All three ways in
+                  ← Back to coaching
                 </Link>
               </div>
             </Reveal>
@@ -61,27 +68,32 @@ export default function CoachingProgram() {
         <section className="rw-cp-section">
           <div className="rw-cp-grid">
             <Reveal>
-              <p className="rw-cp-eyebrow" style={{ fontFamily: mono }}>What you work on</p>
-              <h2 className="rw-cp-h2" style={{ fontFamily: serif }}>Included in this programme</h2>
-              <p className="rw-cp-note" style={{ fontFamily: text }}>{program.outcome}</p>
+              <p className="rw-cp-eyebrow" style={{ fontFamily: mono }}>Built for</p>
+              <h2 className="rw-cp-h2" style={{ fontFamily: serif }}>Who this is for</h2>
+              <p className="rw-cp-note" style={{ fontFamily: text }}>{program.proof || program.audience}</p>
               <div className="rw-cp-meta">
-                <div className="rw-cp-meta-card">
-                  <p className="rw-cp-meta-label" style={{ fontFamily: mono }}>Who it is for</p>
-                  <p className="rw-cp-meta-value" style={{ fontFamily: text }}>{program.audience}</p>
-                </div>
                 <div className="rw-cp-meta-card">
                   <p className="rw-cp-meta-label" style={{ fontFamily: mono }}>Session</p>
                   <p className="rw-cp-meta-value" style={{ fontFamily: text }}>{program.session}</p>
                 </div>
+                <div className="rw-cp-meta-card">
+                  <p className="rw-cp-meta-label" style={{ fontFamily: mono }}>What you leave with</p>
+                  <p className="rw-cp-meta-value" style={{ fontFamily: text }}>{program.outcome}</p>
+                </div>
               </div>
             </Reveal>
 
-            <Reveal delay={100}>
-              <ol className="rw-cp-list">
-                {program.focus.map((line, i) => (
-                  <li key={line}>
+            <Reveal delay={80}>
+              <p className="rw-cp-eyebrow" style={{ fontFamily: mono }}>The difference</p>
+              <h2 className="rw-cp-h2" style={{ fontFamily: serif }}>{program.processTitle || 'What you sharpen'}</h2>
+              <ol className="rw-cp-process">
+                {process.map((step, i) => (
+                  <li key={step.heading}>
                     <span className="rw-cp-list-num" style={{ fontFamily: mono }}>{String(i + 1).padStart(2, '0')}</span>
-                    <span style={{ fontFamily: text }}>{line}</span>
+                    <div className="rw-cp-process-body">
+                      <p className="rw-cp-process-heading" style={{ fontFamily: serif }}>{step.heading}</p>
+                      <p className="rw-cp-process-line" style={{ fontFamily: text }}>{step.line}</p>
+                    </div>
                   </li>
                 ))}
               </ol>
@@ -89,35 +101,24 @@ export default function CoachingProgram() {
           </div>
         </section>
 
-        <section className="rw-cp-section is-chip">
-          <div className="rw-cp-section-inner">
-            <Reveal>
-              <p className="rw-cp-eyebrow" style={{ fontFamily: mono }}>Also covered</p>
-              <h2 className="rw-cp-h2" style={{ fontFamily: serif }}>Core focus areas</h2>
-              <ul className="rw-cp-list" style={{ marginTop: 28 }}>
-                {program.features.map((feature, i) => (
-                  <li key={feature}>
-                    <span className="rw-cp-list-num" style={{ fontFamily: mono }}>{String(i + 1).padStart(2, '0')}</span>
-                    <span style={{ fontFamily: text }}>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          </div>
-        </section>
-
         <section className="rw-cp-cta-band rw-pad">
           <Reveal className="rw-cp-cta-stack">
-            <h2 className="rw-cp-h2" style={{ fontFamily: serif }}>Ready to talk this through?</h2>
+            <h2 className="rw-cp-h2" style={{ fontFamily: serif }}>Ready for the next level?</h2>
             <p className="rw-cp-note" style={{ fontFamily: text }}>
-              Tell Team RW where you are stuck. We will point you to the right programme or a one-to-one path.
+              Talk with Team RW about the right programme for you or your sales leadership.
             </p>
             <div className="rw-cp-actions">
-              <BookButton to={enquireTo} interest="Coaching" className="rw-cta" style={ctaCopper}>
+              <BookButton
+                to={enquireTo}
+                state={enquireState}
+                interest="Coaching"
+                className="rw-cta"
+                style={ctaCopper}
+              >
                 Talk to Team RW <span className="rw-cta-arrow">→</span>
               </BookButton>
-              <Link to="/assessment" className="rw-cp-secondary">
-                Take the assessment
+              <Link to="/coaching#premium-programs" className="rw-cp-secondary">
+                ← Back to coaching
               </Link>
             </div>
           </Reveal>

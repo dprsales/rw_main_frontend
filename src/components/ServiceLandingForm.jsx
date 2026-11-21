@@ -7,19 +7,35 @@ import { crmDeliveryOf, errorCategory, newId, track } from '../data/analytics'
 import { headerOffset, useSmoothScroll } from '../hooks/useSmoothScroll'
 import '../form/form.css'
 
+/** Only keep prefill values that exist on this track's questions. */
+function sanitizePrefill(trackKey, raw = {}) {
+  const questions = ASSESSMENT_TRACKS[trackKey]?.questions || []
+  const out = {}
+  for (const [id, value] of Object.entries(raw || {})) {
+    if (value == null || value === '') continue
+    const q = questions.find((x) => x.id === id)
+    if (!q) continue
+    if (q.options) {
+      if (Array.isArray(value)) {
+        const kept = value.filter((v) => q.options.includes(v))
+        if (kept.length) out[id] = kept
+      } else if (q.options.includes(value)) {
+        out[id] = value
+      }
+      continue
+    }
+    out[id] = value
+  }
+  return out
+}
+
 /** Finder answers → this track's question ids when the option exists. */
 function prefillFromFinder(trackKey, finder) {
   if (!finder) return {}
-  const questions = ASSESSMENT_TRACKS[trackKey]?.questions || []
   const wanted = {
     role: { developer: 'Builder / Developer', sales_leader: 'Sales Head', sales_pro: 'Sales Executive' }[finder.who],
   }
-  const out = {}
-  for (const [id, value] of Object.entries(wanted)) {
-    const q = questions.find((x) => x.id === id)
-    if (q && value && q.options?.includes(value)) out[id] = value
-  }
-  return out
+  return sanitizePrefill(trackKey, wanted)
 }
 
 /**
@@ -32,6 +48,18 @@ export default function ServiceLandingForm({ trackKey }) {
   const finder = state?.prefill?.finder || null
   const attemptId = state?.attemptId
   const valid = ASSESSMENT_TRACKS[trackKey] ? trackKey : null
+  const rawRoutePrefill = state?.prefill && typeof state.prefill === 'object'
+    ? Object.fromEntries(Object.entries(state.prefill).filter(([key]) => key !== 'finder'))
+    : {}
+  const routePrefill = valid
+    ? sanitizePrefill(valid, {
+        ...prefillFromFinder(valid, finder),
+        ...rawRoutePrefill,
+      })
+    : {}
+  const prefillKey = valid
+    ? `${valid}:${routePrefill.goal || ''}:${Array.isArray(routePrefill.role) ? routePrefill.role.join(',') : (routePrefill.role || '')}`
+    : 'none'
 
   const leadContext = () => ({
     flow: 'assessment_form',
@@ -75,11 +103,11 @@ export default function ServiceLandingForm({ trackKey }) {
       style={{ borderTop: '1px solid var(--line)', background: 'var(--chip)' }}
     >
       <AssessmentForm
-        key={valid}
+        key={prefillKey}
         embedded
         initialTrack={valid}
         stickyOffset={headerH}
-        prefill={prefillFromFinder(valid, finder)}
+        prefill={routePrefill}
         extraAnswers={finder ? { finder } : {}}
         onFirstInput={() => {
           const sub = submissionRef.current

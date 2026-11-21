@@ -6,10 +6,10 @@ import PageIntro from '../components/PageIntro'
 import Seo from '../components/Seo'
 import Reveal from '../components/Reveal'
 import CtaButton from '../components/CtaButton'
-import hydMark from '../assets/site/hyd-05.svg'
+import skylineImage from '../assets/site/skyline.png'
 import { useLang } from '../i18n/LangProvider'
 import { EMAIL, FOOTER_LINKS, PHONE, WHATSAPP, mono, serif } from '../theme'
-import { fs, container, eyebrowFaded, sectionRule } from '../styles'
+import { container, eyebrowFaded, sectionRule } from '../styles'
 import { CAREERS_INTEREST, INTERESTS, isValidPhone, submitBooking } from '../data/booking'
 
 const emptyForm = () => ({
@@ -79,7 +79,10 @@ function ContactForm() {
 
   return (
     <form className="rw-contact-form" onSubmit={onSubmit} noValidate>
-      <p className="rw-contact-form-eyebrow">{t('contact.form.eyebrow')}</p>
+      <div className="rw-contact-form-head">
+        <p className="rw-contact-form-eyebrow">{t('contact.form.eyebrow')}</p>
+        <p className="rw-contact-form-note">{t('contact.form.note')}</p>
+      </div>
 
       <label className="rw-contact-field">
         <span>{t('field.name')} *</span>
@@ -170,31 +173,47 @@ export default function Contact() {
         intro={t('contact.intro')}
       />
 
-      <section style={{ ...sectionRule, background: 'var(--chip)', position: 'relative', overflow: 'hidden' }}>
-        <img src={hydMark} alt="" aria-hidden className="rw-watermark is-right" />
+      <section className="rw-contact-band" style={{ ...sectionRule, position: 'relative', overflow: 'hidden' }}>
+        <img
+          src={skylineImage}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          className="rw-contact-skyline"
+        />
+        <div className="rw-contact-skyline-wash" aria-hidden />
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px', position: 'relative', zIndex: 1 }}>
           <div className="rw-contact-layout">
-            <div>
-              <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>{t('contact.reach')}</Reveal>
-              <div style={{ maxWidth: 560 }}>
-                {rows.map((row) => (
-                  <div key={row.key} className="rw-contact-row" style={{ display: 'flex', alignItems: 'baseline', gap: 20, borderTop: '1px solid var(--line)', padding: '18px 0' }}>
-                    <span className="rw-contact-label" style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'var(--faded)', width: 110, flexShrink: 0 }}>
-                      {row.label}
-                    </span>
-                    {row.href ? (
-                      <a href={row.href} style={{ fontFamily: serif, fontSize: fs('19px'), color: 'var(--ink)' }}>{row.value}</a>
-                    ) : (
-                      <span style={{ fontFamily: serif, fontSize: fs('19px'), color: 'var(--ink)' }}>{row.value}</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
             <Reveal>
               <ContactForm />
             </Reveal>
+
+            <aside className="rw-contact-reach" aria-labelledby="rw-contact-reach-title">
+              <Reveal>
+                <p id="rw-contact-reach-title" style={{ ...eyebrowFaded, marginBottom: 18 }}>
+                  {t('contact.reach')}
+                </p>
+                <p className="rw-contact-reach-note">{t('contact.reachNote')}</p>
+                <ul className="rw-contact-list">
+                  {rows.map((row) => (
+                    <li key={row.key} className="rw-contact-row">
+                      <span className="rw-contact-label" style={{ fontFamily: mono }}>
+                        {row.label}
+                      </span>
+                      {row.href ? (
+                        <a href={row.href} className="rw-contact-value" style={{ fontFamily: serif }}>
+                          {row.value}
+                        </a>
+                      ) : (
+                        <span className="rw-contact-value" style={{ fontFamily: serif }}>
+                          {row.value}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+            </aside>
           </div>
         </div>
       </section>

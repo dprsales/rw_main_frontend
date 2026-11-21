@@ -50,8 +50,18 @@ export const ASSESSMENT_TRACKS = {
       },
       {
         id: 'goal', type: 'pill', required: true,
+        /* Rajiv sir: same form for programmes I–III; Luxury Sales must be listed. */
         title: 'What would you like to achieve through Rajiv Williams Coaching?',
-        options: ['Increase sales', 'Improve closing skills', 'Train my sales team', 'Grow my business', 'Become a better leader', 'Learn luxury real estate sales'],
+        options: [
+          'Luxury Sales Mastery',
+          'High Ticket Sales Mastery',
+          'One-to-One Mentoring',
+          'Increase sales',
+          'Improve closing skills',
+          'Train my sales team',
+          'Grow my business',
+          'Become a better leader',
+        ],
       },
       {
         id: 'timeline', type: 'pill', required: true,

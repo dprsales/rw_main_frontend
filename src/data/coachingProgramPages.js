@@ -1,6 +1,9 @@
 /**
  * Simple coaching programme landings linked from /coaching cards and the header submenu.
- * Paths match the shareable URLs Team RW asked for (improve copy/layout later).
+ * Paths match the shareable URLs Team RW asked for.
+ *
+ * Audience is builders, developers, and senior sales people who already have skill.
+ * Copy must show the edge they do not already get from experience alone.
  */
 import luxuryImage from '../assets/site/hero-luxury-sales.jpg'
 import highTicketImage from '../assets/site/hero-high-ticket-sales.jpg'
@@ -21,14 +24,27 @@ const EXTRAS = [
     slug: 'luxarysales',
     eyebrow: 'Sales Coaching · Programme I',
     titleLines: ['Luxury Sales', 'Mastery'],
-    /* Couple + model sit centre-right; keep them clear of the sticky header. */
     objectPosition: '68% 42%',
-    proof: 'For developers and luxury real-estate sales professionals who sell on trust, not discounts.',
-    focus: [
-      'How luxury buyers decide and what they actually trust',
-      'Premium positioning without sounding desperate',
-      'Rapport that holds under high ticket pressure',
-      'Negotiation and closing for high-value inventory',
+    lede: 'You already sell. This is the edge that holds premium price and closes luxury buyers on trust.',
+    proof: 'For developers and luxury real-estate sales professionals who already close, and want the top of the market.',
+    processTitle: 'What you sharpen',
+    process: [
+      {
+        heading: 'Luxury buyer psychology',
+        line: 'How serious luxury buyers decide when features and brochures are not enough.',
+      },
+      {
+        heading: 'Premium positioning',
+        line: 'Hold value when the market, the channel, or the buyer pushes for discount.',
+      },
+      {
+        heading: 'Trust and rapport',
+        line: 'Authority in the room that scripts and product tours cannot replace.',
+      },
+      {
+        heading: 'High-value negotiation and closing',
+        line: 'Close crore inventory without giving the deal away.',
+      },
     ],
   },
   {
@@ -37,12 +53,26 @@ const EXTRAS = [
     eyebrow: 'Sales Coaching · Programme II',
     titleLines: ['High Ticket', 'Sales Mastery'],
     objectPosition: '62% 40%',
-    proof: 'For developers and real-estate sales professionals who need cleaner conversion and stronger closes.',
-    focus: [
-      'Client psychology that drives yes or no',
-      'Objection handling that stays calm and clear',
-      'Negotiation that protects ticket size',
-      'Confidence and consistency on high-value closes',
+    lede: 'You already work a high-ticket pipeline. This turns more of those deals into closes.',
+    proof: 'For developers and real-estate sales professionals who sell large tickets and want cleaner conversion.',
+    processTitle: 'What you sharpen',
+    process: [
+      {
+        heading: 'Client psychology',
+        line: 'Why strong buyers stall, and how to move them without pressure theatre.',
+      },
+      {
+        heading: 'Objection handling',
+        line: 'Turn the objections that kill high-ticket deals into clear next steps.',
+      },
+      {
+        heading: 'Negotiation',
+        line: 'Protect ticket and margin when the buyer is experienced too.',
+      },
+      {
+        heading: 'Confidence and high-value closing',
+        line: 'Repeatable closes when the number is large and the room is sharp.',
+      },
     ],
   },
   {
@@ -51,22 +81,42 @@ const EXTRAS = [
     eyebrow: 'Sales Coaching · Programme III',
     titleLines: ['One-to-One', 'Mentoring'],
     objectPosition: '58% 38%',
-    proof: 'For CXOs, senior leadership, and ambitious sales professionals who need personal guidance.',
-    focus: [
-      'A personal read of where you are stuck',
-      'Strategy and gap discussion on your live deals',
-      'Targeted mentoring, not a generic classroom script',
-      'Clear next actions you can run the same week',
+    /* One-to-One points locked to Rajiv sir call wording. */
+    lede: '1-to-1 mentoring on your live deals, leadership priorities, and next actions.',
+    proof: 'For CXOs, senior leadership, and aspiring sales professionals.',
+    processTitle: 'What you work on',
+    process: [
+      {
+        heading: 'Strategy and gap discussion',
+        line: 'Work through your live deals and leadership priorities.',
+      },
+      {
+        heading: 'Identify key areas',
+        line: 'Focus on the priorities that must not be ignored.',
+      },
+      {
+        heading: 'Targeted mentoring',
+        line: 'Mentoring shaped around your situation.',
+      },
+      {
+        heading: 'Strategic execution plan',
+        line: 'Step-by-step guidance you can run the same week.',
+      },
     ],
   },
 ]
 
-export const COACHING_PROGRAM_PAGES = COACHING_PROGRAMS.map((program, index) => ({
-  ...program,
-  ...EXTRAS[index],
-  cover: COVERS[index],
-  index,
-}))
+export const COACHING_PROGRAM_PAGES = COACHING_PROGRAMS.map((program, index) => {
+  const extra = EXTRAS[index]
+  return {
+    ...program,
+    ...extra,
+    description: extra.lede || program.description,
+    audience: extra.proof || program.audience,
+    cover: COVERS[index],
+    index,
+  }
+})
 
 export function coachingProgramByPath(pathname = '') {
   const path = String(pathname || '').replace(/\/$/, '') || '/'

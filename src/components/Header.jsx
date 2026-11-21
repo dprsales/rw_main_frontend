@@ -535,16 +535,16 @@ function DesktopNav({ pathname, onBook }) {
         onMouseLeave={leave}
         onBlur={(e) => blurUnlessSibling(e, learnRef)}
       >
-        <button
+                          <button
           ref={learnTriggerRef}
-          type="button"
+                            type="button"
           className={`rw-dnav-link${learnActive ? ' is-current' : ''}${open === 'learn' || (learnActive && !megaOpen) ? ' is-active' : ''}`}
           aria-expanded={open === 'learn'}
           aria-controls="rw-learn-mega"
           onClick={() => toggle('learn')}
         >
           {t('nav.learn')} <ChevronDown className="rw-dnav-caret" size={14} strokeWidth={1.75} aria-hidden="true" />
-        </button>
+                          </button>
 
         {open === 'learn' && (
           <MegaPanel id="rw-learn-mega" columns={LEARN_COLUMNS} pathname={pathname} onClose={close} triggerRef={learnTriggerRef} />
