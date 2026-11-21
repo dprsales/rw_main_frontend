@@ -5,7 +5,7 @@ import Seo from '../components/Seo'
 import Reveal from '../components/Reveal'
 import { BookButton } from '../components/BookingModal'
 import { coachingProgramByPath } from '../data/coachingProgramPages'
-import { FOOTER_LINKS, mono, serif, text } from '../theme'
+import { FOOTER_LINKS, jost, mono, serif, text } from '../theme'
 import { ctaCopper } from '../styles'
 import './coaching-program.css'
 
@@ -91,7 +91,7 @@ export default function CoachingProgram() {
                   <li key={step.heading}>
                     <span className="rw-cp-list-num" style={{ fontFamily: mono }}>{String(i + 1).padStart(2, '0')}</span>
                     <div className="rw-cp-process-body">
-                      <p className="rw-cp-process-heading" style={{ fontFamily: serif }}>{step.heading}</p>
+                      <p className="rw-cp-process-heading" style={{ fontFamily: jost }}>{step.heading}</p>
                       <p className="rw-cp-process-line" style={{ fontFamily: text }}>{step.line}</p>
                     </div>
                   </li>

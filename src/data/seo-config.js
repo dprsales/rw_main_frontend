@@ -86,9 +86,9 @@ export const ROUTE_SEO = {
       'Browse verified apartments, villas and plots. Every listing is reviewed by the RW Realty team before it goes live.',
   },
   '/listings': {
-    title: 'List a Property with Team RW | RW Realty',
+    title: 'Upload Your Property Free | Team RW Realty',
     description:
-      'Buy, sell, or rent in Hyderabad with Team RW. List a property for free, or browse verified homes for sale and rent.',
+      'Upload your Hyderabad property free. Team RW markets it. 3% professional fee only when the sale closes with us.',
   },
   '/listings/login': {
     title: 'Listing Login | RW Realty',

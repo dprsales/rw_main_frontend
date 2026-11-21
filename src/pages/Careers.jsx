@@ -1,29 +1,24 @@
 import { useEffect, useMemo, useState } from 'react'
-import skylineImage from '../assets/site/skyline.png'
 import careersHero from '../assets/site/careers-hero.png'
 import cultureImage from '../assets/site/the-floor.png'
-import teamImage from '../assets/site/team-rw.png'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
-import ImageSlot from '../components/ImageSlot'
 import Seo from '../components/Seo'
 import { BookButton } from '../components/BookingModal'
 import CtaButton from '../components/CtaButton'
 import BorderGlow from '../components/BorderGlow'
 import Reveal from '../components/Reveal'
 import AchieveGrid from '../components/AchieveGrid'
-import ClosingCTA from '../components/ClosingCTA'
 import PageIntro from '../components/PageIntro'
 import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
-import { useInView } from '../hooks/useInView'
 import { useLang } from '../i18n/LangProvider'
-import { CAREER_CATEGORIES, CAREER_PROCESS, CAREER_REASONS, CAREER_ROLES, activeHiringCampaigns } from '../data/content'
+import { CAREER_CATEGORIES, CAREER_REASONS, CAREER_ROLES, activeHiringCampaigns } from '../data/content'
 import { CAREERS_INTEREST } from '../data/booking'
 import { CRM_PRIORITY_TITLES, careerRolePath, fetchRoles } from '../data/jobs'
 import { FOOTER_LINKS, mono, serif } from '../theme'
 import { fs,
-  container, ctaInline, eyebrow,
+  container, ctaCopper, ctaInline, eyebrow,
   note, sectionHeading, sectionRule,
 } from '../styles'
 
@@ -128,12 +123,6 @@ export default function Careers() {
     title: t(`careers.reason.${i}.title`),
     body: t(`careers.reason.${i}.body`),
   })), [t])
-  const process = useMemo(() => CAREER_PROCESS.map((step, i) => ({
-    ...step,
-    title: t(`careers.process.${i}.title`),
-    body: t(`careers.process.${i}.body`),
-  })), [t])
-  const [stepsRef, stepsInView] = useInView({ rootMargin: '0px 0px -18% 0px' })
   const [filter, setFilter] = useState(ALL)
   const [visibleCount, setVisibleCount] = useState(ROLES_PER_PAGE)
 
@@ -165,10 +154,7 @@ export default function Careers() {
       <Seo route="/careers" />
       <Header />
 
-      {/* Intro - careers-hero.png sits full-bleed behind the copy. PageIntro's own
-          `image` slot is a 4:5 portrait box with object-fit:contain, which would
-          letterbox this 16:9 frame, so the photo is layered here instead and
-          PageIntro keeps its own container. Same treatment as the culture band below. */}
+      {/* Intro - careers-hero.png sits full-bleed behind the copy. */}
       <section style={{ position: 'relative', overflow: 'hidden' }}>
         <img
           src={careersHero}
@@ -200,140 +186,7 @@ export default function Careers() {
         </div>
       </section>
 
-      {/* Statement band */}
-      <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--card)', position: 'relative', overflow: 'hidden' }}>
-        {/* Skyline across the full band, low and flush to the bottom edge so it reads as a
-            horizon under the line rather than a photo competing with the statement. */}
-        <img
-          src={skylineImage}
-          alt=""
-          aria-hidden
-          loading="lazy"
-          style={{
-            position: 'absolute', inset: 0,
-            width: '100%', height: '100%',
-            objectFit: 'cover', objectPosition: 'center bottom',
-            opacity: .25,
-          }}
-        />
-        <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, var(--card) 0%, rgba(20,18,16,.36) 55%, rgba(20,18,16,.62) 100%)' }} />
-        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-sm) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-          <Reveal as="p" className="rw-te-display" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, textShadow: '0 2px 24px rgba(11,10,9,.75)' }}>
-            {t('careers.hook.lead')}
-          </Reveal>
-          <Reveal as="p" className="rw-te-display" delay={120} style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, fontStyle: 'italic', color: 'var(--copper)', marginTop: 10, textShadow: '0 2px 24px rgba(11,10,9,.75)' }}>
-            {t('careers.hook.accent')}
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Why here */}
-      <section id="why" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
-          <SectionHead
-            eyebrow={t('careers.why.eyebrow')} titleWidth="11em"
-            title={t('careers.why.title')}
-            aside={<SectionAside>{t('careers.why.aside')}</SectionAside>}
-          />
-
-          <AchieveGrid items={reasons} className="rw-reason-grid" stagger={4} />
-        </div>
-      </section>
-
-    {/* Life on the floor */}
-      <section className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
-        <div
-          className="rw-grid-2"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 'clamp(28px,4vw,64px)',
-            alignItems: 'center'
-          }}
-        >
-          <Reveal
-            className="rw-figure"
-            style={{ border: '1px solid var(--line)', aspectRatio: '4/3' }}
-          >
-            <ImageSlot
-              alt={t('careers.work.alt')}
-              placeholder="Team Rajiv Williams"
-              caption="The floor"
-              spec="Landscape 4:3 · ≥1800px wide · the team mid-session, faces engaged"
-              tag="HYDERABAD"
-              position="center 35%"
-              src={teamImage}
-            />
-          </Reveal>
-
-          <Reveal delay={120}>
-            <div style={{ ...eyebrow, marginBottom: 16 }}>
-              {t('careers.work.eyebrow')}
-            </div>
-
-            <h2
-              style={{
-                ...sectionHeading,
-                fontSize: fs('clamp(26px,3.2vw,40px)'),
-                lineHeight: 1.08
-              }}
-            >
-              {t('careers.work.title')}
-            </h2>
-
-            <p
-              style={{
-                ...note,
-                marginTop: 18,
-                fontSize: fs('clamp(16px,1.7vw,18px)'),
-                lineHeight: 1.6
-              }}
-            >
-              {t('careers.work.p1')}
-            </p>
-
-            <p
-              style={{
-                ...note,
-                marginTop: 14,
-                fontSize: fs('clamp(16px,1.7vw,18px)'),
-                lineHeight: 1.6
-              }}
-            >
-              {t('careers.work.p2')}
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Culture — full-bleed plate, copy sitting over it */}
-      <section style={{ position: 'relative', minHeight: 'clamp(420px,62vh,620px)', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-        <img
-          src={cultureImage}
-          alt={t('careers.culture.alt')}
-          loading="lazy"
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 35%' }}
-        />
-        {/* Dark wash so light body text stays readable over the mid-tone photo. */}
-        <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(rgba(11,10,9,.55), rgba(11,10,9,.82))' }} />
-
-        <div className="rw-pad" style={{ ...container, position: 'relative', zIndex: 2, padding: 'var(--rw-sy) 40px', textAlign: 'center' }}>
-          <Reveal style={{ ...eyebrow, marginBottom: 16 }}>{t('careers.culture.eyebrow')}</Reveal>
-          <Reveal as="h2" delay={80} style={{ ...sectionHeading, lineHeight: 1.06, maxWidth: '13em', margin: '0 auto' }}>
-            {t('careers.culture.title')}
-          </Reveal>
-          <Reveal as="p" delay={140} style={{ ...note, marginTop: 18, marginLeft: 'auto', marginRight: 'auto', maxWidth: '38em', fontSize: fs('clamp(16px,1.7vw,19px)'), lineHeight: 1.6 }}>
-            {t('careers.culture.body')}
-          </Reveal>
-          <Reveal delay={200} style={{ marginTop: 30 }}>
-            <button type="button" onClick={() => scrollToId('roles')} className="rw-inline-cta" style={ctaInline}>
-              {t('careers.culture.cta')} →
-            </button>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Open roles */}
+      {/* Open roles — first after hero */}
       <section id="roles" style={{ ...sectionRule, background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
           <CenteredHead
@@ -429,38 +282,42 @@ export default function Careers() {
         </div>
       </section>
 
-      {/* Process */}
-      <section id="process" className="rw-pad" style={{ ...container, ...sectionRule, padding: 'var(--rw-sy) 40px' }}>
-        <Reveal style={{ ...eyebrow, marginBottom: 16 }}>{t('careers.process.eyebrow')}</Reveal>
-        <Reveal as="h2" delay={80} style={{ ...sectionHeading, maxWidth: '14em' }}>
-          {t('careers.process.title')}
-        </Reveal>
+      {/* Why here — after open roles */}
+      <section id="why" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
+          <SectionHead
+            eyebrow={t('careers.why.eyebrow')} titleWidth="11em"
+            title={t('careers.why.title')}
+            aside={<SectionAside>{t('careers.why.aside')}</SectionAside>}
+          />
 
-        {/* One rail across desktop, stacking to a vertical rail on a phone. */}
-        <div ref={stepsRef} className={`rw-track${stepsInView ? ' is-in' : ''}`} style={{ marginTop: 'clamp(44px,6vw,72px)' }}>
-          <div className="rw-track-steps">
-            {process.map((step, i) => (
-              <Reveal key={step.n} delay={i * 90} className="rw-track-step" style={{ textAlign: 'center' }}>
-                <div className="rw-track-node" style={{ fontFamily: mono, fontSize: fs('13px'), letterSpacing: '.08em' }}>
-                  {i === process.length - 1 ? (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
-                      <path d="M4 12.5 9.5 18 20 6.5" />
-                    </svg>
-                  ) : step.n}
-                </div>
-                <div>
-                  <div style={{ marginTop: 22, fontFamily: serif, fontSize: fs('clamp(21px,2.4vw,27px)'), color: 'var(--ink)' }}>{step.title}</div>
-                  <div style={{ ...note, marginTop: 8, marginLeft: 'auto', marginRight: 'auto', maxWidth: '20em', fontSize: fs('16px'), lineHeight: 1.5 }}>{step.body}</div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <AchieveGrid items={reasons} className="rw-reason-grid" stagger={4} />
         </div>
       </section>
 
-      <ClosingCTA title={t('careers.close')} titleStyle={{ maxWidth: '15em' }}>
-        <CtaButton to="/careers/apply">{t('careers.apply')}</CtaButton>
-      </ClosingCTA>
+      {/* Culture band at bottom, with apply CTA (replaces old ClosingCTA) */}
+      <section id="apply" style={{ position: 'relative', minHeight: 'clamp(420px,62vh,620px)', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+        <img
+          src={cultureImage}
+          alt={t('careers.culture.alt')}
+          loading="lazy"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 35%' }}
+        />
+        <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(rgba(11,10,9,.55), rgba(11,10,9,.82))' }} />
+
+        <div className="rw-pad" style={{ ...container, position: 'relative', zIndex: 2, padding: 'var(--rw-sy) 40px', textAlign: 'center' }}>
+          <Reveal style={{ ...eyebrow, marginBottom: 16 }}>{t('careers.culture.eyebrow')}</Reveal>
+          <Reveal as="h2" delay={80} style={{ ...sectionHeading, lineHeight: 1.06, maxWidth: '13em', margin: '0 auto' }}>
+            {t('careers.culture.title')}
+          </Reveal>
+          <Reveal as="p" delay={140} style={{ ...note, marginTop: 18, marginLeft: 'auto', marginRight: 'auto', maxWidth: '38em', fontSize: fs('clamp(16px,1.7vw,19px)'), lineHeight: 1.6 }}>
+            {t('careers.culture.body')}
+          </Reveal>
+          <Reveal delay={200} style={{ marginTop: 30, display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 16 }}>
+            <CtaButton to="/careers/apply" style={ctaCopper}>{t('careers.apply')}</CtaButton>
+          </Reveal>
+        </div>
+      </section>
 
       <Footer links={FOOTER_LINKS} />
     </>

@@ -93,7 +93,7 @@ const en = {
   'coach.program.2.title': 'One-to-One Mentoring',
   'coach.program.2.desc': 'Personalised 1-to-1 guidance on your own sales, leadership or business gaps.',
   'coach.program.2.f.0': 'Personal assessment',
-  'coach.program.2.f.1': 'Strategy & gap discussion',
+  'coach.program.2.f.1': 'Strategy & gap analysis',
   'coach.program.2.f.2': 'Targeted mentoring',
   'coach.program.2.f.3': 'Action guidance',
   'coach.program.2.alt': 'Rajiv, One-to-One Mentoring programme',

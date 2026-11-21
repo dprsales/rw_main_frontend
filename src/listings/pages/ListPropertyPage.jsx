@@ -19,15 +19,16 @@ import ListingsPage from './ListingsPage'
 const DRAFT_KEY = 'rw_listing_draft'
 const INITIAL = { listingType: 'Sale', city: '', email: '', areaUnit: 'sq.ft', areaType: 'Carpet Area' }
 
+/** Owner landing for commission-only stock: upload here, 3% only on close. */
 const FEATURES = [
-  'Free to list and verify. Professional fee only if a sale closes with Team RW',
-  'Every listing verified by our team before it goes live',
-  'Team RW handles every buyer enquiry and introduces you when there is a serious match',
+  'Upload free. No marketing fee from you upfront',
+  'Team RW verifies and markets the listing to serious buyers',
+  '3% professional fee only if the sale closes with Team RW',
 ]
 const STATS = [
+  { value: 'Free', label: 'To upload' },
   { value: '24 hrs', label: 'Verification' },
-  { value: '100%', label: 'Verified listings' },
-  { value: 'Free', label: 'To list' },
+  { value: '3%', label: 'On closed sale' },
 ]
 
 function loadDraft() {
@@ -160,26 +161,29 @@ export default function ListPropertyPage() {
   }
 
   return (
-    <ListingsShell title="List your property — free | RW Realty" description="List your property for free. Verified within 24 hours and shown to serious buyers.">
+    <ListingsShell
+      title="List your property free | RW Realty"
+      description="Upload your property free. Team RW markets it. You pay a fee only when the sale closes with us."
+    >
       {screen === 'landing' && (
         <>
         <section className="relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(60% 55% at 85% 0%, rgba(195,155,83,0.14) 0%, rgba(11,10,9,0) 70%)' }} />
           <div id="list-form" className="relative mx-auto grid max-w-[1320px] scroll-mt-[var(--rw-header-h,76px)] grid-cols-1 gap-12 px-5 pb-12 pt-14 sm:px-10 lg:grid-cols-[1.1fr_0.9fr] lg:pt-20">
             <div>
-              <p className="eyebrow">RW Realty · Owner & builder listings</p>
+              <p className="eyebrow">RW Realty · Owner listings</p>
               <h1 className="mt-5 font-serif text-5xl font-normal leading-[1.02] text-ink sm:text-6xl lg:text-7xl">
-                Sell or rent faster.
+                Upload your property.
                 <br />
-                <em className="gold-text not-italic">100% free.</em>
+                <em className="gold-text not-italic">3% only when it sells.</em>
               </h1>
-              <p className="mt-6 max-w-md text-base font-light leading-relaxed text-faded sm:text-lg">
-                List your property in a few minutes. Our team verifies it, then it goes live on the Projects page for serious buyers and tenants.
+              <p className="mt-6 max-w-lg text-base font-light leading-relaxed text-faded sm:text-lg">
+                Holding stock you want to sell, but not paying for marketing? List it here free. Team RW verifies the home and shows it to serious buyers. On a closed sale with us, the professional fee is 3% of the sale value.
               </p>
               <ul className="mt-8 space-y-3">
                 {FEATURES.map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-ink">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-gold-500/40 text-[11px] text-gold-300">✓</span>
+                  <li key={f} className="flex items-start gap-3 text-sm leading-snug text-ink">
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-gold-500/40 text-[11px] text-gold-300">✓</span>
                     {f}
                   </li>
                 ))}
@@ -192,7 +196,10 @@ export default function ListPropertyPage() {
                   </div>
                 ))}
               </div>
-              <a href="#listings" className="mt-8 inline-block text-sm text-gold-300 hover:underline">
+              <p className="mt-5 max-w-lg text-xs leading-relaxed text-faded">
+                Sale: 3% of sale value, only when Team RW closes the deal. Rent: free to publish; any fee is agreed in writing first. You do not pay marketing upfront.
+              </p>
+              <a href="#listings" className="mt-6 inline-block text-sm text-gold-300 hover:underline">
                 Browse listed properties ↓
               </a>
             </div>
@@ -214,7 +221,7 @@ export default function ListPropertyPage() {
                   </p>
                   {submitError && <p className="mt-4 text-sm text-red-300">{submitError}</p>}
                   <button className="btn-primary mt-7 w-full" onClick={startWizard}>
-                    {data.images?.length || data.locality ? 'Continue your draft →' : 'Start a new listing →'}
+                    {data.images?.length || data.locality ? 'Continue your draft →' : 'Upload a property →'}
                   </button>
                   <button className="btn-secondary mt-3 w-full" onClick={() => navigate('/listings/dashboard')}>My listings</button>
                 </div>

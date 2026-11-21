@@ -87,7 +87,7 @@ const EXTRAS = [
     processTitle: 'What you work on',
     process: [
       {
-        heading: 'Strategy and gap discussion',
+        heading: 'Strategy and gap analysis',
         line: 'Work through your live deals and leadership priorities.',
       },
       {

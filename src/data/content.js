@@ -147,7 +147,7 @@ export const COACHING_PROGRAMS = [
     audience: 'For CXOs, Senior Leadership & Aspiring Sales Professionals',
     title: 'One-to-One Mentoring', subtitle: "3rd Opportunity · For CXOs, Senior Leadership & Aspiring Sales Professionals · Hyderabad",
     description: '1-to-1 mentoring on your live deals, leadership priorities, and next actions.',
-    features: ['Strategy & gap discussion', 'Identify key areas', 'Targeted mentoring', 'Strategic execution plan'],
+    features: ['Strategy & gap analysis', 'Identify key areas', 'Targeted mentoring', 'Strategic execution plan'],
     outcome: 'Targeted mentoring and a strategic execution plan with step-by-step guidance for the week ahead.',
     session: '90-120 mins · 1-to-1',
   },

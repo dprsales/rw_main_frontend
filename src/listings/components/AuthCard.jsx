@@ -109,7 +109,7 @@ export default function AuthCard({ data, update, onAuthed, mode = 'listing' }) {
   const pwScore = strength(password)
   const header = (title, sub) => (
     <>
-      <p className="eyebrow">{accountMode ? 'My account' : 'List your property · free'}</p>
+      <p className="eyebrow">{accountMode ? 'My account' : 'Upload property · free'}</p>
       <h2 className="mt-2 font-serif text-3xl text-ink">{title}</h2>
       <p className="mb-6 mt-1 text-sm text-faded">{sub}</p>
     </>
@@ -129,7 +129,7 @@ export default function AuthCard({ data, update, onAuthed, mode = 'listing' }) {
         <form onSubmit={onContinue} noValidate>
           {accountMode
             ? header('Log in', 'Use your email and password to open your dashboard. New here? We will help you create an account.')
-            : header('Get started', 'Takes less than 2 minutes.')}
+            : header('Upload your property', 'Create a free account, then add photos and details. No marketing fee upfront.')}
 
           {!accountMode && (<>
           <label className="field-label">I want to</label>
