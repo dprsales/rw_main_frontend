@@ -132,6 +132,12 @@
 
 /* Site-specific: vector marks (white on transparent) get a dark tile (.is-dark); opaque
    bitmap marks get the light frost. Each logo rides in a tile that carries the height. */
+/* Vertical pad keeps hover border + shadow inside overflow:hidden (marquee still clips sides). */
+.rw-logoloop.logoloop {
+  padding-top: 12px;
+  padding-bottom: 20px;
+}
+
 .rw-logoloop .logoloop__item { font-size: 0; }
 
 .rw-logoloop .rw-loop-tile {

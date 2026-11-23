@@ -259,9 +259,6 @@ export default function Realty() {
               direction="left"
               gap={12}
               hoverSpeed={0}
-              pauseControl
-              pauseLabel={t('home.loop.pause')}
-              playLabel={t('home.loop.play')}
               fadeOut
               fadeOutColor="var(--rw-band-solid)"
               ariaLabel={t('realty.clients.aria')}
