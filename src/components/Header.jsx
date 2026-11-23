@@ -425,7 +425,7 @@ function MegaPanel({ id, columns, pathname, onClose, onBook, triggerRef }) {
   return <FlatMegaPanel id={id} columns={columns} pathname={pathname} onClose={onClose} onBook={onBook} triggerRef={triggerRef} />
 }
 
-/** Top bar: Home, Services, About, Learn, Careers, Contact. Gallery lives under Learn. */
+/** Top bar: Home, About, Services, Learn, Careers, Contact. Gallery lives under Learn. */
 function DesktopNav({ pathname, onBook }) {
   const { t } = useLang()
   const [open, setOpen] = useState(null)
@@ -503,6 +503,8 @@ function DesktopNav({ pathname, onBook }) {
     <nav className="rw-dnav" aria-label={t('ui.main')}>
       <Link to="/" className={linkClass('/')}>{t('nav.home')}</Link>
 
+      <Link to="/about" className={linkClass('/about')}>{t('nav.portfolio')}</Link>
+
       <div
         ref={workRef}
         className={`rw-dnav-mega-wrap${open === 'work' ? ' is-open' : ''}`}
@@ -525,8 +527,6 @@ function DesktopNav({ pathname, onBook }) {
           <ServicesMegaPanel id="rw-mega" pathname={pathname} onClose={close} onBook={onBook} triggerRef={workTriggerRef} />
         )}
       </div>
-
-      <Link to="/about" className={linkClass('/about')}>{t('nav.portfolio')}</Link>
 
       <div
         ref={learnRef}

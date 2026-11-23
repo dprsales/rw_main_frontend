@@ -269,7 +269,7 @@ export default function ProjectsSection({ id = 'projects' }) {
   const visibleLocalityCount = nodes.filter((n) => n.projects.length > 0).length
 
   return (
-    <section id={id} style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
+    <section id={id} className="rw-band" style={sectionRule}>
       {/* Tighter than the site's default section rhythm on purpose: this header carries
           controls, so the stock clamp(90px,11vw,120px) left it floating in dead space. */}
       <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>

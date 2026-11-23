@@ -116,6 +116,9 @@ function VoicesStrip({ t }) {
       gap={20}
       logoHeight={16}
       hoverSpeed={0}
+      pauseControl
+      pauseLabel={t('home.loop.pause')}
+      playLabel={t('home.loop.play')}
       fadeOut
       fadeOutColor="var(--bg)"
       ariaLabel={t('home.voices.aria')}
@@ -584,7 +587,7 @@ He helps developers and their sales teams<br />
       </section>
 
       {/* Organisations / partners trust strip (same logos as About). */}
-      <section id="organisations" className="rw-home-orgs" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
+      <section id="organisations" className="rw-home-orgs rw-band" style={sectionRule}>
         <div className="rw-pad" style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px' }}>
           <SectionHead
             eyebrow={t('home.orgs.eyebrow')}
@@ -599,8 +602,11 @@ He helps developers and their sales teams<br />
               direction="left"
               gap={12}
               hoverSpeed={0}
+              pauseControl
+              pauseLabel={t('home.loop.pause')}
+              playLabel={t('home.loop.play')}
               fadeOut
-              fadeOutColor="var(--chip)"
+              fadeOutColor="var(--rw-band-solid)"
               ariaLabel={t('home.orgs.aria')}
               className="rw-logoloop"
               renderItem={(item) => (
@@ -633,17 +639,19 @@ He helps developers and their sales teams<br />
         </div>
       </section>
 
-      <section id="support" className="rw-pad" style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px clamp(32px, 4vw, 48px)' }}>
-        <SectionHead
-          eyebrow={t('home.more.eyebrow')}
-          titleWidth="14em"
-          title={t('home.more.title.a')}
-          titleAccent={t('home.more.title.b')}
-        />
+      <section id="support" className="rw-band" style={sectionRule}>
+        <div className="rw-pad" style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px clamp(32px, 4vw, 48px)' }}>
+          <SectionHead
+            eyebrow={t('home.more.eyebrow')}
+            titleWidth="14em"
+            title={t('home.more.title.a')}
+            titleAccent={t('home.more.title.b')}
+          />
 
-        <Reveal delay={80}>
-          <SupportCloud />
-        </Reveal>
+          <Reveal delay={80}>
+            <SupportCloud />
+          </Reveal>
+        </div>
       </section>
 
       <Footer links={HOME_FOOTER_LINKS} />

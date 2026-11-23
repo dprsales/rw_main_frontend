@@ -311,7 +311,7 @@ export default function Coaching() {
 
       <ServiceLandingForm trackKey="coaching" />
 
-      <section id="curriculum" className="rw-pad" style={{ ...sectionRule, background: 'var(--chip)' }}>
+      <section id="curriculum" className="rw-pad rw-band" style={sectionRule}>
         <div style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px' }}>
           <SectionHead
             eyebrow={t('coach.syllabus.eyebrow')}

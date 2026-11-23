@@ -59,6 +59,8 @@ export const te = {
  'home.orgs.title.a': 'నమ్మకం ',
  'home.orgs.title.b': 'హైదరాబాద్ లగ్జరీ మార్కెట్‌లో.',
  'home.orgs.aria': '\u0c1f\u0c40\u0c2e\u0c4d RW \u0c2a\u0c28\u0c3f \u0c1a\u0c47\u0c38\u0c3f\u0c28 \u0c38\u0c02\u0c38\u0c4d\u0c25\u0c32\u0c41',
+ 'home.loop.pause': 'ఆపు',
+ 'home.loop.play': 'ప్లే',
  'home.words.eyebrow': 'స్వరాలు',
  'home.words.title.a': 'పరిశ్రమ ',
  'home.words.title.b': 'స్వరాలు.',

@@ -119,6 +119,9 @@ export const LogoLoop = memo(({
   fadeOut = false,
   fadeOutColor,
   scaleOnHover = false,
+  pauseControl = false,
+  pauseLabel = 'Pause',
+  playLabel = 'Play',
   renderItem,
   ariaLabel = 'Partner logos',
   className,
@@ -132,6 +135,7 @@ export const LogoLoop = memo(({
   const [seqHeight, setSeqHeight] = useState(0)
   const [copyCount, setCopyCount] = useState(ANIMATION_CONFIG.MIN_COPIES)
   const [isHovered, setIsHovered] = useState(false)
+  const [paused, setPaused] = useState(false)
 
   const effectiveHoverSpeed = useMemo(() => {
     if (hoverSpeed !== undefined) return hoverSpeed
@@ -180,7 +184,8 @@ export const LogoLoop = memo(({
 
   useResizeObserver(updateDimensions, [containerRef, seqRef], [logos, gap, logoHeight, isVertical])
   useImageLoader(seqRef, updateDimensions, [logos, gap, logoHeight, isVertical])
-  useAnimationLoop(trackRef, targetVelocity, seqWidth, seqHeight, isHovered, effectiveHoverSpeed, isVertical)
+  const motionHeld = paused || isHovered
+  useAnimationLoop(trackRef, targetVelocity, seqWidth, seqHeight, motionHeld, effectiveHoverSpeed, isVertical)
 
   const cssVariables = useMemo(() => ({
     '--logoloop-gap': `${gap}px`,
@@ -193,8 +198,9 @@ export const LogoLoop = memo(({
     isVertical ? 'logoloop--vertical' : 'logoloop--horizontal',
     fadeOut && 'logoloop--fade',
     scaleOnHover && 'logoloop--scale-hover',
+    pauseControl && 'logoloop--has-pause',
     className,
-  ].filter(Boolean).join(' '), [isVertical, fadeOut, scaleOnHover, className])
+  ].filter(Boolean).join(' '), [isVertical, fadeOut, scaleOnHover, pauseControl, className])
 
   const handleMouseEnter = useCallback(() => {
     if (effectiveHoverSpeed !== undefined) setIsHovered(true)
@@ -255,7 +261,17 @@ export const LogoLoop = memo(({
   }), [width, cssVariables, style, isVertical])
 
   return (
-    <div ref={containerRef} className={rootClassName} style={containerStyle} role="region" aria-label={ariaLabel}>
+    <div ref={containerRef} className={rootClassName} style={containerStyle} role="region" aria-label={ariaLabel} aria-live="off">
+      {pauseControl ? (
+        <button
+          type="button"
+          className="logoloop__pause"
+          aria-pressed={paused}
+          onClick={() => setPaused((v) => !v)}
+        >
+          {paused ? playLabel : pauseLabel}
+        </button>
+      ) : null}
       <div
         className="logoloop__track"
         ref={trackRef}

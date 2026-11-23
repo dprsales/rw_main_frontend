@@ -72,6 +72,8 @@ export const pages = {
     'home.orgs.title.a': 'Trusted across ',
     'home.orgs.title.b': "Hyderabad's luxury market.",
     'home.orgs.aria': 'Organisations Team RW has worked with',
+    'home.loop.pause': 'Pause',
+    'home.loop.play': 'Play',
     'home.words.eyebrow': 'VOICES',
     'home.words.title.a': 'Industry ',
     'home.words.title.b': 'voices.',

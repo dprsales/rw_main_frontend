@@ -178,7 +178,7 @@ export default function Consulting() {
         </div>
       </section>
 
-      <section id="model" style={{ ...sectionRule, background: 'var(--chip)', overflow: 'hidden' }}>
+      <section id="model" className="rw-band" style={{ ...sectionRule, overflow: 'hidden' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
           <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56, marginBottom: 'clamp(56px,7vw,90px)' }}>
             <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>{t('consult.model.eyebrow')}</Reveal>
@@ -227,7 +227,7 @@ export default function Consulting() {
             {t('consult.case.title.a')}
             <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>{t('consult.case.title.b')}</span>
           </Reveal>
-          <Reveal as="p" delay={140} style={{ ...note, marginTop: 26, fontSize: fs('clamp(16px,1.7vw,18px)'), lineHeight: 1.6, maxWidth: '44em' }}>
+          <Reveal as="p" delay={140} style={{ ...note, marginTop: 26, fontSize: fs('clamp(16px,1.7vw,18px)'), lineHeight: 1.6, maxWidth: '36em' }}>
             {t('consult.case.body')}
           </Reveal>
           <div className="rw-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 32, marginTop: 'clamp(34px,4vw,52px)' }}>

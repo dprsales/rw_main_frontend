@@ -239,7 +239,7 @@ export default function Realty() {
         </div>
       </section>
 
-      <section id="clients" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
+      <section id="clients" className="rw-band" style={sectionRule}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <SectionHead
             eyebrow={t('realty.clients.eyebrow')}
@@ -259,8 +259,11 @@ export default function Realty() {
               direction="left"
               gap={12}
               hoverSpeed={0}
+              pauseControl
+              pauseLabel={t('home.loop.pause')}
+              playLabel={t('home.loop.play')}
               fadeOut
-              fadeOutColor="var(--chip)"
+              fadeOutColor="var(--rw-band-solid)"
               ariaLabel={t('realty.clients.aria')}
               className="rw-logoloop"
               renderItem={(item) => (

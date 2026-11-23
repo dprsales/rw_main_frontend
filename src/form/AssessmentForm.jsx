@@ -384,9 +384,9 @@ export default function AssessmentForm({
         <div className="rw-form-pad rw-form-wrap rw-form-rail-inner">
           {showBack ? (
             <button type="button" className="rw-form-back" onClick={reset} disabled={isSubmitting}>{backLabel}</button>
-          ) : (
+          ) : !embedded ? (
             <span className="rw-form-back" style={{ visibility: 'hidden' }} aria-hidden="true">{backLabel}</span>
-          )}
+          ) : null}
           <span className="rw-form-rail-label">{t('sale.rail', { label: t(`sale.track.${trackKey}.label`), done, total: required.length })}</span>
           <div className="rw-form-bar">
             <div className="rw-form-bar-fill" style={{ transform: `scaleX(${required.length ? done / required.length : 0})` }} />
@@ -397,7 +397,11 @@ export default function AssessmentForm({
       <section className="rw-form-pad rw-form-body">
         <Reveal instant={embedded} className="rw-form-preamble">
           <div className="rw-form-eyebrow" style={{ fontSize: 13 }}>{t(`sale.track.${trackKey}.eyebrow`)}</div>
-          <h1 className="rw-form-h2" style={{ marginTop: 12 }}>{t(`sale.track.${trackKey}.title`)}</h1>
+          {embedded ? (
+            <h2 className="rw-form-h2 rw-section-title" style={{ marginTop: 12 }}>{t(`sale.track.${trackKey}.title`)}</h2>
+          ) : (
+            <h1 className="rw-form-h2" style={{ marginTop: 12 }}>{t(`sale.track.${trackKey}.title`)}</h1>
+          )}
           {track.intro.thanks && <p className="rw-form-thanks">{t(`sale.track.${trackKey}.thanks`)}</p>}
           <p className="rw-form-note" style={{ marginTop: 6, marginLeft: 'auto', marginRight: 'auto', maxWidth: '36em' }}>
             {t(`sale.track.${trackKey}.line`)}

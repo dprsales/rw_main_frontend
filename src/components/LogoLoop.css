@@ -98,6 +98,36 @@
   /* !important beats the inline transform the rAF loop writes each frame. */
   .logoloop__track { transform: translate3d(0, 0, 0) !important; }
   .logoloop__item img, .logoloop__node { transition: none !important; }
+  .logoloop__pause { display: none; }
+}
+
+.logoloop--has-pause { padding-top: 28px; }
+.logoloop__pause {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 12;
+  min-height: 32px;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  color: var(--faded);
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color .25s ease, border-color .25s ease, background .25s ease;
+}
+.logoloop__pause:hover,
+.logoloop__pause[aria-pressed='true'] {
+  color: var(--ink);
+  border-color: var(--copper);
+}
+.logoloop__pause:focus-visible {
+  outline: 2px solid var(--copper);
+  outline-offset: 2px;
 }
 
 /* Site-specific: vector marks (white on transparent) get a dark tile (.is-dark); opaque
@@ -117,11 +147,19 @@
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(242, 239, 233, .18);
   border-radius: 4px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  transition: border-color .35s ease, box-shadow .35s ease, transform .35s cubic-bezier(.2, .7, .2, 1);
+}
+
+.rw-logoloop .rw-loop-tile:hover {
+  border-color: color-mix(in srgb, var(--copper) 55%, rgba(242, 239, 233, .35));
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  transform: translateY(-2px);
 }
 
 .rw-logoloop .rw-loop-tile.is-dark {
-  background: rgba(20, 18, 16, .55);
-  border-color: rgba(242, 239, 233, .18);
+  background: rgba(20, 18, 16, .72);
+  border-color: color-mix(in srgb, var(--copper) 28%, rgba(242, 239, 233, .16));
 }
 
 /* Overrides height: var(--logoloop-logoHeight) so the mark is contained by the tile. */
