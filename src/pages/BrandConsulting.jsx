@@ -118,6 +118,8 @@ const emptyForm = () => ({
   helpAreas: [],
   projectStage: '',
   timeline: '',
+  assetsMode: 'detailed',
+  assetsSkipReason: '',
   brandAssets: emptyAssets(),
   challenges: [],
   challengeOther: '',
@@ -126,6 +128,9 @@ const emptyForm = () => ({
   website: '',
   privacyConsent: false,
 })
+
+/** Concrete options only. Other stays manual because it needs a note. */
+const selectableItems = (items) => items.filter((item) => item !== 'Other')
 
 export default function BrandConsulting() {
   const [form, setForm] = useState(emptyForm)
@@ -179,6 +184,37 @@ export default function BrandConsulting() {
     }
   }
 
+  const selectAllList = (field, items, otherField) => {
+    markStarted()
+    const all = selectableItems(items)
+    setForm((prev) => {
+      const keepOther = otherField && (prev[field] || []).includes('Other')
+      return {
+        ...prev,
+        [field]: keepOther ? [...all, 'Other'] : all,
+      }
+    })
+    setFieldErrors((prev) => prev.filter((row) => row.id !== field))
+    if (status === 'error') {
+      setStatus('idle')
+      setError('')
+    }
+  }
+
+  const clearList = (field, otherField) => {
+    markStarted()
+    setForm((prev) => ({
+      ...prev,
+      [field]: [],
+      ...(otherField ? { [otherField]: '' } : {}),
+    }))
+    setFieldErrors((prev) => prev.filter((row) => row.id !== field && row.id !== otherField))
+    if (status === 'error') {
+      setStatus('idle')
+      setError('')
+    }
+  }
+
   const toggleHelpArea = (area) => toggleList('helpAreas', null, area)
   const toggleChallenge = (item) => toggleList('challenges', 'challengeOther', item)
   const toggleExtra = (item) => toggleList('extras', 'extrasOther', item)
@@ -186,15 +222,47 @@ export default function BrandConsulting() {
   const setAssetStatus = (key, next) => {
     markStarted()
     setForm((prev) => {
+      if (prev.assetsMode === 'skipped') return prev
       const current = prev.brandAssets[key]
-      // Tap again to clear.
       const statusValue = current === next ? 'unset' : next
       return {
         ...prev,
+        assetsMode: 'detailed',
+        assetsSkipReason: '',
         brandAssets: { ...prev.brandAssets, [key]: statusValue },
       }
     })
-    setFieldErrors((prev) => prev.filter((row) => row.id !== 'brandAssets'))
+    setFieldErrors((prev) => prev.filter((row) => row.id !== 'brandAssets' && row.id !== 'assetsSkipReason'))
+    if (status === 'error') {
+      setStatus('idle')
+      setError('')
+    }
+  }
+
+  const markAllAssets = (statusValue) => {
+    markStarted()
+    setForm((prev) => ({
+      ...prev,
+      assetsMode: 'detailed',
+      assetsSkipReason: '',
+      brandAssets: Object.fromEntries(BRAND_ASSETS.map((item) => [item.key, statusValue])),
+    }))
+    setFieldErrors((prev) => prev.filter((row) => row.id !== 'brandAssets' && row.id !== 'assetsSkipReason'))
+    if (status === 'error') {
+      setStatus('idle')
+      setError('')
+    }
+  }
+
+  const setAssetsSkip = (on) => {
+    markStarted()
+    setForm((prev) => ({
+      ...prev,
+      assetsMode: on ? 'skipped' : 'detailed',
+      assetsSkipReason: on ? prev.assetsSkipReason : '',
+      brandAssets: on ? emptyAssets() : prev.brandAssets,
+    }))
+    setFieldErrors((prev) => prev.filter((row) => row.id !== 'brandAssets' && row.id !== 'assetsSkipReason'))
     if (status === 'error') {
       setStatus('idle')
       setError('')
@@ -206,20 +274,66 @@ export default function BrandConsulting() {
     if (!form.name.trim()) missing.push({ id: 'name', label: 'Name' })
     if (!form.email.trim()) missing.push({ id: 'email', label: 'Email' })
     if (!isValidPhone(form.phone)) missing.push({ id: 'phone', label: 'Phone (10 digits)' })
+    if (!form.role) missing.push({ id: 'role', label: 'Your role' })
+    if (!form.company.trim()) missing.push({ id: 'company', label: 'Company / developer' })
+    if (!form.projectName.trim()) missing.push({ id: 'projectName', label: 'Project name' })
+    if (!form.location.trim()) missing.push({ id: 'location', label: 'City / location' })
+    if (!form.projectStage) missing.push({ id: 'projectStage', label: 'Project stage' })
     if (!form.brandNeed) missing.push({ id: 'brandNeed', label: 'What you need' })
     if (!form.helpAreas.length) missing.push({ id: 'helpAreas', label: 'Areas of help' })
-    const answeredAssets = Object.values(form.brandAssets).filter((value) => value === 'have' || value === 'need')
-    if (!answeredAssets.length) missing.push({ id: 'brandAssets', label: 'Brand assets (We have / We need)' })
+    if (!form.timeline) missing.push({ id: 'timeline', label: 'When you want to start' })
+    if (form.assetsMode === 'skipped') {
+      if (!form.assetsSkipReason.trim()) {
+        missing.push({ id: 'assetsSkipReason', label: 'Reason for skipping brand assets' })
+      }
+    } else {
+      const unanswered = BRAND_ASSETS.filter((item) => {
+        const value = form.brandAssets[item.key]
+        return value !== 'have' && value !== 'need'
+      })
+      if (unanswered.length) {
+        missing.push({ id: 'brandAssets', label: 'Brand assets (mark every row, or Skip)' })
+      }
+    }
     if (!form.challenges.length) missing.push({ id: 'challenges', label: 'Biggest brand challenge' })
     if (form.challenges.includes('Other') && !form.challengeOther.trim()) {
       missing.push({ id: 'challengeOther', label: 'Other challenge detail' })
     }
+    if (!form.extras.length) missing.push({ id: 'extras', label: 'Anything else we should know' })
     if (form.extras.includes('Other') && !form.extrasOther.trim()) {
       missing.push({ id: 'extrasOther', label: 'Other note detail' })
     }
     if (!form.privacyConsent) missing.push({ id: 'privacyConsent', label: 'Privacy consent' })
     setFieldErrors(missing)
-    return missing.length === 0
+    return missing
+  }
+
+  const focusFirstMissing = (missing) => {
+    const first = missing[0]
+    if (!first) return
+    let root = document.getElementById(`bc-${first.id}`)
+    if (!root) {
+      errorRef.current?.focus()
+      return
+    }
+    if (root.tagName === 'LEGEND') {
+      const matrix = root.parentElement?.querySelector('.rw-bc-matrix, .rw-bc-toolbar, textarea')
+      if (matrix) root = matrix
+    }
+    root.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const focusable = root.matches('input, textarea, select, button')
+      ? root
+      : root.querySelector(
+          'input:not([type="hidden"]), textarea, button.rw-form-select-btn, button.rw-bc-chip, button.rw-bc-seg-btn, button.rw-bc-check-action, button.rw-bc-mode-btn, button.rw-bc-link-action',
+        )
+    window.setTimeout(() => {
+      if (focusable && typeof focusable.focus === 'function') {
+        focusable.focus({ preventScroll: true })
+        return
+      }
+      if (!root.hasAttribute('tabindex')) root.tabIndex = -1
+      root.focus({ preventScroll: true })
+    }, 280)
   }
 
   const composeChallenge = () => {
@@ -241,16 +355,18 @@ export default function BrandConsulting() {
   const onSubmit = async (e) => {
     e.preventDefault()
     if (status === 'sending') return
-    if (!validate()) {
+    const missing = validate()
+    if (missing.length) {
       setStatus('error')
-      setError('Please fix the highlighted fields.')
-      requestAnimationFrame(() => errorRef.current?.focus())
+      setError('Please fill the highlighted required fields.')
+      requestAnimationFrame(() => focusFirstMissing(missing))
       return
     }
 
     setStatus('sending')
     setError('')
     try {
+      const assetsSkipped = form.assetsMode === 'skipped'
       await submitBrandConsultingEnquiry({
         name: form.name.trim(),
         email: form.email.trim(),
@@ -263,11 +379,15 @@ export default function BrandConsulting() {
         helpAreas: form.helpAreas,
         projectStage: form.projectStage,
         timeline: form.timeline,
-        brandAssets: BRAND_ASSETS.map((item) => ({
-          key: item.key,
-          label: `${item.no} ${item.label}`,
-          status: form.brandAssets[item.key] || 'unset',
-        })),
+        assetsMode: assetsSkipped ? 'skipped' : 'detailed',
+        assetsSkipReason: assetsSkipped ? form.assetsSkipReason.trim() : '',
+        brandAssets: assetsSkipped
+          ? []
+          : BRAND_ASSETS.map((item) => ({
+              key: item.key,
+              label: `${item.no} ${item.label}`,
+              status: form.brandAssets[item.key] || 'unset',
+            })),
         challenge: composeChallenge(),
         moreDetail: composeMoreDetail(),
         website: form.website,
@@ -359,7 +479,7 @@ export default function BrandConsulting() {
                     Tell us about the brand work
                   </h2>
                   <p className="rw-bc-note" style={{ fontFamily: text }}>
-                    Short brand brief for Team RW. Mark Have or Need on your assets below.
+                    Full brand brief for Team RW. Every field is required. Mark Have or Need on every asset, or Skip with a reason.
                   </p>
                 </header>
 
@@ -377,7 +497,15 @@ export default function BrandConsulting() {
                       <ul>
                         {fieldErrors.map((row) => (
                           <li key={row.id}>
-                            <a href={`#bc-${row.id}`}>{row.label} is required</a>
+                            <a
+                              href={`#bc-${row.id}`}
+                              onClick={(ev) => {
+                                ev.preventDefault()
+                                focusFirstMissing([row])
+                              }}
+                            >
+                              {row.label} is required
+                            </a>
                           </li>
                         ))}
                       </ul>
@@ -441,18 +569,24 @@ export default function BrandConsulting() {
                     </label>
 
                     <label className="rw-form-field-wrap" htmlFor="bc-role">
-                      <span className="rw-form-q-title">Your role</span>
+                      <span className="rw-form-q-title">
+                        Your role <span className="rw-form-req">*</span>
+                      </span>
                       <FormSelect
                         id="bc-role"
                         value={form.role}
                         options={ROLES}
                         placeholder="Select"
                         onChange={setPick('role')}
+                        aria-invalid={fieldErrors.some((row) => row.id === 'role')}
+                        required
                       />
                     </label>
 
                     <label className="rw-form-field-wrap" htmlFor="bc-company">
-                      <span className="rw-form-q-title">Company / developer</span>
+                      <span className="rw-form-q-title">
+                        Company / developer <span className="rw-form-req">*</span>
+                      </span>
                       <input
                         id="bc-company"
                         className="rw-form-field"
@@ -460,22 +594,30 @@ export default function BrandConsulting() {
                         autoComplete="organization"
                         value={form.company}
                         onChange={set('company')}
+                        aria-invalid={fieldErrors.some((row) => row.id === 'company')}
+                        required
                       />
                     </label>
 
                     <label className="rw-form-field-wrap" htmlFor="bc-projectName">
-                      <span className="rw-form-q-title">Project name</span>
+                      <span className="rw-form-q-title">
+                        Project name <span className="rw-form-req">*</span>
+                      </span>
                       <input
                         id="bc-projectName"
                         className="rw-form-field"
                         name="projectName"
                         value={form.projectName}
                         onChange={set('projectName')}
+                        aria-invalid={fieldErrors.some((row) => row.id === 'projectName')}
+                        required
                       />
                     </label>
 
                     <label className="rw-form-field-wrap" htmlFor="bc-location">
-                      <span className="rw-form-q-title">City / location</span>
+                      <span className="rw-form-q-title">
+                        City / location <span className="rw-form-req">*</span>
+                      </span>
                       <input
                         id="bc-location"
                         className="rw-form-field"
@@ -483,17 +625,23 @@ export default function BrandConsulting() {
                         placeholder="e.g. Gachibowli, Hyderabad"
                         value={form.location}
                         onChange={set('location')}
+                        aria-invalid={fieldErrors.some((row) => row.id === 'location')}
+                        required
                       />
                     </label>
 
                     <label className="rw-form-field-wrap" htmlFor="bc-projectStage">
-                      <span className="rw-form-q-title">Project stage</span>
+                      <span className="rw-form-q-title">
+                        Project stage <span className="rw-form-req">*</span>
+                      </span>
                       <FormSelect
                         id="bc-projectStage"
                         value={form.projectStage}
                         options={PROJECT_STAGES}
                         placeholder="Select"
                         onChange={setPick('projectStage')}
+                        aria-invalid={fieldErrors.some((row) => row.id === 'projectStage')}
+                        required
                       />
                     </label>
                   </div>
@@ -527,7 +675,33 @@ export default function BrandConsulting() {
                       <span id="bc-helpAreas-label" className="rw-form-q-title">
                         Where do you need help? <span className="rw-form-req">*</span>
                       </span>
-                      <p className="rw-bc-hint">Select all that apply.</p>
+                      <p className="rw-bc-hint">Select a few, or Select all. Each choice is saved by name.</p>
+                      <div className="rw-bc-toolbar rw-bc-toolbar--checks" role="toolbar" aria-label="Help areas quick actions">
+                        <button
+                          type="button"
+                          className={`rw-bc-check-action${selectableItems(HELP_AREAS).every((item) => form.helpAreas.includes(item)) ? ' is-on' : ''}`}
+                          aria-pressed={selectableItems(HELP_AREAS).every((item) => form.helpAreas.includes(item))}
+                          onClick={() => {
+                            if (selectableItems(HELP_AREAS).every((item) => form.helpAreas.includes(item))) {
+                              clearList('helpAreas', null)
+                            } else {
+                              selectAllList('helpAreas', HELP_AREAS, null)
+                            }
+                          }}
+                        >
+                          <span className="rw-bc-check-box" aria-hidden="true" />
+                          Select all
+                        </button>
+                        <span className="rw-bc-toolbar-sep" aria-hidden="true" />
+                        <button
+                          type="button"
+                          className="rw-bc-link-action"
+                          onClick={() => clearList('helpAreas', null)}
+                          disabled={!form.helpAreas.length}
+                        >
+                          Clear
+                        </button>
+                      </div>
                       <div className="rw-bc-chips">
                         {HELP_AREAS.map((area) => {
                           const on = form.helpAreas.includes(area)
@@ -547,13 +721,17 @@ export default function BrandConsulting() {
                     </div>
 
                     <label className="rw-form-field-wrap" htmlFor="bc-timeline">
-                      <span className="rw-form-q-title">When do you want to start?</span>
+                      <span className="rw-form-q-title">
+                        When do you want to start? <span className="rw-form-req">*</span>
+                      </span>
                       <FormSelect
                         id="bc-timeline"
                         value={form.timeline}
                         options={TIMELINES}
                         placeholder="Select"
                         onChange={setPick('timeline')}
+                        aria-invalid={fieldErrors.some((row) => row.id === 'timeline')}
+                        required
                       />
                     </label>
                   </div>
@@ -564,10 +742,61 @@ export default function BrandConsulting() {
                     Brand assets <span className="rw-form-req">*</span>
                   </legend>
                   <p className="rw-bc-hint rw-bc-hint--tight">
-                    Mark Have or Need for every asset below.
+                    Mark Have or Need on every row, use Mark all shortcuts, or Skip for now with a reason.
                   </p>
                   <div
-                    className="rw-bc-matrix"
+                    className="rw-bc-toolbar rw-bc-toolbar--mode"
+                    role="radiogroup"
+                    aria-label="Brand asset quick actions"
+                  >
+                    <button
+                      type="button"
+                      role="radio"
+                      className={`rw-bc-mode-btn${form.assetsMode !== 'skipped' && BRAND_ASSETS.every((item) => form.brandAssets[item.key] === 'have') ? ' is-on' : ''}`}
+                      aria-checked={form.assetsMode !== 'skipped' && BRAND_ASSETS.every((item) => form.brandAssets[item.key] === 'have')}
+                      onClick={() => markAllAssets('have')}
+                    >
+                      All Have
+                    </button>
+                    <button
+                      type="button"
+                      role="radio"
+                      className={`rw-bc-mode-btn${form.assetsMode !== 'skipped' && BRAND_ASSETS.every((item) => form.brandAssets[item.key] === 'need') ? ' is-on' : ''}`}
+                      aria-checked={form.assetsMode !== 'skipped' && BRAND_ASSETS.every((item) => form.brandAssets[item.key] === 'need')}
+                      onClick={() => markAllAssets('need')}
+                    >
+                      All Need
+                    </button>
+                    <button
+                      type="button"
+                      role="radio"
+                      className={`rw-bc-mode-btn${form.assetsMode === 'skipped' ? ' is-on' : ''}`}
+                      aria-checked={form.assetsMode === 'skipped'}
+                      onClick={() => setAssetsSkip(form.assetsMode !== 'skipped')}
+                    >
+                      Skip
+                    </button>
+                  </div>
+                  {form.assetsMode === 'skipped' ? (
+                    <label className="rw-bc-other-field" htmlFor="bc-assetsSkipReason">
+                      <span className="rw-form-q-title">
+                        Why are you skipping this? <span className="rw-form-req">*</span>
+                      </span>
+                      <textarea
+                        id="bc-assetsSkipReason"
+                        className="rw-form-field rw-bc-message"
+                        name="assetsSkipReason"
+                        rows={3}
+                        value={form.assetsSkipReason}
+                        onChange={set('assetsSkipReason')}
+                        placeholder="e.g. Will share brand kit on the call / Not ready yet / Already have an agency"
+                        aria-invalid={fieldErrors.some((row) => row.id === 'assetsSkipReason')}
+                        required
+                      />
+                    </label>
+                  ) : null}
+                  <div
+                    className={`rw-bc-matrix${form.assetsMode === 'skipped' ? ' is-skipped' : ''}`}
                     role="group"
                     aria-labelledby="bc-brandAssets"
                     aria-invalid={fieldErrors.some((row) => row.id === 'brandAssets')}
@@ -599,6 +828,7 @@ export default function BrandConsulting() {
                                 className={`rw-bc-seg-btn${value === 'have' ? ' is-on' : ''}`}
                                 aria-checked={value === 'have'}
                                 onClick={() => setAssetStatus(item.key, 'have')}
+                                disabled={form.assetsMode === 'skipped'}
                               >
                                 Have
                               </button>
@@ -608,6 +838,7 @@ export default function BrandConsulting() {
                                 className={`rw-bc-seg-btn${value === 'need' ? ' is-on' : ''}`}
                                 aria-checked={value === 'need'}
                                 onClick={() => setAssetStatus(item.key, 'need')}
+                                disabled={form.assetsMode === 'skipped'}
                               >
                                 Need
                               </button>
@@ -633,6 +864,32 @@ export default function BrandConsulting() {
                         Biggest brand challenge right now <span className="rw-form-req">*</span>
                       </span>
                       <p className="rw-bc-hint">Select all that apply. Tap Other only if needed.</p>
+                      <div className="rw-bc-toolbar rw-bc-toolbar--checks" role="toolbar" aria-label="Challenges quick actions">
+                        <button
+                          type="button"
+                          className={`rw-bc-check-action${selectableItems(CHALLENGES).every((item) => form.challenges.includes(item)) ? ' is-on' : ''}`}
+                          aria-pressed={selectableItems(CHALLENGES).every((item) => form.challenges.includes(item))}
+                          onClick={() => {
+                            if (selectableItems(CHALLENGES).every((item) => form.challenges.includes(item))) {
+                              clearList('challenges', 'challengeOther')
+                            } else {
+                              selectAllList('challenges', CHALLENGES, 'challengeOther')
+                            }
+                          }}
+                        >
+                          <span className="rw-bc-check-box" aria-hidden="true" />
+                          Select all
+                        </button>
+                        <span className="rw-bc-toolbar-sep" aria-hidden="true" />
+                        <button
+                          type="button"
+                          className="rw-bc-link-action"
+                          onClick={() => clearList('challenges', 'challengeOther')}
+                          disabled={!form.challenges.length}
+                        >
+                          Clear
+                        </button>
+                      </div>
                       <div className="rw-bc-chips">
                         {CHALLENGES.map((item) => {
                           const on = form.challenges.includes(item)
@@ -674,11 +931,38 @@ export default function BrandConsulting() {
                       className="rw-form-field-wrap rw-form-field-wrap--wide"
                       role="group"
                       aria-labelledby="bc-extras-label"
+                      aria-invalid={fieldErrors.some((row) => row.id === 'extras')}
                     >
                       <span id="bc-extras-label" className="rw-form-q-title">
-                        Anything else we should know?
+                        Anything else we should know? <span className="rw-form-req">*</span>
                       </span>
-                      <p className="rw-bc-hint">Optional. Tap Other only if needed.</p>
+                      <p className="rw-bc-hint">Select at least one. Tap Other only if needed.</p>
+                      <div className="rw-bc-toolbar rw-bc-toolbar--checks" role="toolbar" aria-label="Extra notes quick actions">
+                        <button
+                          type="button"
+                          className={`rw-bc-check-action${selectableItems(EXTRA_NOTES).every((item) => form.extras.includes(item)) ? ' is-on' : ''}`}
+                          aria-pressed={selectableItems(EXTRA_NOTES).every((item) => form.extras.includes(item))}
+                          onClick={() => {
+                            if (selectableItems(EXTRA_NOTES).every((item) => form.extras.includes(item))) {
+                              clearList('extras', 'extrasOther')
+                            } else {
+                              selectAllList('extras', EXTRA_NOTES, 'extrasOther')
+                            }
+                          }}
+                        >
+                          <span className="rw-bc-check-box" aria-hidden="true" />
+                          Select all
+                        </button>
+                        <span className="rw-bc-toolbar-sep" aria-hidden="true" />
+                        <button
+                          type="button"
+                          className="rw-bc-link-action"
+                          onClick={() => clearList('extras', 'extrasOther')}
+                          disabled={!form.extras.length}
+                        >
+                          Clear
+                        </button>
+                      </div>
                       <div className="rw-bc-chips">
                         {EXTRA_NOTES.map((item) => {
                           const on = form.extras.includes(item)
@@ -751,7 +1035,7 @@ export default function BrandConsulting() {
                     style={ctaCopper}
                     disabled={status === 'sending'}
                   >
-                    {status === 'sending' ? 'Sending...' : 'Send brand brief'}
+                    {status === 'sending' ? 'Submitting...' : 'Submit'}
                   </button>
                 </div>
               </form>

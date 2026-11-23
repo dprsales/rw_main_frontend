@@ -58,6 +58,11 @@ export const ROUTE_SEO = {
     description:
       '16 years in Hyderabad inventory. Team RW brand consulting helps developers sell with the right brand language and buyer psychology. Rajiv is the face of the brand.',
   },
+  '/socialmedia': {
+    title: 'Social Media Management for Real Estate Brands | Rajiv Williams',
+    description:
+      'Team RW social media management for Hyderabad developers: Instagram, Facebook, YouTube, LinkedIn, X, Threads, creatives, ads, plus SEO and local visibility add-ons.',
+  },
   /* Legacy paths; app redirects to /brandconsulting. */
   '/brandingconsulting': {
     title: 'Brand Consulting for Real Estate Developers | Rajiv Williams',

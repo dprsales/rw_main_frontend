@@ -161,6 +161,9 @@ export const submitBrandConsultingChecklist = (data) =>
 export const submitBrandConsultingEnquiry = (data) =>
   request('/brand-consulting-enquiry', { method: 'POST', body: data })
 
+export const submitSocialMediaEnquiry = (data) =>
+  request('/social-media-enquiry', { method: 'POST', body: data })
+
 /** Published Team RW stills for the Gallery page. */
 export const fetchGalleryPhotos = () => request('/gallery-photos')
 

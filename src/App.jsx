@@ -38,6 +38,7 @@ import ContentLibrary from './pages/ContentLibrary'
 import Gallery from './pages/Gallery'
 import BrandConsulting from './pages/BrandConsulting'
 import BrandConsultingChecklist from './pages/BrandConsultingChecklist'
+import SocialMedia from './pages/SocialMedia'
 
 const ListPropertyPage = lazy(() => import('./listings/pages/ListPropertyPage'))
 const DashboardPage = lazy(() => import('./listings/pages/DashboardPage'))
@@ -137,6 +138,7 @@ export default function App() {
           <Route path="/consulting" element={<Consulting />} />
           {/* Clean shareable URLs (same style as /vendorpartner, /brandconsultingchecklist). */}
           <Route path="/brandconsulting" element={<BrandConsulting />} />
+          <Route path="/socialmedia" element={<SocialMedia />} />
           <Route path="/investmentadvisory" element={<ProjectHyderabad />} />
           <Route path="/realty" element={<Realty />} />
           <Route path="/careers" element={<Careers />} />
@@ -178,6 +180,9 @@ export default function App() {
           <Route path="/brandingconsulting" element={<Navigate to="/brandconsulting" replace />} />
           <Route path="/consulting/brand-consulting" element={<Navigate to="/brandconsulting" replace />} />
           <Route path="/consulting/brand&marketing" element={<Navigate to="/brandconsulting" replace />} />
+          <Route path="/social-media" element={<Navigate to="/socialmedia" replace />} />
+          <Route path="/socialmediamanagement" element={<Navigate to="/socialmedia" replace />} />
+          <Route path="/services/social-media" element={<Navigate to="/socialmedia" replace />} />
           <Route path="/project-hyderabad" element={<Navigate to="/investmentadvisory" replace />} />
           {/* Project detail pages, keyed by API slug; both bare and realty-nested paths resolve here */}
           <Route path="/projects/:slug" element={<Project />} />

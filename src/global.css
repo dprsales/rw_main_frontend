@@ -1147,6 +1147,17 @@ html[lang="te"] .rw-chip-caption-text { line-height: 1.55; }
   display: block; margin-bottom: 10px;
   font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--copper);
 }
+.rw-chip-caption-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--copper);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--copper) 45%, transparent);
+}
+.rw-chip-caption-link:hover { color: var(--ink); border-bottom-color: var(--ink); }
 
 /* Skeleton placeholder shown by <Skeleton> while blog images buffer. Gold-tinted, not a dead grey block. */
 .rw-skel {

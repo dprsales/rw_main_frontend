@@ -24,6 +24,13 @@ export function formPathForRoute(pathname = '/') {
     || path.startsWith('/consulting/brand-consulting')
   ) return '/brandconsulting#enquire'
   if (
+    path === '/socialmedia'
+    || path.startsWith('/socialmedia#')
+    || path === '/social-media'
+    || path.startsWith('/social-media#')
+    || path.startsWith('/socialmediamanagement')
+  ) return '/socialmedia#enquire'
+  if (
     path.startsWith('/coaching')
     || path.startsWith('/assessment')
     || path.startsWith('/result')
@@ -117,6 +124,9 @@ const PAGE_AREAS = [
   [/^\/brandingconsultingchecklist/, 'Brand Checklist'],
   [/^\/brandconsulting/, 'Brand Consulting'],
   [/^\/brandingconsulting/, 'Brand Consulting'],
+  [/^\/socialmedia/, 'Social Media'],
+  [/^\/social-media/, 'Social Media'],
+  [/^\/socialmediamanagement/, 'Social Media'],
   [/^\/consulting/, 'Consulting'],
   [/^\/(realty|projects)/, 'Realty'],
   [/^\/investmentadvisory/, 'Investment Advisory'],

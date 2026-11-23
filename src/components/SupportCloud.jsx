@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { SUPPORT_SERVICES } from '../data/content'
 import { useLang } from '../i18n/LangProvider'
@@ -143,6 +144,14 @@ export default function SupportCloud() {
             >
               <span className="rw-chip-caption-label" style={{ fontFamily: mono }}>{t(`home.more.${i}.title`)}</span>
               {t(`home.more.${i}.desc`)}
+              {svc.to && i === active ? (
+                <>
+                  {' '}
+                  <Link to={svc.to} className="rw-chip-caption-link" style={{ fontFamily: mono }}>
+                    Enquire →
+                  </Link>
+                </>
+              ) : null}
             </p>
           ))}
         </div>

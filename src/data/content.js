@@ -260,7 +260,7 @@ export const ECOSYSTEM = [
 
 /** "& More" - additional strategic support services, from the brochure's support-services list. */
 export const SUPPORT_SERVICES = [
-  { title: 'Social Media & Brand Presence', desc: 'Built to improve visibility, positioning, and long-term market recall.' },
+  { title: 'Social Media & Brand Presence', desc: 'Built to improve visibility, positioning, and long-term market recall.', to: '/socialmedia' },
   { title: 'Performance Marketing', desc: 'Campaigns engineered for reach, lead generation, and qualified conversions.' },
   { title: 'Media & PR Collaborations', desc: 'Strategic visibility partnerships and media collaborations (including platforms like Happening Hyderabad) to strengthen brand reach and market presence.' },
   { title: 'Organic Video Marketing', desc: 'Content designed to improve engagement, trust, and brand perception.' },

@@ -14,6 +14,7 @@ const CRAWLABLE_LINKS = [
   { label: 'High Ticket Sales Mastery', to: '/highticketsales' },
   { label: 'Business Consulting', to: '/consulting' },
   { label: 'Branding and Marketing', to: '/brandconsulting' },
+  { label: 'Social Media Management', to: '/socialmedia' },
   { label: 'Sales Mandate', to: '/realty' },
   { label: 'Investment Advisory', to: '/investmentadvisory' },
   { label: 'Buy, sell, rent', to: '/listings' },
