@@ -111,11 +111,11 @@ export function activeHiringCampaigns(now = new Date()) {
   })
 }
 
-/* Order is the display order - numbers and connector arrows both run 1→6 down the grid. */
+/* Order is Z-scan display order: 1 2 3 on row one, 4 5 6 on row two. */
 export const ACHIEVE = [
   { title: 'Increase Sales Revenue', body: 'Move from inconsistent wins to structured, repeatable conversions backed by a clear sales framework.' },
   { title: 'Strengthen Cash Flow & Margins', body: 'Position your product or service with authority so pricing becomes a decision, not a negotiation.' },
-  { title: 'Build High Value Clientele', body: 'Learn how to handle premium buyers with clarity, control, and long-term relationship thinking.' },
+  { title: 'Build High-Value Clientele', body: 'Learn how to guide high-value buyers with clarity, control, and long-term relationship thinking.' },
   { title: 'Operate With Authority', body: 'Develop the confidence, communication discipline, and positioning required to lead in competitive markets.' },
   { title: 'Master Sales Psychology', body: 'Understand how decision-makers think at higher ticket sizes and adapt conversations accordingly.' },
   { title: 'Eliminate Revenue Leaks', body: 'Identify where deals slow down or break and install systems that prevent loss of momentum.' },

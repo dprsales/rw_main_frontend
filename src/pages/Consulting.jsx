@@ -9,6 +9,7 @@ import Seo from '../components/Seo'
 import { BookButton } from '../components/BookingModal'
 import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
+import SectionHead from '../components/SectionHead'
 import ServiceLandingForm from '../components/ServiceLandingForm'
 import PullQuote from '../components/PullQuote'
 import { useLang } from '../i18n/LangProvider'
@@ -180,15 +181,13 @@ export default function Consulting() {
 
       <section id="model" className="rw-band" style={{ ...sectionRule, overflow: 'hidden' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-lg) 40px' }}>
-          <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56, marginBottom: 'clamp(56px,7vw,90px)' }}>
-            <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>{t('consult.model.eyebrow')}</Reveal>
-            <Reveal delay={100}>
-              <h2 className="rw-section-title" style={{ ...sectionHeading, maxWidth: '15em', textWrap: 'balance' }}>
-                {t('consult.model.title.a')}
-                <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>{t('consult.model.title.b')}</span>
-              </h2>
-            </Reveal>
-          </div>
+          <SectionHead
+            eyebrow={t('consult.model.eyebrow')}
+            title={t('consult.model.title.a')}
+            titleAccent={t('consult.model.title.b')}
+            titleWidth="22em"
+            space="clamp(56px,7vw,90px)"
+          />
 
           <PhaseGrid
             items={ecosystem}

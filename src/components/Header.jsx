@@ -666,9 +666,9 @@ export default function Header() {
   }, [])
 
   return (
-    // Glass background lives on .rw-header::before (global.css), not on the header itself:
-    // a backdrop-filter on the header would stop the mega menu's own glass from blurring the page.
-    <header ref={headerRef} className="rw-header" style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid var(--line)' }}>
+    // Sticky + solid fill live in global.css (.rw-header). Keep this element in normal
+    // flow so heroes start below it; do not add header-height padding on page heroes.
+    <header ref={headerRef} className="rw-header">
       <HiringBanner />
       <div
         className="rw-pad"

@@ -620,7 +620,11 @@ a:hover { color: var(--ink, #12100D); }
 }
 
 /* Home testimonials: compact single-row strip (orgs LogoLoop density, not a tall grid). */
-.rw-voices-loop.logoloop { --logoloop-logoHeight: 16px; }
+.rw-voices-loop.logoloop {
+  --logoloop-logoHeight: 16px;
+  padding-top: 10px;
+  padding-bottom: 18px;
+}
 .rw-voices-loop .logoloop__item {
   font-size: inherit;
   line-height: inherit;
@@ -901,30 +905,16 @@ a:hover { color: var(--ink, #12100D); }
   transform: translate(-50%, -50%) rotate(90deg);
 }
 
-/* 3 columns (default, > 1000px): the chain snakes (boustrophedon).
+/* 3 columns (default, > 1000px): Z-scan order (left→right, then next row).
       [01][02][03]
                ↓
-      [06][05][04]
-   Row one runs 1→2→3 rightward; card 3 drops DOWN to card 4 (which we place
-   directly beneath it at column 3); the bottom row is reversed so it reads
-   6 ← 5 ← 4 leftward, ending on card 6 at bottom-left. */
+      [04][05][06]
+   Row one runs 1→2→3; card 3 drops DOWN to card 4; row two runs 4→5→6. */
 @media (min-width: 1001px) {
-  /* Pin the row explicitly - non-dense auto-flow won't backtrack to fill earlier columns. */
-  .rw-achieve-grid > *:nth-child(4) { grid-column: 3; grid-row: 2; }
-  .rw-achieve-grid > *:nth-child(5) { grid-column: 2; grid-row: 2; }
-  .rw-achieve-grid > *:nth-child(6) { grid-column: 1; grid-row: 2; }
-
   /* Card 3 drops straight down onto card 4. */
   .rw-achieve-grid > *:nth-child(3) .rw-achieve-arrow {
     left: 50%; top: calc(100% + var(--achieve-gap) / 2);
     transform: translate(-50%, -50%) rotate(90deg);
-  }
-  /* Cards 4 and 5 point LEFT into the gap on their left (between 4|5, 5|6). */
-  .rw-achieve-grid > *:nth-child(4) .rw-achieve-arrow,
-  .rw-achieve-grid > *:nth-child(5) .rw-achieve-arrow {
-    left: calc(0% - var(--achieve-gap) / 2);
-    top: 50%;
-    transform: translate(-50%, -50%) rotate(180deg);
   }
 }
 /* 2 columns (701–1000px): cards 2 and 4 end their rows and point down. */
@@ -2225,11 +2215,18 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   .rw-footer-social { gap: 8px; }
 }
 
-/* Header glass on a pseudo-element so the header isn't a backdrop root (see Header.jsx). */
+/* Sticky header: solid bar in its own layout slot. Heroes sit below in document
+   flow (never under the chrome), so sticky scroll never paints photo through glass. */
+.rw-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
 .rw-header::before {
   content: ''; position: absolute; inset: 0; z-index: -1;
-  background: color-mix(in srgb, var(--bg) 84%, transparent);
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  background: var(--bg);
 }
 
 /* Time-bound hiring rail. Sits inside the sticky header so --rw-header-h tracks it. */
@@ -3548,6 +3545,411 @@ html[lang="te"] .rw-contact-row {
 @media (max-width: 1100px) { .rw-voice-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 700px)  { .rw-voice-grid { grid-template-columns: 1fr; } }
 
+/* About: Team RW case studies (consulting + mandate). */
+.rw-team-cases {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 3vw, 32px);
+  margin-top: clamp(34px, 4vw, 52px);
+}
+.rw-team-case {
+  padding: clamp(24px, 2.8vw, 36px);
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+.rw-team-case-kicker {
+  font-size: calc(var(--rw-fs, 1) * 11px);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--copper);
+  margin-bottom: 14px;
+}
+.rw-team-case-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: calc(var(--rw-fs, 1) * var(--rw-te, 1) * clamp(22px, 2.4vw, 30px));
+  line-height: 1.2;
+  letter-spacing: -.01em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.rw-team-case-body {
+  margin: 16px 0 0;
+  font-weight: 300;
+  font-size: calc(var(--rw-fs, 1) * 15px);
+  line-height: 1.55;
+  color: var(--faded);
+}
+.rw-team-case-points {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+.rw-team-case-points li {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 10px;
+  font-weight: 400;
+  font-size: calc(var(--rw-fs, 1) * 14px);
+  line-height: 1.45;
+  color: var(--ink);
+}
+.rw-team-case-points li::before {
+  content: '';
+  width: 6px; height: 6px; margin-top: 7px;
+  border-radius: 50%;
+  background: var(--copper);
+}
+.rw-team-case-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.rw-team-case-stat-v {
+  font-size: calc(var(--rw-fs, 1) * clamp(22px, 2.2vw, 28px));
+  line-height: 1;
+  color: var(--copper);
+}
+.rw-team-case-stat-l {
+  margin-top: 8px;
+  font-size: calc(var(--rw-fs, 1) * 10px);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faded);
+}
+@media (max-width: 900px) {
+  .rw-team-cases { grid-template-columns: 1fr; }
+  .rw-team-case-stats { grid-template-columns: 1fr; gap: 16px; }
+}
+
+/* Home: Dribbble-style spotlight film rail (center active + narrow side strips). */
+.rw-film-band {
+  position: relative;
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+.rw-film-band:focus-visible {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--copper) 55%, transparent);
+}
+.rw-film-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(20px, 3vw, 40px);
+  flex-wrap: wrap;
+  margin-bottom: clamp(28px, 3.6vw, 44px);
+}
+.rw-film-head-copy { min-width: min(100%, 28rem); flex: 1 1 18rem; }
+.rw-film-lede {
+  margin: 0;
+  max-width: 34em;
+  font-family: 'Poppins', system-ui, sans-serif;
+  font-weight: 300;
+  font-size: calc(var(--rw-fs, 1) * 15px);
+  line-height: 1.55;
+  color: var(--faded);
+}
+.rw-film-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-shrink: 0;
+  padding-bottom: 2px;
+}
+.rw-film-count {
+  font-size: calc(var(--rw-fs, 1) * 12px);
+  letter-spacing: .18em;
+  color: var(--copper);
+  white-space: nowrap;
+}
+.rw-film-count-sep {
+  margin: 0 .35em;
+  color: color-mix(in srgb, var(--faded) 70%, transparent);
+}
+.rw-film-spotlight {
+  --film-h: clamp(380px, 62vh, 560px);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: clamp(8px, 1.1vw, 14px);
+  height: var(--film-h);
+  max-width: 100%;
+  overflow: visible;
+  isolation: isolate;
+}
+.rw-film-card {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #0a0908;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .4);
+  transition: flex-basis .45s cubic-bezier(.2,.7,.2,1), width .45s cubic-bezier(.2,.7,.2,1), filter .35s ease, opacity .35s ease;
+}
+.rw-film-card--active {
+  flex: 0 0 clamp(240px, 28vw, 340px);
+  width: clamp(240px, 28vw, 340px);
+  z-index: 2;
+  overflow: visible;
+  border: 1px solid color-mix(in srgb, var(--copper) 55%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--copper) 28%, transparent),
+    0 0 28px color-mix(in srgb, var(--copper) 32%, transparent),
+    0 0 64px color-mix(in srgb, var(--copper) 18%, transparent),
+    0 28px 56px rgba(0, 0, 0, .52);
+}
+.rw-film-card--active::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -22% -28%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 55% 48% at 50% 42%,
+      color-mix(in srgb, var(--copper) 42%, transparent) 0%,
+      color-mix(in srgb, var(--copper) 18%, transparent) 42%,
+      transparent 72%
+    );
+  filter: blur(32px);
+  opacity: 1;
+}
+.rw-film-card--active.is-playing {
+  border-color: var(--copper);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--copper) 70%, transparent),
+    0 0 36px color-mix(in srgb, var(--copper) 42%, transparent),
+    0 0 80px color-mix(in srgb, var(--copper) 24%, transparent),
+    0 28px 56px rgba(0, 0, 0, .5);
+}
+.rw-film-card--active.is-playing::before {
+  opacity: 1;
+  filter: blur(32px);
+  background:
+    radial-gradient(
+      ellipse 58% 50% at 50% 42%,
+      color-mix(in srgb, var(--copper) 48%, transparent) 0%,
+      color-mix(in srgb, var(--copper) 22%, transparent) 40%,
+      transparent 74%
+    );
+}
+.rw-film-card--side {
+  display: block;
+  cursor: pointer;
+  color: inherit;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.rw-film-card--side:hover,
+.rw-film-card--side:focus-visible {
+  outline: none;
+  filter: brightness(1.08);
+}
+.rw-film-card--side:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--copper) 70%, transparent);
+}
+.rw-film-card--d1 {
+  flex: 0 0 clamp(72px, 8vw, 96px);
+  width: clamp(72px, 8vw, 96px);
+}
+.rw-film-card--d2 {
+  flex: 0 0 clamp(52px, 5.5vw, 72px);
+  width: clamp(52px, 5.5vw, 72px);
+  opacity: .88;
+}
+.rw-film-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0a0908;
+}
+.rw-film-media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #0a0908;
+}
+.rw-film-embed {
+  border: 0;
+  object-fit: unset;
+}
+.rw-film-side-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, .42) 0%,
+    rgba(0, 0, 0, .72) 55%,
+    rgba(0, 0, 0, .88) 100%
+  );
+  pointer-events: none;
+}
+.rw-film-card--d2 .rw-film-side-shade {
+  background: rgba(0, 0, 0, .78);
+}
+.rw-film-side-name {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  font-size: calc(var(--rw-fs, 1) * 11px);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(242, 239, 233, .9);
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+.rw-film-card--right .rw-film-side-name {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.rw-film-play {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+}
+.rw-film-play:focus-visible { outline: none; }
+.rw-film-play-ring {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 999px;
+  background: var(--gold-gradient);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .45);
+  transition: transform .3s cubic-bezier(.2,.7,.2,1), filter .25s ease;
+}
+.rw-film-play:hover .rw-film-play-ring,
+.rw-film-play:focus-visible .rw-film-play-ring {
+  transform: scale(1.06);
+  filter: brightness(1.05);
+}
+.rw-film-play-glyph {
+  width: 0;
+  height: 0;
+  margin-left: 3px;
+  border-style: solid;
+  border-width: 8px 0 8px 13px;
+  border-color: transparent transparent transparent #16110a;
+}
+.rw-film-active-meta {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 48px 16px 18px;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(8, 7, 6, .88));
+}
+.rw-film-active-copy {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.rw-film-active-name {
+  font-size: calc(var(--rw-fs, 1) * 15px);
+  letter-spacing: .04em;
+  text-transform: none;
+  color: #f2efe9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rw-film-active-role {
+  font-size: calc(var(--rw-fs, 1) * 11px);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(242, 239, 233, .62);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rw-film-active-mark {
+  flex-shrink: 0;
+  width: auto;
+  height: 28px;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, .45));
+}
+.rw-film-progress {
+  position: absolute;
+  z-index: 4;
+  left: 16px;
+  right: 16px;
+  bottom: 8px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(242, 239, 233, .18);
+  overflow: hidden;
+  pointer-events: none;
+}
+.rw-film-progress-bar {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--copper);
+  border-radius: inherit;
+}
+.rw-film-progress-bar.is-on {
+  animation: rw-film-progress 48s linear forwards;
+}
+@keyframes rw-film-progress {
+  from { width: 0; }
+  to { width: 100%; }
+}
+@media (max-width: 900px) {
+  .rw-film-card--d2 { display: none; }
+}
+@media (max-width: 700px) {
+  .rw-film-spotlight {
+    --film-h: min(72vw, 460px);
+    gap: 8px;
+  }
+  .rw-film-card--active {
+    flex-basis: min(58vw, 280px);
+    width: min(58vw, 280px);
+  }
+  .rw-film-card--d1 {
+    flex-basis: clamp(56px, 14vw, 72px);
+    width: clamp(56px, 14vw, 72px);
+  }
+  .rw-film-play-ring { width: 56px; height: 56px; }
+  .rw-film-side-name {
+    font-size: calc(var(--rw-fs, 1) * 10px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rw-film-card,
+  .rw-film-play-ring {
+    transition: none;
+  }
+  .rw-film-progress-bar.is-on {
+    animation: none;
+    width: 35%;
+  }
+}
+
 /* Clips horizontal overflow with `clip`, not `hidden` - `overflow-x: hidden`
    forces the other axis to `auto`, silently breaking `position: sticky` for
    descendants. The `hidden` line is a fallback for pre-`clip` browsers (Safari < 16). */
@@ -3831,12 +4233,15 @@ html[lang="te"] .rw-contact-row {
   overflow: hidden;
 }
 
-/* Desktop: at least one viewport below the header. Use min-height (not fixed
-   height) so HRA/meta/CTAs are never clipped by overflow:hidden on short laptops. */
+/* Desktop: fill the viewport below the in-flow header. Use min-height (not
+   fixed height) so HRA/meta/CTAs are never clipped by overflow:hidden.
+   On short laptops the leftover band is too shallow for cover crops, so the
+   floor below prefers a taller frame (slight scroll) over chopping faces. */
 @media (min-width: 761px) {
   .rw-hero {
     min-height: calc(100vh - var(--rw-header-h, 103px));
-    min-height: calc(100svh - var(--rw-header-h, 103px));
+    min-height: max(560px, calc(100vh - var(--rw-header-h, 103px)));
+    min-height: max(560px, calc(100svh - var(--rw-header-h, 103px)));
   }
 }
 
@@ -4008,25 +4413,25 @@ html[lang="te"] .rw-contact-row {
   }
 }
 
-/* Short laptop: keep the copy block centred (not stuck to the top), pack
-   spacing so CTAs/meta/slider still fit without a dead black band under them. */
+/* Short laptop: pack type, keep air under the header, bias cover crops so
+   heads stay in frame. Hero min-height floor (above) may add a little scroll. */
 @media (min-width: 761px) and (max-height: 820px) {
   .rw-hero-copy {
-    padding-top: clamp(24px, 3.2vh, 40px);
-    padding-bottom: clamp(48px, 6.5vh, 64px);
+    padding-top: clamp(28px, 4vh, 48px);
+    padding-bottom: clamp(52px, 7vh, 72px);
     justify-content: center;
   }
   .rw-hero-img--lead,
-  .rw-hero-img--lead img { object-position: 72% 28%; }
+  .rw-hero-img--lead img { object-position: 72% 24%; }
   .rw-hero-img--coaching,
-  .rw-hero-img--coaching img { object-position: 54% 34%; }
+  .rw-hero-img--coaching img { object-position: 54% 30%; }
   .rw-hero-img--bridge,
   .rw-hero-img--bridge img,
-  .rw-hero-photo-stack .rw-hero-img--bridge img { object-position: 70% 38%; }
+  .rw-hero-photo-stack .rw-hero-img--bridge img { object-position: 70% 34%; }
   .rw-hero-img--sky,
-  .rw-hero-img--sky img { object-position: 72% 34%; }
+  .rw-hero-img--sky img { object-position: 72% 30%; }
   .rw-hero .rw-hero-stroke-line {
-    --stroke-text-height: clamp(46px, 6.2vw, 66px) !important;
+    --stroke-text-height: clamp(42px, 5.8vw, 62px) !important;
   }
   .rw-hero .rw-hero-eyebrow {
     margin-bottom: 12px !important;
@@ -4050,6 +4455,44 @@ html[lang="te"] .rw-contact-row {
   }
 }
 
+/* Very short desktop (laptop lids ~560–700px): tighter type, more header clearance. */
+@media (min-width: 761px) and (max-height: 700px) {
+  .rw-hero-copy {
+    padding-top: clamp(32px, 5vh, 44px);
+    padding-bottom: clamp(56px, 9vh, 80px);
+    justify-content: flex-start;
+  }
+  .rw-hero-img--lead,
+  .rw-hero-img--lead img { object-position: 72% 20%; }
+  .rw-hero-img--coaching,
+  .rw-hero-img--coaching img { object-position: 52% 26%; }
+  .rw-hero-img--bridge,
+  .rw-hero-img--bridge img,
+  .rw-hero-photo-stack .rw-hero-img--bridge img { object-position: 68% 30%; }
+  .rw-hero-img--sky,
+  .rw-hero-img--sky img { object-position: 72% 26%; }
+  .rw-hero .rw-hero-stroke-line {
+    --stroke-text-height: clamp(38px, 5.2vw, 54px) !important;
+  }
+  .rw-hero .rw-hero-eyebrow {
+    margin-bottom: 10px !important;
+  }
+  .rw-hero .rw-hero-panel.is-on > p:not(.rw-hero-eyebrow) {
+    margin-top: 10px !important;
+    font-size: clamp(15px, 1.5vw, 17px) !important;
+  }
+  .rw-hero .rw-hero-actions {
+    margin-top: 14px;
+  }
+  .rw-hero-meta {
+    margin-top: 12px !important;
+    padding-top: 10px !important;
+  }
+  .rw-hero-slider {
+    bottom: 8px;
+  }
+}
+
 .rw-hero .rw-hero-explore {
   background: rgba(11,10,9,.45);
   border-color: rgba(242,239,233,.28);
@@ -4068,28 +4511,34 @@ html[lang="te"] .rw-contact-row {
   background: linear-gradient(180deg, rgba(11,10,9,0) 55%, rgba(11,10,9,.35) 100%);
 }
 
-/* Copy sizes the hero. On desktop it is at least one viewport tall so the
-   photo still reads full-bleed; short laptops may grow a little instead of clipping. */
+/* Copy sizes the hero. Same 1320 + 40px shell as header and page sections. */
 .rw-hero-copy {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 1240px;
+  max-width: 1320px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: clamp(36px, 5vh, 72px) clamp(20px, 5vw, 64px);
+  padding: clamp(36px, 5vh, 72px) 40px;
   text-align: left;
   box-sizing: border-box;
 }
 @media (min-width: 761px) {
   .rw-hero-copy {
     min-height: calc(100vh - var(--rw-header-h, 103px));
-    min-height: calc(100svh - var(--rw-header-h, 103px));
+    min-height: max(560px, calc(100vh - var(--rw-header-h, 103px)));
+    min-height: max(560px, calc(100svh - var(--rw-header-h, 103px)));
     /* Leave air above the absolute slider dots. */
     padding-bottom: clamp(52px, 7vh, 80px);
   }
+}
+@media (max-width: 1200px) and (min-width: 761px) {
+  .rw-hero-copy { padding-left: 32px; padding-right: 32px; }
+}
+@media (max-width: 900px) and (min-width: 761px) {
+  .rw-hero-copy { padding-left: 24px; padding-right: 24px; }
 }
 
 /* --- The hero, banded ---------------------------------------------------- */
@@ -5586,7 +6035,7 @@ body.rw-faqs-page [class*="fb_"] {
 }
 
 /* --- Careers: reasons grid ------------------------------------------------ */
-/* Same cards as .rw-achieve but a plain row, not the six-card serpentine (which
+/* Same cards as .rw-achieve but a plain row, not the six-card Z grid (which
    would leave a hole with only four reasons). No connector nodes - these are parallel reasons, not an ordered chain. */
 .rw-reason-grid {
   display: grid;

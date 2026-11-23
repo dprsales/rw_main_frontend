@@ -14,7 +14,7 @@ export default function WhyTeamRwSection() {
       <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
         <Reveal style={{ ...eyebrow, letterSpacing: '.24em', marginBottom: 14 }}>{t('about.why')}</Reveal>
         <Reveal as="h2" className="rw-section-title" style={{ ...sectionHeading, maxWidth: '12em', textWrap: 'balance' }}>
-          {t('about.whyTitle').replace(/\?$/, '')}
+          {t('about.whyTitle').replace(/\?\s*$/, '')}
           <span style={{ color: 'var(--copper)', fontStyle: 'italic' }}>?</span>
         </Reveal>
         <Reveal as="p" delay={80} style={{ marginTop: 18, fontFamily: text, fontWeight: 300, fontSize: fs('17px'), lineHeight: 1.6, color: 'var(--faded)', maxWidth: '36em' }}>

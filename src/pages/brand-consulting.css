@@ -6,14 +6,13 @@
   min-height: 100vh;
 }
 
-/* --- Hero: content starts under the header, not parked at the bottom --- */
+/* --- Hero: sits below the in-flow sticky header (no extra header-height pad) --- */
 .rw-bc-hero {
   position: relative;
   isolation: isolate;
   min-height: 0;
   overflow: hidden;
   background: var(--bg, #0b0a09);
-  padding-top: calc(var(--rw-header-h, 76px) + env(safe-area-inset-top, 0px));
 }
 
 .rw-bc-hero::before {

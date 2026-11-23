@@ -6,7 +6,6 @@
   min-height: 0;
   overflow: hidden;
   background: var(--bg, #0b0a09);
-  padding-top: calc(var(--rw-header-h, 76px) + env(safe-area-inset-top, 0px));
 }
 
 .rw-vp-hero::before {

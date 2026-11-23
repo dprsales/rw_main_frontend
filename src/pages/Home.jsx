@@ -26,6 +26,7 @@ import FoldText from '../components/FoldText'
 import StrokeText from '../components/StrokeText'
 import SectionHead from '../components/SectionHead'
 import SupportCloud from '../components/SupportCloud'
+import VideoTestimonialsSection from '../components/VideoTestimonialsSection'
 import { useParallax } from '../hooks/useParallax'
 import { useInView } from '../hooks/useInView'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
@@ -116,9 +117,6 @@ function VoicesStrip({ t }) {
       gap={20}
       logoHeight={16}
       hoverSpeed={0}
-      pauseControl
-      pauseLabel={t('home.loop.pause')}
-      playLabel={t('home.loop.play')}
       fadeOut
       fadeOutColor="var(--bg)"
       ariaLabel={t('home.voices.aria')}
@@ -387,24 +385,24 @@ function HeroCinematic() {
 
       <div className="rw-hero-copy">
         <div className={`rw-hero-panel ${active === 0 ? 'is-on' : ''}`}>
-          <FoldText
+        <FoldText
             key={lang}
             text={t('home.eyebrow')}
-            splitBy="word"
-            hinge="top"
-            trigger="mount"
-            duration={0.6}
-            stagger={0.06}
-            fontSize={15}
-            fontWeight={400}
-            color="var(--copper)"
-            className="rw-hero-eyebrow"
-            style={{ fontFamily: mono, letterSpacing: '.3em', marginBottom: 30 }}
-          />
+          splitBy="word"
+          hinge="top"
+          trigger="mount"
+          duration={0.6}
+          stagger={0.06}
+          fontSize={15}
+          fontWeight={400}
+          color="var(--copper)"
+          className="rw-hero-eyebrow"
+          style={{ fontFamily: mono, letterSpacing: '.3em', marginBottom: 30 }}
+        />
 
-          <h1 style={{ fontFamily: serif, lineHeight: .98, letterSpacing: '-.01em' }}>
+        <h1 style={{ fontFamily: serif, lineHeight: .98, letterSpacing: '-.01em' }}>
             <HeroTitle lang={lang} t={t} />
-          </h1>
+        </h1>
 
           <p style={{ ...body, margin: '32px 0 0', maxWidth: '34em', fontSize: fs('clamp(16px,1.6vw,19px)'), lineHeight: 1.6, color: 'rgba(234,241,249,.82)' }}>
             {t('home.lede')}
@@ -414,26 +412,26 @@ function HeroCinematic() {
             <BookButton to="/form" className="rw-cta" style={ctaCopper}>{t('mega.bookStrategy')}</BookButton>
             <Link to="/about" className="rw-inline-cta" style={{ ...ctaInline, color: '#F2EFE9' }}>
               {t('home.story')}
-            </Link>
+          </Link>
           </div>
 
           <div className="rw-hero-meta" style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid rgba(234,241,249,.22)', display: 'flex', alignItems: 'center', gap: 20, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.14em', color: 'rgba(234,241,249,.7)', flexWrap: 'wrap' }}>
             <span>{t('home.tgrera')}</span>
-            <span className="rw-hero-meta-sep" style={{ opacity: 0.5 }}>|</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14 }}>
+          <span className="rw-hero-meta-sep" style={{ opacity: 0.5 }}>|</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 14 }}>
               {t('home.member')}
-              <img
-                src={hraLogo}
+            <img
+              src={hraLogo}
                 alt={t('home.alt.hra')}
-                style={{ height: 26, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 1, alignSelf: 'center' }}
-              />
-              <img
-                src={narLogo}
+              style={{ height: 26, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 1, alignSelf: 'center' }}
+            />
+            <img
+              src={narLogo}
                 alt={t('home.alt.nar')}
-                style={{ height: 26, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 1, alignSelf: 'center' }}
-              />
-            </span>
-            <FounderSignature />
+              style={{ height: 26, width: 'auto', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 1, alignSelf: 'center' }}
+            />
+          </span>
+          <FounderSignature />
           </div>
         </div>
 
@@ -554,13 +552,13 @@ He helps developers and their sales teams<br />
             {WAYS.map((way, i) => {
               const slideId = ['coaching', 'consulting', 'realty'][i]
               return (
-                <Reveal
-                  key={way.title}
-                  as="button"
-                  delay={i * 90}
-                  type="button"
-                  className="rw-way"
-                  onClick={() => navigate(way.to)}
+              <Reveal
+                key={way.title}
+                as="button"
+                delay={i * 90}
+                type="button"
+                className="rw-way"
+                onClick={() => navigate(way.to)}
                 >
                   <WayMedia
                     cover={{
@@ -570,16 +568,16 @@ He helps developers and their sales teams<br />
                   />
                   <span className="rw-way-body">
                     <span className="rw-way-meta">
-                      <span className="rw-way-numeral" style={{ fontFamily: serif }} aria-hidden>{way.k}</span>
+                  <span className="rw-way-numeral" style={{ fontFamily: serif }} aria-hidden>{way.k}</span>
                       <span className="rw-way-service-name">
                         {t(`home.slide.${slideId}.line1`)}{' '}
                         <span className="rw-way-service-accent">{t(`home.slide.${slideId}.line2`)}</span>
                       </span>
-                    </span>
+                </span>
                     <span className="rw-way-title">{t(`home.way.${i + 1}.title`)}</span>
                     <span className="rw-way-line">{t(`home.way.${i + 1}.line`)}</span>
-                  </span>
-                </Reveal>
+                </span>
+              </Reveal>
               )
             })}
           </div>
@@ -589,7 +587,7 @@ He helps developers and their sales teams<br />
       {/* Organisations / partners trust strip (same logos as About). */}
       <section id="organisations" className="rw-home-orgs rw-band" style={sectionRule}>
         <div className="rw-pad" style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px' }}>
-          <SectionHead
+        <SectionHead
             eyebrow={t('home.orgs.eyebrow')}
             titleWidth="16em"
             title={t('home.orgs.title.a')}
@@ -602,9 +600,6 @@ He helps developers and their sales teams<br />
               direction="left"
               gap={12}
               hoverSpeed={0}
-              pauseControl
-              pauseLabel={t('home.loop.pause')}
-              playLabel={t('home.loop.play')}
               fadeOut
               fadeOutColor="var(--rw-band-solid)"
               ariaLabel={t('home.orgs.aria')}
@@ -635,9 +630,12 @@ He helps developers and their sales teams<br />
           />
           <Reveal delay={60}>
             <VoicesStrip t={t} />
-          </Reveal>
+            </Reveal>
         </div>
       </section>
+
+      {/* Client films: social proof rail after written voices. */}
+      <VideoTestimonialsSection />
 
       <section id="support" className="rw-band" style={sectionRule}>
         <div className="rw-pad" style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px clamp(32px, 4vw, 48px)' }}>

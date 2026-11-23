@@ -3,8 +3,9 @@
 .rw-finder { position: relative; }
 
 .rw-finder-inner {
-  max-width: 1320px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
   display: grid;
   grid-template-columns: minmax(0, .46fr) minmax(0, .54fr);
   gap: clamp(32px, 5vw, 72px);

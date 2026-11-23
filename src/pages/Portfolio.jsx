@@ -15,7 +15,6 @@ import AboutSection from '../components/AboutSection'
 import ExperienceSection from '../components/ExperienceSection'
 import WhyTeamRwSection from '../components/WhyTeamRwSection'
 import Footer from '../components/Footer'
-import GlimpsesSection from '../components/GlimpsesSection'
 import Header from '../components/Header'
 import ImageSlot from '../components/ImageSlot'
 import SignatureOverlay from '../components/SignatureOverlay'
@@ -25,6 +24,7 @@ import RiseText from '../components/RiseText'
 import ClosingCTA from '../components/ClosingCTA'
 import SectionHead, { SectionCount } from '../components/SectionHead'
 import TeamSection from '../components/TeamSection'
+import TeamCasesSection from '../components/TeamCasesSection'
 import { useTilt } from '../hooks/useTilt'
 import { useLang } from '../i18n/LangProvider'
 import { associationRoleKey } from '../i18n/pages'
@@ -74,7 +74,7 @@ export default function Portfolio() {
       <Seo route="/about" />
       <Header />
 
-      {/* Intro */}
+      {/* 1. Rajiv introduction */}
       <section id="top" className="rw-pad" style={{ ...container, padding: '80px 40px 56px' }}>
         <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: 56, alignItems: 'center' }}>
           <div>
@@ -93,7 +93,6 @@ export default function Portfolio() {
               className="rw-frame"
               style={{ ...tilt.style, aspectRatio: '4/5', border: '1px solid var(--line)', overflow: 'hidden' }}
             >
-              {/* The About section's portrait (with its signature) now leads the page. */}
               <ImageSlot src={portraitImage} alt="Rajiv Williams" placeholder="Portrait of Rajiv" caption="pics/ · office or studio" position="45% 28%" />
               <SignatureOverlay />
             </div>
@@ -101,11 +100,10 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Track record */}
+      {/* 2. Rajiv track record */}
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)', position: 'relative', overflow: 'hidden' }}>
         <img src={hydMark} alt="" aria-hidden className="rw-watermark is-left" />
         <div className="rw-pad" style={{ ...container, position: 'relative', zIndex: 1 }}>
-          {/* Dividers drawn in CSS (.rw-stat) since only the stylesheet knows the wrap column count. */}
           <div className="rw-grid-4 rw-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)' }}>
             {trackRecord.map((stat, i) => (
               <Reveal key={stat.label} delay={i * 80} className="rw-stat">
@@ -117,18 +115,90 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Same mosaic as home; no through-link since you're already on the portfolio. */}
-      {/* <GlimpsesSection showCta={false} linkTo={null} /> */}
-
+      {/* 3. Rajiv story + career */}
       <AboutSection />
-
-      <WhyTeamRwSection />
-
       <ExperienceSection />
 
-      <TeamSection />
+      {/* 4. Rajiv market trust + credentials */}
+      <section id="organisations" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
+          <SectionHead
+            eyebrow={t('portfolio.orgs.eyebrow')}
+            titleWidth="14em"
+            title={t('portfolio.orgs.title.a')}
+            titleAccent={t('portfolio.orgs.title.b')}
+          />
+          <div className="rw-orgs" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10, marginTop: 'clamp(34px,4vw,52px)' }}>
+            {ORGS_WITH_LOGO.map((org, i) => {
+              const scale = LOGO_SCALE[org] || 1
+              const onDark = LOGO_NEEDS_DARK.has(org)
+              return (
+                <Reveal
+                  key={org}
+                  delay={(i % 5) * 60}
+                  style={{
+                    aspectRatio: '3 / 2', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
+                    background: onDark ? 'rgba(20,18,16,0.55)' : 'rgba(242,239,233,0.90)',
+                    backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
+                    border: '1px solid rgba(242,239,233,0.18)', borderRadius: 4,
+                  }}
+                >
+                  <img
+                    src={ORG_LOGOS[org]}
+                    alt={org}
+                    loading="lazy"
+                    style={{ maxWidth: `${LOGO_MAX_W * scale}%`, maxHeight: `${LOGO_MAX_H * scale}%`, objectFit: 'contain' }}
+                  />
+                </Reveal>
+              )
+            })}
+          </div>
+        </div>
+      </section>
 
-      {/* Testimonials wall: one line pulled out large, rest layer beneath as a denser grid. */}
+      <section id="credentials" style={{ ...sectionRule, background: 'var(--chip)' }}>
+        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
+          <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>{t('portfolio.creds')}</Reveal>
+
+          <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+            {ASSOC_ITEMS.map((assoc, i) => (
+              <Reveal
+                key={assoc.name}
+                delay={i * 90}
+                as={assoc.href ? 'a' : 'div'}
+                href={assoc.href}
+                target={assoc.href ? '_blank' : undefined}
+                rel={assoc.href ? 'noreferrer' : undefined}
+                className="rw-assoc-card"
+                style={{ display: 'flex', alignItems: 'center', gap: 'clamp(14px,2vw,20px)', flexWrap: 'wrap', border: '1px solid var(--line)', padding: 'clamp(16px,2vw,22px)', background: 'var(--bg)', textDecoration: 'none' }}
+              >
+                <div className="rw-logo rw-assoc-logo" style={{ width: 'clamp(96px,26vw,132px)', height: 44, flexShrink: 0 }}>
+                  <ImageSlot
+                    src={assoc.logo}
+                    alt={assoc.name}
+                    placeholder="Logo"
+                    caption="assoc."
+                    spec="Transparent PNG or SVG · ≥400px wide · flattens to one colour"
+                    fit="contain"
+                  />
+                </div>
+                <div>
+                  <div style={{ fontFamily: serif, fontSize: fs('20px'), color: 'var(--ink)' }}>
+                    {assoc.name}
+                    {assoc.href && <span aria-hidden style={{ marginLeft: 8, color: 'var(--copper)' }}>↗</span>}
+                  </div>
+                  <div style={{ marginTop: 4, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.08em', color: 'var(--copper)' }}>{t(associationRoleKey(assoc.role) || assoc.role)}</div>
+                  {assoc.desc && (
+                    <div style={{ marginTop: 6, fontFamily: text, fontSize: fs('13px'), lineHeight: 1.45, color: 'var(--faded)' }}>{t('about.assoc.hh')}</div>
+                  )}
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Voices on Rajiv */}
       <section id="voices" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
         <SectionHead
           eyebrow={t('portfolio.voices.eyebrow')}
@@ -142,7 +212,6 @@ export default function Portfolio() {
           )}
         />
 
-        {/* One voice leads at scale; multiple large quotes gave the eye no entry point. */}
         {leadVoice && (
           <Reveal
             style={{
@@ -151,11 +220,9 @@ export default function Portfolio() {
               marginBottom: 'clamp(30px,3.4vw,44px)',
             }}
           >
-            {/* ~26em keeps line length comfortable without stranding empty space on desktop. */}
             <p style={{ fontFamily: text, fontWeight: 400, fontSize: fs('clamp(18px,1.5vw,22px)'), lineHeight: 1.55, color: 'var(--ink)', margin: 0, maxWidth: '34em' }}>
               “{leadVoice.text}”
             </p>
-            {/* Attribution under the quote: a second column left a tall void beside shorter quotes. */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 'clamp(22px,2.4vw,30px)' }}>
               <span aria-hidden style={{ width: 34, height: 1, background: 'var(--copper)', flexShrink: 0 }} />
               <div>
@@ -168,7 +235,6 @@ export default function Portfolio() {
           </Reveal>
         )}
 
-        {/* Six voices by default; showing all ran the section to nearly 2,000px. */}
         <div className="rw-voice-grid">
           {restVoices.slice(0, 6).map((voice, i) => (
             <Reveal key={voice.name} delay={(i % 3) * 80} className="rw-voice-card">
@@ -203,87 +269,10 @@ export default function Portfolio() {
         )}
       </section>
 
-      {/* Organisations - same copper kicker + dual-tone H2 as Home. */}
-      <section id="organisations" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
-          <SectionHead
-            eyebrow={t('portfolio.orgs.eyebrow')}
-            titleWidth="14em"
-            title={t('portfolio.orgs.title.a')}
-            titleAccent={t('portfolio.orgs.title.b')}
-          />
-          {/* Frosted-glass tiles, dark - white artwork logos only read against a dark tile. */}
-          <div className="rw-orgs" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10, marginTop: 'clamp(34px,4vw,52px)' }}>
-            {ORGS_WITH_LOGO.map((org, i) => {
-              const scale = LOGO_SCALE[org] || 1
-              const onDark = LOGO_NEEDS_DARK.has(org)
-              return (
-                <Reveal
-                  key={org}
-                  delay={(i % 5) * 60}
-                  style={{
-                    aspectRatio: '3 / 2', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
-                    background: onDark ? 'rgba(20,18,16,0.55)' : 'rgba(242,239,233,0.90)',
-                    backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
-                    border: '1px solid rgba(242,239,233,0.18)', borderRadius: 4,
-                  }}
-                >
-                  <img
-                    src={ORG_LOGOS[org]}
-                    alt={org}
-                    loading="lazy"
-                    style={{ maxWidth: `${LOGO_MAX_W * scale}%`, maxHeight: `${LOGO_MAX_H * scale}%`, objectFit: 'contain' }}
-                  />
-                </Reveal>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Credentials + associations */}
-      <section id="credentials" style={{ ...sectionRule, background: 'var(--chip)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
-          <Reveal style={{ ...eyebrowFaded, marginBottom: 26 }}>{t('portfolio.creds')}</Reveal>
-
-          <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-            {ASSOC_ITEMS.map((assoc, i) => (
-              <Reveal
-                key={assoc.name}
-                delay={i * 90}
-                as={assoc.href ? 'a' : 'div'}
-                href={assoc.href}
-                target={assoc.href ? '_blank' : undefined}
-                rel={assoc.href ? 'noreferrer' : undefined}
-                className="rw-assoc-card"
-                style={{ display: 'flex', alignItems: 'center', gap: 'clamp(14px,2vw,20px)', flexWrap: 'wrap', border: '1px solid var(--line)', padding: 'clamp(16px,2vw,22px)', background: 'var(--bg)', textDecoration: 'none' }}
-              >
-                {/* Fixed-width, non-shrinking, leaving the name ~90px to wrap on a small phone. */}
-                <div className="rw-logo rw-assoc-logo" style={{ width: 'clamp(96px,26vw,132px)', height: 44, flexShrink: 0 }}>
-                  <ImageSlot
-                    src={assoc.logo}
-                    alt={assoc.name}
-                    placeholder="Logo"
-                    caption="assoc."
-                    spec="Transparent PNG or SVG · ≥400px wide · flattens to one colour"
-                    fit="contain"
-                  />
-                </div>
-                <div>
-                  <div style={{ fontFamily: serif, fontSize: fs('20px'), color: 'var(--ink)' }}>
-                    {assoc.name}
-                    {assoc.href && <span aria-hidden style={{ marginLeft: 8, color: 'var(--copper)' }}>↗</span>}
-                  </div>
-                  <div style={{ marginTop: 4, fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.08em', color: 'var(--copper)' }}>{t(associationRoleKey(assoc.role) || assoc.role)}</div>
-                  {assoc.desc && (
-                    <div style={{ marginTop: 6, fontFamily: text, fontSize: fs('13px'), lineHeight: 1.45, color: 'var(--faded)' }}>{t('about.assoc.hh')}</div>
-                  )}
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 6. Team RW: why, people, cases */}
+      <WhyTeamRwSection />
+      <TeamSection />
+      <TeamCasesSection />
 
       <ClosingCTA
         pad="var(--rw-sy-lg)" titleStyle={{ fontStyle: 'italic' }}

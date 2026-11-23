@@ -99,46 +99,56 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
     <section
       id="finder"
       ref={rootRef}
-      className={`rw-finder rw-pad${variant === 'page' ? ' rw-finder--page' : ''}${className ? ` ${className}` : ''}`}
+      className={`rw-finder${variant === 'page' ? ' rw-finder--page' : ''}${className ? ` ${className}` : ''}`}
       style={{
-        padding: variant === 'page'
-          ? 'var(--rw-sy-lg) 40px var(--rw-sy)'
-          : 'var(--rw-sy-lg) 40px',
         borderTop: variant === 'inline' ? '1px solid var(--line)' : 'none',
       }}
       aria-labelledby="finder-heading"
     >
-      <div className="rw-finder-inner">
-        <div className="rw-finder-lead">
-          <Reveal style={{ ...eyebrow, marginBottom: 22 }}>{t('finder.eyebrow')}</Reveal>
-          <Reveal
-            as={variant === 'page' ? 'h1' : 'h2'}
-            id="finder-heading"
-            delay={80}
-            style={variant === 'page' ? pageHeading : sectionHeading}
-          >
-            {t('finder.title1')}<span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>{t('finder.title2')}</span>
-          </Reveal>
-          <Reveal as="p" delay={140} style={{ ...body, marginTop: 22, maxWidth: '30em' }}>
-            {t('finder.lede')}
-          </Reveal>
-        </div>
+      <div
+        className="rw-pad rw-finder-shell"
+        style={{
+          maxWidth: 1320,
+          margin: '0 auto',
+          width: '100%',
+          boxSizing: 'border-box',
+          padding: variant === 'page'
+            ? 'var(--rw-sy-lg) 40px var(--rw-sy)'
+            : 'var(--rw-sy-lg) 40px',
+        }}
+      >
+        <div className="rw-finder-inner">
+          <div className="rw-finder-lead">
+            <Reveal style={{ ...eyebrow, marginBottom: 22 }}>{t('finder.eyebrow')}</Reveal>
+            <Reveal
+              as={variant === 'page' ? 'h1' : 'h2'}
+              id="finder-heading"
+              delay={80}
+              style={variant === 'page' ? pageHeading : sectionHeading}
+            >
+              {t('finder.title1')}<span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>{t('finder.title2')}</span>
+            </Reveal>
+            <Reveal as="p" delay={140} style={{ ...body, marginTop: 22, maxWidth: '30em' }}>
+              {t('finder.lede')}
+            </Reveal>
+          </div>
 
-        <div className="rw-finder-stage" aria-live="polite">
-          <FinderSteps finder={finder} onStartOver={startOver}>
-            <BookButton to="/form" specular source="finder_skip" skipQuestions>{t('cta.bookCall')}</BookButton>
-          </FinderSteps>
+          <div className="rw-finder-stage" aria-live="polite">
+            <FinderSteps finder={finder} onStartOver={startOver}>
+              <BookButton to="/form" specular source="finder_skip" skipQuestions>{t('cta.bookCall')}</BookButton>
+            </FinderSteps>
 
-          {done && result && (
-            <ResultCard
-              ref={cardRef}
-              result={result}
-              guidance={{ ...guidance, onEdit: startOver }}
-              onDeepPath={deepPath}
-              onBrowse={browseServices}
-              location={location}
-            />
-          )}
+            {done && result && (
+              <ResultCard
+                ref={cardRef}
+                result={result}
+                guidance={{ ...guidance, onEdit: startOver }}
+                onDeepPath={deepPath}
+                onBrowse={browseServices}
+                location={location}
+              />
+            )}
+          </div>
         </div>
       </div>
     </section>
