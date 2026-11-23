@@ -10,7 +10,7 @@ import { formPathForTrack } from '../data/booking'
 import { useFinder } from '../hooks/useFinder'
 import { useLang } from '../i18n/LangProvider'
 import { finderOutcomeName } from '../i18n/pages'
-import { fs, eyebrow, sectionHeadingLg, body, ctaCopper } from '../styles'
+import { eyebrow, pageHeading, sectionHeading, body, ctaCopper } from '../styles'
 import './GuidedFinder.css'
 
 /** Same cursor-tracked gold edge the careers cards use (CAREER_GLOW in Careers.jsx). */
@@ -111,7 +111,12 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
       <div className="rw-finder-inner">
         <div className="rw-finder-lead">
           <Reveal style={{ ...eyebrow, marginBottom: 22 }}>{t('finder.eyebrow')}</Reveal>
-          <Reveal as={variant === 'page' ? 'h1' : 'h2'} id="finder-heading" delay={80} style={{ ...sectionHeadingLg, fontSize: fs('clamp(28px,3.1vw,44px)'), lineHeight: 1.28 }}>
+          <Reveal
+            as={variant === 'page' ? 'h1' : 'h2'}
+            id="finder-heading"
+            delay={80}
+            style={variant === 'page' ? pageHeading : sectionHeading}
+          >
             {t('finder.title1')}<span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>{t('finder.title2')}</span>
           </Reveal>
           <Reveal as="p" delay={140} style={{ ...body, marginTop: 22, maxWidth: '30em' }}>

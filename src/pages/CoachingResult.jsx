@@ -5,7 +5,7 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Reveal from '../components/Reveal'
 import ScoreResult from '../components/ScoreResult'
-import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
+import SectionHead, { CenteredHead } from '../components/SectionHead'
 import Seo from '../components/Seo'
 import CtaButton from '../components/CtaButton'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
@@ -30,7 +30,7 @@ import {
   scenarioBandTitle,
 } from '../i18n/coachCheckout'
 import { FOOTER_LINKS, mono, serif } from '../theme'
-import { fs, container, ctaInline, eyebrow, note, sectionHeading, sectionRule } from '../styles'
+import { fs, container, ctaInline, eyebrow, note, pageHeading, sectionHeading, sectionRule } from '../styles'
 import goldWatermark from '../assets/site/rw-logo-ccr.png'
 
 const chipStyle = {
@@ -97,7 +97,7 @@ export default function CoachingResult() {
         <img src={goldWatermark} alt="" aria-hidden className="rw-watermark is-right" />
         <div className="rw-pad" style={{ ...container, maxWidth: 880, padding: 'var(--rw-sy) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrow, marginBottom: 20 }}>{t('cresult.eyebrow')}</Reveal>
-          <Reveal as="h1" delay={80} style={{ ...sectionHeading, fontSize: fs('clamp(32px,4.6vw,56px)'), lineHeight: 1.08 }}>
+          <Reveal as="h1" delay={80} style={pageHeading}>
             {t('cresult.h1')}
           </Reveal>
 
@@ -136,9 +136,9 @@ export default function CoachingResult() {
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-sm) 40px' }}>
           <SectionHead
-            eyebrow={t('cresult.glance.eyebrow')} titleWidth="16em"
+            eyebrow={t('cresult.glance.eyebrow')}
+            titleWidth="16em"
             title={t('cresult.glance.title')}
-            aside={<SectionAside>{t('cresult.glance.aside')}</SectionAside>}
           />
           <div style={{ marginTop: 44 }}>
             <ScoreResult
@@ -204,9 +204,10 @@ export default function CoachingResult() {
         <img src={goldWatermark} alt="" aria-hidden className="rw-watermark is-left" />
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px', position: 'relative', zIndex: 1 }}>
           <SectionHead
-            eyebrow={t('cresult.buy.eyebrow')} titleWidth="15em"
-            title={<>{t('cresult.buy.title.a')}<span style={{ color: 'var(--copper)' }}>{t('cresult.buy.title.b')}</span></>}
-            aside={<SectionAside>{t('cresult.buy.aside', { price: formatINR(calculatePricing(1).payableAmount) })}</SectionAside>}
+            eyebrow={t('cresult.buy.eyebrow')}
+            titleWidth="15em"
+            title={t('cresult.buy.title.a')}
+            titleAccent={t('cresult.buy.title.b')}
           />
 
           <div style={{ marginTop: 44, border: '1px solid rgba(195,155,83,.28)', background: 'var(--card)', maxWidth: 680, position: 'relative' }}>

@@ -14,7 +14,7 @@ export default function FaqSection({ items, title = 'FAQs', id, more }) {
   return (
     <section className="rw-faq" id={id} aria-labelledby={headingId}>
       <div className="rw-pad rw-faq-wrap">
-        <Reveal as="h2" id={headingId} style={{ ...sectionHeading, color: 'var(--copper)', marginBottom: more ? 12 : 36 }}>
+        <Reveal as="h2" id={headingId} className="rw-section-title" style={{ ...sectionHeading, marginBottom: more ? 12 : 36, textWrap: 'balance' }}>
           {title}
         </Reveal>
         {more && <div className="rw-faq-more-wrap">{more}</div>}

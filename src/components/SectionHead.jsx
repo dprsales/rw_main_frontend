@@ -1,26 +1,35 @@
 import Reveal from './Reveal'
-import { fs, eyebrow, eyebrowFaded, note, sectionHeading, sectionHeadingLg, sectionHeadingSm } from '../styles'
-import { mono, serif } from '../theme'
-
-// The two section-opening patterns used site-wide; replaces ten near-identical inline copies.
-
-const HEADING = { lg: sectionHeadingLg, md: sectionHeading, sm: sectionHeadingSm }
+import { fs, eyebrow, note, sectionHeading, blockHeading } from '../styles'
+import { mono } from '../theme'
 
 /**
- * Eyebrow + heading left, optional aside right, wrapping to two rows on a phone.
- * `aside` takes a node, not a string, since call sites use both text and links.
+ * Site section opener. One pattern only:
+ *   copper ALL-CAPS kicker
+ *   H2 serif (optional copper italic accent on the end)
+ *   optional right slot for a short count or link (not a body paragraph)
  */
+
+const accentStyle = { color: 'var(--copper)', fontStyle: 'italic' }
+
 export default function SectionHead({
   eyebrow: kicker,
-  faded = false,
-  tracking,
+  /** @deprecated Ignored. Kickers are always copper for predictability. */
+  faded: _faded = false,
+  tracking = '.24em',
   title,
-  size = 'md',
-  titleWidth,
+  /** Copper italic end of a dual-tone title. Prefer this over nesting spans in `title`. */
+  titleAccent,
+  titleWidth = '15em',
   aside,
   space = 'clamp(34px,4vw,54px)',
   delay = 0,
+  /** @deprecated Size is fixed to H2 sectionHeading. */
+  size: _size = 'md',
 }) {
+  const heading = titleAccent != null && titleAccent !== ''
+    ? <>{title}<span style={accentStyle}>{titleAccent}</span></>
+    : title
+
   return (
     <Reveal
       delay={delay}
@@ -31,11 +40,20 @@ export default function SectionHead({
     >
       <div>
         {kicker && (
-          <div className="rw-section-kicker" style={{ ...(faded ? eyebrowFaded : eyebrow), ...(tracking && { letterSpacing: tracking }), marginBottom: 14 }}>
+          <div className="rw-section-kicker" style={{ ...eyebrow, letterSpacing: tracking, marginBottom: 14 }}>
             {kicker}
           </div>
         )}
-        <h2 style={{ ...HEADING[size], ...(titleWidth && { maxWidth: titleWidth }) }}>{title}</h2>
+        <h2
+          className="rw-section-title"
+          style={{
+            ...sectionHeading,
+            maxWidth: titleWidth,
+            textWrap: 'balance',
+          }}
+        >
+          {heading}
+        </h2>
       </div>
       {aside}
     </Reveal>
@@ -43,18 +61,26 @@ export default function SectionHead({
 }
 
 /**
- * Centred variant for full-width list sections (Coaching's programmes, Careers' roles).
- * Heading is a plain <div>: both call sites already have an <h1>/<h2> above this point.
+ * Centred variant for full-width list sections (Coaching programmes, Careers roles).
  */
-export function CenteredHead({ eyebrow: kicker, title, intro }) {
+export function CenteredHead({ eyebrow: kicker, title, titleAccent, intro }) {
+  const heading = titleAccent != null && titleAccent !== ''
+    ? <>{title}<span style={accentStyle}>{titleAccent}</span></>
+    : title
+
   return (
     <Reveal style={{ textAlign: 'center', marginBottom: 20 }}>
-      <div style={{ ...eyebrow, letterSpacing: '.24em' }}>{kicker}</div>
-      <div style={{ marginTop: 16, fontFamily: serif, fontSize: fs('clamp(28px,3.4vw,42px)'), color: 'var(--ink)' }}>
-        {title}
-      </div>
+      {kicker && (
+        <div className="rw-section-kicker" style={{ ...eyebrow, letterSpacing: '.24em' }}>{kicker}</div>
+      )}
+      <h2
+        className="rw-section-title"
+        style={{ ...sectionHeading, marginTop: kicker ? 16 : 0, textWrap: 'balance' }}
+      >
+        {heading}
+      </h2>
       {intro && (
-        <div style={{ ...note, marginTop: 14, fontSize: fs('clamp(16px,1.7vw,18px)'), maxWidth: '40em', marginLeft: 'auto', marginRight: 'auto' }}>
+        <div style={{ ...note, marginTop: 14, maxWidth: '40em', marginLeft: 'auto', marginRight: 'auto' }}>
           {intro}
         </div>
       )}
@@ -62,12 +88,14 @@ export function CenteredHead({ eyebrow: kicker, title, intro }) {
   )
 }
 
-/** The supporting paragraph that most `aside` slots want. */
+/** Short aside: count, location, or a single text link. Not a body paragraph. */
 export function SectionAside({ children, width = '22em', style }) {
   return <p style={{ ...note, maxWidth: width, ...style }}>{children}</p>
 }
 
-/** The small mono line some sections use as an aside - a count, a location. */
+/** Small mono line some sections use as an aside. */
 export function SectionCount({ children }) {
   return <p style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.1em', color: 'var(--faded)' }}>{children}</p>
 }
+
+export { blockHeading, accentStyle as sectionTitleAccent }

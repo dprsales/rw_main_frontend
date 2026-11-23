@@ -16,7 +16,7 @@ import AchieveGrid from '../components/AchieveGrid'
 import Bullet from '../components/Bullet'
 import ServiceLandingForm from '../components/ServiceLandingForm'
 import PullQuote from '../components/PullQuote'
-import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
+import SectionHead, { CenteredHead } from '../components/SectionHead'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { useLang } from '../i18n/LangProvider'
 import { ACHIEVE, ASSESSMENT_AREAS, COACHING_PROGRAMS, COACHING_TESTIMONIALS, CURRICULUM } from '../data/content'
@@ -25,7 +25,7 @@ import { track } from '../data/analytics'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import { fs,
   container, ctaCopper, eyebrow,
-  note, sectionRule,
+  note, sectionHeading, sectionRule,
 } from '../styles'
 import {
   Award, Brain, ChevronDown, Compass, Crown, Gem, Handshake, HeartHandshake,
@@ -299,9 +299,10 @@ export default function Coaching() {
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px' }}>
           <SectionHead
-            eyebrow={t('coach.achieve.eyebrow')} titleWidth="11em"
-            title={t('coach.achieve.title')}
-            aside={<SectionAside>{t('coach.achieve.aside')}</SectionAside>}
+            eyebrow={t('coach.achieve.eyebrow')}
+            titleWidth="11em"
+            title={t('coach.achieve.title.a')}
+            titleAccent={t('coach.achieve.title.b')}
           />
 
           <AchieveGrid items={achieve} className="rw-achieve-grid" arrows numberPrefix="#" />
@@ -313,9 +314,10 @@ export default function Coaching() {
       <section id="curriculum" className="rw-pad" style={{ ...sectionRule, background: 'var(--chip)' }}>
         <div style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px' }}>
           <SectionHead
-            eyebrow={t('coach.syllabus.eyebrow')} titleWidth="15em"
-            title={t('coach.syllabus.title')}
-            aside={<SectionAside width="24em">{t('coach.syllabus.aside')}</SectionAside>}
+            eyebrow={t('coach.syllabus.eyebrow')}
+            titleWidth="15em"
+            title={t('coach.syllabus.title.a')}
+            titleAccent={t('coach.syllabus.title.b')}
           />
 
           <SyllabusCloud categories={curriculum} hint={t('coach.syllabus.hint')} />
@@ -330,8 +332,9 @@ export default function Coaching() {
         <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 48, alignItems: 'center' }}>
           <Reveal>
             <div style={{ ...eyebrow, marginBottom: 14 }}>{t('coach.assess.eyebrow')}</div>
-            <h2 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(28px,3.6vw,42px)'), lineHeight: 1.1, color: 'var(--ink)', maxWidth: '14em' }}>
-              {t('coach.assess.title')}
+            <h2 className="rw-section-title" style={{ ...sectionHeading, maxWidth: '14em', textWrap: 'balance' }}>
+              {t('coach.assess.title.a')}
+              <span style={{ color: 'var(--copper)', fontStyle: 'italic' }}>{t('coach.assess.title.b')}</span>
             </h2>
             <p style={{ ...note, marginTop: 18, fontSize: fs('16px'), lineHeight: 1.6, maxWidth: '34em' }}>
               {t('coach.assess.lede')}

@@ -22,24 +22,33 @@ export const statLabel = {
   fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.16em', color: 'var(--faded)', marginTop: 12,
 }
 
-/* DISPLAY TYPE - every headline shares the same serif/weight/tracking in
- * `display`; only size and leading change by role. One-offs spread the nearest rung and override fontSize/lineHeight. */
+/* DISPLAY TYPE: three rungs only. Same serif/weight/tracking; size marks the role.
+ * Do not override fontSize on these at call sites. Dual-tone (ink + copper italic)
+ * is composition inside the node, not a fourth size.
+ *
+ *   H1 pageHeading     : one per page (PageIntro / page hero)
+ *   H2 sectionHeading  : every section title (SectionHead, Reveal as="h2")
+ *   H3 blockHeading    : in-section titles (cards, columns, list heads)
+ */
 const display = { fontFamily: serif, fontWeight: 400, letterSpacing: '-.01em', color: 'var(--ink)' }
 
-/** Page h1 on the interior pages (Coaching, Careers, Consulting, Realty). */
+/** H1: page title. */
 export const pageHeading = { ...display, fontSize: fs('clamp(42px,5.6vw,84px)'), lineHeight: 1.04 }
 
-/** The largest section h2 - used where a section opens a page's second act. */
-export const sectionHeadingLg = { ...display, fontSize: fs('clamp(30px,4vw,52px)'), lineHeight: 1 }
-
-/** The standard section h2. */
+/** H2: section title. One size site-wide so the eye learns the pattern. */
 export const sectionHeading = { ...display, fontSize: fs('clamp(28px,3.6vw,46px)'), lineHeight: 1.04 }
 
-/** A quieter section h2, for sections that sit under a larger one. */
-export const sectionHeadingSm = { ...display, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.04 }
+/** @deprecated Use sectionHeading. Kept as an alias so old imports keep working. */
+export const sectionHeadingLg = sectionHeading
+
+/** @deprecated Use sectionHeading. Kept as an alias so old imports keep working. */
+export const sectionHeadingSm = sectionHeading
+
+/** H3: block / card / column title under an H2 section. */
+export const blockHeading = { ...display, fontSize: fs('clamp(22px,2.4vw,30px)'), lineHeight: 1.15 }
 
 export const closingHeading = {
-  ...display, fontSize: fs('clamp(28px,3.6vw,46px)'), lineHeight: 1.08,
+  ...sectionHeading, lineHeight: 1.08,
   maxWidth: '16em', margin: '0 auto',
 }
 

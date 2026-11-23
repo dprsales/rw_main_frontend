@@ -26,8 +26,10 @@ export default function GlimpsesSection({ showCta = true, linkTo = '/about' }) {
   return (
     <section className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
       <SectionHead
-        eyebrow="GLIMPSES" size="sm" space={30}
-        title="Where the work happens."
+        eyebrow="GLIMPSES"
+        space={30}
+        title="Where the work "
+        titleAccent="happens."
         aside={showCta && linkTo && (
           <Link to={linkTo} className="rw-nav-link" style={headLink}>
             VIEW FULL PORTFOLIO →

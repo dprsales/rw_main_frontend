@@ -10,7 +10,7 @@ import BorderGlow from '../components/BorderGlow'
 import Reveal from '../components/Reveal'
 import AchieveGrid from '../components/AchieveGrid'
 import PageIntro from '../components/PageIntro'
-import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
+import SectionHead, { CenteredHead } from '../components/SectionHead'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { useLang } from '../i18n/LangProvider'
 import { CAREER_CATEGORIES, CAREER_REASONS, CAREER_ROLES, activeHiringCampaigns } from '../data/content'
@@ -286,9 +286,10 @@ export default function Careers() {
       <section id="why" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <SectionHead
-            eyebrow={t('careers.why.eyebrow')} titleWidth="11em"
-            title={t('careers.why.title')}
-            aside={<SectionAside>{t('careers.why.aside')}</SectionAside>}
+            eyebrow={t('careers.why.eyebrow')}
+            titleWidth="11em"
+            title={t('careers.why.title.a')}
+            titleAccent={t('careers.why.title.b')}
           />
 
           <AchieveGrid items={reasons} className="rw-reason-grid" stagger={4} />

@@ -16,7 +16,7 @@ import { useSmoothScroll } from '../hooks/useSmoothScroll'
 import { ECOSYSTEM } from '../data/content'
 import { FOOTER_LINKS, jost, mono, serif, text } from '../theme'
 import { fs, ctaCopper,
-  container, eyebrow,
+  blockHeading, container, eyebrow,
   note, sectionHeading, sectionRule,
 } from '../styles'
 
@@ -76,9 +76,9 @@ function PhaseCard({ flow, index, delay, active, expanded, onToggle, onHover, on
       <span className="rw-phase-num" style={{ fontFamily: serif }} aria-hidden>
         {String(index + 1).padStart(2, '0')}
       </span>
-      <h4 style={{ ...sectionHeading, marginTop: 10, fontSize: fs('clamp(21px,1.9vw,25px)'), lineHeight: 1.12 }}>
+      <h3 style={{ ...blockHeading, marginTop: 10 }}>
         {flow.title}
-      </h4>
+      </h3>
 
       <div className="rw-phase-body">
         <p className="rw-phase-line" style={{ ...note, marginTop: 8, fontSize: fs('14px'), lineHeight: 1.5 }}>
@@ -183,10 +183,10 @@ export default function Consulting() {
           <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56, marginBottom: 'clamp(56px,7vw,90px)' }}>
             <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>{t('consult.model.eyebrow')}</Reveal>
             <Reveal delay={100}>
-              <h3 style={{ ...sectionHeading, fontSize: fs('clamp(26px,3vw,38px)'), lineHeight: 1.15, maxWidth: '15em' }}>
+              <h2 className="rw-section-title" style={{ ...sectionHeading, maxWidth: '15em', textWrap: 'balance' }}>
                 {t('consult.model.title.a')}
                 <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>{t('consult.model.title.b')}</span>
-              </h3>
+              </h2>
             </Reveal>
           </div>
 
@@ -203,11 +203,11 @@ export default function Consulting() {
       <section style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56 }}>
-            <Reveal style={{ ...eyebrow, fontSize: fs('clamp(15px,1.6vw,19px)'), letterSpacing: '.22em' }}>{t('consult.mission.eyebrow')}</Reveal>
+            <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>{t('consult.mission.eyebrow')}</Reveal>
             <Reveal delay={100}>
-              <h2 style={{ fontFamily: jost, fontWeight: 400, letterSpacing: '-.01em', color: 'var(--ink)', fontSize: fs('clamp(17px,1.65vw,20px)'), lineHeight: 1.5, maxWidth: '36em' }}>
+              <p style={{ fontFamily: jost, fontWeight: 400, letterSpacing: '-.01em', color: 'var(--ink)', fontSize: fs('clamp(17px,1.65vw,20px)'), lineHeight: 1.5, maxWidth: '36em', margin: 0 }}>
                 {t('consult.mission')}
-              </h2>
+              </p>
             </Reveal>
           </div>
 
@@ -223,8 +223,9 @@ export default function Consulting() {
       <section id="engagement" style={{ ...sectionRule, background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <Reveal style={{ ...eyebrow, letterSpacing: '.24em', marginBottom: 14 }}>{t('consult.case.eyebrow')}</Reveal>
-          <Reveal as="h2" delay={80} style={{ ...sectionHeading, maxWidth: '16em' }}>
-            {t('consult.case.title')}
+          <Reveal as="h2" delay={80} className="rw-section-title" style={{ ...sectionHeading, maxWidth: '16em', textWrap: 'balance' }}>
+            {t('consult.case.title.a')}
+            <span style={{ fontStyle: 'italic', color: 'var(--copper)' }}>{t('consult.case.title.b')}</span>
           </Reveal>
           <Reveal as="p" delay={140} style={{ ...note, marginTop: 26, fontSize: fs('clamp(16px,1.7vw,18px)'), lineHeight: 1.6, maxWidth: '44em' }}>
             {t('consult.case.body')}

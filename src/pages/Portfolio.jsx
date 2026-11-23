@@ -35,7 +35,7 @@ import {
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import { fs,
   container, eyebrow, eyebrowFaded,
-  sectionHeadingSm, sectionRule,
+  pageHeading, sectionRule,
 } from '../styles'
 
 /* Logos for ASSOCIATIONS, matched by index. */
@@ -79,7 +79,7 @@ export default function Portfolio() {
         <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: 56, alignItems: 'center' }}>
           <div>
             <Reveal style={{ ...eyebrow, marginBottom: 30 }}>{t('portfolio.eyebrow')}</Reveal>
-            <h1 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(48px,6.4vw,98px)'), lineHeight: .96, letterSpacing: '-.01em', color: 'var(--ink)', maxWidth: '13em' }}>
+            <h1 style={{ ...pageHeading, maxWidth: '13em' }}>
               <RiseText lines={headline} step={0.085} />
             </h1>
             <Reveal as="p" delay={140} style={{ marginTop: 32, maxWidth: '34em', fontFamily: text, fontWeight: 300, fontSize: fs('clamp(17px,1.9vw,21px)'), lineHeight: 1.55, color: 'var(--faded)' }}>
@@ -131,8 +131,10 @@ export default function Portfolio() {
       {/* Testimonials wall: one line pulled out large, rest layer beneath as a denser grid. */}
       <section id="voices" className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
         <SectionHead
-          eyebrow={t('portfolio.voices.eyebrow')} faded size="lg" space={34}
-          title={t('portfolio.voices.title')}
+          eyebrow={t('portfolio.voices.eyebrow')}
+          space={34}
+          title={t('portfolio.voices.title.a')}
+          titleAccent={t('portfolio.voices.title.b')}
           aside={(
             <SectionCount>
               {t('portfolio.voices.count', { n: String(PORTFOLIO_TESTIMONIALS.length).padStart(2, '0') })}
@@ -201,13 +203,15 @@ export default function Portfolio() {
         )}
       </section>
 
-      {/* Organisations we've worked with - a typographic name wall. */}
+      {/* Organisations - same copper kicker + dual-tone H2 as Home. */}
       <section id="organisations" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
-          <Reveal style={{ ...eyebrowFaded, marginBottom: 14 }}>{t('portfolio.orgs.eyebrow')}</Reveal>
-          <Reveal delay={80} as="h2" style={{ ...sectionHeadingSm, maxWidth: '14em' }}>
-            {t('portfolio.orgs.title')}
-          </Reveal>
+          <SectionHead
+            eyebrow={t('portfolio.orgs.eyebrow')}
+            titleWidth="14em"
+            title={t('portfolio.orgs.title.a')}
+            titleAccent={t('portfolio.orgs.title.b')}
+          />
           {/* Frosted-glass tiles, dark - white artwork logos only read against a dark tile. */}
           <div className="rw-orgs" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10, marginTop: 'clamp(34px,4vw,52px)' }}>
             {ORGS_WITH_LOGO.map((org, i) => {

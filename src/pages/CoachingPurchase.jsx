@@ -418,7 +418,7 @@ export default function CoachingPurchase() {
         <Reveal>
           <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy-sm) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
             <div style={{ ...eyebrow, marginBottom: 18 }}>{t('cpur.eyebrow')}</div>
-            <div className="rw-te-display" style={{ ...sectionHeading, fontSize: fs('clamp(30px,4.4vw,52px)'), lineHeight: 1.08 }}>
+            <div className="rw-te-display" style={sectionHeading}>
               {t('cpur.h1')}
             </div>
             <p style={{ ...note, marginTop: 14, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em', fontSize: fs('17px'), lineHeight: 1.6 }}>

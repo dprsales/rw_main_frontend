@@ -27,6 +27,11 @@ img, svg, video, canvas { max-width: 100%; }
   --rw-te: 1;
   --rw-te-display: 1;
 }
+
+/* Section H2: balanced wrap so short titles do not leave a lonely last word. */
+.rw-section-title {
+  text-wrap: balance;
+}
 html[lang="te"] {
   /* Body/UI: mild. Display: stronger — Indic glyphs read ~30% heavier at same px. */
   --rw-te-body: 0.94;
@@ -422,8 +427,9 @@ a:hover { color: var(--ink, #12100D); }
 .rw-realty-hero-copy { min-width: 0; }
 /* Match Consulting / pageHeading ladder: display serif, not larger than service siblings. */
 .rw-realty-hero-title {
-  font-size: calc(var(--rw-fs, 1) * var(--rw-te-display, 1) * clamp(38px, 5vw, 72px));
-  line-height: 1.06;
+  /* Match H1 pageHeading; TE/mobile overrides stay below. */
+  font-size: calc(var(--rw-fs, 1) * var(--rw-te-display, 1) * clamp(42px, 5.6vw, 84px));
+  line-height: 1.04;
 }
 .rw-realty-hero-description {
   font-size: calc(var(--rw-fs, 1) * var(--rw-te, 1) * clamp(17px, 1.45vw, 20px));

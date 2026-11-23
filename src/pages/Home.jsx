@@ -24,7 +24,7 @@ import LogoLoop from '../components/LogoLoop'
 import Reveal from '../components/Reveal'
 import FoldText from '../components/FoldText'
 import StrokeText from '../components/StrokeText'
-import SectionHead, { SectionAside, SectionCount } from '../components/SectionHead'
+import SectionHead from '../components/SectionHead'
 import SupportCloud from '../components/SupportCloud'
 import { useParallax } from '../hooks/useParallax'
 import { useInView } from '../hooks/useInView'
@@ -36,7 +36,7 @@ import { HOME_FEATURED, featureFirst, fetchBlogsOnce } from '../data/blogs'
 import { HOME_FOOTER_LINKS, jost, mono, serif, text } from '../theme'
 import { fs,
   body, container, ctaCopper, ctaInk, ctaInline,
-  sectionHeading, sectionHeadingLg, sectionRule,
+  sectionRule,
 } from '../styles'
 
 
@@ -543,14 +543,9 @@ He helps developers and their sales teams<br />
         <div className="rw-pad" style={{ ...container, paddingTop: 'clamp(40px, 5vw, 64px)' }}>
           <SectionHead
             eyebrow={t('home.ways.eyebrow')}
-            tracking=".24em"
             titleWidth="14em"
-            title={(
-              <>
-                {t('home.ways.title.a')}
-                <span style={{ color: 'var(--copper)', fontStyle: 'italic' }}>{t('home.ways.title.b')}</span>
-              </>
-            )}
+            title={t('home.ways.title.a')}
+            titleAccent={t('home.ways.title.b')}
           />
           <div className="rw-grid-3 rw-ways">
             {WAYS.map((way, i) => {
@@ -591,12 +586,12 @@ He helps developers and their sales teams<br />
       {/* Organisations / partners trust strip (same logos as About). */}
       <section id="organisations" className="rw-home-orgs" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px' }}>
-          <Reveal style={{ fontFamily: mono, fontSize: fs('11px'), letterSpacing: '.22em', color: 'var(--faded)', marginBottom: 14 }}>
-            {t('home.orgs.eyebrow')}
-          </Reveal>
-          <Reveal delay={60} as="h2" style={{ ...sectionHeading, maxWidth: '16em', marginBottom: 'clamp(24px, 3vw, 36px)' }}>
-            {t('home.orgs.title')}
-          </Reveal>
+          <SectionHead
+            eyebrow={t('home.orgs.eyebrow')}
+            titleWidth="16em"
+            title={t('home.orgs.title.a')}
+            titleAccent={t('home.orgs.title.b')}
+          />
           <Reveal delay={100}>
             <LogoLoop
               logos={orgLogoLoopItems()}
@@ -623,23 +618,27 @@ He helps developers and their sales teams<br />
         </div>
       </section>
 
-      {/* Testimonials: compact single-row strip (same density language as orgs LogoLoop). */}
+      {/* Testimonials: same section-head pattern as ways / orgs / support. */}
       <section id="testimonials" className="rw-home-voices" style={{ ...sectionRule, borderBottom: '1px solid var(--line)' }}>
-        <div className="rw-pad" style={{ ...container, padding: 'clamp(28px, 3.5vw, 44px) 40px' }}>
-          <Reveal style={{ marginBottom: 16 }}>
-            <h2 style={{ ...sectionHeading, fontSize: fs('clamp(22px, 2.4vw, 30px)') }}>{t('home.words')}</h2>
-          </Reveal>
+        <div className="rw-pad" style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px' }}>
+          <SectionHead
+            eyebrow={t('home.words.eyebrow')}
+            titleWidth="14em"
+            title={t('home.words.title.a')}
+            titleAccent={t('home.words.title.b')}
+          />
           <Reveal delay={60}>
             <VoicesStrip t={t} />
           </Reveal>
         </div>
       </section>
 
-      <section id="support" className="rw-pad" style={{ ...container, padding: 'clamp(28px, 3.5vw, 44px) 40px clamp(32px, 4vw, 48px)' }}>
+      <section id="support" className="rw-pad" style={{ ...container, padding: 'clamp(40px, 5vw, 64px) 40px clamp(32px, 4vw, 48px)' }}>
         <SectionHead
-          titleWidth="12em"
-          title={t('home.more.title')}
-          aside={<SectionAside width="24em">{t('home.more.aside')}</SectionAside>}
+          eyebrow={t('home.more.eyebrow')}
+          titleWidth="14em"
+          title={t('home.more.title.a')}
+          titleAccent={t('home.more.title.b')}
         />
 
         <Reveal delay={80}>

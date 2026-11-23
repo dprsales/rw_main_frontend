@@ -19,9 +19,11 @@ export default function TeamSection() {
     <section id="team" style={{ ...sectionRule, background: 'var(--chip)' }}>
       <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
         <SectionHead
-          eyebrow={t('portfolio.team.eyebrow')} faded size="lg" titleWidth="14em"
+          eyebrow={t('portfolio.team.eyebrow')}
+          titleWidth="14em"
           space="clamp(30px,3.4vw,44px)"
-          title={t('portfolio.team.title')}
+          title={t('portfolio.team.title.a')}
+          titleAccent={t('portfolio.team.title.b')}
           aside={<SectionCount>{t('portfolio.team.count', { n: String(TEAM.length).padStart(2, '0') })}</SectionCount>}
         />
 

@@ -4,7 +4,7 @@ import { EXPERIENCE, EXPERIENCE_PHASES } from '../data/content'
 import { useLang } from '../i18n/LangProvider'
 import { experienceRoleKey } from '../i18n/pages'
 import { mono, text } from '../theme'
-import { fs, container, eyebrowFaded, sectionHeading, sectionRule } from '../styles'
+import { fs, container, eyebrow, sectionHeading, sectionRule } from '../styles'
 
 /**
  * Tracks which phase block crosses viewport centre, so the pinned column shows reading position.
@@ -54,9 +54,9 @@ export default function ExperienceSection() {
         <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.34fr .66fr', gap: 48 }}>
           {/* Pinned while the track scrolls past — the heading stays as context. */}
           <div className="rw-sticky-aside">
-            <Reveal style={{ ...eyebrowFaded, marginBottom: 18 }}>{t('about.track')}</Reveal>
-            <Reveal as="h2" delay={80} style={{ ...sectionHeading, fontSize: fs('clamp(28px,3.4vw,44px)'), lineHeight: 1.05, maxWidth: '11em' }}>
-              <span style={{ color: 'var(--copper)' }}>16+</span>{t('about.trackTitle')}
+            <Reveal style={{ ...eyebrow, letterSpacing: '.24em', marginBottom: 18 }}>{t('about.track')}</Reveal>
+            <Reveal as="h2" delay={80} className="rw-section-title" style={{ ...sectionHeading, maxWidth: '11em', textWrap: 'balance' }}>
+              <span style={{ color: 'var(--copper)', fontStyle: 'italic' }}>16+</span>{t('about.trackTitle')}
             </Reveal>
             <Reveal as="p" delay={140} style={{ marginTop: 22, fontFamily: text, fontWeight: 300, fontSize: fs('17px'), lineHeight: 1.6, color: 'var(--faded)', maxWidth: '26em' }}>
               {t('about.trackLede')}

@@ -10,7 +10,7 @@ import Reveal from '../components/Reveal'
 import PullQuote from '../components/PullQuote'
 import CtaButton from '../components/CtaButton'
 import ClosingCTA from '../components/ClosingCTA'
-import SectionHead, { CenteredHead, SectionAside } from '../components/SectionHead'
+import SectionHead, { CenteredHead } from '../components/SectionHead'
 import { BookButton } from '../components/BookingModal'
 import AssessmentStartModal from '../components/AssessmentStartModal'
 import useCtaEntrance from '../hooks/useCtaEntrance'
@@ -120,10 +120,10 @@ export default function Assessment() {
         <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(11,10,9,.55) 0%, rgba(11,10,9,.22) 45%, rgba(11,10,9,.62) 100%)' }} />
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrow, marginBottom: 16 }}>{t('assess.team')}</Reveal>
-          <Reveal as="p" className="rw-te-display" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12 }}>
+          <Reveal as="p" className="rw-te-display" style={sectionHeading}>
             {t('assess.stand.a')}
           </Reveal>
-          <Reveal as="p" className="rw-te-display" delay={120} style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,44px)'), lineHeight: 1.12, fontStyle: 'italic', color: 'var(--copper)', marginTop: 12 }}>
+          <Reveal as="p" className="rw-te-display" delay={120} style={{ ...sectionHeading, fontStyle: 'italic', color: 'var(--copper)', marginTop: 12 }}>
             {t('assess.stand.b')}
           </Reveal>
           <Reveal as="p" delay={200} style={{ ...note, marginTop: 20, marginLeft: 'auto', marginRight: 'auto', maxWidth: '32em', fontSize: fs('clamp(16px,1.7vw,18px)'), lineHeight: 1.6, color: 'var(--ink)', textShadow: '0 1px 20px rgba(11,10,9,.6), 0 0 2px rgba(11,10,9,.8)' }}>
@@ -138,7 +138,7 @@ export default function Assessment() {
           <div className="rw-grid-2 rw-assessment-session-grid">
             <Reveal delay={120} className="rw-assessment-session-content">
               <div style={{ ...eyebrow, fontSize: fs('clamp(14px,1vw,18px)'), marginBottom: 20 }}>{t('assess.session.eyebrow')}</div>
-              <h2 style={{ ...sectionHeading, fontSize: fs('clamp(30px,3.4vw,52px)'), lineHeight: 1.08 }}>
+              <h2 style={sectionHeading}>
                 {t('assess.session.title')}
               </h2>
               <p style={{ ...note, marginTop: 24, fontSize: fs('clamp(17px,1.35vw,22px)'), lineHeight: 1.62 }}>
@@ -186,9 +186,10 @@ export default function Assessment() {
         <img src={goldWatermark} alt="" aria-hidden className="rw-watermark is-left" />
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px', position: 'relative' }}>
           <SectionHead
-            eyebrow={t('assess.report.eyebrow')} titleWidth="12em"
-            title={t('assess.report.title')}
-            aside={<SectionAside>{t('assess.report.aside')}</SectionAside>}
+            eyebrow={t('assess.report.eyebrow')}
+            titleWidth="12em"
+            title={t('assess.report.title.a')}
+            titleAccent={t('assess.report.title.b')}
           />
 
           <div className="rw-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(28px,4vw,64px)', alignItems: 'start', marginTop: 12 }}>

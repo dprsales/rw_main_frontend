@@ -6,7 +6,7 @@ import Reveal from '../components/Reveal'
 import BorderGlow from '../components/BorderGlow'
 import { getErrorMessage, submitVendorPartner } from '../data/api'
 import { FOOTER_LINKS, mono, serif, text, WHATSAPP } from '../theme'
-import { ctaCopper, eyebrow, fs, note, sectionHeading, sectionRule } from '../styles'
+import { blockHeading, ctaCopper, eyebrow, fs, note, sectionHeading, sectionRule } from '../styles'
 import { useLang } from '../i18n/LangProvider'
 import '../form/form.css'
 import './vendor-partner.css'
@@ -206,7 +206,7 @@ export default function VendorPartner() {
 
           {status === 'done' ? (
             <Reveal delay={100} style={{ textAlign: 'center', paddingTop: 'clamp(44px,6vw,66px)' }}>
-              <h3 style={{ fontFamily: serif, fontWeight: 400, fontSize: fs('clamp(24px,3vw,32px)'), color: 'var(--ink)', marginTop: 8 }}>
+              <h3 style={{ ...blockHeading, marginTop: 8 }}>
                 {t('vendor.done.title')}
               </h3>
               <p style={{ ...note, marginTop: 14, marginLeft: 'auto', marginRight: 'auto', maxWidth: '32em' }}>

@@ -5,7 +5,7 @@ import { useLang } from '../i18n/LangProvider'
 import { AREA_TO_LOCALITY, LOCALITIES, PROJECTS, resolveLocality } from '../data/content'
 import { PROJECT_SLUGS, fetchAllProjects, fetchProjectSlugs, projectImage } from '../data/projects'
 import { mono, serif, text } from '../theme'
-import { container, eyebrowFaded, note, sectionHeadingLg, sectionRule } from '../styles'
+import { container, eyebrow, note, sectionHeading, sectionRule } from '../styles'
 
 // Territory map: west Hyderabad localities as dots scaled by project count, with a caption panel.
 // Lifted out of Portfolio so RW Realty can reuse it; owns its state, reads content.js directly.
@@ -279,8 +279,11 @@ export default function ProjectsSection({ id = 'projects' }) {
             no other section pairs its heading with controls like this. */}
         <div className="rw-influence-head">
           <div className="rw-influence-heading">
-            <div style={{ ...eyebrowFaded, marginBottom: 14 }}>{t('projects.map.eyebrow')}</div>
-            <h2 style={{ ...sectionHeadingLg, maxWidth: '13em' }}>{t('projects.map.title')}</h2>
+            <div className="rw-section-kicker" style={{ ...eyebrow, letterSpacing: '.24em', marginBottom: 14 }}>{t('projects.map.eyebrow')}</div>
+            <h2 className="rw-section-title" style={{ ...sectionHeading, maxWidth: '13em', textWrap: 'balance' }}>
+              {t('projects.map.title.a')}
+              <span style={{ color: 'var(--copper)', fontStyle: 'italic' }}>{t('projects.map.title.b')}</span>
+            </h2>
           </div>
 
           <div className="rw-influence-summary">

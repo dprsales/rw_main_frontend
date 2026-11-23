@@ -71,7 +71,7 @@ export default function SupportCloud() {
           ref={railRef}
           className="rw-chips"
           role="group"
-          aria-label={t('home.more.title')}
+          aria-label={`${t('home.more.title.a')}${t('home.more.title.b')}`}
         >
           {SUPPORT_SERVICES.map((svc, i) => (
             <button

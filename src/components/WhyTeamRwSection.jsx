@@ -1,7 +1,7 @@
 import Reveal from './Reveal'
 import { useLang } from '../i18n/LangProvider'
 import { mono, text } from '../theme'
-import { fs, container, sectionHeading, sectionRule } from '../styles'
+import { fs, container, eyebrow, sectionHeading, sectionRule } from '../styles'
 
 const WHY_POINTS = 10
 
@@ -12,8 +12,10 @@ export default function WhyTeamRwSection() {
   return (
     <section id="why-team-rw" style={{ ...sectionRule, background: 'var(--card)' }}>
       <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
-        <Reveal as="h2" style={{ ...sectionHeading, fontSize: fs('clamp(28px,3.4vw,44px)'), lineHeight: 1.05, maxWidth: '12em' }}>
-          {t('about.whyTitle')}
+        <Reveal style={{ ...eyebrow, letterSpacing: '.24em', marginBottom: 14 }}>{t('about.why')}</Reveal>
+        <Reveal as="h2" className="rw-section-title" style={{ ...sectionHeading, maxWidth: '12em', textWrap: 'balance' }}>
+          {t('about.whyTitle').replace(/\?$/, '')}
+          <span style={{ color: 'var(--copper)', fontStyle: 'italic' }}>?</span>
         </Reveal>
         <Reveal as="p" delay={80} style={{ marginTop: 18, fontFamily: text, fontWeight: 300, fontSize: fs('17px'), lineHeight: 1.6, color: 'var(--faded)', maxWidth: '36em' }}>
           {t('about.whyLede')}

@@ -5,7 +5,7 @@ import Header from '../components/Header'
 import Reveal from '../components/Reveal'
 import CtaButton from '../components/CtaButton'
 import Seo from '../components/Seo'
-import SectionHead, { SectionAside } from '../components/SectionHead'
+import SectionHead from '../components/SectionHead'
 import useCtaEntrance from '../hooks/useCtaEntrance'
 import { useLang } from '../i18n/LangProvider'
 import { getErrorMessage, submitSaleLead } from '../data/api'
@@ -13,8 +13,8 @@ import { track } from '../data/analytics'
 import goldWatermark from '../assets/site/rw-logo-ccr.png'
 import goldLockup from '../assets/site/gold.png'
 import { KRISAH_ASSESSMENT_URL } from '../data/content'
-import { FOOTER_LINKS, mono, serif } from '../theme'
-import { fs, container, eyebrow, note, sectionHeading, sectionRule } from '../styles'
+import { FOOTER_LINKS, mono } from '../theme'
+import { fs, blockHeading, container, eyebrow, note, pageHeading, sectionHeading, sectionRule } from '../styles'
 
 /**
  * Landing page for KRISAH's back button after the interview. It carries no
@@ -86,7 +86,7 @@ export default function AssessmentResult() {
         <img src={goldWatermark} alt="" aria-hidden className="rw-watermark is-right" />
         <div className="rw-pad" style={{ ...container, maxWidth: 880, padding: 'var(--rw-sy) 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <Reveal style={{ ...eyebrow, marginBottom: 20 }}>{t('result.eyebrow')}</Reveal>
-          <Reveal as="h1" delay={80} style={{ ...sectionHeading, fontSize: fs('clamp(30px,4.2vw,52px)'), lineHeight: 1.1 }}>
+          <Reveal as="h1" delay={80} style={pageHeading}>
             {t('result.title')}
           </Reveal>
           <Reveal as="p" delay={160} style={{ ...note, marginTop: 18, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em', fontSize: fs('clamp(16px,1.7vw,18px)'), lineHeight: 1.6 }}>
@@ -112,16 +112,16 @@ export default function AssessmentResult() {
       {/* The sixteen areas — the curated list ships with the write-up */}
       <section id="capture" className="rw-pad" style={{ ...container, ...sectionRule, padding: 'var(--rw-sy) 40px' }}>
         <SectionHead
-          eyebrow={t('result.after.eyebrow')} titleWidth="14em"
+          eyebrow={t('result.after.eyebrow')}
+          titleWidth="14em"
           title={t('result.after.title')}
-          aside={<SectionAside>{t('result.after.aside')}</SectionAside>}
         />
 
         <Reveal className="rw-figure" style={{ border: '1px solid var(--line)', padding: 'clamp(28px,4vw,40px)', marginTop: 44 }}>
           {capStatus === 'ok' ? (
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.16em', color: 'var(--copper)' }}>{t('result.done')}</div>
-              <h3 style={{ fontFamily: serif, fontSize: fs('clamp(22px,2.6vw,30px)'), color: 'var(--ink)', marginTop: 12 }}>
+              <h3 style={{ ...blockHeading, marginTop: 12 }}>
                 {t('result.sent', { name: cap.name.trim() ? `, ${cap.name.trim()}` : '' })}
               </h3>
               <p style={{ ...note, marginTop: 10, fontSize: fs('15px'), lineHeight: 1.55 }}>
@@ -131,7 +131,7 @@ export default function AssessmentResult() {
           ) : (
             <div>
               <div style={{ fontFamily: mono, fontSize: fs('10px'), letterSpacing: '.16em', color: 'var(--copper)' }}>{t('result.keep')}</div>
-              <h3 style={{ fontFamily: serif, fontSize: fs('clamp(22px,2.6vw,30px)'), color: 'var(--ink)', marginTop: 4 }}>
+              <h3 style={{ ...blockHeading, marginTop: 4 }}>
                 {t('result.formTitle')}
               </h3>
               <p style={{ ...note, fontSize: fs('15px'), lineHeight: 1.55, marginTop: 10, marginBottom: 22 }}>
@@ -183,7 +183,7 @@ export default function AssessmentResult() {
               style={{ height: 'clamp(72px, 11vw, 120px)', width: 'auto', objectFit: 'contain', mixBlendMode: 'screen' }}
             />
           </Reveal>
-          <Reveal as="h2" style={{ ...sectionHeading, fontSize: fs('clamp(26px,3.4vw,42px)'), lineHeight: 1.12 }}>
+          <Reveal as="h2" style={sectionHeading}>
             {t('result.retakeTitle')}
           </Reveal>
           <Reveal as="p" delay={120} style={{ ...note, marginTop: 16, marginLeft: 'auto', marginRight: 'auto', maxWidth: '30em', fontSize: fs('16px'), lineHeight: 1.6 }}>

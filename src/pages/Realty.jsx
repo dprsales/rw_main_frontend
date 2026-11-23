@@ -18,7 +18,7 @@ import CtaButton from '../components/CtaButton'
 import Reveal from '../components/Reveal'
 import RiseText from '../components/RiseText'
 import ServiceLandingForm from '../components/ServiceLandingForm'
-import SectionHead, { SectionAside } from '../components/SectionHead'
+import SectionHead from '../components/SectionHead'
 import { useInView } from '../hooks/useInView'
 import { useLang } from '../i18n/LangProvider'
 import { MANDATE_SCOPE } from '../data/content'
@@ -86,7 +86,7 @@ export default function Realty() {
           <div className="rw-realty-hero-copy">
             <Reveal style={{ ...eyebrow, marginBottom: 30 }}>{t('realty.hero.eyebrow')}</Reveal>
 
-            <h1 className="rw-realty-hero-title" style={{ ...pageHeading, fontSize: undefined, lineHeight: undefined, maxWidth: '12em' }}>
+            <h1 className="rw-realty-hero-title" style={{ ...pageHeading, maxWidth: '12em' }}>
               <RiseText lines={headline} step={0.12} />
             </h1>
 
@@ -148,9 +148,10 @@ export default function Realty() {
       <section id="scope" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <SectionHead
-            eyebrow={t('realty.scope.eyebrow')} tracking=".24em" titleWidth="12em"
-            title={t('realty.scope.title')}
-            aside={<SectionAside>{t('realty.scope.aside')}</SectionAside>}
+            eyebrow={t('realty.scope.eyebrow')}
+            titleWidth="12em"
+            title={t('realty.scope.title.a')}
+            titleAccent={t('realty.scope.title.b')}
           />
 
           <div className="rw-matrix">
@@ -171,7 +172,7 @@ export default function Realty() {
         <div className="rw-split" style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56 }}>
           <Reveal style={{ ...eyebrow, letterSpacing: '.24em' }}>{t('realty.why.eyebrow')}</Reveal>
           <div>
-            <Reveal as="h2" style={{ ...sectionHeading, fontSize: fs('clamp(30px,3.8vw,48px)'), lineHeight: 1.06, maxWidth: '16em' }}>
+            <Reveal as="h2" style={{ ...sectionHeading, maxWidth: '16em' }}>
               {t('realty.why.title')}
             </Reveal>
             <Reveal as="p" delay={120} style={{ ...body, marginTop: 26, maxWidth: '35em' }}>
@@ -189,7 +190,7 @@ export default function Realty() {
           <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.36fr .64fr', gap: 56 }}>
             <div className="rw-sticky-aside">
               <div style={{ ...eyebrow, letterSpacing: '.24em' }}>{t('realty.case.eyebrow')}</div>
-              <h2 style={{ ...sectionHeading, fontSize: fs('clamp(28px,3.2vw,40px)'), lineHeight: 1.08, marginTop: 18, maxWidth: '11em' }}>
+              <h2 style={{ ...sectionHeading, marginTop: 18, maxWidth: '11em' }}>
                 {t('realty.case.title')}
               </h2>
             </div>
@@ -241,8 +242,10 @@ export default function Realty() {
       <section id="clients" style={{ ...sectionRule, borderBottom: '1px solid var(--line)', background: 'var(--chip)' }}>
         <div className="rw-pad" style={{ ...container, padding: 'var(--rw-sy) 40px' }}>
           <SectionHead
-            eyebrow={t('realty.clients.eyebrow')} faded size="sm" space={30}
-            title={t('realty.clients.title')}
+            eyebrow={t('realty.clients.eyebrow')}
+            space={30}
+            title={t('realty.clients.title.a')}
+            titleAccent={t('realty.clients.title.b')}
             aside={(
               <Link to="/about" className="rw-nav-link" style={headLink}>
                 {t('realty.clients.portfolio')}

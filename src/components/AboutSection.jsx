@@ -1,6 +1,6 @@
 import Reveal from './Reveal'
 import { useLang } from '../i18n/LangProvider'
-import { fs, body, container, eyebrow, sectionHeadingLg } from '../styles'
+import { body, container, eyebrow, sectionHeading } from '../styles'
 
 /** Text-only About: the portrait moved up to the Portfolio hero, so the heading sits
  *  left and the story right; .rw-split stacks them on smaller screens. */
@@ -11,7 +11,7 @@ export default function AboutSection() {
       <div className="rw-split" style={{ display: 'grid', gridTemplateColumns: '.9fr 1.1fr', gap: 'clamp(32px,6vw,90px)', alignItems: 'start' }}>
         <div>
           <Reveal style={{ ...eyebrow, letterSpacing: '.24em', marginBottom: 22 }}>{t('portfolio.about.eyebrow')}</Reveal>
-          <Reveal as="h2" style={{ ...sectionHeadingLg, fontSize: fs('clamp(34px,4.6vw,62px)'), lineHeight: 1.02 }}>
+          <Reveal as="h2" style={sectionHeading}>
             {t('portfolio.about.title.1')}<br />{t('portfolio.about.title.2')}
           </Reveal>
         </div>
