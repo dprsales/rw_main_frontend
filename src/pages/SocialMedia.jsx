@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -169,13 +169,88 @@ const emptyForm = () => ({
 /** Concrete options only. Other stays manual because it needs a note. */
 const selectableItems = (items) => items.filter((item) => item !== 'Other')
 
+const STEPS = [
+  { id: 'details', label: 'Your details' },
+  { id: 'need', label: 'Social need' },
+  { id: 'assets', label: 'Creative assets' },
+  { id: 'challenge', label: 'Challenge' },
+  { id: 'review', label: 'Review & send' },
+]
+const STEP_LAST = STEPS.length - 1
+
+function missingForStep(step, form) {
+  const missing = []
+  if (step === 0) {
+    if (!form.name.trim()) missing.push({ id: 'name', label: 'Name' })
+    if (!form.email.trim()) missing.push({ id: 'email', label: 'Email' })
+    if (!isValidPhone(form.phone)) missing.push({ id: 'phone', label: 'Phone (10 digits)' })
+    if (!form.role) missing.push({ id: 'role', label: 'Your role' })
+    if (!form.company.trim()) missing.push({ id: 'company', label: 'Company / developer' })
+    if (!form.projectName.trim()) missing.push({ id: 'projectName', label: 'Project or brand name' })
+    if (!form.location.trim()) missing.push({ id: 'location', label: 'City / location' })
+    if (!form.projectStage) missing.push({ id: 'projectStage', label: 'Stage' })
+  }
+  if (step === 1) {
+    if (!form.primaryNeeds.length) missing.push({ id: 'primaryNeeds', label: 'What you need' })
+    if (!form.platforms.length) missing.push({ id: 'platforms', label: 'Platforms' })
+    if (!form.platformLinks.trim()) missing.push({ id: 'platformLinks', label: 'Handles or page links' })
+    if (!form.helpAreas.length) missing.push({ id: 'helpAreas', label: 'Areas of help' })
+    if (!form.goals.length) missing.push({ id: 'goals', label: 'Goals' })
+    if (!form.cadence) missing.push({ id: 'cadence', label: 'Posting cadence' })
+    if (!form.timeline) missing.push({ id: 'timeline', label: 'When you want to start' })
+  }
+  if (step === 2) {
+    if (form.assetsMode === 'skipped') {
+      if (!form.assetsSkipReason.trim()) {
+        missing.push({ id: 'assetsSkipReason', label: 'Reason for skipping assets' })
+      }
+    } else {
+      const unanswered = CREATIVE_ASSETS.filter((item) => {
+        const value = form.creativeAssets[item.key]
+        return value !== 'have' && value !== 'need'
+      })
+      if (unanswered.length) {
+        missing.push({ id: 'creativeAssets', label: 'Creative assets (mark every row, or Skip)' })
+      }
+    }
+  }
+  if (step === 3) {
+    if (!form.challenges.length) missing.push({ id: 'challenges', label: 'Biggest social challenge' })
+    if (form.challenges.includes('Other') && !form.challengeOther.trim()) {
+      missing.push({ id: 'challengeOther', label: 'Other challenge detail' })
+    }
+    if (!form.extras.length) missing.push({ id: 'extras', label: 'Anything else we should know' })
+    if (form.extras.includes('Other') && !form.extrasOther.trim()) {
+      missing.push({ id: 'extrasOther', label: 'Other note detail' })
+    }
+  }
+  if (step === 4) {
+    if (!form.privacyConsent) missing.push({ id: 'privacyConsent', label: 'Privacy consent' })
+  }
+  return missing
+}
+
+function stepIsComplete(step, form) {
+  return missingForStep(step, form).length === 0
+}
+
 export default function SocialMedia() {
   const [form, setForm] = useState(emptyForm)
+  const [step, setStep] = useState(0)
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
   const [fieldErrors, setFieldErrors] = useState([])
   const errorRef = useRef(null)
+  const panelRef = useRef(null)
   const startedRef = useRef(false)
+
+  const stepProgress = STEP_LAST > 0 ? step / STEP_LAST : 0
+
+  useEffect(() => {
+    if (panelRef.current) {
+      panelRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [step])
 
   const markStarted = () => {
     if (startedRef.current) return
@@ -303,45 +378,56 @@ export default function SocialMedia() {
 
   const validate = () => {
     const missing = []
-    if (!form.name.trim()) missing.push({ id: 'name', label: 'Name' })
-    if (!form.email.trim()) missing.push({ id: 'email', label: 'Email' })
-    if (!isValidPhone(form.phone)) missing.push({ id: 'phone', label: 'Phone (10 digits)' })
-    if (!form.role) missing.push({ id: 'role', label: 'Your role' })
-    if (!form.company.trim()) missing.push({ id: 'company', label: 'Company / developer' })
-    if (!form.projectName.trim()) missing.push({ id: 'projectName', label: 'Project or brand name' })
-    if (!form.location.trim()) missing.push({ id: 'location', label: 'City / location' })
-    if (!form.projectStage) missing.push({ id: 'projectStage', label: 'Stage' })
-    if (!form.primaryNeeds.length) missing.push({ id: 'primaryNeeds', label: 'What you need' })
-    if (!form.platforms.length) missing.push({ id: 'platforms', label: 'Platforms' })
-    if (!form.platformLinks.trim()) missing.push({ id: 'platformLinks', label: 'Handles or page links' })
-    if (!form.helpAreas.length) missing.push({ id: 'helpAreas', label: 'Areas of help' })
-    if (!form.goals.length) missing.push({ id: 'goals', label: 'Goals' })
-    if (!form.cadence) missing.push({ id: 'cadence', label: 'Posting cadence' })
-    if (!form.timeline) missing.push({ id: 'timeline', label: 'When you want to start' })
-    if (form.assetsMode === 'skipped') {
-      if (!form.assetsSkipReason.trim()) {
-        missing.push({ id: 'assetsSkipReason', label: 'Reason for skipping assets' })
-      }
-    } else {
-      const unanswered = CREATIVE_ASSETS.filter((item) => {
-        const value = form.creativeAssets[item.key]
-        return value !== 'have' && value !== 'need'
-      })
-      if (unanswered.length) {
-        missing.push({ id: 'creativeAssets', label: 'Creative assets (mark every row, or Skip)' })
-      }
-    }
-    if (!form.challenges.length) missing.push({ id: 'challenges', label: 'Biggest social challenge' })
-    if (form.challenges.includes('Other') && !form.challengeOther.trim()) {
-      missing.push({ id: 'challengeOther', label: 'Other challenge detail' })
-    }
-    if (!form.extras.length) missing.push({ id: 'extras', label: 'Anything else we should know' })
-    if (form.extras.includes('Other') && !form.extrasOther.trim()) {
-      missing.push({ id: 'extrasOther', label: 'Other note detail' })
-    }
-    if (!form.privacyConsent) missing.push({ id: 'privacyConsent', label: 'Privacy consent' })
+    for (let i = 0; i <= STEP_LAST; i += 1) missing.push(...missingForStep(i, form))
     setFieldErrors(missing)
     return missing
+  }
+
+  const validateStep = (target = step) => {
+    const missing = missingForStep(target, form)
+    setFieldErrors(missing)
+    return missing
+  }
+
+  const goNext = () => {
+    const missing = validateStep(step)
+    if (missing.length) {
+      setStatus('error')
+      setError('Please fill the highlighted required fields.')
+      requestAnimationFrame(() => focusFirstMissing(missing))
+      return
+    }
+    setStatus('idle')
+    setError('')
+    setFieldErrors([])
+    setStep((s) => Math.min(STEP_LAST, s + 1))
+  }
+
+  const goBack = () => {
+    setStatus('idle')
+    setError('')
+    setFieldErrors([])
+    setStep((s) => Math.max(0, s - 1))
+  }
+
+  const goToStep = (next) => {
+    if (next > step) {
+      for (let i = step; i < next; i += 1) {
+        const missing = missingForStep(i, form)
+        if (missing.length) {
+          setStep(i)
+          setFieldErrors(missing)
+          setStatus('error')
+          setError('Please fill the highlighted required fields.')
+          requestAnimationFrame(() => focusFirstMissing(missing))
+          return
+        }
+      }
+    }
+    setStatus('idle')
+    setError('')
+    setFieldErrors([])
+    setStep(next)
   }
 
   const focusFirstMissing = (missing) => {
@@ -391,10 +477,20 @@ export default function SocialMedia() {
   const onSubmit = async (e) => {
     e.preventDefault()
     if (status === 'sending') return
+    if (step < STEP_LAST) {
+      goNext()
+      return
+    }
     const missing = validate()
     if (missing.length) {
       setStatus('error')
       setError('Please fill the highlighted required fields.')
+      for (let i = 0; i <= STEP_LAST; i += 1) {
+        if (missingForStep(i, form).length) {
+          setStep(i)
+          break
+        }
+      }
       requestAnimationFrame(() => focusFirstMissing(missing))
       return
     }
@@ -563,7 +659,7 @@ export default function SocialMedia() {
           </div>
         </section>
 
-        <section id="enquire" className="rw-bc-form-section rw-pad">
+        <section id="enquire" className="rw-bc-form-section is-stepper rw-pad">
           <div className="rw-bc-shell">
             {status === 'sent' ? (
               <Reveal className="rw-bc-panel rw-bc-done">
@@ -580,6 +676,7 @@ export default function SocialMedia() {
                   style={{ ...ctaCopper, marginTop: 22 }}
                   onClick={() => {
                     setForm(emptyForm())
+                    setStep(0)
                     setStatus('idle')
                     startedRef.current = false
                   }}
@@ -588,17 +685,41 @@ export default function SocialMedia() {
                 </button>
               </Reveal>
             ) : (
-              <form className="rw-bc-panel" onSubmit={onSubmit} noValidate>
+              <form className="rw-bc-panel is-stepper rw-bc-form" onSubmit={onSubmit} noValidate ref={panelRef}>
                 <header className="rw-bc-panel-head">
                   <p className="rw-bc-eyebrow" style={{ fontFamily: mono }}>Social brief</p>
                   <h2 className="rw-bc-panel-title" style={{ fontFamily: serif }}>
                     Tell us about the social work
                   </h2>
                   <p className="rw-bc-note" style={{ fontFamily: text }}>
-                    Every field is required. Platforms, goals, creatives, SEO / local / GEO add-ons.
-                    Share this page link when someone only needs social media management.
+                    One section at a time. Platforms, goals, creatives, SEO / local / GEO add-ons.
                   </p>
                 </header>
+
+                <div className="rw-bc-rail" aria-label="Brief progress">
+                  <div className="rw-bc-rail-meta">
+                    <div className="rw-bc-rail-label">
+                      Step <strong>{step + 1}</strong> / {STEPS.length}
+                      <span className="rw-bc-rail-sep">·</span>
+                      <span className="rw-bc-rail-current">{STEPS[step].label}</span>
+                    </div>
+                    <div className="rw-bc-bar" aria-hidden="true">
+                      <div className="rw-bc-bar-fill" style={{ transform: `scaleX(${stepProgress})` }} />
+                    </div>
+                  </div>
+                  <div className="rw-bc-stepper" role="navigation" aria-label="Brief steps">
+                    {STEPS.map((row, i) => (
+                      <button
+                        key={row.id}
+                        type="button"
+                        className={`rw-bc-step-seg${step === i ? ' is-on' : ''}${stepIsComplete(i, form) ? ' is-done' : ''}`}
+                        onClick={() => goToStep(i)}
+                        aria-label={row.label}
+                        title={row.label}
+                      />
+                    ))}
+                  </div>
+                </div>
 
                 {(fieldErrors.length > 0 || error) && (
                   <div
@@ -630,7 +751,8 @@ export default function SocialMedia() {
                   </div>
                 )}
 
-                <fieldset className="rw-bc-block">
+                {step === 0 && (
+                <fieldset className="rw-bc-block rw-bc-step-panel">
                   <legend className="rw-bc-block-title">Your details</legend>
                   <div className="rw-form-panel rw-form-panel--compact rw-bc-grid">
                     <label className="rw-form-field-wrap" htmlFor="sm-name">
@@ -763,8 +885,10 @@ export default function SocialMedia() {
                     </label>
                   </div>
                 </fieldset>
+                )}
 
-                <fieldset className="rw-bc-block">
+                {step === 1 && (
+                <fieldset className="rw-bc-block rw-bc-step-panel">
                   <legend className="rw-bc-block-title">Social need</legend>
                   <div className="rw-form-panel rw-form-panel--compact rw-bc-grid">
                     {chipGroup(
@@ -856,8 +980,10 @@ export default function SocialMedia() {
                     </label>
                   </div>
                 </fieldset>
+                )}
 
-                <fieldset className="rw-bc-block">
+                {step === 2 && (
+                <fieldset className="rw-bc-block rw-bc-step-panel">
                   <legend className="rw-bc-block-title" id="sm-creativeAssets">
                     Creative and setup assets <span className="rw-form-req">*</span>
                   </legend>
@@ -969,8 +1095,10 @@ export default function SocialMedia() {
                     </div>
                   </div>
                 </fieldset>
+                )}
 
-                <fieldset className="rw-bc-block">
+                {step === 3 && (
+                <fieldset className="rw-bc-block rw-bc-step-panel">
                   <legend className="rw-bc-block-title">Challenge</legend>
                   <div className="rw-form-panel rw-form-panel--compact rw-bc-grid">
                     {chipGroup(
@@ -993,20 +1121,24 @@ export default function SocialMedia() {
                     )}
                   </div>
                 </fieldset>
+                )}
 
-                <label className="rw-bc-hp" aria-hidden="true">
-                  Website
-                  <input
-                    type="text"
-                    name="website"
-                    tabIndex={-1}
-                    autoComplete="off"
-                    value={form.website}
-                    onChange={set('website')}
-                  />
-                </label>
-
-                <div className="rw-bc-footer">
+                {step === 4 && (
+                <section className="rw-bc-block rw-bc-step-panel" aria-labelledby="sm-review-title">
+                  <h3 id="sm-review-title" className="rw-bc-block-title">Review & send</h3>
+                  <p className="rw-bc-review-meta">
+                    Check your brief, then agree to privacy and submit. Tap a row to edit that section.
+                  </p>
+                  <ul className="rw-bc-review-list">
+                    {STEPS.slice(0, 4).map((row, i) => (
+                      <li key={row.id}>
+                        <button type="button" className="rw-bc-review-link" onClick={() => goToStep(i)}>
+                          <span>{row.label}</span>
+                          <span>{stepIsComplete(i, form) ? 'Ready' : 'Needs detail'}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
                   <label className="rw-bc-consent" htmlFor="sm-privacyConsent">
                     <input
                       id="sm-privacyConsent"
@@ -1021,15 +1153,46 @@ export default function SocialMedia() {
                       {' '}and Team RW contacting me about this enquiry.
                     </span>
                   </label>
+                </section>
+                )}
 
-                  <button
-                    type="submit"
-                    className="rw-cta rw-bc-submit"
-                    style={ctaCopper}
-                    disabled={status === 'sending'}
-                  >
-                    {status === 'sending' ? 'Submitting...' : 'Submit'}
-                  </button>
+                <label className="rw-bc-hp" aria-hidden="true">
+                  Website
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={form.website}
+                    onChange={set('website')}
+                  />
+                </label>
+
+                <div className="rw-bc-foot">
+                  <div className="rw-bc-foot-inner">
+                    <button
+                      type="button"
+                      className="rw-bc-nav-btn"
+                      onClick={goBack}
+                      disabled={step === 0 || status === 'sending'}
+                    >
+                      Back
+                    </button>
+                    {step < STEP_LAST ? (
+                      <button type="button" className="rw-cta" style={ctaCopper} onClick={goNext} disabled={status === 'sending'}>
+                        Continue
+                      </button>
+                    ) : (
+                      <button
+                        type="submit"
+                        className="rw-cta rw-bc-submit"
+                        style={ctaCopper}
+                        disabled={status === 'sending'}
+                      >
+                        {status === 'sending' ? 'Submitting...' : 'Submit'}
+                      </button>
+                    )}
+                  </div>
                 </div>
               </form>
             )}

@@ -81,7 +81,7 @@ export const pages = {
     'home.videos.eyebrow': 'ON THE FLOOR',
     'home.videos.title.a': 'Client ',
     'home.videos.title.b': 'testimonials.',
-    'home.videos.lede': 'Hear why teams stay with RW. Tap a side strip to move. Play the centre film.',
+    'home.videos.lede': 'Hear why teams stay with RW. Auto-slides like the hero. Hover to pause. Play the centre film.',
     'home.videos.play': 'Play client film {n}',
     'home.videos.rail': 'Client testimonials',
     'home.videos.nav': 'Film navigation',

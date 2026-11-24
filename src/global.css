@@ -3672,6 +3672,11 @@ html[lang="te"] .rw-contact-row {
   margin: 0 .35em;
   color: color-mix(in srgb, var(--faded) 70%, transparent);
 }
+.rw-film-stage {
+  display: grid;
+  gap: clamp(18px, 2.4vw, 28px);
+  touch-action: pan-y;
+}
 .rw-film-spotlight {
   --film-h: clamp(380px, 62vh, 560px);
   display: flex;
@@ -3682,6 +3687,65 @@ html[lang="te"] .rw-contact-row {
   max-width: 100%;
   overflow: visible;
   isolation: isolate;
+  user-select: none;
+}
+.rw-film-slider-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2vw, 22px);
+}
+.rw-film-nav-btn {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: 1.5px solid var(--copper);
+  background: color-mix(in srgb, #0b0a09 55%, transparent);
+  color: var(--copper);
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
+  transition: background .25s ease, color .25s ease, border-color .25s ease, transform .25s cubic-bezier(.2,.7,.2,1), filter .25s ease;
+}
+.rw-film-nav-btn:hover,
+.rw-film-nav-btn:focus-visible {
+  background: var(--gold-gradient);
+  color: #16110a;
+  border-color: transparent;
+  outline: none;
+  transform: scale(1.05);
+  filter: brightness(1.04);
+}
+.rw-film-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+}
+.rw-film-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(242, 239, 233, .22);
+  cursor: pointer;
+  transition: width .25s ease, background .25s ease, box-shadow .25s ease;
+}
+.rw-film-dot.is-on {
+  width: 22px;
+  background: linear-gradient(100deg, #a67c3d, #e8c97a);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--copper) 45%, transparent);
+}
+.rw-film-dot:hover {
+  background: rgba(232, 201, 122, .45);
+}
+.rw-film-dot:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--copper) 70%, transparent);
+  outline-offset: 3px;
 }
 .rw-film-card {
   position: relative;
@@ -3938,10 +4002,16 @@ html[lang="te"] .rw-contact-row {
   .rw-film-side-name {
     font-size: calc(var(--rw-fs, 1) * 10px);
   }
+  .rw-film-nav-btn {
+    width: 42px;
+    height: 42px;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .rw-film-card,
-  .rw-film-play-ring {
+  .rw-film-play-ring,
+  .rw-film-nav-btn,
+  .rw-film-dot {
     transition: none;
   }
   .rw-film-progress-bar.is-on {
