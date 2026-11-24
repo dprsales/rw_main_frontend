@@ -5,6 +5,7 @@ import hireFinanceBanner from '../assets/site/hiring-finance-account-manager.jpg
 import hireTraineeBanner from '../assets/site/hiring-management-trainee.jpg'
 import hirePresalesBanner from '../assets/site/presales.jpg'
 import hireDigitalBanner from '../assets/site/digital-maketing-exe.jpg'
+import hireSocialBanner from '../assets/site/hiring-social-media-manager.jpg'
 import CtaButton from './CtaButton'
 import { activeHiringCampaigns, showHiringRail } from '../data/content'
 import { careerRolePath } from '../data/jobs'
@@ -13,6 +14,7 @@ export const HIRE_OPEN = 'rw-open-hire'
 const SLIDE_MS = 5000
 
 const POSTERS = {
+  social: hireSocialBanner,
   finance: hireFinanceBanner,
   trainee: hireTraineeBanner,
   presales: hirePresalesBanner,

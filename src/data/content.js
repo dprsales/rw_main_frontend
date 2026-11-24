@@ -68,6 +68,13 @@ export const MARQUEE_ITEMS = [
    hide themselves. Add another object to rotate; empty the array to take the rail down. */
 export const HIRING_CAMPAIGNS = [
   {
+    title: 'Social Media Manager',
+    location: 'Hyderabad',
+    line: 'Calendar, reels, growth, and insights. Salary ₹30K – ₹45K.',
+    until: '2026-12-31',
+    poster: 'social',
+  },
+  {
     title: 'Digital Marketing Executive',
     location: 'Hyderabad',
     line: 'Plan campaigns. Social, leads, and performance.',
@@ -588,6 +595,25 @@ export const CAREER_ROLES = [
       'Real estate experience preferred',
       'Creative and analytical mindset',
       'High energy and a growth mindset',
+    ],
+  },
+  {
+    title: 'Social Media Manager',
+    type: 'FULL-TIME · HYDERABAD',
+    category: 'Marketing',
+    level: 'Junior – Mid',
+    experience: '2–4+ years',
+    location: 'Hyderabad',
+    description: 'Plan and run the social media calendar, create reels, posts and campaigns, grow followers and engagement, and track insights for Team RW in Hyderabad. Salary ₹30K – ₹45K.',
+    requirements: [
+      'Plan and run the social media calendar',
+      'Create reels, posts, and campaigns',
+      'Grow followers and engagement',
+      'Track insights and report results',
+      '2–4+ years experience',
+      'Instagram, LinkedIn, and Meta Ads',
+      'Content and trend awareness',
+      'Real estate experience preferred',
     ],
   },
   {

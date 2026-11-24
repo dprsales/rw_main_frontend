@@ -114,6 +114,7 @@ const CURATED_SALES_HEADS = [
   'Management Trainee',
   'Pre Sales Executive',
   'Digital Marketing Executive',
+  'Social Media Manager',
   'Social Media Intern',
   'GM - CRM',
   'VP - Customer Experience & Post-Sales Operations',
@@ -139,6 +140,7 @@ const HIDDEN_ROLE_TITLES = new Set(['Telecaller Executive'])
 const CURATED_COPY_TITLES = new Set([
   'Pre Sales Executive',
   'Digital Marketing Executive',
+  'Social Media Manager',
   'Social Media Intern',
 ])
 

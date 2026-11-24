@@ -298,6 +298,7 @@ export const pages = {
     'hire.line.trainee': 'Ops, sales support, and real estate training.',
     'hire.line.presales': 'Call and qualify leads. Site visits. CRM follow-up.',
     'hire.line.digital': 'Plan campaigns. Social, leads, and performance.',
+    'hire.line.social': 'Calendar, reels, growth, and insights. Salary ₹30K – ₹45K.',
     'hire.apply': 'Apply',
     ...servicesEn,
     ...contentPagesEn,
@@ -336,6 +337,7 @@ const HIRE_LINE_KEYS = {
   'Management Trainee': 'hire.line.trainee',
   'Pre Sales Executive': 'hire.line.presales',
   'Digital Marketing Executive': 'hire.line.digital',
+  'Social Media Manager': 'hire.line.social',
 }
 
 const SEO_ROUTES = {
