@@ -8,6 +8,7 @@ import { getErrorMessage, submitBrandConsultingEnquiry } from '../data/api'
 import { errorCategory, track } from '../data/analytics'
 import { isValidPhone, toPhoneDigits } from '../data/booking'
 import FormSelect from '../form/FormSelect'
+import BriefStepper from '../components/BriefStepper'
 import { FOOTER_LINKS, mono, serif, text } from '../theme'
 import { ctaCopper, fs } from '../styles'
 import '../form/form.css'
@@ -133,11 +134,11 @@ const emptyForm = () => ({
 const selectableItems = (items) => items.filter((item) => item !== 'Other')
 
 const STEPS = [
-  { id: 'details', label: 'Your details' },
-  { id: 'need', label: 'Brand need' },
-  { id: 'assets', label: 'Brand assets' },
+  { id: 'details', label: 'Details' },
+  { id: 'need', label: 'Need' },
+  { id: 'assets', label: 'Assets' },
   { id: 'challenge', label: 'Challenge' },
-  { id: 'review', label: 'Review & send' },
+  { id: 'review', label: 'Review' },
 ]
 const STEP_LAST = STEPS.length - 1
 
@@ -196,6 +197,7 @@ function stepIsComplete(step, form) {
 export default function BrandConsulting() {
   const [form, setForm] = useState(emptyForm)
   const [step, setStep] = useState(0)
+  const [reached, setReached] = useState(0)
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
   const [fieldErrors, setFieldErrors] = useState([])
@@ -204,12 +206,16 @@ export default function BrandConsulting() {
   const panelRef = useRef(null)
   const startedRef = useRef(false)
 
-  const stepProgress = STEP_LAST > 0 ? step / STEP_LAST : 0
-
   const scrollFormIntoView = () => {
     requestAnimationFrame(() => {
       panelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     })
+  }
+
+  const moveToStep = (next) => {
+    const n = Math.max(0, Math.min(STEP_LAST, next))
+    setStep(n)
+    setReached((r) => Math.max(r, n))
   }
 
   const markStarted = () => {
@@ -364,7 +370,7 @@ export default function BrandConsulting() {
     setStatus('idle')
     setError('')
     setFieldErrors([])
-    setStep((s) => Math.min(STEP_LAST, s + 1))
+    moveToStep(step + 1)
     scrollFormIntoView()
   }
 
@@ -372,16 +378,17 @@ export default function BrandConsulting() {
     setStatus('idle')
     setError('')
     setFieldErrors([])
-    setStep((s) => Math.max(0, s - 1))
+    moveToStep(step - 1)
     scrollFormIntoView()
   }
 
   const goToStep = (next) => {
+    if (next > reached) return
     if (next > step) {
       for (let i = step; i < next; i += 1) {
         const missing = missingForStep(i, form)
         if (missing.length) {
-          setStep(i)
+          moveToStep(i)
           setFieldErrors(missing)
           setStatus('error')
           setError('Please fill the highlighted required fields.')
@@ -393,7 +400,7 @@ export default function BrandConsulting() {
     setStatus('idle')
     setError('')
     setFieldErrors([])
-    setStep(next)
+    moveToStep(next)
     scrollFormIntoView()
   }
 
@@ -454,7 +461,7 @@ export default function BrandConsulting() {
       setError('Please fill the highlighted required fields.')
       for (let i = 0; i <= STEP_LAST; i += 1) {
         if (missingForStep(i, form).length) {
-          setStep(i)
+          moveToStep(i)
           break
         }
       }
@@ -563,6 +570,7 @@ export default function BrandConsulting() {
                   onClick={() => {
                     setForm(emptyForm())
                     setStep(0)
+                    setReached(0)
                     setStatus('idle')
                     setRepeat(false)
                     startedRef.current = false
@@ -584,30 +592,13 @@ export default function BrandConsulting() {
               </header>
 
               <form className="rw-bc-form is-stepper" onSubmit={onSubmit} noValidate ref={panelRef}>
-                <div className="rw-bc-rail" aria-label="Brief progress">
-                  <div className="rw-bc-rail-meta">
-                    <div className="rw-bc-rail-label">
-                      Step <strong>{step + 1}</strong> / {STEPS.length}
-                      <span className="rw-bc-rail-sep">·</span>
-                      <span className="rw-bc-rail-current">{STEPS[step].label}</span>
-                    </div>
-                    <div className="rw-bc-bar" aria-hidden="true">
-                      <div className="rw-bc-bar-fill" style={{ transform: `scaleX(${stepProgress})` }} />
-                    </div>
-                  </div>
-                  <div className="rw-bc-stepper" role="navigation" aria-label="Brief steps">
-                    {STEPS.map((row, i) => (
-                      <button
-                        key={row.id}
-                        type="button"
-                        className={`rw-bc-step-seg${step === i ? ' is-on' : ''}${stepIsComplete(i, form) ? ' is-done' : ''}`}
-                        onClick={() => goToStep(i)}
-                        aria-label={row.label}
-                        title={row.label}
-                      />
-                    ))}
-                  </div>
-                </div>
+                <BriefStepper
+                  steps={STEPS}
+                  current={step}
+                  reached={reached}
+                  onJump={goToStep}
+                  ariaLabel="Brand brief steps"
+                />
 
                 {(fieldErrors.length > 0 || error) && (
                   <div
