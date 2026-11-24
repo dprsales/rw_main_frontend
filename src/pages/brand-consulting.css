@@ -1,6 +1,14 @@
 /* Public Brand Consulting enquiry: hero + brand brief form. */
 
 .rw-bc {
+  /* Form control tokens: live on page root so fields still paint after the outer panel was removed. */
+  --bc-surface: var(--card);
+  --bc-block: transparent;
+  --bc-control: var(--chip);
+  --bc-line: var(--line);
+  --bc-line-soft: color-mix(in srgb, var(--line) 70%, transparent);
+  --bc-ink: var(--ink);
+  --bc-muted: color-mix(in srgb, var(--ink) 62%, transparent);
   background: var(--bg);
   color: var(--ink);
   min-height: 100vh;
@@ -152,14 +160,6 @@
 }
 
 .rw-bc-panel {
-  /* Site palette only: --bg / --card / --chip / --line / --copper / --ink. */
-  --bc-surface: var(--card);
-  --bc-block: transparent;
-  --bc-control: var(--chip);
-  --bc-line: var(--line);
-  --bc-line-soft: color-mix(in srgb, var(--line) 70%, transparent);
-  --bc-ink: var(--ink);
-  --bc-muted: color-mix(in srgb, var(--ink) 62%, transparent);
   /* Body theme defaults to Cormorant; form UI stays Poppins. Titles keep inline serif. */
   font-family: 'Poppins', system-ui, sans-serif;
   background: var(--bc-surface);
@@ -1084,14 +1084,73 @@
 }
 
 /* --- Enquiry stepper (same pattern as brand checklist) --- */
-.rw-bc-form-section.is-stepper {
-  padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+/* Match /brandconsultingchecklist hierarchy: intro → rail → one step card → foot. */
+.rw-bc-form-section.is-stepper .rw-bc-shell {
+  max-width: 920px;
+}
+
+.rw-bc-intro {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
 }
 
 .rw-bc-form.is-stepper {
   display: grid;
   gap: 16px;
-  padding-bottom: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font-family: 'Poppins', system-ui, sans-serif;
+}
+
+.rw-bc-form.is-stepper .rw-bc-block,
+.rw-bc-form.is-stepper .rw-bc-step-panel {
+  margin: 0;
+  padding: 18px 16px 16px;
+  border: 1px solid color-mix(in srgb, var(--copper) 18%, var(--line));
+  border-radius: 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--copper) 18%, var(--line));
+  background:
+    linear-gradient(180deg, rgba(232, 201, 122, 0.04), transparent 28%),
+    var(--bc-surface);
+  box-shadow:
+    0 1px 0 rgba(232, 201, 122, 0.06) inset,
+    0 18px 48px rgba(0, 0, 0, 0.22);
+  scroll-margin-top: calc(var(--rw-header-h, 76px) + env(safe-area-inset-top, 0px) + 140px);
+}
+
+/* Keep step title inside the card (fieldset legend defaults to sitting on the border). */
+.rw-bc-form.is-stepper .rw-bc-block-title {
+  float: left;
+  width: 100%;
+  margin: 0 0 12px;
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--bc-line-soft);
+}
+
+.rw-bc-form.is-stepper .rw-bc-block-title + * {
+  clear: both;
+}
+
+.rw-bc-form.is-stepper .rw-form-panel.rw-bc-grid {
+  gap: 14px 18px;
+  width: 100%;
+}
+
+/* Explicit field paint under stepper so inputs never go invisible if a token slips. */
+.rw-bc-form.is-stepper .rw-form-field,
+.rw-bc-form.is-stepper .rw-form-select-btn,
+.rw-bc-form.is-stepper textarea.rw-form-field {
+  background: var(--bc-control, var(--chip, #1a1714));
+  border: 1px solid var(--bc-line, var(--line, rgba(242, 239, 233, 0.16)));
+  border-radius: 8px;
+  color: var(--bc-ink, var(--ink, #f2efe9));
 }
 
 .rw-bc-rail {
@@ -1199,9 +1258,6 @@
   outline-offset: 2px;
 }
 
-.rw-bc-step-panel {
-  scroll-margin-top: calc(var(--rw-header-h, 76px) + env(safe-area-inset-top, 0px) + 120px);
-}
 
 .rw-bc-review-list {
   list-style: none;
@@ -1249,12 +1305,19 @@
 }
 
 .rw-bc-foot {
-  position: sticky;
-  bottom: 0;
-  z-index: 18;
-  margin-top: 10px;
-  padding: 14px 0 calc(12px + env(safe-area-inset-bottom, 0px));
-  background: linear-gradient(180deg, rgba(11, 10, 9, 0) 0%, rgba(11, 10, 9, 0.88) 22%, rgba(11, 10, 9, 0.98) 100%);
+  position: static;
+  z-index: auto;
+  margin-top: 4px;
+  padding: 4px 0 0;
+  border-top: 0;
+  background: transparent;
+}
+
+@media (min-width: 900px) {
+  .rw-bc-form.is-stepper .rw-bc-block,
+  .rw-bc-form.is-stepper .rw-bc-step-panel {
+    padding: 22px 22px 18px;
+  }
 }
 
 .rw-bc-foot-inner {

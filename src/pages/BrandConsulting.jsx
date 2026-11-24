@@ -569,17 +569,18 @@ export default function BrandConsulting() {
                 </button>
               </Reveal>
             ) : (
-              <form className="rw-bc-panel is-stepper rw-bc-form" onSubmit={onSubmit} noValidate ref={panelRef}>
-                <header className="rw-bc-panel-head">
-                  <p className="rw-bc-eyebrow" style={{ fontFamily: mono }}>Brand brief</p>
-                  <h2 className="rw-bc-panel-title" style={{ fontFamily: serif }}>
-                    Tell us about the brand work
-                  </h2>
-                  <p className="rw-bc-note" style={{ fontFamily: text }}>
-                    One section at a time. Every field is required. Mark Have or Need on every asset, or Skip with a reason.
-                  </p>
-                </header>
+              <>
+              <header className="rw-bc-intro">
+                <p className="rw-bc-eyebrow" style={{ fontFamily: mono }}>Brand brief</p>
+                <h2 className="rw-bc-panel-title" style={{ fontFamily: serif }}>
+                  Tell us about the brand work
+                </h2>
+                <p className="rw-bc-note" style={{ fontFamily: text }}>
+                  One section at a time. Every field is required. Mark Have or Need on every asset, or Skip with a reason.
+                </p>
+              </header>
 
+              <form className="rw-bc-form is-stepper" onSubmit={onSubmit} noValidate ref={panelRef}>
                 <div className="rw-bc-rail" aria-label="Brief progress">
                   <div className="rw-bc-rail-meta">
                     <div className="rw-bc-rail-label">
@@ -1203,6 +1204,7 @@ export default function BrandConsulting() {
                   </div>
                 </div>
               </form>
+              </>
             )}
           </div>
         </section>

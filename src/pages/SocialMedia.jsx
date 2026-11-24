@@ -685,17 +685,18 @@ export default function SocialMedia() {
                 </button>
               </Reveal>
             ) : (
-              <form className="rw-bc-panel is-stepper rw-bc-form" onSubmit={onSubmit} noValidate ref={panelRef}>
-                <header className="rw-bc-panel-head">
-                  <p className="rw-bc-eyebrow" style={{ fontFamily: mono }}>Social brief</p>
-                  <h2 className="rw-bc-panel-title" style={{ fontFamily: serif }}>
-                    Tell us about the social work
-                  </h2>
-                  <p className="rw-bc-note" style={{ fontFamily: text }}>
-                    One section at a time. Platforms, goals, creatives, SEO / local / GEO add-ons.
-                  </p>
-                </header>
+              <>
+              <header className="rw-bc-intro">
+                <p className="rw-bc-eyebrow" style={{ fontFamily: mono }}>Social brief</p>
+                <h2 className="rw-bc-panel-title" style={{ fontFamily: serif }}>
+                  Tell us about the social work
+                </h2>
+                <p className="rw-bc-note" style={{ fontFamily: text }}>
+                  One section at a time. Platforms, goals, creatives, SEO / local / GEO add-ons.
+                </p>
+              </header>
 
+              <form className="rw-bc-form is-stepper" onSubmit={onSubmit} noValidate ref={panelRef}>
                 <div className="rw-bc-rail" aria-label="Brief progress">
                   <div className="rw-bc-rail-meta">
                     <div className="rw-bc-rail-label">
@@ -1195,6 +1196,7 @@ export default function SocialMedia() {
                   </div>
                 </div>
               </form>
+              </>
             )}
           </div>
         </section>
