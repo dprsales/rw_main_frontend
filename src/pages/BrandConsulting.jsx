@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -206,11 +206,11 @@ export default function BrandConsulting() {
 
   const stepProgress = STEP_LAST > 0 ? step / STEP_LAST : 0
 
-  useEffect(() => {
-    if (panelRef.current) {
-      panelRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-  }, [step])
+  const scrollFormIntoView = () => {
+    requestAnimationFrame(() => {
+      panelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
 
   const markStarted = () => {
     if (startedRef.current) return
@@ -365,6 +365,7 @@ export default function BrandConsulting() {
     setError('')
     setFieldErrors([])
     setStep((s) => Math.min(STEP_LAST, s + 1))
+    scrollFormIntoView()
   }
 
   const goBack = () => {
@@ -372,6 +373,7 @@ export default function BrandConsulting() {
     setError('')
     setFieldErrors([])
     setStep((s) => Math.max(0, s - 1))
+    scrollFormIntoView()
   }
 
   const goToStep = (next) => {
@@ -392,6 +394,7 @@ export default function BrandConsulting() {
     setError('')
     setFieldErrors([])
     setStep(next)
+    scrollFormIntoView()
   }
 
   const focusFirstMissing = (missing) => {
