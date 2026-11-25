@@ -5640,6 +5640,108 @@ html[lang="te"] .rw-contact-row {
 .rw-projx-kb img { width: 100%; height: 100%; object-fit: cover; will-change: transform; animation: rw-kenburns 22s ease-in-out infinite alternate; }
 @keyframes rw-kenburns { from { transform: scale(1.04); } to { transform: scale(1.15); } }
 
+/* Desktop left-to-right veil so type stays readable over the sky. */
+.rw-projx-kb-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(11,10,9,.94) 0%,
+      rgba(11,10,9,.78) 34%,
+      rgba(11,10,9,.3) 58%,
+      rgba(11,10,9,.12) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(11,10,9,.5) 0%,
+      rgba(11,10,9,.1) 40%,
+      rgba(11,10,9,.85) 100%
+    );
+}
+
+/* Content shell: desktop keeps the old breathing room; mobile overrides below. */
+.rw-projx-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding: clamp(48px, 6vw, 88px) 40px clamp(64px, 7vw, 96px);
+}
+
+.rw-projx-facts {
+  margin-top: clamp(34px, 4vw, 50px);
+  padding-top: 26px;
+  border-top: 1px solid rgba(234,241,249,.22);
+  display: flex;
+  gap: clamp(24px, 3.5vw, 48px);
+  flex-wrap: wrap;
+}
+
+.rw-projx-fact-value {
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  font-size: calc(var(--rw-fs, 1) * clamp(17px, 1.7vw, 23px));
+  letter-spacing: .02em;
+  font-variant-numeric: lining-nums;
+  color: #F2EFE9;
+  line-height: 1.1;
+  max-width: 16em;
+}
+
+.rw-projx-fact-label {
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  font-size: calc(var(--rw-fs, 1) * 10px);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(234,241,249,.58);
+  margin-top: 8px;
+}
+
+.rw-projx-cta {
+  margin-top: clamp(28px, 3vw, 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.rw-projx-back {
+  position: relative;
+  z-index: 2;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  font-size: calc(var(--rw-fs, 1) * 11px);
+  letter-spacing: .16em;
+  color: rgba(234,241,249,.72);
+}
+/* Desktop keeps the back link in the copy column; the top slot is mobile-only. */
+.rw-projx-back--top {
+  display: none;
+}
+
+.rw-projx-logo-img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-height: clamp(56px, 7vw, 92px);
+  max-width: min(68%, 300px);
+  object-fit: contain;
+  object-position: left center;
+}
+
+.rw-projx-headline {
+  margin-top: clamp(20px, 2.5vw, 34px);
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-weight: 400;
+  font-size: calc(var(--rw-fs, 1) * clamp(28px, 3.6vw, 52px));
+  line-height: 1.12;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #F2EFE9;
+  max-width: 14em;
+}
+
 /* The project render sits between the sky and the copy as a transparent cutout:
    grounded bottom-right, shown whole (never cropped), sized to the hero height.
    Renders must be uploaded with a transparent background for this to composite;
@@ -5665,9 +5767,14 @@ html[lang="te"] .rw-contact-row {
     rgba(11,10,9,0) 64%
   );
 }
+/* Mobile-only stage plate; desktop composites the cutout onto the full hero sky. */
+.rw-projx-render-bg,
+.rw-projx-render-bg-veil {
+  display: none;
+}
 /* Cutouts fade on the left (into the text) and bottom (into the sky).
    Keep the right edge solid so the villa doesn't dissolve off-screen. */
-.rw-projx-render img {
+.rw-projx-render-cut {
   display: block; width: 100%; height: 100%; object-fit: contain; object-position: right bottom;
   -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 14%), linear-gradient(to right, transparent 0%, #000 28%);
   mask-image: linear-gradient(to top, transparent 0%, #000 14%), linear-gradient(to right, transparent 0%, #000 28%);
@@ -5723,12 +5830,181 @@ html[lang="te"] .rw-contact-row {
 }
 @media (max-width: 900px) {
   .rw-projx-grid { grid-template-columns: 1fr; }
-  /* Content-height on phones: a forced 88svh minimum only manufactures empty space above the copy. */
-  .rw-projx-hero { min-height: 0; }
-  /* Stacked: the render drops behind the copy at reduced opacity so the text stays legible. */
-  .rw-projx-render { width: 100%; top: 40%; opacity: .42; }
+  /* Phone/tablet: building on top, copy below. Same pattern for every project page. */
+  .rw-projx-hero {
+    min-height: 0;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+  .rw-projx-hero--has-render {
+    /* Stacked editorial: image plate, then copy. Do not force one blended viewport. */
+    min-height: 0;
+    background: #0b0a09;
+  }
+  /* Full-bleed sky behind a cutout makes the villa melt into the page on phones.
+     Hide it so the property image owns its own stage above the text. */
+  .rw-projx-hero--has-render .rw-projx-kb,
+  .rw-projx-hero--has-render .rw-projx-kb-veil {
+    display: none;
+  }
+  .rw-projx-hero--has-render .rw-projx-scrim {
+    display: none;
+  }
+  /* Soft top-to-bottom veil for heroes that have no cutout (sky-only). */
+  .rw-projx-kb-veil {
+    background: linear-gradient(
+      180deg,
+      rgba(11,10,9,.12) 0%,
+      rgba(11,10,9,.06) 30%,
+      rgba(11,10,9,.78) 54%,
+      rgba(11,10,9,.97) 100%
+    );
+  }
+  .rw-projx-render {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    height: clamp(260px, 46svh, 400px);
+    margin: 0;
+    padding: 10px 16px 28px;
+    box-sizing: border-box;
+    opacity: 1;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #0b0a09;
+    border-bottom: 1px solid rgba(201, 169, 110, 0.24);
+    box-shadow:
+      inset 0 -36px 52px -30px rgba(11, 10, 9, 0.9),
+      0 1px 0 rgba(242, 239, 233, 0.04);
+  }
+  /* Site sky plate behind the cutout (never the villa photo). */
+  .rw-projx-render-bg {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1.08);
+    filter: saturate(1.05) brightness(0.9);
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .rw-projx-render-bg-veil {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(11, 10, 9, 0.12) 0%, rgba(11, 10, 9, 0.08) 48%, rgba(11, 10, 9, 0.72) 100%),
+      radial-gradient(ellipse 90% 70% at 50% 36%, rgba(48, 38, 30, 0.12) 0%, rgba(11, 10, 9, 0.28) 80%);
+  }
+  .rw-projx-render-cut {
+    position: relative;
+    z-index: 1;
+    object-fit: contain;
+    object-position: center bottom;
+    /* Tiny foot mist into the stage only. Keep the villa whole and separate from copy. */
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 5%);
+    mask-image: linear-gradient(to top, transparent 0%, #000 5%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+    filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.42));
+  }
   .rw-projx-scrim {
-    background: linear-gradient(180deg, rgba(11,10,9,.35) 0%, rgba(11,10,9,.72) 70%, rgba(11,10,9,.88) 100%);
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      transparent 32%,
+      rgba(11,10,9,.45) 46%,
+      rgba(11,10,9,.92) 62%,
+      rgba(11,10,9,.98) 100%
+    );
+  }
+  .rw-projx-content {
+    padding: 22px 20px 40px;
+    background: #0b0a09;
+  }
+  .rw-projx-hero--has-render .rw-projx-content {
+    /* Clear plate under the image stage so type never shares the villa canvas. */
+    border-top: 0;
+  }
+  .rw-projx-main {
+    align-self: stretch;
+  }
+  .rw-projx-back.rw-projx-back--top {
+    display: inline-flex;
+    align-self: flex-start;
+    margin: 10px 20px 8px;
+    color: rgba(234, 241, 249, 0.78);
+  }
+  /* Beat .rw-nav-link { display: inline-flex } from the touch hit-area rules. */
+  .rw-projx-back.rw-projx-back--inline {
+    display: none !important;
+  }
+  .rw-projx-loc {
+    margin-top: 14px !important;
+  }
+  .rw-projx-logo {
+    margin-top: 12px !important;
+  }
+  .rw-projx-logo-img {
+    max-height: 48px;
+    max-width: min(82%, 260px);
+  }
+  .rw-projx-headline {
+    margin-top: 14px;
+    font-size: calc(var(--rw-fs, 1) * clamp(24px, 6.6vw, 32px));
+    max-width: 12em;
+  }
+  .rw-projx-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin-top: 20px;
+    padding-top: 18px;
+  }
+  .rw-projx-fact {
+    min-width: 0;
+    padding-right: 16px;
+  }
+  .rw-projx-fact + .rw-projx-fact {
+    border-left: 1px solid rgba(234,241,249,.22);
+    padding-left: 18px;
+    padding-right: 0;
+  }
+  .rw-projx-fact:nth-child(n+3) {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(234,241,249,.14);
+  }
+  .rw-projx-fact:nth-child(2n+1):nth-child(n+3) {
+    border-left: none;
+    padding-left: 0;
+  }
+  .rw-projx-fact-value {
+    font-size: calc(var(--rw-fs, 1) * 20px);
+    font-weight: 500;
+    max-width: none;
+  }
+  .rw-projx-cta {
+    width: 100%;
+    margin-top: 20px;
+    align-items: stretch;
+  }
+  .rw-projx-cue {
+    display: none;
+  }
+  .rw-projx-enquire.specular-button,
+  .rw-projx-cta .specular-button {
+    width: 100%;
+    max-width: none;
   }
   .rw-projx-stats { grid-template-columns: repeat(2, 1fr); }
   .rw-projx-stat:nth-child(2n+1) { border-left: none; }
@@ -5738,12 +6014,22 @@ html[lang="te"] .rw-contact-row {
   .rw-proj-floorplans { grid-template-columns: 1fr !important; }
   .rw-proj-about-imgs { grid-template-columns: repeat(2, 1fr) !important; }
   .rw-proj-amenities { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important; }
+  .rw-projx-content {
+    padding: 20px 18px 36px;
+  }
+  .rw-projx-render {
+    height: clamp(240px, 42svh, 340px);
+    padding: 8px 14px 24px;
+  }
 }
 @media (max-width: 480px) {
   .rw-projx-stats { grid-template-columns: 1fr; }
   .rw-projx-stat { border-left: none; border-top: 1px solid var(--line); }
   .rw-projx-stat:first-child { border-top: none; }
   .rw-proj-amenities { grid-template-columns: repeat(2, 1fr) !important; }
+  .rw-projx-fact-value {
+    font-size: calc(var(--rw-fs, 1) * 18px);
+  }
 }
 
 /* --- Touch ---------------------------------------------------------------- */

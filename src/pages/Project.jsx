@@ -84,9 +84,10 @@ function ProjectHero({ hero, details, name }) {
   const { t } = useLang()
   const { targetRef, targetStyle, container: parallax } = useParallax({ strength: 22 })
 
-  const sideImage =
-    projectImage(hero?.projectimage) ||
-    projectImage(hero?.backgroundimage)
+  const sideImage = projectImage(hero?.projectimage) || projectImage(hero?.backgroundimage)
+
+  /* Mobile stage behind the cutout: always the site sky plate, never the villa/property photo. */
+  const stageBg = projectHeroImage
 
   const logo = projectImage(hero?.projectlogo)
 
@@ -109,7 +110,7 @@ function ProjectHero({ hero, details, name }) {
   ].filter(([, value]) => value)
 
   return (
-    <section className="rw-projx-hero" {...parallax}>
+    <section className={`rw-projx-hero${sideImage ? ' rw-projx-hero--has-render' : ''}`} {...parallax}>
 
       {/* Background */}
       <div aria-hidden className="rw-projx-kb">
@@ -132,33 +133,23 @@ function ProjectHero({ hero, details, name }) {
           />
         </div>
 
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: `
-              linear-gradient(
-                90deg,
-                rgba(11,10,9,.94) 0%,
-                rgba(11,10,9,.78) 34%,
-                rgba(11,10,9,.3) 58%,
-                rgba(11,10,9,.12) 100%
-              ),
-              linear-gradient(
-                180deg,
-                rgba(11,10,9,.5) 0%,
-                rgba(11,10,9,.1) 40%,
-                rgba(11,10,9,.85) 100%
-              )
-            `,
-          }}
-        />
+        <div className="rw-projx-kb-veil" aria-hidden />
       </div>
 
-      {/* Project render: an alpha cutout composited onto the sky, grounded bottom-right, never cropped. */}
+      {/* Mobile: back sits above the property image so exit is available before the visual. */}
+      <Link
+        to="/investmentadvisory"
+        className="rw-nav-link rw-projx-in rw-projx-back rw-projx-back--top"
+      >
+        {t('projects.back')}
+      </Link>
+
+      {/* Project render: cutout on sky (desktop) or on its own image stage (mobile). */}
       {sideImage && (
         <div aria-hidden className="rw-projx-render">
-          <img src={sideImage} alt="" />
+          <img className="rw-projx-render-bg" src={stageBg} alt="" />
+          <div className="rw-projx-render-bg-veil" />
+          <img className="rw-projx-render-cut" src={sideImage} alt="" />
         </div>
       )}
 
@@ -166,38 +157,23 @@ function ProjectHero({ hero, details, name }) {
       <div aria-hidden className="rw-projx-scrim" />
 
       {/* Main content */}
-      <div
-        className="rw-pad rw-projx-content"
-        style={{
-          position: 'relative',
-          zIndex: 2,
-          ...container,
-          width: '100%',
-          padding:
-            'clamp(48px, 6vw, 88px) 40px clamp(64px, 7vw, 96px)',
-        }}
-      >
+      <div className="rw-pad rw-projx-content">
         <div className="rw-projx-grid">
 
           {/* LEFT CONTENT */}
           <div className="rw-projx-main">
 
+            {/* Desktop: back stays with the copy column. Hidden on mobile in favour of --top. */}
             <Link
               to="/investmentadvisory"
-              className="rw-nav-link rw-projx-in"
-              style={{
-                fontFamily: mono,
-                fontSize: fs('11px'),
-                letterSpacing: '.16em',
-                color: 'rgba(234,241,249,.72)',
-              }}
+              className="rw-nav-link rw-projx-in rw-projx-back rw-projx-back--inline"
             >
               {t('projects.back')}
             </Link>
 
             {(hero?.loc || details?.location) && (
               <div
-                className="rw-projx-in"
+                className="rw-projx-in rw-projx-loc"
                 style={{
                   ...eyebrow,
                   letterSpacing: '.28em',
@@ -216,7 +192,7 @@ function ProjectHero({ hero, details, name }) {
             {/* Project Logo */}
             {logo ? (
               <div
-                className="rw-projx-in"
+                className="rw-projx-in rw-projx-logo"
                 style={{
                   marginTop: 24,
                   animationDelay: '.14s',
@@ -227,15 +203,7 @@ function ProjectHero({ hero, details, name }) {
                 <img
                   src={logo}
                   alt={name}
-                  style={{
-                    display: 'block',
-                    width: 'auto',
-                    height: 'auto',
-                    maxHeight: 'clamp(56px, 7vw, 92px)',
-                    maxWidth: 'min(68%, 300px)',
-                    objectFit: 'contain',
-                    objectPosition: 'left center',
-                  }}
+                  className="rw-projx-logo-img"
                 />
               </div>
             ) : (
@@ -258,19 +226,7 @@ function ProjectHero({ hero, details, name }) {
 
             {/* Hero Heading */}
             {lines.length > 0 && (
-              <h2
-                style={{
-                  marginTop: 'clamp(20px, 2.5vw, 34px)',
-                  fontFamily: cinzel,
-                  fontWeight: 400,
-                  fontSize: fs('clamp(28px, 3.6vw, 52px)'),
-                  lineHeight: 1.12,
-                  letterSpacing: '.04em',
-                  textTransform: 'uppercase',
-                  color: '#F2EFE9',
-                  maxWidth: '14em',
-                }}
-              >
+              <h2 className="rw-projx-headline">
                 <RiseText
                   lines={lines}
                   block
@@ -283,45 +239,18 @@ function ProjectHero({ hero, details, name }) {
             {/* Facts */}
             {facts.length > 0 && (
               <div
-                className="rw-projx-in"
-                style={{
-                  marginTop: 'clamp(34px, 4vw, 50px)',
-                  paddingTop: 26,
-                  borderTop: '1px solid rgba(234,241,249,.22)',
-                  display: 'flex',
-                  gap: 'clamp(24px, 3.5vw, 48px)',
-                  flexWrap: 'wrap',
-                  animationDelay: '.5s',
-                }}
+                className="rw-projx-in rw-projx-facts"
+                style={{ animationDelay: '.5s' }}
               >
                 {facts.map(([label, value]) => (
-                  <div key={label}>
+                  <div key={label} className="rw-projx-fact">
                     {/* Poppins, not Cormorant: the values are mostly digits, and Cormorant's
                         old-style figures sit at uneven heights (2, 2.5, 3, 3.5 / 1085 – 2615). */}
-                    <div
-                      style={{
-                        fontFamily: text,
-                        fontWeight: 400,
-                        fontSize: fs('clamp(17px, 1.7vw, 23px)'),
-                        letterSpacing: '.02em',
-                        fontVariantNumeric: 'lining-nums',
-                        color: '#F2EFE9',
-                        lineHeight: 1.1,
-                        maxWidth: '16em',
-                      }}
-                    >
+                    <div className="rw-projx-fact-value">
                       {value}
                     </div>
 
-                    <div
-                      style={{
-                        ...eyebrow,
-                        fontSize: fs('10px'),
-                        letterSpacing: '.16em',
-                        color: 'rgba(234,241,249,.58)',
-                        marginTop: 8,
-                      }}
-                    >
+                    <div className="rw-projx-fact-label">
                       {label}
                     </div>
                   </div>
@@ -331,20 +260,14 @@ function ProjectHero({ hero, details, name }) {
 
             {/* CTA */}
             <div
-              className="rw-projx-in"
-              style={{
-                marginTop: 'clamp(28px, 3vw, 40px)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: 14,
-                animationDelay: '.6s',
-              }}
+              className="rw-projx-in rw-projx-cta"
+              style={{ animationDelay: '.6s' }}
             >
               <BookButton
                 to="/realty/form"
                 interest="RW Realty mandate"
                 specular
+                className="rw-projx-enquire"
               >
                 ENQUIRE ABOUT {(name || 'THIS PROJECT').toUpperCase()}
               </BookButton>
