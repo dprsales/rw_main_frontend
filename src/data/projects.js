@@ -61,6 +61,12 @@ export const PROJECT_SLUGS = {
   'DSR Ciel': 'dsr-ciel',
   'Alekhya Rise': 'alekhya-rise',
   'Dukes Deevyashakti': 'dukes-deevyashakti',
+  'Sree Varaaha Aurum': 'sree-varaaha-aurum',
+  'Sree Varaha Aurum': 'sree-varaaha-aurum',
+  'IQON West': 'iqon-west',
+  'Konak': 'konak',
+  'Ankura Konak': 'konak',
+  'KONAK': 'konak',
 }
 
 /** Resolve a CDN path (or absolute URL) from the API to a loadable image URL. */
