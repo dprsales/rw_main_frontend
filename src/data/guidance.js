@@ -191,7 +191,7 @@ export const RULES = [
   { id: 'R13', who: 'developer', challenge: '*', goal: 'hand_over', outcome: 'realty',
     reason: 'You build. We sell. That is a sales mandate.' },
   { id: 'R14', who: 'developer', challenge: '*', goal: 'unsure', outcome: 'strategy_call',
-    reason: 'Consulting with Rajiv, or a sales mandate with us. A short call will make it clear.',
+    reason: 'Consulting, or a sales mandate. A short call will make it clear.',
     candidates: ['consulting', 'realty'] },
 ]
 

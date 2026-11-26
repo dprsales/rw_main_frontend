@@ -535,7 +535,7 @@ export default function BrandConsulting() {
               <span className="rw-bc-title-italic">for developers who sell on trust</span>
             </h1>
             <p className="rw-bc-lede" style={{ fontFamily: text }}>
-              16 years of market craft behind the brand. Rajiv is the face.
+              16 years of market craft behind the brand. The face stays clear.
               We deliver the brand and marketing work that helps developers sell on trust.
             </p>
             <p className="rw-bc-proof" style={{ fontFamily: text }}>

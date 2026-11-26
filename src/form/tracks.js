@@ -14,17 +14,14 @@ export const ASSESSMENT_TRACKS = {
     cardBody: 'Personalised coaching to sharpen closing skills, build a high-performing team, and grow into luxury real estate sales.',
     cardCta: 'Share your coaching details',
     intro: {
-      eyebrow: 'RAJIV WILLIAMS COACHING',
-
+      eyebrow: 'SALES COACHING',
       title: 'Tell us about your coaching needs',
-
       lines: [
         'A few thoughtful questions about your business, challenges, and where you want to go.',
       ],
-
       time: 'About 2 minutes',
     },
-    confirm: 'Your coaching brief reaches Rajiv\'s desk. The team will get back to you shortly.',
+    confirm: 'We have your coaching brief. Our team will get back to you shortly.',
     questions: [
       ...CONTACT_QUESTIONS,
       {
@@ -50,8 +47,8 @@ export const ASSESSMENT_TRACKS = {
       },
       {
         id: 'goal', type: 'pill', required: true,
-        /* Rajiv sir: same form for programmes I–III; Luxury Sales must be listed. */
-        title: 'What would you like to achieve through Rajiv Williams Coaching?',
+        /* Same form for programmes I–III; Luxury Sales must be listed. */
+        title: 'What would you like to achieve through sales coaching?',
         options: [
           'Luxury Sales Mastery',
           'High Ticket Sales Mastery',
@@ -80,17 +77,17 @@ export const ASSESSMENT_TRACKS = {
     numeral: 'II',
     label: 'Consulting',
     cardTitle: 'Business & Sales Consulting',
-    cardBody: 'Consulting with Rajiv on sales setup, process, and leadership. Brand and hiring delivery sits with our team where needed.',
+    cardBody: 'Sales consulting on setup, process, and leadership. Brand and hiring delivery sits with our team where needed.',
     cardCta: 'Share your business details',
     intro: {
-      eyebrow: 'RAJIV WILLIAMS CONSULTING',
+      eyebrow: 'SALES CONSULTING',
       title: 'Tell us about your business',
       lines: [
-        'A short brief on your business, challenges, and where you want Rajiv\'s guidance, so the team can reply with clarity.',
+        'A short brief on your business, challenges, and where you want guidance, so we can reply with clarity.',
       ],
       time: 'About 2 minutes',
     },
-    confirm: 'We\'ve received your consulting details. The team will get them to Rajiv and reply shortly.',
+    confirm: 'We have your consulting details. Our team will reply shortly.',
     questions: [
       ...CONTACT_QUESTIONS,
       { id: 'orgName', type: 'input', inputType: 'text', required: true, title: 'Please state the name of your organisation' },
@@ -142,7 +139,7 @@ export const ASSESSMENT_TRACKS = {
       },
       {
         id: 'reachOutReason', type: 'pill', required: true,
-        title: 'What made you reach out to Rajiv Williams today?',
+        title: 'What made you reach out today?',
         options: ['New project launch', 'Low sales performance', 'Team performance issues', 'Business expansion', 'Referral', 'Social media', 'Other'],
       },
       {
@@ -150,7 +147,7 @@ export const ASSESSMENT_TRACKS = {
         title: 'Are you planning to invest in solving this challenge?',
         options: ['Yes, immediately', 'Within this month', 'In the next 2–3 months', 'Just exploring'],
       },
-      { id: 'successLooksLike', type: 'text', required: false, title: 'What would success look like after working with Rajiv Williams?' },
+      { id: 'successLooksLike', type: 'text', required: false, title: 'What would success look like after working with us?' },
       { id: 'notes', type: 'text', required: false, title: 'Anything specific our consultants should know before the meeting?' },
     ],
   },

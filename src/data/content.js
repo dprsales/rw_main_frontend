@@ -28,8 +28,8 @@ export const HERO_COPY =
 
 /** The three services. `title` carries the positioning line; the service name reads from `kicker` and the CTA. */
 export const WAYS = [
-  { k: 'I', kicker: 'Sales Coaching', title: 'Your ticket size is a ceiling you built. Break it.', line: 'Coaching with Rajiv for developers, senior sales leadership, and top closers done with volume games.', to: '/coaching' },
-  { k: 'II', kicker: 'Sales Consulting', title: 'Right product, wrong velocity. That is fixable.', line: 'Consulting with Rajiv on the part of the business the brochure never fixes.', to: '/consulting' },
+  { k: 'I', kicker: 'Sales Coaching', title: 'Your ticket size is a ceiling you built. Break it.', line: 'Sales coaching for developers, senior sales leadership, and top closers done with volume games.', to: '/coaching' },
+  { k: 'II', kicker: 'Sales Consulting', title: 'Right product, wrong velocity. That is fixable.', line: 'Sales consulting on the part of the business the brochure never fixes.', to: '/consulting' },
   { k: 'III', kicker: 'Sales Mandate', title: 'You build. We sell, end to end.', line: 'We own sales strategy, put a dedicated team onsite, and run the funnel to closure.', to: '/realty' },
 ]
 
@@ -348,7 +348,7 @@ export const CREDENTIALS = ['TGRERA Licensed Realtor', "Member, Hyderabad Realto
 /* Why the room is worth joining. Deliberately four, for two even rows at every breakpoint. */
 export const CAREER_REASONS = [
   { title: 'Premium inventory only', body: 'You sell what the market already respects, luxury and high-ticket projects carried on exclusive mandates, not a scattered listing sheet.' },
-  { title: 'Trained, not thrown in', body: 'Rajiv\'s coaching frameworks run in-house first. Every person on the Team RW floor is trained on the same method before they touch a live mandate.' },
+  { title: 'Trained, not thrown in', body: 'Our coaching frameworks run in-house first. Every person on the Team RW floor is trained on the same method before they touch a live mandate.' },
   { title: 'Earnings without a ceiling', body: 'A fixed base plus an incentive structure written against closings. Higher ticket sizes mean the same effort is worth more.' },
   { title: 'Access to the top of the market', body: 'HNI and NRI buyers, developer leadership, and channel networks, all in the room from your first quarter.' },
 ]
