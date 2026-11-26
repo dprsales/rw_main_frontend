@@ -383,8 +383,8 @@ function EnquiryForm({ project }) {
 
   return (
     <form onSubmit={submit} className="card p-5" noValidate>
-      <p className="font-serif text-2xl text-ink">Interested? Talk to Team RW</p>
-      <p className="mt-0.5 text-xs text-faded">Your details go to the Team RW desk. We follow up and connect you with the right person.</p>
+      <p className="font-serif text-2xl text-ink">Interested? Enquire now</p>
+      <p className="mt-0.5 text-xs text-faded">Your details go to our desk. We follow up and connect you with the right person.</p>
       <div className="mt-4 space-y-2.5">
         <input className="field-input" placeholder="Full name" autoComplete="name" value={form.name} onChange={set('name')} />
         <div className="grid grid-cols-2 gap-2.5">

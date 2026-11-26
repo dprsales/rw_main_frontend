@@ -538,7 +538,7 @@ function BookingModal({ preset, onClose }) {
                   )}
                   <div className="rw-career-form-section">PROFESSIONAL REFERENCES <span>(OPTIONAL)</span></div>
                   <p className="rw-reference-disclaimer">
-                    Former manager or colleague who can speak to your work — not the Team RW person who referred you. Anyone you list must have agreed to be contacted.
+                    Former manager or colleague who can speak to your work, not our team member who referred you. Anyone you list must have agreed to be contacted.
                   </p>
                   <div className="rw-career-reference-title">REFERENCE 1</div>
                   <Field label="Name">

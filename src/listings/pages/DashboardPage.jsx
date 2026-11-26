@@ -82,7 +82,7 @@ export default function DashboardPage() {
             ['Total listings', counts.all],
             ['Live', counts.approved],
             ['Pending approval', counts.pending],
-            ['Enquiries with Team RW', enquiries],
+            ['Enquiries with us', enquiries],
           ].map(([label, value]) => (
             <div key={label} className="card p-5">
               <p className="font-serif text-4xl text-gold-300">{value}</p>
@@ -91,7 +91,7 @@ export default function DashboardPage() {
           ))}
         </div>
         <p className="mt-3 text-xs text-faded">
-          You can see how many buyers have enquired. Team RW speaks to them first and introduces you when there is a serious match. Buyer phone and email stay with our desk.
+          You can see how many buyers have enquired. We speak to them first and introduce you when there is a serious match. Buyer phone and email stay with our desk.
         </p>
 
         <div className="mt-8 flex gap-2 overflow-x-auto scrollbar-none">
@@ -154,7 +154,7 @@ function ListingRow({ listing, onDelete }) {
           )}
           {listing.status === 'approved' && (
             <p className="mt-3 text-xs text-faded">
-              Live since {timeAgo(listing.approvedAt)} · 👁 {listing.views || 0} views · ✉️ {enquiryCount} {enquiryCount === 1 ? 'enquiry with Team RW' : 'enquiries with Team RW'}
+              Live since {timeAgo(listing.approvedAt)} · 👁 {listing.views || 0} views · ✉️ {enquiryCount} {enquiryCount === 1 ? 'enquiry with us' : 'enquiries with us'}
             </p>
           )}
         </div>
@@ -170,7 +170,7 @@ function ListingRow({ listing, onDelete }) {
       </div>
       {enquiryCount > 0 && (
         <p className="border-t border-line bg-night/40 px-5 py-3 text-xs text-faded">
-          {enquiryCount} {enquiryCount === 1 ? 'buyer has' : 'buyers have'} enquired. Team RW is handling {enquiryCount === 1 ? 'this' : 'them'} and will connect you when it is a fit.
+          {enquiryCount} {enquiryCount === 1 ? 'buyer has' : 'buyers have'} enquired. We are handling {enquiryCount === 1 ? 'this' : 'them'} and will connect you when it is a fit.
         </p>
       )}
     </div>

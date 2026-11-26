@@ -1,4 +1,4 @@
-/** Site visit branding checklist: 200 points from Team RW marketing assessment. */
+/** Site visit branding checklist: 200 points from our marketing assessment. */
 export const BRAND_CHECKLIST_SECTIONS = [
   {
     "no": 1,

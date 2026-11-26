@@ -7,7 +7,7 @@ export const FAQ_SECTIONS = [
     to: '/coaching',
     more: 'Explore Sales Coaching',
     items: [
-      { q: 'Is this for me, or for my whole sales team?', a: 'For the people who sell. Developers, senior sales leadership, and top closers. One-to-one mentoring is personal. If the whole sales operation needs rebuilding, that is Consulting. If you want Team RW to sell the project, that is a mandate.' },
+      { q: 'Is this for me, or for my whole sales team?', a: 'For the people who sell. Developers, senior sales leadership, and top closers. One-to-one mentoring is personal. If the whole sales operation needs rebuilding, that is Consulting. If you want us to sell the project, that is a mandate.' },
       { q: 'How long is a session?', a: 'Four hours, across four modules, with a 30-minute break. The work is drilled on your own pipeline, not taught as theory.' },
       { q: 'Do I get a certificate?', a: 'No. The result is a higher ticket size, a stronger client base, and more credibility in the market.' },
       { q: 'What is the free assessment?', a: 'A live AI interview on KRISAH, for people looking at coaching. Twenty questions, about twenty-five minutes, answered out loud. Inside KRISAH you get a report based on your answers.' },
@@ -22,7 +22,7 @@ export const FAQ_SECTIONS = [
     to: '/consulting',
     more: 'Explore Sales Consulting',
     items: [
-      { q: 'Do you advise us, or do you sell the inventory?', a: 'Rajiv consults: he audits the sales machine, designs what is missing, and tunes it on live numbers. Team RW supports deployment where needed. Selling the project is a Team RW mandate on Realty.' },
+      { q: 'Do you advise us, or do you sell the inventory?', a: 'Rajiv consults: he audits the sales machine, designs what is missing, and tunes it on live numbers. We support deployment where needed. Selling the project is our Realty mandate.' },
       { q: 'What do you actually change?', a: 'We replace random conversions, discount-led closing, dependence on one star, and a pipeline nobody can see.' },
       { q: 'Do you also handle marketing, hiring, & channel partners?', a: 'Yes, beyond the four phases. Brand and performance marketing, PR, channel-partner activation, sales hiring, and team structure.' },
       { q: 'Can you name a developer you have worked with?', a: 'No. The public result only. A launch stuck at 22% sold, channel partners rebuilt from 40 dormant to 260 active, absorption tripled in ninety days, and revenue up 5×.' },
@@ -37,8 +37,8 @@ export const FAQ_SECTIONS = [
     to: '/realty',
     more: 'Explore Sales Mandate',
     items: [
-      { q: 'You build, Team RW sells. Is that the deal?', a: 'Yes. An exclusive mandate. Team RW owns the sale from strategy to closure. Rajiv coaches and consults; the mandate floor is Team RW.' },
-      { q: 'Does our own sales team stay?', a: 'Team RW puts its own trained team on site and owns the funnel. The mandate exists so the number is not split across brokers, an in-house team, and an agency. Where that split sits today is walked through when you discuss the mandate.' },
+      { q: 'You build, we sell. Is that the deal?', a: 'Yes. An exclusive mandate. We own the sale from strategy to closure. Rajiv coaches and consults; the mandate floor is ours.' },
+      { q: 'Does our own sales team stay?', a: 'We put our own trained team on site and own the funnel. The mandate exists so the number is not split across brokers, an in-house team, and an agency. Where that split sits today is walked through when you discuss the mandate.' },
       { q: 'Who runs it day to day?', a: 'Priyanka Panda, Director of Sales. 8+ years in luxury branding, positioning, and high-value closures.' },
       { q: 'Will you discount to move stock?', a: 'No. Price is defended. The work is judged on absorption, the price realised, and sales on a construction schedule.' },
       { q: 'How many projects do you take at once?', a: 'The team owns each sale, so it is not spread across too many launches. Whether yours fits is discussed on a call or face to face.' },

@@ -135,7 +135,7 @@ export default function GuidedFinder({ variant = 'inline', seed = {}, location =
 
           <div className="rw-finder-stage" aria-live="polite">
             <FinderSteps finder={finder} onStartOver={startOver}>
-              <BookButton to="/form" specular source="finder_skip" skipQuestions>{t('cta.bookCall')}</BookButton>
+              <BookButton to="/form" specular source="finder_skip" skipQuestions>{t('cta.enquireNow')}</BookButton>
             </FinderSteps>
 
             {done && result && (
@@ -191,14 +191,14 @@ const ResultCard = forwardRef(function ResultCard({ result, guidance, onDeepPath
             style={ctaCopper}
             {...bookPreset}
           >
-            {t('mega.bookStrategy')}
+            {t('cta.enquireNow')}
           </BookButton>
         )}
         {outcome.formTrack && (
           <CtaButton variant="outline" onClick={onDeepPath}>{t(`finder.form.${outcome.formTrack}`)}</CtaButton>
         )}
         {isBrowse && (
-          <BookButton to="/realty/form" specular {...bookPreset}>{t('mega.bookStrategy')}</BookButton>
+          <BookButton to="/realty/form" specular {...bookPreset}>{t('cta.enquireNow')}</BookButton>
         )}
       </div>
 

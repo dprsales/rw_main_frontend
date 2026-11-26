@@ -105,7 +105,7 @@ export default function CoachingProgram() {
           <Reveal className="rw-cp-cta-stack">
             <h2 className="rw-cp-h2" style={{ fontFamily: serif }}>Ready for the next level?</h2>
             <p className="rw-cp-note" style={{ fontFamily: text }}>
-              Talk with Team RW about the right programme for you or your sales leadership.
+              Talk with us about the right programme for you or your sales leadership.
             </p>
             <div className="rw-cp-actions">
               <BookButton
@@ -115,7 +115,7 @@ export default function CoachingProgram() {
                 className="rw-cta"
                 style={ctaCopper}
               >
-                Talk to Team RW <span className="rw-cta-arrow">→</span>
+                Enquire now <span className="rw-cta-arrow">→</span>
               </BookButton>
               <Link to="/coaching#premium-programs" className="rw-cp-secondary">
                 ← Back to coaching

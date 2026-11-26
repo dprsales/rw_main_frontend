@@ -80,7 +80,7 @@ export const ASSESSMENT_TRACKS = {
     numeral: 'II',
     label: 'Consulting',
     cardTitle: 'Business & Sales Consulting',
-    cardBody: 'Consulting with Rajiv on sales setup, process, and leadership. Brand and hiring delivery sits with Team RW where needed.',
+    cardBody: 'Consulting with Rajiv on sales setup, process, and leadership. Brand and hiring delivery sits with our team where needed.',
     cardCta: 'Share your business details',
     intro: {
       eyebrow: 'RAJIV WILLIAMS CONSULTING',
@@ -160,17 +160,17 @@ export const ASSESSMENT_TRACKS = {
     numeral: 'III',
     label: 'Realty',
     cardTitle: 'Realty Services',
-    cardBody: 'Hand Team RW your project. They recommend and run the sales and marketing strategy to move your inventory under a mandate.',
+    cardBody: 'Hand us your project. We recommend and run the sales and marketing strategy to move your inventory under a mandate.',
     cardCta: 'Share your project details',
     intro: {
-      eyebrow: 'TEAM RW REALTY SERVICES',
+      eyebrow: 'REALTY SERVICES',
       title: 'Tell us about your project',
       lines: [
-        'A few details on your project help Team RW see whether a mandate fit is right.',
+        'A few details on your project help us see whether a mandate fit is right.',
       ],
       time: 'Under 2 minutes',
     },
-    confirm: 'Team RW will review your project brief and get back to you shortly.',
+    confirm: 'We will review your project brief and get back to you shortly.',
     questions: [
       ...CONTACT_QUESTIONS,
       { id: 'orgName', type: 'input', inputType: 'text', required: true, title: 'Please state the name of your organisation' },

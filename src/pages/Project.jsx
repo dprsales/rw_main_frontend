@@ -269,7 +269,7 @@ function ProjectHero({ hero, details, name }) {
                 specular
                 className="rw-projx-enquire"
               >
-                ENQUIRE ABOUT {(name || 'THIS PROJECT').toUpperCase()}
+                Enquire now
               </BookButton>
 
               {(hero?.rera || details?.ocReceived) && (
@@ -411,7 +411,7 @@ export default function Project() {
           </h1>
           <p style={{ ...body, maxWidth: '32em' }}>The listing may have moved, or the connection dropped. Explore the full portfolio, or reach out and we’ll send the details directly.</p>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8 }}>
-            <Link to="/about" style={ctaInk}>About Team RW</Link>
+            <Link to="/about" style={ctaInk}>About us</Link>
             <BookButton to="/realty/form" interest="RW Realty mandate" specular>Request details</BookButton>
           </div>
         </div>
@@ -628,7 +628,7 @@ Let’s connect and discover if {name} feels like home.
               to="/realty/form"
               interest="RW Realty mandate"
               specular
-            >BOOK A PRIVATE TOUR</BookButton>
+            >Enquire now</BookButton>
           </Reveal>
         </div>
       </section>

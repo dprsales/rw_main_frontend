@@ -651,7 +651,7 @@ export default function SocialMedia() {
               <span className="rw-bc-title-italic">for Hyderabad real estate brands</span>
             </h1>
             <p className="rw-bc-lede" style={{ fontFamily: text }}>
-              Team RW runs Instagram, Facebook, YouTube, LinkedIn, X, Threads and more,
+              We run Instagram, Facebook, YouTube, LinkedIn, X, Threads and more,
               with creatives, calendars, and optional SEO / local visibility add-ons.
               Built for developers and sales brands that need a clear link to enquire.
             </p>
@@ -663,7 +663,7 @@ export default function SocialMedia() {
                 Enquire now
               </a>
               <Link to="/brandconsulting" className="rw-cta-secondary">
-                Branding and marketing
+                Brand consulting
               </Link>
             </div>
           </div>
@@ -678,7 +678,7 @@ export default function SocialMedia() {
                   Social brief received
                 </h2>
                 <p className="rw-bc-note" style={{ fontFamily: text }}>
-                  Team RW will review your social media brief and get back to you on email or phone.
+                  We will review your social media brief and get back to you on email or phone.
                 </p>
                 <button
                   type="button"
@@ -692,7 +692,7 @@ export default function SocialMedia() {
                     startedRef.current = false
                   }}
                 >
-                  Send another brief
+                  Submit another
                 </button>
               </Reveal>
             ) : (
@@ -1145,7 +1145,7 @@ export default function SocialMedia() {
                     <span style={{ fontFamily: text, fontSize: fs('13px') }}>
                       I agree to the{' '}
                       <Link to="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</Link>
-                      {' '}and Team RW contacting me about this enquiry.
+                      {' '}and agree that we may contact me about this enquiry.
                     </span>
                   </label>
                 </section>
@@ -1184,7 +1184,7 @@ export default function SocialMedia() {
                         style={ctaCopper}
                         disabled={status === 'sending'}
                       >
-                        {status === 'sending' ? 'Submitting...' : 'Submit'}
+                        {status === 'sending' ? 'Submitting…' : 'Submit'}
                       </button>
                     )}
                   </div>

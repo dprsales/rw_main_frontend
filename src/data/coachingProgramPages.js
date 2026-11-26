@@ -1,6 +1,6 @@
 /**
  * Simple coaching programme landings linked from /coaching cards and the header submenu.
- * Paths match the shareable URLs Team RW asked for.
+ * Paths match the shareable URLs we asked for.
  *
  * Audience is builders, developers, and senior sales people who already have skill.
  * Copy must show the edge they do not already get from experience alone.

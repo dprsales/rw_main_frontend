@@ -22,8 +22,8 @@ const INITIAL = { listingType: 'Sale', city: '', email: '', areaUnit: 'sq.ft', a
 /** Owner landing for commission-only stock: upload here, 3% only on close. */
 const FEATURES = [
   'Upload free. No marketing fee from you upfront',
-  'Team RW verifies and markets the listing to serious buyers',
-  '3% professional fee only if the sale closes with Team RW',
+  'We verify and market the listing to serious buyers',
+  '3% professional fee only if the sale closes with us',
 ]
 const STATS = [
   { value: 'Free', label: 'To upload' },
@@ -163,7 +163,7 @@ export default function ListPropertyPage() {
   return (
     <ListingsShell
       title="List your property free | RW Realty"
-      description="Upload your property free. Team RW markets it. You pay a fee only when the sale closes with us."
+      description="Upload your property free. We market it. You pay a fee only when the sale closes with us."
     >
       {screen === 'landing' && (
         <>
@@ -178,7 +178,7 @@ export default function ListPropertyPage() {
                 <em className="gold-text not-italic">3% only when it sells.</em>
               </h1>
               <p className="mt-6 max-w-lg text-base font-light leading-relaxed text-faded sm:text-lg">
-                Holding stock you want to sell, but not paying for marketing? List it here free. Team RW verifies the home and shows it to serious buyers. On a closed sale with us, the professional fee is 3% of the sale value.
+                Holding stock you want to sell, but not paying for marketing? List it here free. We verify the home and show it to serious buyers. On a closed sale with us, the professional fee is 3% of the sale value.
               </p>
               <ul className="mt-8 space-y-3">
                 {FEATURES.map((f) => (
@@ -197,7 +197,7 @@ export default function ListPropertyPage() {
                 ))}
               </div>
               <p className="mt-5 max-w-lg text-xs leading-relaxed text-faded">
-                Sale: 3% of sale value, only when Team RW closes the deal. Rent: free to publish; any fee is agreed in writing first. You do not pay marketing upfront.
+                Sale: 3% of sale value, only when we close the deal. Rent: free to publish; any fee is agreed in writing first. You do not pay marketing upfront.
               </p>
               <a href="#listings" className="mt-6 inline-block text-sm text-gold-300 hover:underline">
                 Browse listed properties ↓

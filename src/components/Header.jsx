@@ -39,11 +39,11 @@ const SITE_NAV = [
   { key: 'nav.faqs', label: 'FAQs', to: '/faqs' },
   { key: 'nav.partners', label: 'Channel Partners', to: '/partner' },
   { key: 'nav.krisah', label: 'KRISAH Assessment', to: '/assessment' },
-  { key: 'nav.bookCall', label: 'Talk to Team RW', book: true },
+  { key: 'nav.bookCall', label: 'Book a call', book: true },
 ]
 
 /**
- * Services mega: Grow your sales | hover submenu | Start here.
+ * Services mega: Grow your sales | hover submenu | Links.
  * Coaching programmes, Consulting → Branding, Realty → Mandate + Advisory.
  */
 const MEGA_GROWTH_ITEMS = [
@@ -98,7 +98,7 @@ const LEARN_COLUMNS = [
     headingKey: 'mega.learn',
     heading: 'Learn',
     items: [
-      { key: 'nav.gallery', label: 'Gallery', to: '/gallery', descKey: 'mega.galleryDesc', desc: 'YouTube talks and Team RW floor stills', icon: Film },
+      { key: 'nav.gallery', label: 'Gallery', to: '/gallery', descKey: 'mega.galleryDesc', desc: 'YouTube talks and our floor stills', icon: Film },
       { key: 'nav.articles', label: 'Articles', to: '/articles', descKey: 'mega.articlesDesc', desc: 'Readings on luxury sales and teams', icon: BookOpen },
       { key: 'nav.contentLibrary', label: 'Content Library', to: '/content-library', descKey: 'mega.contentLibraryDesc', desc: 'Sales carousels to preview and download', icon: Library },
       { key: 'nav.faqs', label: 'FAQs', to: '/faqs', descKey: 'mega.faqsDesc', desc: 'Answers on coaching, consulting, mandates', icon: CircleHelp },

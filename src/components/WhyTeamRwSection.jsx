@@ -5,7 +5,7 @@ import { fs, container, eyebrow, sectionHeading, sectionRule } from '../styles'
 
 const WHY_POINTS = 10
 
-/** Practice-wide reasons to work with Team RW. Lives on the About page. */
+/** Practice-wide reasons to work with us. Lives on the About page. */
 export default function WhyTeamRwSection() {
   const { t } = useLang()
 

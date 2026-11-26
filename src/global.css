@@ -1974,7 +1974,7 @@ a.rw-panel-link:hover .rw-panel-chevron { color: var(--copper); transform: trans
   color: var(--faded);
 }
 
-/* Footer Talk to Team RW: compact gold CTA, hugs content (never a full-width bar). */
+/* Footer Book a call: compact gold CTA, hugs content (never a full-width bar). */
 .rw-footer-cta.rw-cta {
   display: inline-flex;
   align-items: center;

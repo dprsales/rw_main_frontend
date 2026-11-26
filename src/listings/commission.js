@@ -3,10 +3,10 @@ export const COMMISSION_TERMS_VERSION = 'team-rw-3pct-v2'
 export const COMMISSION_RENT_TERMS_VERSION = 'team-rw-rent-fee-v1'
 
 export const COMMISSION_TERMS_TEXT_SALE =
-  'I understand and agree that if my property is successfully sold with Team RW’s support, a professional fee of 3% of the total sale value is payable to Team RW.'
+  'I understand and agree that if my property is successfully sold with our support, a professional fee of 3% of the total sale value is payable to us.'
 
 export const COMMISSION_TERMS_TEXT_RENT =
-  'I understand that this rental listing is free to publish. Any professional fee for a completed tenancy will be confirmed in writing with Team RW before it is payable.'
+  'I understand that this rental listing is free to publish. Any professional fee for a completed tenancy will be confirmed in writing with us before it is payable.'
 
 export const COMMISSION_TERMS_TEXT = COMMISSION_TERMS_TEXT_SALE
 
@@ -23,18 +23,18 @@ export const LISTING_CONSENT_VERSION = 'team-rw-listing-consent-v3'
 export const LISTING_CONSENTS = [
   {
     key: 'displayOnWebsite',
-    text: 'I permit Team RW to display this property on the website.',
+    text: 'I allow this property to be shown on the website.',
   },
   {
     key: 'useDetails',
-    text: 'I permit Team RW to show this property’s features and details with the listing.',
+    text: 'I allow this property’s features and details to be shown with the listing.',
   },
   {
     key: 'useMedia',
-    text: 'I permit Team RW to use this property’s images and videos on the website and in promotions.',
+    text: 'I allow this property’s images and videos to be used on the website and in promotions.',
   },
   {
     key: 'runAds',
-    text: 'I permit Team RW to advertise this property on its own channels.',
+    text: 'I allow this property to be advertised on our channels.',
   },
 ]

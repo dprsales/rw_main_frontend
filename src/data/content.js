@@ -30,7 +30,7 @@ export const HERO_COPY =
 export const WAYS = [
   { k: 'I', kicker: 'Sales Coaching', title: 'Your ticket size is a ceiling you built. Break it.', line: 'Coaching with Rajiv for developers, senior sales leadership, and top closers done with volume games.', to: '/coaching' },
   { k: 'II', kicker: 'Sales Consulting', title: 'Right product, wrong velocity. That is fixable.', line: 'Consulting with Rajiv on the part of the business the brochure never fixes.', to: '/consulting' },
-  { k: 'III', kicker: 'Sales Mandate', title: 'You build. Team RW sells, end to end.', line: 'Team RW owns sales strategy, puts a dedicated team onsite, and runs the funnel to closure.', to: '/realty' },
+  { k: 'III', kicker: 'Sales Mandate', title: 'You build. We sell, end to end.', line: 'We own sales strategy, put a dedicated team onsite, and run the funnel to closure.', to: '/realty' },
 ]
 
 export const HOME_TESTIMONIALS = [
@@ -323,7 +323,7 @@ export const PORTFOLIO_TESTIMONIALS = [
  * absent (empty title slots read as unfinished); add a `role` string and the card picks it up automatically.
  */
 export const TEAM = [
-    { name: 'Priyanka Panda', photo: teamPriyanka, linkedin: 'https://www.linkedin.com/in/priyanka-panda-238451259/', title: 'Director of Sales', for: ['Realty'], bio: '8+ yrs in luxury real estate sales & marketing sells by positioning, excels at high-value closures. Under her leadership, Team RW runs high-value sales mandates end to end, from go-to-market strategy to a client experience that keeps your cash flows smooth.' },
+    { name: 'Priyanka Panda', photo: teamPriyanka, linkedin: 'https://www.linkedin.com/in/priyanka-panda-238451259/', title: 'Director of Sales', for: ['Realty'], bio: '8+ yrs in luxury real estate sales & marketing sells by positioning, excels at high-value closures. Under her leadership, we run high-value sales mandates end to end, from go-to-market strategy to a client experience that keeps your cash flows smooth.' },
   { name: 'Sridevi Vinjimur', photo: teamSridevi, linkedin: 'https://www.linkedin.com/in/sridevi-vinjimur-147125270/', title: 'Director of Operations', for: ['Coaching', 'Consulting', 'Realty'], bio:'With 10+ yrs across industries, most of them in real estate, Ms. Sridevi leads back-end operations at Rajiv Williams: hiring, finance, administration and client management. She brings deep expertise in branding, marketing, sales, technology, AI and digital platforms, and is the steady hand who leads the team through every challenge.'},
 
 ]
@@ -389,7 +389,7 @@ export const CAREER_ROLES = [
     level: 'Entry – Junior',
     experience: '1–3 years',
     location: 'Hyderabad',
-    description: 'Call and qualify property leads, schedule site visits, follow up with prospects, and keep CRM and lead status up to date for Team RW in Hyderabad. Salary ₹20K – ₹35K.',
+    description: 'Call and qualify property leads, schedule site visits, follow up with prospects, and keep CRM and lead status up to date for us in Hyderabad. Salary ₹20K – ₹35K.',
     requirements: [
       'Call and qualify property leads',
       'Schedule site visits',
@@ -585,7 +585,7 @@ export const CAREER_ROLES = [
     level: 'Junior – Mid',
     experience: '3–5+ years',
     location: 'Hyderabad',
-    description: 'Plan and execute digital campaigns, manage social media platforms, generate and nurture leads, and track campaign performance for Team RW in Hyderabad.',
+    description: 'Plan and execute digital campaigns, manage social media platforms, generate and nurture leads, and track campaign performance for us in Hyderabad.',
     requirements: [
       'Plan and execute digital campaigns',
       'Manage social media platforms',
@@ -604,7 +604,7 @@ export const CAREER_ROLES = [
     level: 'Junior – Mid',
     experience: '2–4+ years',
     location: 'Hyderabad',
-    description: 'Plan and run the social media calendar, create reels, posts and campaigns, grow followers and engagement, and track insights for Team RW in Hyderabad. Salary ₹30K – ₹45K.',
+    description: 'Plan and run the social media calendar, create reels, posts and campaigns, grow followers and engagement, and track insights for us in Hyderabad. Salary ₹30K – ₹45K.',
     requirements: [
       'Plan and run the social media calendar',
       'Create reels, posts, and campaigns',
@@ -623,7 +623,7 @@ export const CAREER_ROLES = [
     level: 'Intern',
     experience: 'Internship',
     location: 'Hyderabad',
-    description: 'Run Team RW socials on the floor: reels, carousels, stories, and LinkedIn in a luxury real estate voice. Use current AI tools to draft, edit, caption, and cut faster, then publish, reply, and track what actually lands.',
+    description: 'Run our socials on the floor: reels, carousels, stories, and LinkedIn in a luxury real estate voice. Use current AI tools to draft, edit, caption, and cut faster, then publish, reply, and track what actually lands.',
     requirements: [
       'Daily posting on Instagram, LinkedIn, and YouTube Shorts',
       'Short-form video: hooks, captions, on-screen text, and simple cuts',

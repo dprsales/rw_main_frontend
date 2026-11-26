@@ -4,7 +4,7 @@ import { useLang } from '../i18n/LangProvider'
 import { mono, serif, text } from '../theme'
 import { body, container, sectionRule } from '../styles'
 
-/** How Team RW helped previous clients: anonymised consulting case + mandate model. */
+/** How we helped previous clients: anonymised consulting case + mandate model. */
 export default function TeamCasesSection() {
   const { t } = useLang()
 

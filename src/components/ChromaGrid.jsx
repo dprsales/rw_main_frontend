@@ -2,9 +2,9 @@ import { useRef, useEffect } from 'react'
 import { gsap } from 'gsap'
 import './ChromaGrid.css'
 
-/** Team RW and experience marks read in gold. "10+" is set larger than the card body. */
+/** We and experience marks read in gold. "10+" is set larger than the card body. */
 function highlightMarks(text) {
-  const re = /(Team RW|\d+\+|yrs)/g
+  const re = /(us|\d+\+|yrs)/g
   const out = []
   let last = 0
   let match

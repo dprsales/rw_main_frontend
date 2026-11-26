@@ -305,7 +305,7 @@ const HERO_SLIDES = [
     eyebrow: 'END-TO-END SALES MANDATE',
     line1: 'Sales',
     line2: 'Mandates',
-    lede: 'Team RW takes ownership of the sale, from strategy to closure.',
+    lede: 'We take ownership of the sale, from strategy to closure.',
     to: '/realty',
     cta: 'Explore Sales Mandate',
   },
@@ -409,7 +409,7 @@ function HeroCinematic() {
           </p>
 
           <div className="rw-hero-actions">
-            <BookButton to="/form" className="rw-cta" style={ctaCopper}>{t('mega.bookStrategy')}</BookButton>
+            <BookButton to="/form" className="rw-cta" style={ctaCopper}>{t('cta.enquireNow')}</BookButton>
             <Link to="/about" className="rw-inline-cta" style={{ ...ctaInline, color: '#F2EFE9' }}>
               {t('home.story')}
           </Link>

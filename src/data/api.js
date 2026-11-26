@@ -164,7 +164,7 @@ export const submitBrandConsultingEnquiry = (data) =>
 export const submitSocialMediaEnquiry = (data) =>
   request('/social-media-enquiry', { method: 'POST', body: data })
 
-/** Published Team RW stills for the Gallery page. */
+/** Published team stills for the Gallery page. */
 export const fetchGalleryPhotos = () => request('/gallery-photos')
 
 // 6. WHATSAPP — session confirmation, sent through the backend proxy

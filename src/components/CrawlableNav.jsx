@@ -21,7 +21,7 @@ const CRAWLABLE_LINKS = [
   { label: 'Careers', to: '/careers' },
   { label: 'Hiring', to: '/hiring' },
   { label: 'Contact', to: '/contact' },
-  { label: 'About Rajiv Williams and Team RW', to: '/about' },
+  { label: 'About Rajiv Williams', to: '/about' },
   { label: 'Why Team RW', to: '/about#why-team-rw' },
   { label: 'Privacy Policy', to: '/privacy-policy' },
   { label: 'Terms of Use', to: '/terms' },

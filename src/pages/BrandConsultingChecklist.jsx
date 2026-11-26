@@ -13,7 +13,7 @@ const META_FIELDS = [
   { id: 'clientProjectName', label: 'Client / project name', placeholder: 'Project or client name' },
   { id: 'location', label: 'Location', placeholder: 'Site address or area' },
   { id: 'visitedAt', label: 'Date and time', placeholder: 'e.g. 16 Nov 2026, 11:00 am' },
-  { id: 'visitedBy', label: 'Visited by', placeholder: 'Team RW person' },
+  { id: 'visitedBy', label: 'Visited by', placeholder: 'Our team member' },
   { id: 'personMet', label: 'Person met (name, role)', placeholder: 'Name and role on site', wide: true },
 ]
 
@@ -219,7 +219,7 @@ export default function BrandConsultingChecklist() {
               </p>
               <p className="rw-form-note" style={{ marginTop: 8 }}>No email was sent.</p>
               <button type="button" className="rw-cta" style={{ ...ctaCopper, marginTop: 24 }} onClick={resetForm}>
-                Start another checklist
+                Submit another
               </button>
             </div>
           ) : (
@@ -446,7 +446,7 @@ export default function BrandConsultingChecklist() {
                     </button>
                   ) : (
                     <button type="submit" className="rw-cta" style={ctaCopper} disabled={busy}>
-                      {busy ? 'Saving…' : 'Save checklist'}
+                      {busy ? 'Submitting…' : 'Submit'}
                     </button>
                   )}
                 </div>

@@ -1,6 +1,6 @@
 /**
  * Gallery page catalogue.
- * YouTube stays curated here. Team RW photos load from the API (admin uploads).
+ * YouTube stays curated here. Our photos load from the API (admin uploads).
  */
 
 import { cdn } from './api'
@@ -131,6 +131,6 @@ export function mapGalleryPhoto(row) {
     src: cdn(row.url),
     title: row.title || '',
     caption: row.caption || '',
-    alt: row.alt || row.title || 'Team RW gallery photo',
+    alt: row.alt || row.title || 'Our gallery photo',
   }
 }

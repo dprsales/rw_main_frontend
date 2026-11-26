@@ -61,7 +61,7 @@ const TIMELINES = [
   'Just exploring',
 ]
 
-/** Each row: We have / We need buttons (Rajiv guidance). */
+/** Each row: Have / Need buttons (Rajiv guidance). */
 const BRAND_ASSETS = [
   { key: 'brandIdentity', no: '01', label: 'Brand identity' },
   { key: 'logos', no: '02', label: 'Logos' },
@@ -536,17 +536,17 @@ export default function BrandConsulting() {
             </h1>
             <p className="rw-bc-lede" style={{ fontFamily: text }}>
               16 years of market craft behind the brand. Rajiv is the face.
-              Team RW delivers the brand and marketing work that helps developers sell on trust.
+              We deliver the brand and marketing work that helps developers sell on trust.
             </p>
             <p className="rw-bc-proof" style={{ fontFamily: text }}>
-              Team RW brand consulting has helped developers move hundreds of crores of inventory with clearer language and buyer psychology.
+              Our brand consulting has helped developers move hundreds of crores of inventory with clearer language and buyer psychology.
             </p>
             <div className="rw-bc-hero-actions">
               <a href="#enquire" className="rw-cta" style={ctaCopper}>
                 Enquire now
               </a>
               <Link to="/about" className="rw-cta-secondary">
-                About Team RW
+                About us
               </Link>
             </div>
           </div>
@@ -561,7 +561,7 @@ export default function BrandConsulting() {
                   Brand brief received
                 </h2>
                 <p className="rw-bc-note" style={{ fontFamily: text }}>
-                  Team RW will review your brand brief and get back to you on email or phone.
+                  We will review your brand brief and get back to you on email or phone.
                 </p>
                 <button
                   type="button"
@@ -576,7 +576,7 @@ export default function BrandConsulting() {
                     startedRef.current = false
                   }}
                 >
-                  Send another brief
+                  Submit another
                 </button>
               </Reveal>
             ) : (
@@ -1153,7 +1153,7 @@ export default function BrandConsulting() {
                     <span style={{ fontFamily: text, fontSize: fs('13px') }}>
                       I agree to the{' '}
                       <Link to="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</Link>
-                      {' '}and Team RW contacting me about this enquiry.
+                      {' '}and agree that we may contact me about this enquiry.
                     </span>
                   </label>
                 </section>
@@ -1192,7 +1192,7 @@ export default function BrandConsulting() {
                         style={ctaCopper}
                         disabled={status === 'sending'}
                       >
-                        {status === 'sending' ? 'Submitting...' : 'Submit'}
+                        {status === 'sending' ? 'Submitting…' : 'Submit'}
                       </button>
                     )}
                   </div>

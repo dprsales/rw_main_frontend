@@ -149,10 +149,10 @@ export default function Step5Description({ data, update, onSubmit, onPrev, submi
       >
         <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-gold-300">Partnership terms · required</p>
         <p className="mt-2 text-sm leading-relaxed text-faded">
-          Listing and verification are free. Enquiries come to Team RW first. We introduce you when there is a serious match.{' '}
+          Listing and verification are free. Enquiries come to us first. We introduce you when there is a serious match.{' '}
           {isRent
             ? 'Any professional fee for a tenancy is confirmed in writing before it applies.'
-            : 'A 3% professional fee applies only if a sale closes with Team RW’s support.'}
+            : 'A 3% professional fee applies only if a sale closes with our support.'}
         </p>
         <label className="mt-4 flex cursor-pointer items-start gap-3">
           <input

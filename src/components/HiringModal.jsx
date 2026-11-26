@@ -143,7 +143,7 @@ export default function HiringModal() {
           </div>
         )}
         <div className="rw-hire-modal-actions">
-          <CtaButton to={href} className="rw-cta" onClick={close}>APPLY NOW</CtaButton>
+          <CtaButton to={href} className="rw-cta" onClick={close}>Apply now</CtaButton>
           <CtaButton type="button" variant="secondary" onClick={close}>Continue to site</CtaButton>
         </div>
       </div>

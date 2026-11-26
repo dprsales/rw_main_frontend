@@ -269,7 +269,7 @@ export default function Portfolio() {
         )}
       </section>
 
-      {/* 6. Team RW: why, people, cases */}
+      {/* 6. us: why, people, cases */}
       <WhyTeamRwSection />
       <TeamSection />
       <TeamCasesSection />
