@@ -983,6 +983,8 @@ export const PROJECTS = [
   { name: 'The Twins', area: 'Puppalaguda', status: 'Mandate' },
   { name: 'IQON West', area: 'Shankarpally', status: 'Mandate' },
   { name: 'Konak', area: 'Shankarpally', status: 'Mandate' },
+  { name: 'NSL East Luxoria', area: 'Uppal', status: 'Mandate' },
+  { name: 'Evara', area: 'Terpole, Sangareddy', status: 'Mandate' },
   { name: 'Som Boulevard', area: 'Mokila', status: 'Mandate' },
   { name: 'Cascades', area: 'Neopolis', status: 'Mandate' },
   { name: 'Bliss in the Woods', area: 'Tukkuguda', status: 'Mandate' },

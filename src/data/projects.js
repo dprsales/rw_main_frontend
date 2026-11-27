@@ -67,6 +67,10 @@ export const PROJECT_SLUGS = {
   'Konak': 'konak',
   'Ankura Konak': 'konak',
   'KONAK': 'konak',
+  'NSL East Luxoria': 'nsl-east-luxoria',
+  'NSL Luxoria': 'nsl-east-luxoria',
+  'Evara': 'evara',
+  'Anushree Evara': 'evara',
 }
 
 /** Resolve a CDN path (or absolute URL) from the API to a loadable image URL. */
