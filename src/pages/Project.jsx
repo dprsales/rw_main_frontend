@@ -479,8 +479,8 @@ function ProjectBody({ data, name }) {
           {aboutImages.length > 1 && (
             <div className="rw-proj-about-imgs" style={{ marginTop: 'clamp(36px,4.4vw,56px)', display: 'grid', gridTemplateColumns: `repeat(${Math.min(aboutImages.length - 1, 3)}, 1fr)`, gap: 'clamp(12px,1.6vw,20px)' }}>
               {aboutImages.slice(1).map((src, i) => (
-                <Reveal key={src} delay={(i % 3) * 90} className="rw-figure" style={{ aspectRatio: '3/4', border: '1px solid var(--line)', overflow: 'hidden' }}>
-                  <img src={src} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                <Reveal key={src} delay={(i % 3) * 90} className="rw-figure" style={{ aspectRatio: '16/10', maxHeight: 420, border: '1px solid var(--line)', overflow: 'hidden' }}>
+                  <img src={src} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center', display: 'block' }} />
                 </Reveal>
               ))}
             </div>
