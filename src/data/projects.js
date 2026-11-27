@@ -71,6 +71,9 @@ export const PROJECT_SLUGS = {
   'NSL Luxoria': 'nsl-east-luxoria',
   'Evara': 'evara',
   'Anushree Evara': 'evara',
+  'DSR Altitudes': 'dsr-altitudes',
+  'Altitudes by DSR': 'dsr-altitudes',
+  'DSR Latitude': 'dsr-altitudes',
 }
 
 /** Resolve a CDN path (or absolute URL) from the API to a loadable image URL. */
