@@ -74,6 +74,9 @@ export const PROJECT_SLUGS = {
   'DSR Altitudes': 'dsr-altitudes',
   'Altitudes by DSR': 'dsr-altitudes',
   'DSR Latitude': 'dsr-altitudes',
+  'Auro Anantha': 'auro-anantha',
+  'Anantha': 'auro-anantha',
+  'Auro Realty Raidurg': 'auro-anantha',
 }
 
 /** Resolve a CDN path (or absolute URL) from the API to a loadable image URL. */

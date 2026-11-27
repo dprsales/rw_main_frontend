@@ -986,6 +986,7 @@ export const PROJECTS = [
   { name: 'NSL East Luxoria', area: 'Uppal', status: 'Mandate' },
   { name: 'Evara', area: 'Terpole, Sangareddy', status: 'Mandate' },
   { name: 'DSR Altitudes', area: 'Osman Nagar, Tellapur', status: 'Mandate' },
+  { name: 'Auro Anantha', area: 'Raidurg', status: 'Mandate' },
   { name: 'Som Boulevard', area: 'Mokila', status: 'Mandate' },
   { name: 'Cascades', area: 'Neopolis', status: 'Mandate' },
   { name: 'Bliss in the Woods', area: 'Tukkuguda', status: 'Mandate' },
